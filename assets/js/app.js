@@ -301,6 +301,7 @@ window.switchTopSection = function(section) {
   document.getElementById('topNavComponents').classList.toggle('active', section === 'components');
   document.getElementById('topNavGame').classList.toggle('active', section === 'game');
   document.getElementById('topNavPlayground').classList.toggle('active', section === 'playground');
+  document.getElementById('topNavStudio').classList.toggle('active', section === 'studio');
 
   const sidebar = document.getElementById('sidebarNav');
   if (!sidebar) return;
@@ -344,6 +345,16 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('play-tabs');
+  } else if (section === 'studio') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Godot 4 .tres 资源与主题工坊</div>
+        <div class="nav-item active" data-key="studio-theme-editor" onclick="showDoc('studio-theme-editor')"><span>🎨 Godot 4 官方主题编辑器 & .tres 导出</span></div>
+        <div class="nav-item" data-key="studio-custom-resource" onclick="showDoc('studio-custom-resource')"><span>💾 自定义 Resource 数据资源 (.tres)</span></div>
+      </div>
+    `;
+    showDoc('studio-theme-editor');
   } else {
     // Components
     sidebar.innerHTML = `
@@ -403,12 +414,13 @@ window.switchTopSection = function(section) {
 window.showDoc = function(key) {
   window.currentDocKey = key;
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, STUDIO, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
     window.GAME_CATALOG || {}, 
     window.PLAYGROUND_CATALOG || {}, 
+    window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
 
@@ -613,6 +625,10 @@ window.showDoc = function(key) {
     ${demosHtml}
     ${propsHtml}
   `;
+
+  if (key === 'studio-theme-editor' && typeof window.refreshTresPreview === 'function') {
+    setTimeout(window.refreshTresPreview, 50);
+  }
 };
 
 function escapeHtml(text) {
