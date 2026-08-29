@@ -310,8 +310,9 @@ window.switchTopSection = function(section) {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search storage & save..." oninput="filterNav(this.value)">
       <div class="nav-group">
-        <div class="nav-group-title">Game Save 游戏存档与中断存储</div>
+        <div class="nav-group-title">Game Save 游戏存档与生命周期守护</div>
         <div class="nav-item active" data-key="storage-save-slots" onclick="showDoc('storage-save-slots')"><span>💾 游戏多槽位存档与中断存储</span></div>
+        <div class="nav-item" data-key="storage-lifecycle-guardian" onclick="showDoc('storage-lifecycle-guardian')"><span>⚡ 引擎生命周期守护与卡死自动保存</span></div>
       </div>
     `;
     showDoc('storage-save-slots');
@@ -614,6 +615,8 @@ window.showDoc = function(key) {
   } else if (key === 'storage-save-slots') {
     if (typeof window.renderSimSaveSlots === 'function') setTimeout(window.renderSimSaveSlots, 30);
     if (typeof window.updateCurrentGameStatusUI === 'function') setTimeout(window.updateCurrentGameStatusUI, 30);
+  } else if (key === 'storage-lifecycle-guardian') {
+    if (typeof window.renderSimGuardianConsole === 'function') setTimeout(window.renderSimGuardianConsole, 30);
   }
 };
 

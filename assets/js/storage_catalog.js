@@ -1,7 +1,7 @@
 // =========================================================================
-// Gotod Components UI - 9. 游戏存档与中断存储管理器 (Game Save & Checkpoint Studio)
+// Gotod Components UI - 9. 游戏存档与生命周期中断守护 (Game Save & Checkpoint Studio)
 // assets/js/storage_catalog.js
-// 基于纯类 (Class-based GSaveManager) 实现中断存储、多槽位读档、覆盖与删除 (带完整 LocalStorage 缓存持久化)
+// 基于纯类 (GSaveManager + GLifecycleGuardian) 实现中断存储、生命周期自动触发、卡死防丢
 // =========================================================================
 
 const DEFAULT_SLOTS = [
@@ -91,32 +91,60 @@ function persistSaveState() {
   } catch(e) {}
 }
 
-// Actions: Trigger Checkpoint Suspend Save
-window.triggerSimCheckpoint = function() {
+// Simulated Lifecycle Log Console
+window.simGuardianLogs = [];
+
+window.triggerSimLifecycleEvent = function(eventType, reasonText) {
   const now = new Date().toLocaleString();
   const cpSlot = window.simSaveSlots.find(s => s.slot_id === 'slot_checkpoint');
   if (cpSlot) {
     cpSlot.saved_at = now;
-    cpSlot.chapter = '第四章: 熔岩地窟 (自动检查点)';
-    cpSlot.player_level = window.currentGameState.player_level + 1;
-    cpSlot.hp = 920;
-    cpSlot.gold = window.currentGameState.gold + 500;
+    cpSlot.chapter = `自动保护快照 (${reasonText})`;
+    cpSlot.player_level = window.currentGameState.player_level;
+    cpSlot.hp = window.currentGameState.hp;
+    cpSlot.gold = window.currentGameState.gold;
   }
-  
-  // Sync to current state
-  window.currentGameState = {
-    slot_id: 'slot_checkpoint',
-    save_name: cpSlot.save_name,
-    chapter: cpSlot.chapter,
-    player_level: cpSlot.player_level,
-    hp: cpSlot.hp,
-    gold: cpSlot.gold
-  };
 
   persistSaveState();
-  updateCurrentGameStatusUI();
   renderSimSaveSlots();
-  showToast('【中断存储】游戏已自动捕获当前进度并写入检查点存档！', 'success');
+
+  const log = {
+    time: new Date().toLocaleTimeString(),
+    type: eventType,
+    desc: reasonText,
+    saved_file: 'user://saves/slot_checkpoint.json'
+  };
+  window.simGuardianLogs.unshift(log);
+  if (window.simGuardianLogs.length > 20) window.simGuardianLogs.pop();
+
+  renderSimGuardianConsole();
+  showToast(`【GLifecycleGuardian】检测到引擎通知: ${eventType}，已自动执行中断存储！`, 'success');
+};
+
+window.renderSimGuardianConsole = function() {
+  const container = document.getElementById('simGuardianConsole');
+  if (!container) return;
+
+  if (window.simGuardianLogs.length === 0) {
+    container.innerHTML = `<div style="color:var(--text-disabled); font-style:italic;">[生命周期守护中] 正在监听 NOTIFICATION_WM_CLOSE_REQUEST、PAUSED、CRASH 与看门狗...</div>`;
+    return;
+  }
+
+  container.innerHTML = window.simGuardianLogs.map(l => `
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); font-family:var(--font-mono); font-size:11px;">
+      <div>
+        <span style="color:var(--text-secondary);">[${l.time}]</span>
+        <span style="color:var(--warning); font-weight:700; margin-left:6px;">${l.type}</span>
+        <span style="color:#dcdcaa; margin-left:8px;">${l.desc}</span>
+      </div>
+      <span class="g-tag g-tag-success" style="font-size:9px;">Auto-Saved</span>
+    </div>
+  `).join('');
+};
+
+// Actions: Trigger Checkpoint Suspend Save
+window.triggerSimCheckpoint = function() {
+  triggerSimLifecycleEvent('NOTIFICATION_MANUAL', '手动触发中断保存');
 };
 
 // Actions: Load Save Slot
@@ -271,7 +299,7 @@ window.STORAGE_CATALOG = {
   // --------------------------------------------------------
   'storage-save-slots': {
     title: '💾 游戏多槽位存档与中断存储 (Game Save & Checkpoint Manager)',
-    desc: '基于类 (Class-based GSaveManager) 实现的多槽位存档管理、游戏暂停/切后台中断存储 (Checkpoint Save)、读取存档与槽位覆盖/删除。完全替代 SQLite，轻量极速！',
+    desc: '基于纯类 (Class-based GSaveManager) 实现的多槽位存档管理、游戏暂停/切后台中断存储 (Checkpoint Save)、读取存档与槽位覆盖/删除。完全替代 SQLite，轻量极速！',
     demos: [
       {
         title: '游戏存档/读档/中断存储交互面板 (Interactive Save Slots UI)',
@@ -351,6 +379,74 @@ func _on_load_slot_pressed(slot_id: String) -> void:
 # 5. 删除指定槽位存档 (Delete Slot):
 func _on_delete_slot_pressed(slot_id: String) -> void:
     GSaveManager.delete_slot(slot_id)`
+      }
+    ]
+  },
+
+  // --------------------------------------------------------
+  // 2. Godot 引擎生命周期守护与卡死防丢工坊
+  // --------------------------------------------------------
+  'storage-lifecycle-guardian': {
+    title: '⚡ GLifecycleGuardian (Godot 引擎生命周期守护与卡死自动保存)',
+    desc: '自动接入 Godot 官方引擎生命周期通知 (`_notification`) 与心跳看门狗。当游戏切后台、卡死无响应、异常退出或崩溃前夕，系统自动执行静默中断快照，全程无需手动触发！',
+    demos: [
+      {
+        title: '生命周期事件捕获与看门狗自动中断模拟器',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
+            
+            <!-- Trigger Lifecycle Event Buttons -->
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="g-btn g-btn-primary" onclick="triggerSimLifecycleEvent('NOTIFICATION_APPLICATION_PAUSED', '移动端切入后台/游戏暂停')">
+                <i class="fa-solid fa-mobile-screen"></i> 模拟切入后台 (Focus Out)
+              </button>
+              <button class="g-btn g-btn-warning" onclick="triggerSimLifecycleEvent('NOTIFICATION_WM_CLOSE_REQUEST', '窗口被强制关闭请求')">
+                <i class="fa-solid fa-window-close"></i> 模拟窗口关闭 (Close Request)
+              </button>
+              <button class="g-btn g-btn-danger" onclick="triggerSimLifecycleEvent('WATCHDOG_FREEZE_ANOMALY', '主线程卡死无响应看门狗检测')">
+                <i class="fa-solid fa-heart-crack"></i> 模拟卡死无响应看门狗
+              </button>
+              <button class="g-btn g-btn-default" onclick="window.simGuardianLogs=[]; renderSimGuardianConsole(); showToast('日志已清空', 'info');">
+                清空日志
+              </button>
+            </div>
+
+            <!-- Guardian Console Output -->
+            <div style="padding:12px 14px; background:#0d0d11; border:1px solid var(--border-base); border-radius:var(--radius);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px solid var(--border-base); padding-bottom:6px;">
+                <span style="font-size:12px; font-weight:700; color:var(--primary);">
+                  <i class="fa-solid fa-shield-halved"></i> GLifecycleGuardian 自动中断存储监控流水
+                </span>
+                <span style="font-size:10px; color:var(--success);">自动持久化至 slot_checkpoint</span>
+              </div>
+              <div id="simGuardianConsole" style="max-height:160px; overflow-y:auto; line-height:1.5;">
+                <div style="color:var(--text-disabled); font-style:italic;">[生命周期守护中] 正在监听 NOTIFICATION_WM_CLOSE_REQUEST、PAUSED、CRASH 与看门狗...</div>
+              </div>
+            </div>
+
+          </div>
+        `,
+        code: `# GDScript: 自动在 Godot 生命周期中捕获并保存中断状态:
+
+# 1. 业务脚本中挂载状态收集提供者 (例如在 Player 或 GameManager 中):
+func _ready() -> void:
+    GLifecycleGuardian.register_state_provider(func() -> Dictionary:
+        return {
+            "player_hp": hp,
+            "player_pos": global_position,
+            "bag_items": inventory.get_items()
+        }
+    )
+
+# 2. GLifecycleGuardian 在底层 _notification 自动触发 (无需手动写代码):
+func _notification(what: int) -> void:
+    match what:
+        NOTIFICATION_WM_CLOSE_REQUEST: # 窗口关闭
+            _perform_emergency_save("窗口关闭请求")
+        NOTIFICATION_APPLICATION_PAUSED: # 移动端切后台
+            _perform_emergency_save("游戏切后台暂停")
+        NOTIFICATION_CRASH: # 引擎崩溃前夕
+            _perform_emergency_save("🚨 紧急崩溃守护")`
       }
     ]
   }
