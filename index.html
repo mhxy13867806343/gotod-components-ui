@@ -55,20 +55,6 @@
         <option value="https://gitee.com/fangjiayu/gotod-components-ui">🚩 Gitee (国内镜像)</option>
         <option value="https://gitcode.com/m200s/gotod-components-ui">📦 GitCode 仓库</option>
       </select>
-
-      <!-- Preset Select -->
-      <select id="presetSelect" class="select-theme" onchange="changePreset(this.value)">
-        <option value="naive">Naive UI Style (Green)</option>
-        <option value="element">Element Plus Style (Blue)</option>
-        <option value="ant">Ant Design Style (Geek Blue)</option>
-        <option value="vant">Vant UI Style (Mobile)</option>
-      </select>
-
-      <!-- Dark/Light Mode -->
-      <button class="btn-icon" onclick="toggleTheme()">
-        <i id="themeIcon" class="fa-solid fa-moon"></i>
-        <span id="themeText">Dark</span>
-      </button>
     </div>
   </header>
 
@@ -144,6 +130,20 @@
         <span>已索引 9 大板块与全部 28+ 个 UI 控件</span>
       </div>
     </div>
+  </div>
+
+  <!-- Floating Theme & Preset Sticky Toolbar in Bottom-Right -->
+  <div class="floating-theme-bar">
+    <select id="presetSelect" class="select-theme" onchange="changePreset(this.value)">
+      <option value="naive">Naive UI Style (Green)</option>
+      <option value="element">Element Plus Style (Blue)</option>
+      <option value="ant">Ant Design Style (Geek Blue)</option>
+      <option value="vant">Vant UI Style (Mobile)</option>
+    </select>
+    <button class="btn-icon" onclick="toggleTheme()" title="切换深浅主题">
+      <i id="themeIcon" class="fa-solid fa-moon"></i>
+      <span id="themeText">Dark</span>
+    </button>
   </div>
 
   <!-- Local Standalone Logic Modules -->

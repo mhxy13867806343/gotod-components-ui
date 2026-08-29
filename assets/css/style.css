@@ -815,3 +815,47 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   from { opacity: 1; }
   to { opacity: 0; }
 }
+
+/* Floating Theme & Preset Sticky Toolbar in Bottom-Right */
+.floating-theme-bar {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-base) !important;
+  padding: 6px 12px;
+  border-radius: 30px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.floating-theme-bar:hover {
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+.floating-theme-bar .select-theme {
+  border-radius: 20px !important;
+  height: 30px !important;
+  font-size: 12px !important;
+  padding: 0 12px !important;
+  background: var(--bg-surface) !important;
+  border-color: var(--border-base) !important;
+  cursor: pointer;
+}
+
+.floating-theme-bar .btn-icon {
+  border-radius: 20px !important;
+  height: 30px !important;
+  padding: 0 12px !important;
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-base) !important;
+  font-size: 12px !important;
+  cursor: pointer;
+}
