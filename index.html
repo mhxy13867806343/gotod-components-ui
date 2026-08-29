@@ -20,7 +20,7 @@
         <span class="brand-badge">Godot 4.x + Vue UI</span>
       </a>
 
-      <!-- 1. 指南 / 2. 组件 / 3. 游戏实战 / 4. 属性方法演练 Top Navigation -->
+      <!-- 1. 指南 / 2. 组件 / 3. 游戏实战 / 4. 属性方法演练 Top Navigation Links -->
       <nav class="top-nav-links">
         <a href="javascript:void(0)" id="topNavGuide" class="top-nav-item" onclick="switchTopSection('guide')">
           <i class="fa-solid fa-book-open"></i> <span>1. 指南与安装 (Guide)</span>
@@ -38,6 +38,9 @@
           <i class="fa-solid fa-file-code"></i> <span>5. .tres 资源工坊与主题导出 (Resource Studio)</span>
         </a>
       </nav>
+
+      <!-- UI Component GSelect Dropdown for Module Switcher -->
+      <div id="topNavSelectContainer" style="margin-left: 12px;"></div>
     </div>
 
     <div class="header-actions">
@@ -129,6 +132,7 @@
   <script src="assets/js/game_templates.js"></script>
   <script src="assets/js/api_playground.js"></script>
   <script src="assets/js/resource_studio.js"></script>
+  <script src="assets/js/nav_dropdown.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>

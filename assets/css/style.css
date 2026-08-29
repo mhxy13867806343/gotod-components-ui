@@ -169,6 +169,77 @@ header {
   flex-shrink: 0;
   white-space: nowrap;
 }
+
+/* Custom UI GSelect Top Navigation Dropdown */
+.g-nav-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.g-nav-select-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+.g-nav-select-trigger:hover {
+  border-color: var(--primary);
+  background: var(--bg-surface);
+}
+.g-nav-select-arrow {
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: transform 0.25s ease;
+  margin-left: 4px;
+}
+.g-nav-select-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 290px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  animation: dropdownFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.g-nav-select-menu.open {
+  display: flex;
+}
+.g-nav-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: calc(var(--radius) - 2px);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.g-nav-select-option:hover {
+  background: var(--bg-surface);
+}
+.g-nav-select-option.selected {
+  background: rgba(24, 160, 88, 0.12);
+}
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 select, button {
   font-family: inherit;
 }

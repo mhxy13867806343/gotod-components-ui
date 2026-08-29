@@ -332,6 +332,10 @@ window.switchTopSection = function(section) {
   document.getElementById('topNavPlayground').classList.toggle('active', section === 'playground');
   document.getElementById('topNavStudio').classList.toggle('active', section === 'studio');
 
+  if (typeof window.syncNavDropdownUI === 'function') {
+    window.syncNavDropdownUI(section);
+  }
+
   const sidebar = document.getElementById('sidebarNav');
   if (!sidebar) return;
 
