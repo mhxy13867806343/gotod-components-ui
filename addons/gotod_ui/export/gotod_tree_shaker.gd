@@ -26,6 +26,8 @@ static func analyze_project_used_components() -> Dictionary:
 		"GForm": "res://addons/gotod_ui/components/form/g_form.gd",
 		"GFormItem": "res://addons/gotod_ui/components/form/g_form_item.gd",
 		"GDialog": "res://addons/gotod_ui/components/feedback/g_dialog.gd",
+		"GMessageBox": "res://addons/gotod_ui/components/feedback/g_message_box.gd",
+		"GNotification": "res://addons/gotod_ui/components/feedback/g_notification.gd",
 		"GAlert": "res://addons/gotod_ui/components/feedback/g_alert.gd",
 		"GDrawer": "res://addons/gotod_ui/components/feedback/g_drawer.gd",
 		"GTooltip": "res://addons/gotod_ui/components/feedback/g_tooltip.gd",

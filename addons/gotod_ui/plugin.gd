@@ -26,6 +26,8 @@ const CUSTOM_TYPES = [
 	
 	# Feedback
 	{"name": "GDialog", "base": "Control", "script": "res://addons/gotod_ui/components/feedback/g_dialog.gd"},
+	{"name": "GMessageBox", "base": "Control", "script": "res://addons/gotod_ui/components/feedback/g_message_box.gd"},
+	{"name": "GNotification", "base": "CanvasLayer", "script": "res://addons/gotod_ui/components/feedback/g_notification.gd"},
 	{"name": "GAlert", "base": "PanelContainer", "script": "res://addons/gotod_ui/components/feedback/g_alert.gd"},
 	{"name": "GDrawer", "base": "Control", "script": "res://addons/gotod_ui/components/feedback/g_drawer.gd"},
 	{"name": "GTooltip", "base": "PanelContainer", "script": "res://addons/gotod_ui/components/feedback/g_tooltip.gd"},

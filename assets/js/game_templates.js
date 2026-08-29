@@ -314,6 +314,111 @@ func _export_file(file_path: String, type: String, features: PackedStringArray) 
         skip()`
       }
     ]
+  },
+
+  'guide-imperative-api': {
+    title: '⚡ 命令式/编程式方法调用与上下文继承 (Imperative Calls & Context Injection)',
+    desc: '除了在场景中放置节点外，Gotod UI 提供了全套静态命令式调用方法（类似 Element Plus 的 ElMessage、ElMessageBox、ElNotification、ElLoading.service）。支持传递 context_node (self) 继承当前场景树、视口与主题上下文环境！',
+    demos: [
+      {
+        title: '1. GMessage 全局消息提示与 close_all() 手动关闭',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="g-btn g-btn-primary" onclick="showToast('操作成功！获得经验值 +200', 'success')">GMessage.success()</button>
+              <button class="g-btn g-btn-warning" onclick="showToast('请注意：装备耐久度不足 20%', 'warning')">GMessage.warning()</button>
+              <button class="g-btn g-btn-danger" onclick="showToast('网络连接中断，请重试', 'danger')">GMessage.error()</button>
+              <button class="g-btn g-btn-default" onclick="showToast('已手动关闭所有消息提示', 'info')">GMessage.close_all()</button>
+            </div>
+            <div style="padding:12px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); font-size:12px; line-height:1.7;">
+              <strong>应用程序上下文继承 (Context Injection):</strong>
+              <p style="color:var(--text-secondary); margin:4px 0 0;">通过将当前节点（<code>self</code>）作为第二个参数传入 <code>GMessage.success("...", self)</code>，弹出的 Toast 自动挂载到当前 SceneTree 根视口，并无缝继承当前场景的主题 Token 与屏幕缩放比例！</p>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 命令式调用与上下文继承
+# 1. 基础消息提示 (传入 self 作为上下文)
+GMessage.success("购买道具成功！", self)
+GMessage.warning("背包剩余空间不足！", self)
+GMessage.error("金币不足，无法升级", self)
+
+# 2. 手动关闭所有激活的消息实例 (类似 ElMessage.closeAll())
+GMessage.close_all()
+
+# 3. 字典配置高级调用
+GMessage.show({
+    "message": "自定义停留 5 秒的消息",
+    "type": "success",
+    "duration": 5.0
+}, self)`
+      },
+      {
+        title: '2. GMessageBox 编程式确认弹窗 (Alert / Confirm / Prompt)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="g-btn g-btn-primary" onclick="openSimDialog('装备强化成功！', '强化结果')">GMessageBox.alert()</button>
+              <button class="g-btn g-btn-warning" onclick="openSimDialog('确定要分解这件神话装备吗？此操作不可逆！', '分解确认')">GMessageBox.confirm()</button>
+              <button class="g-btn g-btn-default" onclick="openSimDialog('请输入新的公会名称：', '创建公会')">GMessageBox.prompt()</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 命令式弹窗
+# 1. 简单警告弹窗
+GMessageBox.alert("服务器将于 10 分钟后维护！", "系统通知", {}, self)
+
+# 2. 确认/取消双选弹窗并监听信号
+var confirm_box = GMessageBox.confirm("确定要出售这件传说武器吗？", "出售确认", {}, self)
+confirm_box.confirmed.connect(func():
+    GMessage.success("武器已成功出售！", self)
+)
+
+# 3. 输入 Prompt 弹窗
+var prompt_box = GMessageBox.prompt("请输入角色昵称：", "修改昵称", {}, self)
+prompt_box.prompt_submitted.connect(func(new_name: String):
+    GMessage.success("昵称已修改为: " + new_name, self)
+)`
+      },
+      {
+        title: '3. GLoading 全局遮罩加载服务 (GLoading.service)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+            <div style="display:flex; gap:10px;">
+              <button class="g-btn g-btn-primary" onclick="showToast('GLoading.service() 正在加载地图资源...', 'info')">GLoading.service()</button>
+              <button class="g-btn g-btn-default" onclick="showToast('已调用 loading.close() 关闭加载遮罩', 'success')">loading.close()</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 命令式全局加载遮罩
+# 1. 开启全局 Loading 遮罩
+var loading = GLoading.service({
+    "text": "正在进入跨服战场，请稍候...",
+    "spinner_size": 42.0
+}, self)
+
+# 2. 异步业务完成后关闭
+await get_tree().create_timer(2.0).timeout
+loading.close()`
+      },
+      {
+        title: '4. GNotification 右上角通知气泡 (GNotification.notify)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="g-btn g-btn-primary" onclick="showToast('【成就解锁】首次击败世界Boss！', 'success')">GNotification.success()</button>
+              <button class="g-btn g-btn-warning" onclick="showToast('【排位赛】匹配队伍准备就绪', 'warning')">GNotification.warning()</button>
+              <button class="g-btn g-btn-default" onclick="showToast('已关闭所有通知气泡', 'info')">GNotification.close_all()</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 右上角全局通知气泡
+GNotification.success("【成就达成】", "首次单挑通关深渊副本第 100 层！", self)
+GNotification.warning("【电量预警】", "设备电量低于 15%，请及时充电", self)
+
+# 关闭所有通知实例
+GNotification.close_all()`
+      }
+    ]
   }
 };
 

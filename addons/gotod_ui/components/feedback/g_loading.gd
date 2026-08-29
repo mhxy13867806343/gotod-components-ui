@@ -2,6 +2,40 @@
 class_name GLoading
 extends Control
 
+# ==========================================
+# 静态命令式遮罩服务 (Imperative Loading Service)
+# ==========================================
+static func service(options: Dictionary = {}, context_node: Node = null) -> GLoading:
+	var loading = GLoading.new()
+	loading.text = options.get("text", "加载中...")
+	loading.spinner_size = options.get("spinner_size", 36.0)
+	
+	var tree: SceneTree = null
+	if context_node and is_instance_valid(context_node) and context_node.get_tree():
+		tree = context_node.get_tree()
+	elif Engine.get_main_loop() is SceneTree:
+		tree = Engine.get_main_loop() as SceneTree
+
+	if options.get("target"):
+		var target: Node = options["target"]
+		target.add_child(loading)
+	elif tree and tree.root:
+		var canvas = CanvasLayer.new()
+		canvas.layer = 125
+		canvas.add_child(loading)
+		tree.root.add_child(canvas)
+		loading.set_meta("_canvas_parent", canvas)
+		
+	return loading
+
+## 关闭当前 Loading 遮罩
+func close() -> void:
+	var canvas = get_meta("_canvas_parent", null)
+	if canvas and is_instance_valid(canvas):
+		canvas.queue_free()
+	else:
+		queue_free()
+
 @export var text: String = "Loading...":
 	set(val):
 		text = val

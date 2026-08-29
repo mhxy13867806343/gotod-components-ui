@@ -341,6 +341,7 @@ window.switchTopSection = function(section) {
       <div class="nav-group">
         <div class="nav-group-title">Development 指南</div>
         <div class="nav-item active" data-key="guide-install" onclick="showDoc('guide-install')"><span>📥 安装与快速上手</span></div>
+        <div class="nav-item" data-key="guide-imperative-api" onclick="showDoc('guide-imperative-api')"><span>⚡ 命令式调用与上下文继承</span></div>
         <div class="nav-item" data-key="guide-treeshaking" onclick="showDoc('guide-treeshaking')"><span>📦 生产环境按需打包与摇树优化</span></div>
         <div class="nav-item" data-key="guide-common-methods" onclick="showDoc('guide-common-methods')"><span>🛠️ 全局通用基类方法与事件</span></div>
         <div class="nav-item" data-key="guide-dynamic-api" onclick="showDoc('guide-dynamic-api')"><span>🧩 GTabs 动态方法与自定义信号</span></div>

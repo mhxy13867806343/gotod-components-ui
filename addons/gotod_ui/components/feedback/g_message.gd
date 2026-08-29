@@ -3,6 +3,7 @@ extends CanvasLayer
 
 static var _instance: GMessage = null
 var _container: VBoxContainer
+var _active_toasts: Array[PanelContainer] = []
 
 func _ready() -> void:
 	_instance = self
@@ -17,25 +18,67 @@ func _ready() -> void:
 	_container.add_theme_constant_override("separation", 12)
 	add_child(_container)
 
-static func info(content: String, duration: float = 3.0) -> void:
-	_show_toast(content, GThemeTokens.Status.INFO, duration)
+# ==========================================
+# 命令式 / 编程式静态调用 API (Imperative Static Methods)
+# 支持传递 context_node 继承当前应用程序上下文/视口/主题
+# ==========================================
 
-static func success(content: String, duration: float = 3.0) -> void:
-	_show_toast(content, GThemeTokens.Status.SUCCESS, duration)
+## 信息提示 (Info Message)
+static func info(content: String, context_node: Node = null, duration: float = 3.0) -> void:
+	_show_toast(content, GThemeTokens.Status.INFO, duration, context_node)
 
-static func warning(content: String, duration: float = 3.0) -> void:
-	_show_toast(content, GThemeTokens.Status.WARNING, duration)
+## 成功提示 (Success Message)
+static func success(content: String, context_node: Node = null, duration: float = 3.0) -> void:
+	_show_toast(content, GThemeTokens.Status.SUCCESS, duration, context_node)
 
-static func error(content: String, duration: float = 3.0) -> void:
-	_show_toast(content, GThemeTokens.Status.DANGER, duration)
+## 警告提示 (Warning Message)
+static func warning(content: String, context_node: Node = null, duration: float = 3.0) -> void:
+	_show_toast(content, GThemeTokens.Status.WARNING, duration, context_node)
 
-static func _show_toast(content: String, status: GThemeTokens.Status, duration: float) -> void:
-	if _instance == null:
-		print("[GMessage] ", content)
-		return
-	_instance._spawn_toast(content, status, duration)
+## 错误提示 (Error Message)
+static func error(content: String, context_node: Node = null, duration: float = 3.0) -> void:
+	_show_toast(content, GThemeTokens.Status.DANGER, duration, context_node)
 
-func _spawn_toast(content: String, status: GThemeTokens.Status, duration: float) -> void:
+## 关闭所有活跃的消息实例 (Close All Active Messages)
+static func close_all() -> void:
+	if _instance and is_instance_valid(_instance):
+		for toast in _instance._active_toasts.duplicate():
+			if is_instance_valid(toast):
+				toast.queue_free()
+		_instance._active_toasts.clear()
+
+## 字典选项配置调用 (Options Object Call)
+static func show(options: Dictionary, context_node: Node = null) -> void:
+	var msg = options.get("message", "")
+	var type_str = options.get("type", "info")
+	var duration = options.get("duration", 3.0)
+	var status = GThemeTokens.Status.INFO
+	match type_str:
+		"success": status = GThemeTokens.Status.SUCCESS
+		"warning": status = GThemeTokens.Status.WARNING
+		"error", "danger": status = GThemeTokens.Status.DANGER
+		_: status = GThemeTokens.Status.INFO
+	_show_toast(msg, status, duration, context_node)
+
+static func _show_toast(content: String, status: GThemeTokens.Status, duration: float, context_node: Node = null) -> void:
+	# 若尚未初始化单例实例，或 context_node 存在，动态确保实例注入
+	if _instance == null or not is_instance_valid(_instance):
+		_instance = GMessage.new()
+		var tree: SceneTree = null
+		if context_node and is_instance_valid(context_node) and context_node.get_tree():
+			tree = context_node.get_tree()
+		elif Engine.get_main_loop() is SceneTree:
+			tree = Engine.get_main_loop() as SceneTree
+			
+		if tree and tree.root:
+			tree.root.add_child(_instance)
+		else:
+			print("[GMessage Fallback]: ", content)
+			return
+			
+	_instance._spawn_toast(content, status, duration, context_node)
+
+func _spawn_toast(content: String, status: GThemeTokens.Status, duration: float, context_node: Node = null) -> void:
 	var toast = PanelContainer.new()
 	toast.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	toast.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -68,6 +111,7 @@ func _spawn_toast(content: String, status: GThemeTokens.Status, duration: float)
 	toast.add_theme_stylebox_override("panel", sb)
 	
 	_container.add_child(toast)
+	_active_toasts.append(toast)
 	
 	# Enter animation
 	toast.modulate.a = 0.0
@@ -83,4 +127,5 @@ func _spawn_toast(content: String, status: GThemeTokens.Status, duration: float)
 		tw_out.tween_property(toast, "position:y", toast.position.y - 15, 0.2)
 		await tw_out.finished
 		if is_instance_valid(toast):
+			_active_toasts.erase(toast)
 			toast.queue_free()
