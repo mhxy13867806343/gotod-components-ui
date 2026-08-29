@@ -1,0 +1,22 @@
+# Godot 4.x specific ignores
+.godot/
+*.translation
+*.import
+
+# Mono/C#
+.mono/
+[Gg]odot[Ss]harp/
+*.csproj
+*.sln
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+
+# Web export build outputs (if any)
+dist/
+build/

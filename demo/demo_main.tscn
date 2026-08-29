@@ -1,0 +1,79 @@
+[gd_scene load_steps=2 format=3 uid="uid://gotod_demo_main_scene"]
+
+[ext_resource type="Script" path="res://demo/demo_main.gd" id="1_demo"]
+
+[node name="DemoMain" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_demo")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.07, 0.08, 1)
+
+[node name="HSplit" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 240
+
+[node name="Sidebar" type="PanelContainer" parent="HSplit"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="HSplit/Sidebar"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="NavList" type="VBoxContainer" parent="HSplit/Sidebar/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="MainArea" type="VBoxContainer" parent="HSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Header" type="HBoxContainer" parent="HSplit/MainArea"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="HSplit/MainArea/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Gotod Components UI"
+vertical_alignment = 1
+
+[node name="PresetOption" type="OptionButton" parent="HSplit/MainArea/Header"]
+custom_minimum_size = Vector2(180, 36)
+layout_mode = 2
+
+[node name="ThemeToggle" type="Button" parent="HSplit/MainArea/Header"]
+custom_minimum_size = Vector2(90, 36)
+layout_mode = 2
+text = "🌙 Dark"
+
+[node name="Scroll" type="ScrollContainer" parent="HSplit/MainArea"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="HSplit/MainArea/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 24
