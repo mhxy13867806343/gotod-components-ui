@@ -195,6 +195,8 @@ window.SIDEBAR_CONFIG = {
         title: 'Feedback 反馈',
         items: [
           { key: 'dialog', title: 'GDialog / GModal 弹窗' },
+          { key: 'popup', title: 'GPopup 弹出层' },
+          { key: 'overlay', title: 'GOverlay 遮罩层' },
           { key: 'message', title: 'GMessage 全局提示' },
           { key: 'alert', title: 'GAlert 警告提示' },
           { key: 'drawer', title: 'GDrawer 抽屉' },

@@ -585,6 +585,114 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   to { transform: translateX(0); }
 }
 
+/* Vant Style GPopup & GOverlay Simulation */
+.g-popup-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 1000;
+  display: none;
+  animation: fadeIn 0.25s ease-out;
+}
+.g-popup-mask.active {
+  display: block;
+}
+.g-popup-panel {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  position: fixed;
+  z-index: 1001;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.g-popup-panel.g-popup-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 320px;
+  max-width: 90vw;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-base);
+  animation: modalPop 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.g-popup-panel.g-popup-top {
+  top: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid var(--border-base);
+  animation: slideDown 0.25s ease-out;
+}
+.g-popup-panel.g-popup-bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--border-base);
+  animation: slideUp 0.25s ease-out;
+}
+.g-popup-panel.g-popup-left {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 280px;
+  max-width: 80vw;
+  border-right: 1px solid var(--border-base);
+  animation: slideRight 0.25s ease-out;
+}
+.g-popup-panel.g-popup-right {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 280px;
+  max-width: 80vw;
+  border-left: 1px solid var(--border-base);
+  animation: slideLeft 0.25s ease-out;
+}
+
+.g-popup-panel.g-popup-round.g-popup-bottom {
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+.g-popup-panel.g-popup-round.g-popup-top {
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+}
+.g-popup-panel.g-popup-round.g-popup-center {
+  border-radius: 18px;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideRight {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* GOverlay */
+.g-overlay-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+}
+.g-overlay-mask.active {
+  display: flex;
+}
+
 /* Alert Simulation */
 .g-alert-box {
   width: 100%;

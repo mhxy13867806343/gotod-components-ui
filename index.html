@@ -114,6 +114,26 @@
     </div>
   </div>
 
+  <!-- Vant Style GPopup Simulator Overlay -->
+  <div class="g-popup-mask" id="simPopupMask" onclick="if(event.target===this) closeSimPopup()">
+    <div class="g-popup-panel g-popup-center" id="simPopupPanel" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-weight:600; font-size:16px;">
+        <span id="simPopupTitle">GPopup 弹出层</span>
+        <button id="simPopupClose" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:18px;" onclick="closeSimPopup()">×</button>
+      </div>
+      <div id="simPopupBody" style="color:var(--text-regular); font-size:14px; line-height:1.6;">
+        <!-- Dynamic Popup Body Content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Vant Style GOverlay Simulator -->
+  <div class="g-overlay-mask" id="simOverlayMask" onclick="if(event.target===this) closeSimOverlay()">
+    <div id="simOverlaySlot" onclick="event.stopPropagation()" style="display:none; padding:24px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius-lg); box-shadow:var(--shadow); min-width:280px; max-width:90vw;">
+      <!-- Embedded Content Slot -->
+    </div>
+  </div>
+
   <!-- Global Search Modal Dialog (Command Palette) -->
   <div id="globalSearchModal" class="global-search-backdrop" style="display:none;" onclick="if(event.target===this) closeGlobalSearch()">
     <div class="global-search-card">
@@ -168,21 +188,21 @@
   </div>
 
   <!-- Local Standalone Logic Modules -->
-  <script src="assets/js/ui_helpers.js?v=20260829_06"></script>
-  <script src="assets/js/sidebar_nav.js?v=20260829_06"></script>
-  <script src="assets/js/components_catalog.js?v=20260829_06"></script>
-  <script src="assets/js/game_templates.js?v=20260829_06"></script>
-  <script src="assets/js/api_playground.js?v=20260829_06"></script>
-  <script src="assets/js/imperative_api.js?v=20260829_06"></script>
-  <script src="assets/js/hooks_catalog.js?v=20260829_06"></script>
-  <script src="assets/js/signals_catalog.js?v=20260829_06"></script>
-  <script src="assets/js/decorator_catalog.js?v=20260829_06"></script>
-  <script src="assets/js/storage_catalog.js?v=20260829_06"></script>
-  <script src="assets/js/utils_router_catalog.js?v=20260829_06"></script>
-  <script src="assets/js/lifecycle_catalog.js?v=20260829_06"></script>
-  <script src="assets/js/resource_studio.js?v=20260829_06"></script>
-  <script src="assets/js/global_search.js?v=20260829_06"></script>
-  <script src="assets/js/nav_dropdown.js?v=20260829_06"></script>
-  <script src="assets/js/app.js?v=20260829_06"></script>
+  <script src="assets/js/ui_helpers.js?v=20260829_08"></script>
+  <script src="assets/js/sidebar_nav.js?v=20260829_08"></script>
+  <script src="assets/js/components_catalog.js?v=20260829_08"></script>
+  <script src="assets/js/game_templates.js?v=20260829_08"></script>
+  <script src="assets/js/api_playground.js?v=20260829_08"></script>
+  <script src="assets/js/imperative_api.js?v=20260829_08"></script>
+  <script src="assets/js/hooks_catalog.js?v=20260829_08"></script>
+  <script src="assets/js/signals_catalog.js?v=20260829_08"></script>
+  <script src="assets/js/decorator_catalog.js?v=20260829_08"></script>
+  <script src="assets/js/storage_catalog.js?v=20260829_08"></script>
+  <script src="assets/js/utils_router_catalog.js?v=20260829_08"></script>
+  <script src="assets/js/lifecycle_catalog.js?v=20260829_08"></script>
+  <script src="assets/js/resource_studio.js?v=20260829_08"></script>
+  <script src="assets/js/global_search.js?v=20260829_08"></script>
+  <script src="assets/js/nav_dropdown.js?v=20260829_08"></script>
+  <script src="assets/js/app.js?v=20260829_08"></script>
 </body>
 </html>

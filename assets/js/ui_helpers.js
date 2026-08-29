@@ -227,6 +227,119 @@ window.closeDrawerDirect = function() {
   if (drawer) drawer.classList.remove('open');
 };
 
+// Vant UI Style GPopup Simulator Helper
+window.openSimPopup = function(options = {}) {
+  const position = options.position || 'center'; // 'center', 'top', 'bottom', 'left', 'right'
+  const round = options.round ? 'g-popup-round' : '';
+  const closeable = options.closeable !== false;
+  const title = options.title || '弹出层标题 (Popup)';
+  const content = options.content || '这是由 GPopup 动态弹出的内容面板，支持上、下、左、右、居中 5 种位置与圆角动效。';
+  const closeIconPos = options.closeIconPosition || 'top-right';
+
+  const mask = document.getElementById('simPopupMask');
+  const panel = document.getElementById('simPopupPanel');
+  const titleElem = document.getElementById('simPopupTitle');
+  const bodyElem = document.getElementById('simPopupBody');
+  const closeBtn = document.getElementById('simPopupClose');
+
+  if (!mask || !panel) return;
+
+  // Reset classes
+  panel.className = `g-popup-panel g-popup-${position} ${round}`;
+  if (titleElem) titleElem.innerText = title;
+  if (bodyElem) bodyElem.innerHTML = content;
+
+  if (closeBtn) {
+    closeBtn.style.display = closeable ? 'block' : 'none';
+  }
+
+  mask.classList.add('active');
+  showToast(`GPopup 已触发: [${position.toUpperCase()}] 弹出`, 'info');
+};
+
+window.closeSimPopup = function() {
+  const mask = document.getElementById('simPopupMask');
+  if (mask) mask.classList.remove('active');
+};
+
+// Vant UI Style GOverlay Simulator Helper
+window.openSimOverlay = function(options = {}) {
+  const mask = document.getElementById('simOverlayMask');
+  const slot = document.getElementById('simOverlaySlot');
+  if (!mask) return;
+
+  if (options.content && slot) {
+    slot.innerHTML = options.content;
+    slot.style.display = 'block';
+  } else if (slot) {
+    slot.style.display = 'none';
+  }
+
+  if (options.bgColor) {
+    mask.style.background = options.bgColor;
+  } else {
+    mask.style.background = 'rgba(0, 0, 0, 0.7)';
+  }
+
+  mask.classList.add('active');
+  showToast('GOverlay 遮罩层已开启 (点击背景关闭)', 'info');
+};
+
+window.closeSimOverlay = function() {
+  const mask = document.getElementById('simOverlayMask');
+  if (mask) mask.classList.remove('active');
+};
+
+// Form Layout Helpers
+window.changeFormLabelAlign = function(align) {
+  const form = document.getElementById('demoFormDynamic');
+  if (!form) return;
+  form.querySelectorAll('.g-form-label').forEach(lbl => {
+    lbl.style.textAlign = align === 'top' ? 'left' : align;
+    lbl.style.width = align === 'top' ? '100%' : '90px';
+    lbl.style.display = align === 'top' ? 'block' : 'inline-block';
+  });
+  showToast(`表单对齐切换为: ${align.toUpperCase()}`);
+};
+
+window.addDynamicFormItem = function() {
+  const list = document.getElementById('dynamicFormItemList');
+  if (!list) return;
+  const count = list.children.length + 1;
+  const item = document.createElement('div');
+  item.className = 'g-form-item';
+  item.style.display = 'flex';
+  item.style.alignItems = 'center';
+  item.style.gap = '12px';
+  item.innerHTML = `
+    <span style="width:90px; text-align:right; font-size:13px; color:var(--text-secondary);">装备词条 ${count}</span>
+    <div class="g-input-wrapper" style="flex:1;"><input class="g-input" placeholder="输入第 ${count} 条属性..."></div>
+    <button class="g-btn g-btn-danger" style="height:32px; padding:0 10px;" onclick="this.parentElement.remove(); showToast('已删除词条项', 'warning');">×</button>
+  `;
+  list.appendChild(item);
+  showToast(`新增词条 ${count}`, 'success');
+};
+
+// Interactive Demo GFab Toggle Helper
+window.toggleDemoFab = function(containerId, isVertical = false) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const menu = container.querySelector('.demo-fab-menu');
+  const icon = container.querySelector('.demo-fab-icon');
+  if (!menu || !icon) return;
+
+  const isCollapsed = menu.style.display === 'none';
+  if (isCollapsed) {
+    menu.style.display = 'flex';
+    icon.innerText = '✕';
+    showToast('已展开 FAB 菜单', 'info');
+  } else {
+    menu.style.display = 'none';
+    icon.innerText = '+';
+    showToast('已收起 FAB 菜单', 'info');
+  }
+};
+
 // Interactive Tab Switcher in Demos
 window.switchDemoTab = function(btn, panelId) {
   const parent = btn.closest('.sim-tabs-container') || btn.parentElement.parentElement;

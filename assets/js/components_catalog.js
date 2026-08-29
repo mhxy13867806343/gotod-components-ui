@@ -260,11 +260,13 @@ add_child(icon)`
         title: '1. 水平展开悬浮按钮 (Horizontal Uni-UI Speed Dial)',
         render: `
           <div style="background:var(--bg-surface); padding:24px; border-radius:12px; border:1px solid var(--border-base); display:flex; justify-content:flex-end; align-items:center;">
-            <div style="display:flex; align-items:center; gap:8px; background:var(--bg-card); padding:6px 12px; border-radius:30px; border:1px solid var(--border-base); box-shadow:0 6px 20px rgba(0,0,0,0.3);">
-              <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了相册', 'info')"><i class="fa-solid fa-image"></i> 相册</button>
-              <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了首页', 'success')"><i class="fa-solid fa-house"></i> 首页</button>
-              <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了收藏', 'warning')"><i class="fa-solid fa-star"></i> 收藏</button>
-              <button class="g-btn g-btn-default g-btn-round" style="width:32px; height:32px; padding:0;" onclick="showToast('收起 FAB')">✕</button>
+            <div id="demoFabHoriz" style="display:flex; align-items:center; gap:8px; background:var(--bg-card); padding:6px 12px; border-radius:30px; border:1px solid var(--border-base); box-shadow:0 6px 20px rgba(0,0,0,0.3);">
+              <div class="demo-fab-menu" style="display:flex; align-items:center; gap:8px;">
+                <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了相册', 'info')"><i class="fa-solid fa-image"></i> 相册</button>
+                <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了首页', 'success')"><i class="fa-solid fa-house"></i> 首页</button>
+                <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了收藏', 'warning')"><i class="fa-solid fa-star"></i> 收藏</button>
+              </div>
+              <button class="g-btn g-btn-default g-btn-round" style="width:32px; height:32px; padding:0;" onclick="toggleDemoFab('demoFabHoriz')"><span class="demo-fab-icon">✕</span></button>
             </div>
           </div>
         `,
@@ -276,6 +278,28 @@ fab.add_action("album", "相册", preload("res://icons/image.svg"))
 fab.add_action("home", "首页", preload("res://icons/home.svg"))
 fab.add_action("star", "收藏", preload("res://icons/star.svg"))
 fab.item_clicked.connect(func(idx, name): print("Clicked: ", name))
+add_child(fab)`
+      },
+      {
+        title: '2. 垂直向上展开悬浮按钮 (Vertical Speed Dial)',
+        render: `
+          <div style="background:var(--bg-surface); padding:24px; border-radius:12px; border:1px solid var(--border-base); display:flex; justify-content:flex-end; align-items:flex-end; min-height:180px;">
+            <div id="demoFabVert" style="display:flex; flex-direction:column-reverse; align-items:center; gap:8px;">
+              <button class="g-btn g-btn-primary g-btn-round" style="width:44px; height:44px; padding:0; box-shadow:0 4px 12px rgba(0,0,0,0.3);" onclick="toggleDemoFab('demoFabVert', true)"><span class="demo-fab-icon">✕</span></button>
+              <div class="demo-fab-menu" style="display:flex; flex-direction:column-reverse; align-items:center; gap:8px;">
+                <button class="g-btn g-btn-default g-btn-round" style="width:36px; height:36px; padding:0;" title="分享" onclick="showToast('点击了分享')"><i class="fa-solid fa-share-nodes"></i></button>
+                <button class="g-btn g-btn-default g-btn-round" style="width:36px; height:36px; padding:0;" title="下载" onclick="showToast('点击了下载')"><i class="fa-solid fa-download"></i></button>
+                <button class="g-btn g-btn-default g-btn-round" style="width:36px; height:36px; padding:0;" title="点赞" onclick="showToast('点击了点赞')"><i class="fa-solid fa-thumbs-up"></i></button>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: Vertical Speed Dial
+var fab = GFab.new()
+fab.direction = GFab.Direction.VERTICAL
+fab.add_action("share", "分享", icon_share)
+fab.add_action("download", "下载", icon_download)
+fab.add_action("like", "点赞", icon_like)
 add_child(fab)`
       }
     ],
@@ -706,20 +730,20 @@ add_child(slider)`
     desc: '由输入框、选择器、单选框、多选框等控件组成，用以收集、校验和提交数据。支持标签位置 (Top/Left/Right)、统一宽度与星号必填校验。',
     demos: [
       {
-        title: '1. 表单排版与校验提交 (Form Layout & Validation)',
+        title: '1. 基础表单排版与校验提交 (Form Layout & Validation)',
         render: `
-          <div style="display:flex; flex-direction:column; gap:16px; width:100%; max-width:440px;">
+          <div style="display:flex; flex-direction:column; gap:14px; width:100%; max-width:440px;">
             <div style="display:flex; align-items:center; gap:12px;">
               <span style="width:80px; text-align:right; font-size:0.88rem; color:var(--text-secondary);"><span style="color:var(--danger)">*</span> 账号</span>
-              <div class="g-input-wrapper" style="flex:1;"><input id="formUser" class="g-input" value="admin"></div>
+              <div class="g-input-wrapper" style="flex:1;"><input id="formUser" class="g-input" value="勇者卡米尔"></div>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
               <span style="width:80px; text-align:right; font-size:0.88rem; color:var(--text-secondary);"><span style="color:var(--danger)">*</span> 密码</span>
               <div class="g-input-wrapper" style="flex:1;"><input id="formPwd" class="g-input" type="password" value="123456"></div>
             </div>
-            <div style="display:flex; justify-content:flex-end; gap:10px;">
-              <button class="g-btn g-btn-default" onclick="document.getElementById('formUser').value=''; document.getElementById('formPwd').value=''; showToast('Form reset');">重置</button>
-              <button class="g-btn g-btn-primary" onclick="showToast('Form submitted: ' + document.getElementById('formUser').value, 'success')">提交表单</button>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:6px;">
+              <button class="g-btn g-btn-default" onclick="document.getElementById('formUser').value=''; document.getElementById('formPwd').value=''; showToast('表单已重置');">重置</button>
+              <button class="g-btn g-btn-primary" onclick="showToast('提交成功: ' + document.getElementById('formUser').value, 'success')">提交表单</button>
             </div>
           </div>
         `,
@@ -728,12 +752,108 @@ var form = GForm.new()
 form.label_width = 100.0
 
 var user_item = GFormItem.new()
-user_item.label = "Username"
+user_item.label = "账号"
 user_item.required = true
 user_item.add_child(GInput.new())
 form.add_child(user_item)
 
 add_child(form)`
+      },
+      {
+        title: '2. 标签对齐与位置切换 (Label Position: Left / Right / Top)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:16px; width:100%; max-width:440px;">
+            <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
+              <span style="font-size:12px; color:var(--text-secondary);">标签对齐切换：</span>
+              <button class="g-btn g-btn-default" style="height:28px; padding:0 8px; font-size:11px;" onclick="changeFormLabelAlign('left')">LEFT 靠左</button>
+              <button class="g-btn g-btn-default" style="height:28px; padding:0 8px; font-size:11px;" onclick="changeFormLabelAlign('right')">RIGHT 靠右</button>
+              <button class="g-btn g-btn-default" style="height:28px; padding:0 8px; font-size:11px;" onclick="changeFormLabelAlign('top')">TOP 靠顶</button>
+            </div>
+            <div id="demoFormDynamic" style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="g-form-label" style="width:90px; text-align:right; font-size:13px; color:var(--text-secondary);">公会名称</span>
+                <div class="g-input-wrapper" style="flex:1;"><input class="g-input" value="晨曦骑士团"></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="g-form-label" style="width:90px; text-align:right; font-size:13px; color:var(--text-secondary);">活动主城</span>
+                <select class="select-theme" style="flex:1; height:32px;">
+                  <option>王城奥格瑞玛</option>
+                  <option>暴风主城</option>
+                  <option>达拉然浮空岛</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: Form Label Position
+var form = GForm.new()
+form.label_position = GForm.LabelPosition.TOP
+form.label_width = 120.0`
+      },
+      {
+        title: '3. 游戏系统复合设置表单 (Game Multi-Control Settings Form)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:14px; width:100%; max-width:440px; background:var(--bg-surface); padding:16px; border:1px solid var(--border-base); border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:13px; color:var(--text-primary);">🔊 开启背景音乐 (BGM):</span>
+              <label class="g-switch"><input type="checkbox" checked onchange="showToast('BGM 开关: ' + this.checked)"><span class="g-switch-slider"></span></label>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:13px; color:var(--text-primary);">⚔️ 伤害数字显示:</span>
+              <label class="g-switch"><input type="checkbox" checked onchange="showToast('伤害飘字: ' + this.checked)"><span class="g-switch-slider"></span></label>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-primary);">
+                <span>🎮 主音量大小:</span>
+                <span id="formVolText" style="color:var(--primary); font-weight:600;">80%</span>
+              </div>
+              <input type="range" class="g-slider" min="0" max="100" value="80" oninput="document.getElementById('formVolText').innerText = this.value + '%'">
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+              <button class="g-btn g-btn-primary" style="height:32px; font-size:12px;" onclick="showToast('游戏设置已保存到 Local / ConfigFile', 'success')">保存设置</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: Composite Game Settings Form
+var form = GForm.new()
+var bgm_item = GFormItem.new()
+bgm_item.label = "开启背景音乐"
+bgm_item.add_child(GSwitch.new())
+
+var vol_item = GFormItem.new()
+vol_item.label = "音量大小"
+vol_item.add_child(GSlider.new())
+
+form.add_child(bgm_item)
+form.add_child(vol_item)`
+      },
+      {
+        title: '4. 动态表单项增删 (Dynamic Form Item Add/Remove)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:460px;">
+            <div id="dynamicFormItemList" style="display:flex; flex-direction:column; gap:10px;">
+              <div class="g-form-item" style="display:flex; align-items:center; gap:12px;">
+                <span style="width:90px; text-align:right; font-size:13px; color:var(--text-secondary);">装备词条 1</span>
+                <div class="g-input-wrapper" style="flex:1;"><input class="g-input" value="暴击率 +15.5%"></div>
+                <button class="g-btn g-btn-danger" style="height:32px; padding:0 10px;" onclick="this.parentElement.remove(); showToast('已删除词条项', 'warning');">×</button>
+              </div>
+              <div class="g-form-item" style="display:flex; align-items:center; gap:12px;">
+                <span style="width:90px; text-align:right; font-size:13px; color:var(--text-secondary);">装备词条 2</span>
+                <div class="g-input-wrapper" style="flex:1;"><input class="g-input" value="物理穿透 +320"></div>
+                <button class="g-btn g-btn-danger" style="height:32px; padding:0 10px;" onclick="this.parentElement.remove(); showToast('已删除词条项', 'warning');">×</button>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:4px;">
+              <button class="g-btn g-btn-default" style="flex:1; height:32px; font-size:12px;" onclick="addDynamicFormItem()"><i class="fa-solid fa-plus"></i> 追加新词条</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: Dynamic Add FormItem
+func add_item():
+    var item = GFormItem.new()
+    item.label = "自定义属性"
+    item.add_child(GInput.new())
+    form.add_child(item)`
       }
     ],
     props: [
@@ -824,6 +944,167 @@ danger_dlg.open()`
       { name: 'header', desc: '自定义弹窗顶部标题区域', child: 'Control' },
       { name: 'default', desc: '弹窗正文内容插槽', child: 'Control' },
       { name: 'footer', desc: '弹窗底部按钮操作区域', child: 'Control / HBoxContainer' }
+    ]
+  },
+
+  // --------------------------------------------------------
+  // 14.1 GPopup 弹出层 (Vant UI 对标)
+  // --------------------------------------------------------
+  'popup': {
+    title: 'Popup 弹出层 (GPopup)',
+    desc: '弹出层容器，用于展示多方向弹出的面板、规格选择器、快捷菜单或对话框。深度对标 Vant UI Popup 规范，支持居中缩放、顶部滑出、底部抽屉、左右侧滑、大圆角与关闭图标定制。',
+    demos: [
+      {
+        title: '1. 基础居中弹出 (Basic Center Popup)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-primary" onclick="openSimPopup({ position:'center', round:false, closeable:true, title:'居中弹出层', content:'<p>这是基础居中弹出的内容面板，支持点击右上角关闭或点击暗色背景关闭。</p>' })">居中弹出 (Center)</button>
+          </div>
+        `,
+        code: `# GDScript: 基础居中弹出
+var popup = GPopup.new()
+popup.position_type = GPopup.PositionType.CENTER
+popup.closeable = true
+popup.open()
+add_child(popup)`
+      },
+      {
+        title: '2. 弹出位置 (Position: Top / Bottom / Left / Right)',
+        render: `
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'top', title:'顶部通知条', content:'<div style=\\'text-align:center; padding:10px;\\'>🔔 [系统公告] 服务器将在 10 分钟后进行热更新维护！</div>' })">顶部弹出 (Top)</button>
+            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'bottom', round:true, title:'底部操作面板', content:'<div style=\\'display:flex; flex-direction:column; gap:8px;\\'><button class=\\'g-btn g-btn-default\\' style=\\'width:100%;\\' onclick=\\'closeSimPopup(); showToast(\"微信分享\");\\'>微信好友分享</button><button class=\\'g-btn g-btn-default\\' style=\\'width:100%;\\' onclick=\\'closeSimPopup(); showToast(\"朋友圈\");\\'>朋友圈海报</button></div>' })">底部弹出 (Bottom)</button>
+            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'left', title:'左侧快捷侧栏', content:'<p>左侧滑出导航菜单与快捷筛选栏。</p>' })">左侧弹出 (Left)</button>
+            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'right', title:'右侧属性详情', content:'<p>右侧滑出装备详情与人物状态查看。</p>' })">右侧弹出 (Right)</button>
+          </div>
+        `,
+        code: `# GDScript: 4 方向滑出弹出层
+var popup = GPopup.new()
+popup.position_type = GPopup.PositionType.BOTTOM # TOP, LEFT, RIGHT
+popup.round_corner = true
+popup.open()`
+      },
+      {
+        title: '3. 圆角弹窗与关闭图标 (Round Corner & Close Icon)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-warning" onclick="openSimPopup({ position:'bottom', round:true, closeable:true, title:'圆角底部抽屉', content:'<p style=\\'margin-bottom:12px;\\'>底部弹出时自动带有 18px 优雅顶部圆角，符合移动端与触控交互审美规范。</p><button class=\\'g-btn g-btn-primary\\' style=\\'width:100%;\\' onclick=\\'closeSimPopup()\\'>我知道了</button>' })">底部圆角弹窗 (Round Bottom)</button>
+            <button class="g-btn g-btn-warning" onclick="openSimPopup({ position:'center', round:true, closeable:true, title:'圆角居中卡片', content:'<p>居中卡片支持 18px 全圆角，呈现现代感十足的悬浮弹窗。</p>' })">居中圆角卡片 (Round Center)</button>
+          </div>
+        `,
+        code: `# GDScript: 圆角弹窗
+var popup = GPopup.new()
+popup.position_type = GPopup.PositionType.BOTTOM
+popup.round_corner = true
+popup.closeable = true
+popup.open()`
+      },
+      {
+        title: '4. 游戏实战：商品道具购买规格选择器 (Game Item ActionSheet)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-success" onclick="openSimPopup({ position:'bottom', round:true, closeable:true, title:'🛒 购买圣剑·艾斯卡诺', content:'<div style=\\'display:flex; gap:16px; align-items:center; margin-bottom:16px;\\'><div style=\\'width:60px; height:60px; background:var(--bg-card); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:28px;\\'>⚔️</div><div><div style=\\'font-weight:700; color:var(--primary); font-size:16px;\\'>金币: 9,999</div><div style=\\'font-size:12px; color:var(--text-secondary);\\'>库存: 剩余 3 件 | 传奇品质</div></div></div><div style=\\'display:flex; gap:10px;\\'><button class=\\'g-btn g-btn-default\\' style=\\'flex:1;\\' onclick=\\'closeSimPopup()\\'>加入心愿单</button><button class=\\'g-btn g-btn-primary\\' style=\\'flex:1;\\' onclick=\\'closeSimPopup(); showToast(\"购买成功！已放入背包\", \"success\");\\'>立即兑换</button></div>' })">弹出购买规格浮层 (ActionSheet)</button>
+          </div>
+        `,
+        code: `# GDScript: 游戏商品规格选择
+var popup = GPopup.new()
+popup.position_type = GPopup.PositionType.BOTTOM
+popup.round_corner = true
+popup.set_content(item_buy_panel)
+popup.open()`
+      }
+    ],
+    props: [
+      { name: 'position_type', type: 'enum', default: 'CENTER', desc: '弹出位置：CENTER (居中), TOP (顶部), BOTTOM (底部), LEFT (左侧), RIGHT (右侧)' },
+      { name: 'round_corner', type: 'boolean', default: 'false', desc: '是否显示圆角 (顶部/底部弹出时自动为上方或下方大圆角)' },
+      { name: 'closeable', type: 'boolean', default: 'false', desc: '是否显示右上角/左上角关闭图标' },
+      { name: 'close_icon_position', type: 'enum', default: 'TOP_RIGHT', desc: '关闭图标位置：TOP_RIGHT, TOP_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT' },
+      { name: 'overlay', type: 'boolean', default: 'true', desc: '是否显示背景遮罩层' },
+      { name: 'close_on_click_overlay', type: 'boolean', default: 'true', desc: '是否在点击背景遮罩层后自动关闭' },
+      { name: 'duration', type: 'float', default: '0.3', desc: '过渡动画时长 (秒)' }
+    ],
+    events: [
+      { name: 'opened()', desc: '弹出层打开动画结束时触发', params: '()' },
+      { name: 'closed()', desc: '弹出层关闭动画结束时触发', params: '()' },
+      { name: 'click_overlay()', desc: '点击背景遮罩层时触发', params: '()' },
+      { name: 'click_close_icon()', desc: '点击关闭图标时触发', params: '()' }
+    ],
+    methods: [
+      { name: 'open()', desc: '打开弹出层并执行对应方位的 Tween 滑入/缩放动效', params: '() -> void' },
+      { name: 'close()', desc: '关闭弹出层并执行滑出/淡出动效', params: '() -> void' },
+      { name: 'toggle()', desc: '切换弹出层的开启/关闭状态', params: '() -> void' },
+      { name: 'set_content(node)', desc: '动态设置弹出层内部承载的子节点内容', params: '(node: Control) -> void' }
+    ],
+    slots: [
+      { name: 'default', desc: '弹出层面板内部承载的内容容器', child: 'Control' }
+    ]
+  },
+
+  // --------------------------------------------------------
+  // 14.2 GOverlay 遮罩层 (Vant UI 对标)
+  // --------------------------------------------------------
+  'overlay': {
+    title: 'Overlay 遮罩层 (GOverlay)',
+    desc: '创建一个全屏遮罩层，用于强调特定的页面元素，并阻止用户进行其他操作。深度对标 Vant UI Overlay 规范，支持内嵌居中卡片插槽与背景淡入淡出。',
+    demos: [
+      {
+        title: '1. 基础遮罩层 (Basic Overlay)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-primary" onclick="openSimOverlay()">显示基础遮罩 (点击背景关闭)</button>
+          </div>
+        `,
+        code: `# GDScript: 基础遮罩层
+var overlay = GOverlay.new()
+overlay.open()
+add_child(overlay)`
+      },
+      {
+        title: '2. 嵌入内容 (Embedded Centered Content / Slot)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-success" onclick="openSimOverlay({ content:'<div style=\\'text-align:center;\\'><div style=\\'font-size:36px; margin-bottom:12px;\\'>⏳</div><div style=\\'font-weight:600; font-size:15px;\\'>资源同步加载中...</div><p style=\\'font-size:12px; color:var(--text-secondary); margin-top:6px;\\'>正在从云存档读取角色数据，请稍候</p><button class=\\'g-btn g-btn-default\\' style=\\'margin-top:14px; height:28px; font-size:12px;\\' onclick=\\'closeSimOverlay()\\'>取消加载</button></div>' })">嵌入居中加载卡片 (Embedded Content)</button>
+          </div>
+        `,
+        code: `# GDScript: 遮罩层嵌入内容
+var overlay = GOverlay.new()
+var card = PanelContainer.new()
+# 添加居中内容卡片...
+overlay.set_content(card)
+overlay.open()`
+      },
+      {
+        title: '3. 自定义遮罩层颜色与透明度 (Custom Background Color)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-warning" onclick="openSimOverlay({ bgColor: 'rgba(24, 160, 88, 0.4)' })">绿色沉浸遮罩 (Green Tint)</button>
+            <button class="g-btn g-btn-danger" onclick="openSimOverlay({ bgColor: 'rgba(208, 48, 80, 0.4)' })">红色警戒遮罩 (Danger Tint)</button>
+          </div>
+        `,
+        code: `# GDScript: 自定义遮罩颜色
+var overlay = GOverlay.new()
+overlay.mask_color = Color(0.1, 0.6, 0.3, 0.5) # 自定义颜色
+overlay.open()`
+      }
+    ],
+    props: [
+      { name: 'mask_color', type: 'Color', default: 'Color(0, 0, 0, 0.7)', desc: '遮罩背景颜色与透明度' },
+      { name: 'duration', type: 'float', default: '0.3', desc: '淡入淡出动画时长 (秒)' },
+      { name: 'lock_scroll', type: 'boolean', default: 'true', desc: '是否锁定底层滚动或输入阻断' }
+    ],
+    events: [
+      { name: 'click()', desc: '点击遮罩层时触发', params: '()' },
+      { name: 'opened()', desc: '遮罩层淡入打开结束时触发', params: '()' },
+      { name: 'closed()', desc: '遮罩层淡出关闭结束时触发', params: '()' }
+    ],
+    methods: [
+      { name: 'open()', desc: '打开遮罩层并播放淡入动效', params: '() -> void' },
+      { name: 'close()', desc: '关闭遮罩层并播放淡出动效', params: '() -> void' },
+      { name: 'toggle()', desc: '切换遮罩层的开启与关闭状态', params: '() -> void' },
+      { name: 'set_content(node)', desc: '向遮罩层中央插槽挂载自定义控件节点', params: '(node: Control) -> void' }
+    ],
+    slots: [
+      { name: 'default', desc: '遮罩层居中插槽内容容器', child: 'Control' }
     ]
   },
 
