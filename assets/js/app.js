@@ -306,6 +306,16 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('decorator-weapon');
+  } else if (section === 'storage') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search storage..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Storage 数据存储与本地缓存</div>
+        <div class="nav-item active" data-key="storage-key-value" onclick="showDoc('storage-key-value')"><span>💾 GStorage 本地缓存与落盘</span></div>
+        <div class="nav-item" data-key="storage-datastore" onclick="showDoc('storage-datastore')"><span>📦 GDataStore 集合文档 CRUD</span></div>
+      </div>
+    `;
+    showDoc('storage-key-value');
   } else if (section === 'studio') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
@@ -376,7 +386,7 @@ window.showDoc = function(key) {
   window.currentDocKey = key;
   localStorage.setItem('gotod_doc_key', key);
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STUDIO, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STORAGE, STUDIO, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
@@ -386,6 +396,7 @@ window.showDoc = function(key) {
     window.HOOKS_CATALOG || {},
     window.SIGNALS_CATALOG || {},
     window.DECORATOR_CATALOG || {},
+    window.STORAGE_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
