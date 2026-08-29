@@ -173,14 +173,436 @@ add_child(txt)`
   },
 
   // --------------------------------------------------------
-  // 2.2 GContainer 布局容器 (Element Plus 对标)
+  // 2.2 GContainer 布局容器 (Element Plus 对标 & 游戏实战布局)
   // --------------------------------------------------------
   'container': {
-    title: 'Container 布局容器 (GContainer & Layouts)',
-    desc: '用于快速搭建游戏主界面、系统设置或面板系统的常见整体结构。深度对标 Element Plus Container 规范，提供 GContainer（外层容器）、GHeader（顶栏）、GAside（侧边栏）、GMain（主要区域）与 GFooter（底栏）。当子元素中包含 GHeader 或 GFooter 时自动垂直排列，否则水平排列。',
+    title: 'Container 布局容器 (GContainer & Game Layouts)',
+    desc: '用于搭建游戏 HUD 主界面、JRPG 战术面板、MMORPG 战场或后台管理系统的全套整体布局架构。深度对标 Element Plus Container 规范，提供 GContainer（外层弹性容器）、GHeader（顶栏）、GAside（侧边栏）、GMain（主要区域）与 GFooter（底栏）。支持灵活的嵌套组合与自定义游戏主题布局。',
     demos: [
       {
-        title: '1. 常见布局：顶栏 + 主要区域 + 底栏 (Header + Main + Footer)',
+        title: '1. 经典 JRPG 《最终幻想》(Final Fantasy) 战术战斗 HUD 布局',
+        render: `
+          <div style="width:100%; border:2px solid #3a3a50; border-radius:12px; overflow:hidden; background:#0e0e14; color:#fff; font-size:12px; display:flex; flex-direction:column; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
+            <!-- Top Header: Battle Target & Stage Indicator -->
+            <div style="background:linear-gradient(90deg, #1a1a2e, #16213e); padding:10px 18px; border-bottom:1px solid #2e2e48; display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="background:#e6a23c; color:#000; font-weight:800; padding:2px 8px; border-radius:4px; font-size:11px;">BOSS</span>
+                <span style="font-weight:700; font-size:14px; color:#f1f2f6;">巴哈姆特·绝境龙神 (Bahamut Prime)</span>
+              </div>
+              <div style="color:#a4b0be; font-family:var(--font-mono); font-size:11px;">Phase 3 | 极限充能 100%</div>
+            </div>
+
+            <!-- Middle Body: Left Party HUD + Center Battlefield -->
+            <div style="display:flex; min-height:180px;">
+              <!-- Left Aside: Party Stats (Cloud, Tifa, Aerith) -->
+              <div style="width:220px; background:rgba(20, 20, 30, 0.85); border-right:1px solid #2e2e48; padding:12px; display:flex; flex-direction:column; gap:10px;">
+                <div style="background:rgba(255,255,255,0.04); padding:8px 10px; border-radius:6px; border-left:3px solid #409eff;">
+                  <div style="display:flex; justify-content:space-between; font-weight:600; margin-bottom:4px;">
+                    <span>克劳德 (Cloud)</span>
+                    <span style="color:#67c23a;">HP 7850/8000</span>
+                  </div>
+                  <div style="width:100%; height:4px; background:#2c3e50; border-radius:2px; overflow:hidden;"><div style="width:98%; height:100%; background:#67c23a;"></div></div>
+                  <div style="width:100%; height:3px; background:#2c3e50; border-radius:2px; margin-top:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#e6a23c;"></div></div>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.04); padding:8px 10px; border-radius:6px; border-left:3px solid #f56c6c;">
+                  <div style="display:flex; justify-content:space-between; font-weight:600; margin-bottom:4px;">
+                    <span>蒂法 (Tifa)</span>
+                    <span style="color:#67c23a;">HP 6200/6200</span>
+                  </div>
+                  <div style="width:100%; height:4px; background:#2c3e50; border-radius:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#67c23a;"></div></div>
+                  <div style="width:100%; height:3px; background:#2c3e50; border-radius:2px; margin-top:2px; overflow:hidden;"><div style="width:85%; height:100%; background:#e6a23c;"></div></div>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.04); padding:8px 10px; border-radius:6px; border-left:3px solid #e6a23c;">
+                  <div style="display:flex; justify-content:space-between; font-weight:600; margin-bottom:4px;">
+                    <span>爱丽丝 (Aerith)</span>
+                    <span style="color:#67c23a;">HP 5100/5100</span>
+                  </div>
+                  <div style="width:100%; height:4px; background:#2c3e50; border-radius:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#67c23a;"></div></div>
+                  <div style="width:100%; height:3px; background:#2c3e50; border-radius:2px; margin-top:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#e6a23c;"></div></div>
+                </div>
+              </div>
+
+              <!-- Center Main: 3D Tactical Battlefield -->
+              <div style="flex:1; background:radial-gradient(circle at center, #1b2838 0%, #0e1117 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; position:relative;">
+                <div style="font-size:36px; margin-bottom:8px;">🐉</div>
+                <div style="color:#e6a23c; font-weight:700; font-size:13px; text-shadow:0 0 10px rgba(230,162,60,0.5);">【锁定目标】 绝境龙神 · 弱点属性: 冰 (Ice)</div>
+                <div style="margin-top:12px; display:flex; gap:8px;">
+                  <span class="g-tag g-tag-primary">ATB 充能完毕</span>
+                  <span class="g-tag g-tag-warning">LIMIT BREAK READY</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Footer: JRPG Command Menu & Action Wheel -->
+            <div style="background:linear-gradient(180deg, #161b26, #0d1117); padding:12px 18px; border-top:1px solid #2e2e48; display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; gap:10px;">
+                <button class="g-btn g-btn-primary" style="font-weight:700; height:32px; font-size:12px;" onclick="showToast('执行: 普通攻击 (Attack)', 'success')">⚔️ 攻击 (Attack)</button>
+                <button class="g-btn g-btn-default" style="font-weight:600; height:32px; font-size:12px;" onclick="showToast('展开魔晶石魔法菜单 (Magic)', 'info')">🔮 魔法 (Magic)</button>
+                <button class="g-btn g-btn-default" style="font-weight:600; height:32px; font-size:12px;" onclick="showToast('打开消耗品背包 (Item)', 'info')">🎒 道具 (Item)</button>
+                <button class="g-btn g-btn-danger" style="font-weight:700; height:32px; font-size:12px;" onclick="showToast('释放极限技: 超究武神霸斩！', 'warning')">⚡ 极限技 (Limit)</button>
+              </div>
+              <div style="color:#747d8c; font-size:11px;">GContainer: Header + (Aside + Main) + Footer 战术嵌套</div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 《最终幻想》经典战术战斗 HUD 架构
+var root_hud = GContainer.new() # 根容器 (自动垂直布局)
+
+# 1. 顶栏：Boss 血条与战场指示
+var header_boss = GHeader.new()
+header_boss.height = 48.0
+header_boss.add_child(boss_health_bar_component)
+
+# 2. 中间横向区域：左侧队伍列表 + 中央 3D 战场
+var middle_container = GContainer.new()
+middle_container.direction = GContainer.Direction.HORIZONTAL
+
+var aside_party = GAside.new()
+aside_party.width = 220.0
+aside_party.add_child(party_members_vbox)
+
+var main_battlefield = GMain.new()
+main_battlefield.add_child(camera_viewport_3d)
+
+middle_container.add_child(aside_party)
+middle_container.add_child(main_battlefield)
+
+# 3. 底栏：ATB 指令控制台 [ 攻击 | 魔法 | 道具 | 极限技 ]
+var footer_command = GFooter.new()
+footer_command.height = 64.0
+footer_command.add_child(command_buttons_hbox)
+
+# 4. 组装至根容器并挂载
+root_hud.add_child(header_boss)
+root_hud.add_child(middle_container)
+root_hud.add_child(footer_command)
+add_child(root_hud)`
+      },
+      {
+        title: '2. 经典 JRPG 《黄金太阳》(Golden Sun) 精灵矩阵与精神力布局',
+        render: `
+          <div style="width:100%; border:2px solid #5c4326; border-radius:12px; overflow:hidden; background:#1c1610; color:#eed8ae; font-size:12px; display:flex; flex-direction:column; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
+            <!-- Top: 4 Element Djinn Spirits Bar -->
+            <div style="background:linear-gradient(90deg, #3d2b15, #2c1f0f); padding:10px 18px; border-bottom:1px solid #5c4326; display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; color:#f5d76e; font-size:13px;">🌟 四大元素精灵矩阵 (Djinn Matrix)</span>
+              <div style="display:flex; gap:12px; font-weight:600;">
+                <span style="color:#f56c6c;">🔥 火炎: 4/4</span>
+                <span style="color:#409eff;">💧 水泉: 4/4</span>
+                <span style="color:#67c23a;">🌿 地灵: 4/4</span>
+                <span style="color:#e6a23c;">⚡ 风暴: 4/4</span>
+              </div>
+            </div>
+
+            <!-- Middle: Left Psynergy List + Center Summon View -->
+            <div style="display:flex; min-height:160px;">
+              <div style="width:200px; background:#17120d; border-right:1px solid #5c4326; padding:12px; display:flex; flex-direction:column; gap:8px;">
+                <div style="font-weight:700; color:#f5d76e; margin-bottom:4px;">精神力术式 (Psynergy)</div>
+                <div style="padding:6px 8px; background:rgba(245,215,110,0.1); border-radius:4px; border:1px solid #5c4326; cursor:pointer;" onclick="showToast('选择精神力: 诸神黄昏 (Ragnarok)')">
+                  <div style="font-weight:600; color:#fff;">诸神黄昏 (Ragnarok)</div>
+                  <div style="font-size:10px; color:#eed8ae;">PP 消耗: 7 | 召唤黄金巨剑</div>
+                </div>
+                <div style="padding:6px 8px; background:rgba(255,255,255,0.03); border-radius:4px; cursor:pointer;" onclick="showToast('选择精神力: 痊愈光环 (Wish)')">
+                  <div style="font-weight:600; color:#fff;">痊愈光环 (Wish)</div>
+                  <div style="font-size:10px; color:#eed8ae;">PP 消耗: 9 | 全队恢复 400 HP</div>
+                </div>
+              </div>
+
+              <div style="flex:1; background:radial-gradient(circle at center, #2e2112 0%, #140d07 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;">
+                <div style="font-size:32px; margin-bottom:6px;">🗡️✨</div>
+                <div style="color:#f5d76e; font-weight:700;">【神殿战场】 地之使者·罗宾 (Robin)</div>
+                <p style="font-size:11px; color:#eed8ae; margin-top:4px; opacity:0.8;">精灵附体加成: 攻击力 +45, 敏捷 +20</p>
+              </div>
+            </div>
+
+            <!-- Bottom: Action Confirm Bar -->
+            <div style="background:#2c1f0f; padding:10px 18px; border-top:1px solid #5c4326; display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; color:#eed8ae;">按 A 键确认精神力释放，按 B 键切换精灵待机</span>
+              <button class="g-btn g-btn-warning" style="height:28px; font-size:11px;" onclick="showToast('精神力召唤法阵已展开！', 'success')">释放精灵召唤术 ⚡</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 《黄金太阳》精灵契约与精神力施法界面
+var gs_container = GContainer.new()
+
+var djinns_header = GHeader.new()
+djinns_header.height = 42.0
+djinns_header.add_child(element_djinns_hbox)
+
+var body_container = GContainer.new()
+body_container.direction = GContainer.Direction.HORIZONTAL
+
+var psynergy_aside = GAside.new()
+psynergy_aside.width = 200.0
+psynergy_aside.add_child(psynergy_spell_list)
+
+var summon_main = GMain.new()
+summon_main.add_child(summon_animation_viewport)
+
+body_container.add_child(psynergy_aside)
+body_container.add_child(summon_main)
+
+var footer_action = GFooter.new()
+footer_action.height = 46.0
+footer_action.add_child(action_prompt_hbox)
+
+gs_container.add_child(djinns_header)
+gs_container.add_child(body_container)
+gs_container.add_child(footer_action)
+add_child(gs_container)`
+      },
+      {
+        title: '3. 大型网游 MMORPG (魔兽世界 / FF14) 全景游戏 HUD 布局',
+        render: `
+          <div style="width:100%; border:2px solid #2c3e50; border-radius:12px; overflow:hidden; background:#0b0f19; color:#f1f2f6; font-size:12px; display:flex; flex-direction:column; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
+            <!-- Top: Target Info & Raid Buffs -->
+            <div style="background:rgba(18,24,38,0.95); padding:10px 18px; border-bottom:1px solid #202d42; display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-weight:700; color:#409eff;">🛡️ 团队首领战: 熔火核心拉格纳罗斯</span>
+                <span class="g-tag g-tag-danger">狂暴倒计时 04:32</span>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <span class="g-tag g-tag-default">⚔️ 强效王者祝福</span>
+                <span class="g-tag g-tag-default">🛡️ 耐力光环</span>
+                <span class="g-tag g-tag-default">⚡ 嗜血/英勇就绪</span>
+              </div>
+            </div>
+
+            <!-- Middle: Left Team Raid + Center Game World + Right Minimap -->
+            <div style="display:flex; min-height:180px;">
+              <!-- Left: Team Raid Frame (20-man team) -->
+              <div style="width:180px; background:rgba(11,15,25,0.9); border-right:1px solid #202d42; padding:10px; display:flex; flex-direction:column; gap:6px;">
+                <div style="font-weight:700; font-size:11px; color:#a4b0be; margin-bottom:2px;">👥 20人团队框架 (Raid Frame)</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+                  <div style="background:#27ae60; padding:4px; border-radius:3px; text-align:center; font-size:10px; font-weight:700;">主T·战士</div>
+                  <div style="background:#27ae60; padding:4px; border-radius:3px; text-align:center; font-size:10px; font-weight:700;">副T·圣骑</div>
+                  <div style="background:#2980b9; padding:4px; border-radius:3px; text-align:center; font-size:10px; font-weight:700;">治疗·白魔</div>
+                  <div style="background:#2980b9; padding:4px; border-radius:3px; text-align:center; font-size:10px; font-weight:700;">治疗·学者</div>
+                  <div style="background:#c0392b; padding:4px; border-radius:3px; text-align:center; font-size:10px; font-weight:700;">DPS·黑魔</div>
+                  <div style="background:#c0392b; padding:4px; border-radius:3px; text-align:center; font-size:10px; font-weight:700;">DPS·龙骑</div>
+                </div>
+              </div>
+
+              <!-- Center: MMORPG Main World View -->
+              <div style="flex:1; background:radial-gradient(circle at center, #1e2b40 0%, #0a0e17 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;">
+                <div style="font-size:36px; margin-bottom:6px;">🔥🌋</div>
+                <div style="font-weight:700; color:#f56c6c;">主战场 3D 视野 (World Camera Viewport)</div>
+                <div style="font-size:11px; color:#a4b0be; margin-top:4px;">当前 FPS: 144 | 延迟: 18ms</div>
+              </div>
+
+              <!-- Right: Minimap & Quest Log -->
+              <div style="width:200px; background:rgba(11,15,25,0.9); border-left:1px solid #202d42; padding:10px; display:flex; flex-direction:column; gap:8px;">
+                <div style="background:#1a233a; height:70px; border-radius:6px; border:1px solid #202d42; display:flex; align-items:center; justify-content:center; color:#409eff; font-weight:600; font-size:11px;">
+                  🗺️ 小地图 (Minimap)
+                </div>
+                <div style="font-size:11px;">
+                  <div style="font-weight:700; color:#e6a23c; margin-bottom:2px;">📜 史诗任务追踪:</div>
+                  <div style="color:#a4b0be; line-height:1.4;">击败炎魔之王 (1/1)<br>收集萨弗拉斯铁锭 (8/8)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom: 12-Slot Action Bar & Chat Window -->
+            <div style="background:rgba(18,24,38,0.95); padding:10px 18px; border-top:1px solid #202d42; display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; gap:6px;">
+                <button class="g-btn g-btn-primary" style="width:36px; height:36px; padding:0; font-weight:700;">1</button>
+                <button class="g-btn g-btn-primary" style="width:36px; height:36px; padding:0; font-weight:700;">2</button>
+                <button class="g-btn g-btn-primary" style="width:36px; height:36px; padding:0; font-weight:700;">3</button>
+                <button class="g-btn g-btn-primary" style="width:36px; height:36px; padding:0; font-weight:700;">4</button>
+                <button class="g-btn g-btn-default" style="width:36px; height:36px; padding:0; font-weight:700;">Q</button>
+                <button class="g-btn g-btn-default" style="width:36px; height:36px; padding:0; font-weight:700;">E</button>
+                <button class="g-btn g-btn-danger" style="width:36px; height:36px; padding:0; font-weight:700;">R</button>
+              </div>
+              <div style="font-size:11px; color:#a4b0be;">XP: 88,450 / 100,000 (88.4%)</div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: MMORPG 5 分栏全景 HUD 布局 (魔兽/FF14 结构)
+var mmo_root = GContainer.new()
+
+# 1. 顶栏：首领状态与光环
+var top_header = GHeader.new()
+top_header.height = 48.0
+top_header.add_child(boss_status_hud)
+
+# 2. 中间横向三栏：左侧团队框架 + 中央战场 + 右侧小地图
+var mid_container = GContainer.new()
+mid_container.direction = GContainer.Direction.HORIZONTAL
+
+var left_raid = GAside.new()
+left_raid.width = 180.0
+left_raid.add_child(raid_frame_grid)
+
+var center_world = GMain.new()
+center_world.add_child(world_viewport_3d)
+
+var right_minimap = GAside.new()
+right_minimap.width = 200.0
+right_minimap.add_child(minimap_and_quest_tracker)
+
+mid_container.add_child(left_raid)
+mid_container.add_child(center_world)
+mid_container.add_child(right_minimap)
+
+# 3. 底栏：技能快捷键栏与经验条
+var bottom_bar = GFooter.new()
+bottom_bar.height = 56.0
+bottom_bar.add_child(action_hotkey_slots)
+
+# 4. 组装并挂载
+mmo_root.add_child(top_header)
+mmo_root.add_child(mid_container)
+mmo_root.add_child(bottom_bar)
+add_child(mmo_root)`
+      },
+      {
+        title: '4. 经典三栏纸娃娃装备与属性面板 (3-Column Paperdoll)',
+        render: `
+          <div style="width:100%; border:1px solid var(--border-base); border-radius:12px; overflow:hidden; background:var(--bg-surface); color:var(--text-primary); font-size:12px; display:flex; flex-direction:column;">
+            <div style="background:var(--bg-card); padding:12px 18px; border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; font-size:14px; color:var(--primary);">👤 角色装备与战斗属性面板 (Character Paperdoll)</span>
+              <span class="g-tag g-tag-success">装等 (iLvl): 645</span>
+            </div>
+
+            <div style="display:flex; min-height:200px;">
+              <!-- Left Equipment Column -->
+              <div style="width:140px; background:var(--bg-surface); border-right:1px solid var(--border-base); padding:12px; display:flex; flex-direction:column; gap:8px;">
+                <div style="padding:6px; background:var(--bg-card); border-radius:6px; border:1px solid var(--border-base); text-align:center;">🪖 龙王头盔 +15</div>
+                <div style="padding:6px; background:var(--bg-card); border-radius:6px; border:1px solid var(--border-base); text-align:center;">🥋 泰坦胸铠 +15</div>
+                <div style="padding:6px; background:var(--bg-card); border-radius:6px; border:1px solid var(--border-base); text-align:center;">⚔️ 圣剑·誓约之刃</div>
+                <div style="padding:6px; background:var(--bg-card); border-radius:6px; border:1px solid var(--border-base); text-align:center;">🛡️ 狮鹫纹章盾</div>
+              </div>
+
+              <!-- Center Model Viewport -->
+              <div style="flex:1; background:var(--bg-card); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;">
+                <div style="font-size:48px; margin-bottom:8px;">🧙‍♂️</div>
+                <div style="font-weight:700; font-size:14px;">大魔导师·罗兰 (Roland)</div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Lv.99 宗师级奥术大法师</div>
+              </div>
+
+              <!-- Right Attribute Column -->
+              <div style="width:160px; background:var(--bg-surface); border-left:1px solid var(--border-base); padding:12px; display:flex; flex-direction:column; gap:6px; font-size:11px;">
+                <div style="font-weight:700; color:var(--primary); margin-bottom:4px;">📊 基础属性值</div>
+                <div style="display:flex; justify-content:space-between;"><span>物理攻击:</span><b>3,420</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>法术强度:</span><b style="color:var(--primary);">8,950</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>暴击率:</span><b style="color:var(--warning);">68.5%</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>暴击伤害:</span><b>245%</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>元素抗性:</span><b style="color:var(--success);">75.0%</b></div>
+              </div>
+            </div>
+
+            <div style="background:var(--bg-card); padding:10px 18px; border-top:1px solid var(--border-base); display:flex; justify-content:flex-end; gap:10px;">
+              <button class="g-btn g-btn-default" style="height:28px; font-size:11px;" onclick="showToast('已一键卸下全部装备')">一键卸装</button>
+              <button class="g-btn g-btn-primary" style="height:28px; font-size:11px;" onclick="showToast('已自动穿戴最高装等神装！', 'success')">一键穿戴最高装等 ⚡</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 三栏纸娃娃装备与属性面板架构
+var equip_panel = GContainer.new()
+
+var header = GHeader.new()
+header.height = 48.0
+header.add_child(character_title_hud)
+
+var body = GContainer.new()
+body.direction = GContainer.Direction.HORIZONTAL
+
+var left_slots = GAside.new()
+left_slots.width = 140.0
+left_slots.add_child(equipment_slots_vbox)
+
+var center_model = GMain.new()
+center_model.add_child(hero_model_viewport_2d)
+
+var right_stats = GAside.new()
+right_stats.width = 160.0
+right_stats.add_child(attributes_stats_list)
+
+body.add_child(left_slots)
+body.add_child(center_model)
+body.add_child(right_stats)
+
+var footer = GFooter.new()
+footer.height = 48.0
+footer.add_child(quick_buttons_hbox)
+
+equip_panel.add_child(header)
+equip_panel.add_child(body)
+equip_panel.add_child(footer)
+add_child(equip_panel)`
+      },
+      {
+        title: '5. 网游商城与祈愿抽卡 Multi-container 布局 (Market & Gacha Studio)',
+        render: `
+          <div style="width:100%; border:1px solid var(--border-base); border-radius:12px; overflow:hidden; background:var(--bg-surface); color:var(--text-primary); font-size:12px; display:flex; flex-direction:column;">
+            <!-- Top: Player Currency HUD -->
+            <div style="background:var(--bg-card); padding:10px 18px; border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; color:var(--warning); font-size:13px;">🛒 远古星辰道具商城 & 英雄祈愿池</span>
+              <div style="display:flex; gap:14px; font-weight:600;">
+                <span>💎 钻石: <b style="color:var(--primary);">12,800</b></span>
+                <span>🔮 纠缠之缘: <b style="color:var(--warning);">45</b></span>
+                <span>🪙 金币: <b style="color:var(--success);">3,450,000</b></span>
+              </div>
+            </div>
+
+            <!-- Middle: Left Categories + Center Gacha Showcase -->
+            <div style="display:flex; min-height:180px;">
+              <div style="width:140px; background:var(--bg-surface); border-right:1px solid var(--border-base); padding:10px; display:flex; flex-direction:column; gap:6px;">
+                <div style="padding:8px; background:var(--primary); color:#fff; border-radius:6px; font-weight:600; text-align:center; cursor:pointer;">✨ 限时神话卡池</div>
+                <div style="padding:8px; background:var(--bg-card); border-radius:6px; text-align:center; cursor:pointer;" onclick="showToast('切换至武器专武池')">⚔️ 专属武器库</div>
+                <div style="padding:8px; background:var(--bg-card); border-radius:6px; text-align:center; cursor:pointer;" onclick="showToast('切换至道具商城')">🧪 消耗品杂货</div>
+                <div style="padding:8px; background:var(--bg-card); border-radius:6px; text-align:center; cursor:pointer;" onclick="showToast('切换至皮肤工坊')">🎨 英雄限定皮肤</div>
+              </div>
+
+              <div style="flex:1; background:radial-gradient(circle at center, rgba(64,158,255,0.15) 0%, var(--bg-card) 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;">
+                <div style="font-size:40px; margin-bottom:6px;">🌟⚔️</div>
+                <div style="font-weight:800; font-size:15px; color:var(--primary);">【星穹破晓】限定 SSR 圣剑女武神 · 概率 UP!</div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">保底计数: 72/90 抽必出金色传说</div>
+              </div>
+            </div>
+
+            <!-- Bottom: 1-Pull & 10-Pull Buttons -->
+            <div style="background:var(--bg-card); padding:12px 18px; border-top:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; color:var(--text-secondary);">单次祈愿消耗 1 颗祈愿石，十连必得 SR 以上道具</span>
+              <div style="display:flex; gap:10px;">
+                <button class="g-btn g-btn-default" style="height:32px; font-weight:600;" onclick="showToast('单抽祈愿: 获得【星光精粹】x1')">祈愿 1 次 (160 💎)</button>
+                <button class="g-btn g-btn-primary" style="height:32px; font-weight:700;" onclick="showToast('🎉 十连抽大爆！恭喜获得金色传说【圣剑女武神】！', 'success')">祈愿 10 次 (1600 💎) ✨</button>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 商城与祈愿抽卡 Multi-container 布局
+var shop_root = GContainer.new()
+
+var currency_header = GHeader.new()
+currency_header.height = 46.0
+currency_header.add_child(currency_status_bar)
+
+var shop_body = GContainer.new()
+shop_body.direction = GContainer.Direction.HORIZONTAL
+
+var tab_aside = GAside.new()
+tab_aside.width = 140.0
+tab_aside.add_child(category_tabs_vbox)
+
+var gacha_main = GMain.new()
+gacha_main.add_child(gacha_banner_showcase)
+
+shop_body.add_child(tab_aside)
+shop_body.add_child(gacha_main)
+
+var gacha_footer = GFooter.new()
+gacha_footer.height = 56.0
+gacha_footer.add_child(pull_buttons_hbox)
+
+shop_root.add_child(currency_header)
+shop_root.add_child(shop_body)
+shop_root.add_child(gacha_footer)
+add_child(shop_root)`
+      },
+      {
+        title: '6. 基础结构：顶栏 + 主要区域 + 底栏 (Header + Main + Footer)',
         render: `
           <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; text-align:center; font-size:13px; font-weight:600;">
             <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-bottom:1px solid var(--border-base);">GHeader (高度: 60px)</div>
@@ -188,73 +610,15 @@ add_child(txt)`
             <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-top:1px solid var(--border-base);">GFooter (高度: 60px)</div>
           </div>
         `,
-        code: `# GDScript: Header + Main + Footer 经典上下布局
+        code: `# GDScript: Header + Main + Footer 基础上下布局
 var container = GContainer.new()
-
-var header = GHeader.new()
-header.height = 60.0
-
-var main = GMain.new()
-
-var footer = GFooter.new()
-footer.height = 60.0
-
-container.add_child(header)
-container.add_child(main)
-container.add_child(footer)
+container.add_child(GHeader.new())
+container.add_child(GMain.new())
+container.add_child(GFooter.new())
 add_child(container)`
       },
       {
-        title: '2. 常见布局：侧边栏 + 主要区域 (Aside + Main)',
-        render: `
-          <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; text-align:center; font-size:13px; font-weight:600; min-height:160px;">
-            <div style="background:rgba(230,162,60,0.15); color:var(--warning); width:160px; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border-base);">GAside (宽: 200px)</div>
-            <div style="background:rgba(103,194,58,0.12); color:var(--success); flex:1; display:flex; align-items:center; justify-content:center;">GMain (主要内容区域)</div>
-          </div>
-        `,
-        code: `# GDScript: Aside + Main 左右分栏布局
-var container = GContainer.new()
-
-var aside = GAside.new()
-aside.width = 200.0
-
-var main = GMain.new()
-
-container.add_child(aside)
-container.add_child(main)
-add_child(container)`
-      },
-      {
-        title: '3. 常见布局：顶栏通顶 + 侧边与主要区域 + 底栏 (Header + (Aside + Main) + Footer)',
-        render: `
-          <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; text-align:center; font-size:13px; font-weight:600;">
-            <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-bottom:1px solid var(--border-base);">GHeader (顶栏通顶)</div>
-            <div style="display:flex; min-height:140px;">
-              <div style="background:rgba(230,162,60,0.15); color:var(--warning); width:150px; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border-base);">GAside</div>
-              <div style="background:rgba(103,194,58,0.12); color:var(--success); flex:1; display:flex; align-items:center; justify-content:center;">GMain</div>
-            </div>
-            <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-top:1px solid var(--border-base);">GFooter</div>
-          </div>
-        `,
-        code: `# GDScript: Header + (Aside + Main) + Footer 嵌套布局
-var root_container = GContainer.new()
-
-var header = GHeader.new()
-var sub_container = GContainer.new()
-var aside = GAside.new()
-var main = GMain.new()
-var footer = GFooter.new()
-
-sub_container.add_child(aside)
-sub_container.add_child(main)
-
-root_container.add_child(header)
-root_container.add_child(sub_container)
-root_container.add_child(footer)
-add_child(root_container)`
-      },
-      {
-        title: '4. 常见布局：侧边栏通顶 + 顶栏与内容 (Aside + (Header + Main + Footer))',
+        title: '7. 基础结构：侧边栏通顶 + 顶栏与内容 (Aside + (Header + Main + Footer))',
         render: `
           <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; text-align:center; font-size:13px; font-weight:600;">
             <div style="background:rgba(230,162,60,0.15); color:var(--warning); width:150px; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border-base);">GAside (通顶导航)</div>
@@ -267,20 +631,15 @@ add_child(root_container)`
         `,
         code: `# GDScript: Aside + (Header + Main + Footer) 侧边栏通顶布局
 var root_container = GContainer.new()
-
 var aside = GAside.new()
-var right_container = GContainer.new()
+var right_box = GContainer.new()
 
-var header = GHeader.new()
-var main = GMain.new()
-var footer = GFooter.new()
-
-right_container.add_child(header)
-right_container.add_child(main)
-right_container.add_child(footer)
+right_box.add_child(GHeader.new())
+right_box.add_child(GMain.new())
+right_box.add_child(GFooter.new())
 
 root_container.add_child(aside)
-root_container.add_child(right_container)
+root_container.add_child(right_box)
 add_child(root_container)`
       }
     ],
