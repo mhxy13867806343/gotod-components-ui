@@ -234,6 +234,20 @@ window.SIDEBAR_CONFIG = {
       }
     ],
     defaultKey: 'tabs'
+  },
+  'godot-globals': {
+    placeholder: 'Search Godot globals & base APIs...',
+    groups: [
+      {
+        title: 'Godot 全局与核心方法 (Engine Globals)',
+        items: [
+          { key: 'godot-globals', title: '🌐 Godot 全局方法 & Node 核心 API' },
+          { key: 'guide-common-methods', title: '🛠️ 全局通用基类方法与事件' },
+          { key: 'godot-docs', title: '📖 Godot 4 官方文档与资源传送门' }
+        ]
+      }
+    ],
+    defaultKey: 'godot-globals'
   }
 };
 

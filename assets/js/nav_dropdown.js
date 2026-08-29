@@ -4,12 +4,19 @@
 // =========================================================================
 
 window.TOP_SECTIONS = [
-  { key: 'guide', label: '1. 指南与安装 (Guide)', icon: 'fa-book-open', desc: '快速上手、全局基类方法、动态实例化指南' },
-  { key: 'components', label: '2. 组件库 (Components)', icon: 'fa-cube', desc: '全部 28+ 个 UI 控件全量文档与 API 字典' },
-  { key: 'game', label: '3. 游戏实战案例 (Game UI)', icon: 'fa-gamepad', desc: '背包、角色面板、系统设置等游戏场景' },
+  { key: 'guide', label: '1. 指南与快速上手 (Guide)', icon: 'fa-book-open', desc: '安装、按需加载、生命周期与全局服务' },
+  { key: 'components', label: '2. 组件库全量文档 (Components)', icon: 'fa-cube', desc: '全部 30+ UI 控件属性、事件与插槽字典' },
+  { key: 'game', label: '3. 游戏实战案例 (Game UI)', icon: 'fa-gamepad', desc: '背包、角色面板、系统设置、任务与商城' },
   { key: 'playground', label: '4. 属性与方法演练 (Playground)', icon: 'fa-flask-vial', desc: '实时属性调节器与方法调用测试' },
-  { key: 'imperative', label: '5. 编程式调用 (Imperative API)', icon: 'fa-bolt', desc: 'GMessage/GMessageBox/GLoading/上下文继承' },
-  { key: 'studio', label: '6. .tres 资源工坊 (Studio)', icon: 'fa-file-code', desc: 'Godot 4 主题面板与 .tres 导入导出' }
+  { key: 'imperative', label: '5. 编程式/命令式调用 (Imperative API)', icon: 'fa-bolt', desc: 'GMessage/GMessageBox/GLoading/通知气泡' },
+  { key: 'hooks', label: '6. Hooks 响应式钩子 (Vue Hooks)', icon: 'fa-link', desc: 'useCountDown/useToggle/useDebounce 等' },
+  { key: 'signals', label: '7. 自定义信号与事件总线 (Signals & Events)', icon: 'fa-tower-broadcast', desc: '全域 EventBus、防抖信号与跨场景通信' },
+  { key: 'decorator', label: '8. 装饰器设计模式工坊 (Decorator Pattern)', icon: 'fa-wand-magic-sparkles', desc: '音效装饰器、流光扫光、防重复点击与冷却' },
+  { key: 'storage', label: '9. 游戏存档与中断存储 (Game Save & Checkpoint)', icon: 'fa-floppy-disk', desc: '多槽位加密读写、版本迁移与自动保存' },
+  { key: 'router', label: '10. 格式化、资源导入与转场路由 (Utils & Router)', icon: 'fa-route', desc: '富文本、音效、场景平滑转场路由与守卫' },
+  { key: 'lifecycle', label: '11. Godot 4 全量生命周期与节点钩子 (Lifecycle Atlas)', icon: 'fa-rotate', desc: '7 大阶段生命周期状态机与可视化追踪' },
+  { key: 'studio', label: '12. .tres 资源工坊与主题导出 (Resource Studio)', icon: 'fa-palette', desc: '实时可视化主题定制与 .tres 文件生成' },
+  { key: 'godot-globals', label: '13. 全局与基类方法速查 (Godot Globals & Base APIs)', icon: 'fa-globe', desc: 'Node 核心树方法、@GlobalScope 全局函数速查' }
 ];
 
 // Initialize Top Nav GSelect Dropdown
