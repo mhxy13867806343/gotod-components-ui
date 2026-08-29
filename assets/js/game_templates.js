@@ -46,6 +46,154 @@ add_child(btn)`
     ]
   },
 
+  'guide-css-style-engine': {
+    title: '🎨 .css() 与 .style() 动态样式引擎 (Dynamic Style Engine)',
+    desc: '提供类似现代前端 CSS / Tailwind 的链式与字典化样式定义体系。支持通过 .css() 进行全局或实例级快速样式定义，以及通过 .style({ name, func }).css() 针对特定组件进行深度全域定制，全面兼容 Godot 4 官方全部 StyleBox、Color、Font 与 Theme 规范。',
+    demos: [
+      {
+        title: '1. .css({...}) 字典化与函数式样式设定 (Instance & Global CSS)',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-lg); border:1px solid var(--border-base); display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:600; font-size:14px; color:var(--text-primary);">⚡ 实时样式预览与切换 (Live Style Switching)</span>
+              <span class="g-tag g-tag-primary">全域 / 实例级链式支持</span>
+            </div>
+            
+            <!-- Live Preview Elements -->
+            <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; padding:16px; background:var(--bg-card); border-radius:var(--radius); border:1px dashed var(--border-base);" id="cssPreviewContainer">
+              <button id="cssPreviewBtn" class="g-btn g-btn-primary" style="height:36px; padding:0 18px; border-radius:8px; transition:all 0.3s ease;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> 示例动态按钮
+              </button>
+              <div id="cssPreviewBadge" style="padding:4px 12px; background:rgba(64,158,255,0.15); color:var(--primary); border:1px solid var(--primary); border-radius:6px; font-size:12px; font-weight:600; transition:all 0.3s ease;">
+                Status: Dynamic CSS Active
+              </div>
+            </div>
+
+            <!-- Style Preset Switchers -->
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="g-btn g-btn-default" onclick="
+                const btn = document.getElementById('cssPreviewBtn');
+                btn.style.background = '#409eff';
+                btn.style.borderRadius = '8px';
+                btn.style.boxShadow = '0 4px 12px rgba(64,158,255,0.3)';
+                btn.style.border = 'none';
+                btn.style.color = '#fff';
+                showToast('已应用: 极简扁平主题 (Clean Flat)', 'success');
+              ">应用: 极简扁平主题</button>
+
+              <button class="g-btn g-btn-default" onclick="
+                const btn = document.getElementById('cssPreviewBtn');
+                btn.style.background = 'linear-gradient(135deg, #e6a23c, #f56c6c)';
+                btn.style.borderRadius = '99px';
+                btn.style.boxShadow = '0 6px 16px rgba(245,108,108,0.4)';
+                btn.style.border = '2px solid #ffd04b';
+                btn.style.color = '#fff';
+                showToast('已应用: 炫彩流光主题 (Gradient Glow)', 'warning');
+              ">应用: 炫彩流光主题</button>
+
+              <button class="g-btn g-btn-default" onclick="
+                const btn = document.getElementById('cssPreviewBtn');
+                btn.style.background = '#141414';
+                btn.style.borderRadius = '4px';
+                btn.style.boxShadow = '0 0 12px rgba(103,194,58,0.5)';
+                btn.style.border = '1px solid #67c23a';
+                btn.style.color = '#67c23a';
+                showToast('已应用: 赛博朋克终端 (Cyber Terminal)', 'info');
+              ">应用: 赛博朋克终端</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript 方式 1: 字典化直接设定样式
+my_button.css({
+    "bg_color": Color.hex(0x409eff),
+    "corner_radius": 8,
+    "font_color": Color.WHITE,
+    "font_size": 14,
+    "shadow_color": Color(0, 0, 0, 0.3),
+    "shadow_size": 6
+})
+
+# GDScript 方式 2: 函数式回调深度定制 (支持原生 Godot 4 Control API)
+my_button.css(func(ctrl: Control):
+    var sb = StyleBoxFlat.new()
+    sb.bg_color = Color(0.12, 0.14, 0.18)
+    sb.set_corner_radius_all(10)
+    sb.border_width_bottom = 3
+    sb.border_color = Color.hex(0x67c23a)
+    ctrl.add_theme_stylebox_override("normal", sb)
+)`
+      },
+      {
+        title: '2. .style({...}) 专属组件定制与链式全局调用 (.style & Chaining)',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-lg); border:1px solid var(--border-base); display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:600; font-size:14px; color:var(--text-primary);">🎯 .style({ name, func }) 组件类型精准定制</span>
+              <span class="g-tag g-tag-success">.style().style().css() 链式驱动</span>
+            </div>
+            <p style="font-size:13px; color:var(--text-regular); margin:0; line-height:1.6;">
+              <code style="color:var(--primary); font-family:var(--font-mono);">.style()</code> 用于针对某种特定组件类型（例如所有 <code style="color:var(--primary); font-family:var(--font-mono);">GFab</code>、<code style="color:var(--primary); font-family:var(--font-mono);">GButton</code> 或 <code style="color:var(--primary); font-family:var(--font-mono);">GDialog</code>）进行统一规则配置，末尾可无缝串联 <code style="color:var(--primary); font-family:var(--font-mono);">.css()</code> 设定全域字体与通用底色。
+            </p>
+            <div style="display:flex; gap:12px;">
+              <button class="g-btn g-btn-primary" onclick="showToast('模拟 GStyle 链式规则已成功注入场景树！', 'success')">
+                <i class="fa-solid fa-play"></i> 执行 GStyle 链式注入
+              </button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 针对特定组件进行全域定制，并链式配置全局样式
+GStyle.style({
+    "name": "GFab",
+    "func": func(fab: GFab):
+        fab.expand_duration = 0.35
+        fab.css({
+            "bg_color": Color.hex(0xe6a23c),
+            "corner_radius": 99,
+            "shadow_size": 8
+        })
+}).style({
+    "name": "GButton",
+    "func": func(btn: GButton):
+        btn.round_theme = true
+        btn.add_theme_font_size_override("font_size", 14)
+}).style({
+    "name": "GDialog",
+    "func": func(dlg: GDialog):
+        dlg.round_corner = true
+}).css({
+    # 此处 .css() 作用于全局所有 UI 控件
+    "font_color": Color.WHITE,
+    "border_color": Color.hex(0x3a3a48)
+})
+
+# 一键递归应用到当前场景树节点
+GStyle.apply_to(self)`
+      }
+    ],
+    props: [
+      { name: 'name / type', type: 'String', default: '""', desc: '目标组件类名 (如 "GFab", "GButton", "GSelect", "GDialog", "GTabs")' },
+      { name: 'func / apply', type: 'Callable', default: 'Callable()', desc: '针对该组件的专属样式配置回调 func(component: Control) -> void' },
+      { name: 'bg_color', type: 'Color / String', default: 'Color.WHITE', desc: '背景底色 (StyleBoxFlat.bg_color)' },
+      { name: 'corner_radius', type: 'int / Vector4', default: '0', desc: '四角圆角半径 (支持单数值或 Vector4(左上, 右上, 右下, 左下))' },
+      { name: 'border_color', type: 'Color / String', default: 'Color.TRANSPARENT', desc: '边框描边颜色 (StyleBoxFlat.border_color)' },
+      { name: 'border_width', type: 'int / Vector4', default: '0', desc: '边框描边粗细 (StyleBoxFlat.border_width)' },
+      { name: 'shadow_color', type: 'Color / String', default: 'Color(0,0,0,0.3)', desc: '投影阴影颜色 (StyleBoxFlat.shadow_color)' },
+      { name: 'shadow_size', type: 'int', default: '0', desc: '投影弥散大小 (StyleBoxFlat.shadow_size)' },
+      { name: 'shadow_offset', type: 'Vector2', default: 'Vector2.ZERO', desc: '投影位移偏移量 (StyleBoxFlat.shadow_offset)' },
+      { name: 'content_margin', type: 'float / Vector4', default: '0.0', desc: '内部边距 (StyleBoxFlat.content_margin)' },
+      { name: 'font_color', type: 'Color / String', default: 'Color.WHITE', desc: '文本字体颜色 (add_theme_color_override)' },
+      { name: 'font_size', type: 'int', default: '14', desc: '文本字号大小 (add_theme_font_size_override)' },
+      { name: 'font', type: 'Font', default: 'null', desc: '自定义字体资源 (add_theme_font_override)' }
+    ],
+    events: [],
+    methods: [
+      { name: 'css(rules_or_func: Variant)', desc: '配置全域通用或实例级样式（支持 Dictionary 或 Callable）', params: '(rules_or_func: Variant) -> GStyle' },
+      { name: 'style(definition: Dictionary)', desc: '针对指定组件类名注册专属定制逻辑 {"name": "GFab", "func": Callable}', params: '(definition: Dictionary) -> GStyle' },
+      { name: 'apply_to(target: Node)', desc: '将已注册的全部动态样式规则递归应用至目标场景树', params: '(target: Node) -> void' }
+    ],
+    slots: []
+  },
+
   'guide-common-methods': {
     title: '🛠️ 全局通用基类方法与事件 (Universal Control Methods)',
     desc: '所有 Gotod UI 组件（GButton, GInput, GTabs, GDialog 等）均继承自 Godot 4 的 Control / Node 基类，因此天然具备以下完整的全局通用方法、生命周期销毁与信号订阅能力。',

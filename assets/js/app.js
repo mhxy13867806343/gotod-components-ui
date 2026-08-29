@@ -5,7 +5,7 @@
 // =========================================================================
 
 window.currentTopSection = 'components';
-window.currentDocKey = 'tabs';
+window.currentDocKey = 'button';
 
 // ==========================================
 // Top Navigation Switcher
@@ -56,7 +56,7 @@ window.routeFromHash = function() {
   const hash = window.location.hash.replace(/^#/, '').trim();
   if (!hash) {
     const savedSection = window.StorageUtil.getSection();
-    const savedDocKey = window.StorageUtil.getDocKey() || (savedSection === 'components' ? 'tabs' : null);
+    const savedDocKey = window.StorageUtil.getDocKey() || (savedSection === 'components' ? 'button' : null);
     switchTopSection(savedSection, savedDocKey);
     return;
   }

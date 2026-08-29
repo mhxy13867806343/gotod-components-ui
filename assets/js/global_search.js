@@ -36,6 +36,7 @@ window.getAllSearchIndex = function() {
   pushCategory(window.UTILS_ROUTER_CATALOG, '工具路由 (Utils & Router)', 'router', 'info');
   pushCategory(window.LIFECYCLE_CATALOG, '生命周期 (Lifecycle)', 'lifecycle', 'warning');
   pushCategory(window.STUDIO_CATALOG, '资源工坊 (Studio)', 'studio', 'info');
+  pushCategory(window.GODOT_GLOBALS_CATALOG, '全局方法 (Godot Globals)', 'godot-globals', 'primary');
 
   return index;
 };

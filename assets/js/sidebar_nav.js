@@ -11,6 +11,7 @@ window.SIDEBAR_CONFIG = {
         title: 'Development 指南',
         items: [
           { key: 'guide-install', title: '📥 安装与快速上手' },
+          { key: 'guide-css-style-engine', title: '🎨 .css() 与 .style() 样式引擎' },
           { key: 'guide-imperative-api', title: '⚡ 命令式调用与上下文继承' },
           { key: 'guide-treeshaking', title: '📦 生产环境按需打包与摇树优化' },
           { key: 'guide-common-methods', title: '🛠️ 全局通用基类方法与事件' },
@@ -233,7 +234,7 @@ window.SIDEBAR_CONFIG = {
         ]
       }
     ],
-    defaultKey: 'tabs'
+    defaultKey: 'button'
   },
   'godot-globals': {
     placeholder: 'Search Godot globals & base APIs...',
