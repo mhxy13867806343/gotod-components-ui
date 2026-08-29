@@ -626,8 +626,9 @@ window.showDoc = function(key) {
     ${propsHtml}
   `;
 
-  if (key === 'studio-theme-editor' && typeof window.refreshTresPreview === 'function') {
-    setTimeout(window.refreshTresPreview, 50);
+  if (key === 'studio-theme-editor') {
+    if (typeof window.refreshStudioCanvas === 'function') setTimeout(window.refreshStudioCanvas, 50);
+    if (typeof window.renderStudioInspector === 'function') setTimeout(window.renderStudioInspector, 50);
   }
 };
 
