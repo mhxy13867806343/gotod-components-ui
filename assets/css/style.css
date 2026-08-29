@@ -99,6 +99,8 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
+  gap: 16px;
+  overflow-x: auto;
 }
 .brand {
   display: flex;
@@ -108,6 +110,8 @@ header {
   font-size: 1.15rem;
   color: var(--text-primary);
   text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .brand-badge {
   font-size: 0.75rem;
@@ -116,13 +120,16 @@ header {
   background: var(--primary-light);
   color: var(--primary);
   font-weight: 600;
+  white-space: nowrap;
 }
 .top-nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
   height: 100%;
-  margin-left: 36px;
+  margin-left: 28px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .top-nav-item {
   color: var(--text-secondary);
@@ -136,6 +143,7 @@ header {
   position: relative;
   transition: color 0.2s;
   cursor: pointer;
+  white-space: nowrap;
 }
 .top-nav-item:hover {
   color: var(--text-primary);
@@ -158,6 +166,8 @@ header {
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 select, button {
   font-family: inherit;

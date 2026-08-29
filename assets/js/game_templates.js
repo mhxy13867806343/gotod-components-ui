@@ -46,6 +46,150 @@ add_child(btn)`
     ]
   },
 
+  'guide-common-methods': {
+    title: '🛠️ 全局通用基类方法与事件 (Universal Control Methods)',
+    desc: '所有 Gotod UI 组件（GButton, GInput, GTabs, GDialog 等）均继承自 Godot 4 的 Control / Node 基类，因此天然具备以下完整的全局通用方法、生命周期销毁与信号订阅能力。',
+    demos: [
+      {
+        title: '通用基类方法调用示例 (GDScript Common Usage)',
+        render: `
+          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); line-height:1.7;">
+            <p style="color:var(--text-primary); margin-bottom:8px;">在任何 UI 脚本中，您都可以直接调用这些原生继承的通用 API：</p>
+            <div class="code-box" style="margin:0;"><pre><code># 1. 显式显示与隐藏
+my_component.show()
+my_component.hide()
+my_component.set_visible(true)
+
+# 2. 焦点获取与判断
+my_component.grab_focus()
+if my_component.has_focus():
+    print("处于激活交互状态")
+
+# 3. 动态重设尺寸与位置
+my_component.set_size(Vector2(240, 48))
+my_component.set_position(Vector2(100, 200))
+
+# 4. 动态设置提示气泡
+my_component.set_tooltip_text("点击保存当前装备数据")
+
+# 5. 信号连接与自定义发射
+my_component.connect("custom_event", Callable(self, "_on_custom_event"))
+my_component.emit_signal("custom_event", "arg1", 123)
+
+# 6. 安全销毁
+my_component.queue_free()</code></pre></div>
+          </div>
+        `,
+        code: `# GDScript: Universal Control API
+var btn = GButton.new()
+btn.text = "Universal Control"
+btn.grab_focus()
+btn.set_tooltip_text("悬浮提示文字")
+add_child(btn)`
+      }
+    ],
+    props: [],
+    methods: [
+      { name: 'show() / hide()', desc: '显式显示或隐藏当前控件节点', params: '() -> void' },
+      { name: 'set_visible(visible: bool)', desc: '动态控制控件的可见性', params: '(visible: bool) -> void' },
+      { name: 'is_visible_in_tree()', desc: '查询当前控件在场景树中是否全局可见', params: '() -> bool' },
+      { name: 'grab_focus()', desc: '使控件获取键盘/手柄交互焦点', params: '() -> void' },
+      { name: 'release_focus()', desc: '主动释放当前焦点', params: '() -> void' },
+      { name: 'has_focus()', desc: '查询控件当前是否正处于聚焦状态', params: '() -> bool' },
+      { name: 'set_size(size: Vector2)', desc: '设置控件的实际像素宽高尺寸', params: '(size: Vector2) -> void' },
+      { name: 'get_size()', desc: '读取控件的实际像素宽高尺寸', params: '() -> Vector2' },
+      { name: 'set_position(pos: Vector2)', desc: '设置控件的相对局部坐标位置', params: '(pos: Vector2) -> void' },
+      { name: 'get_position()', desc: '读取控件的相对局部坐标位置', params: '() -> Vector2' },
+      { name: 'set_tooltip_text(text: String)', desc: '动态设置鼠标悬停提示气泡文本', params: '(text: String) -> void' },
+      { name: 'queue_free()', desc: '在当前帧末安全销毁并释放节点内存', params: '() -> void' },
+      { name: 'connect(signal_name, callable)', desc: '订阅并绑定信号至指定回调函数', params: '(signal_name: StringName, callable: Callable) -> Error' },
+      { name: 'emit_signal(signal_name, ...)', desc: '手动发射自定义信号与携带参数', params: '(signal_name: StringName, ...) -> Error' },
+      { name: 'add_theme_color_override(name, color)', desc: '动态覆盖控件的主题文字/边框颜色', params: '(name: StringName, color: Color) -> void' },
+      { name: 'add_theme_stylebox_override(name, stylebox)', desc: '动态覆盖控件的主题背景样式盒 StyleBox', params: '(name: StringName, stylebox: StyleBox) -> void' }
+    ]
+  },
+
+  'guide-dynamic-api': {
+    title: '🧩 GTabs.new() 外部方法与自定义信号 (Dynamic Scripting & Signals)',
+    desc: '通过代码动态创建 GTabs.new() 并调用外部 API 进行增删查改、拦截判断以及订阅自定义信号。',
+    demos: [
+      {
+        title: 'GTabs.new() 完整代码动态构建示例',
+        render: `
+          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); line-height:1.7;">
+            <p style="color:var(--text-primary); margin-bottom:8px;">以下是在 GDScript 中通过纯代码动态构建选项卡界面的完整流程：</p>
+            <div class="code-box" style="margin:0;"><pre><code># 1. 实例化 GTabs
+var tabs = GTabs.new()
+tabs.type = GTabs.TabType.CARD
+tabs.closable = true
+tabs.addable = true
+
+# 2. 动态添加标签页与内容面板
+var p1 = PanelContainer.new()
+var p2 = PanelContainer.new()
+tabs.add_tab("角色属性", p1, false)
+tabs.add_tab("背包物品", p2, true)
+
+# 3. 订阅自定义信号
+tabs.tab_clicked.connect(func(idx, name):
+    print("点击了标签:", idx, name)
+)
+tabs.tab_changed.connect(func(idx, name):
+    print("当前激活标签切换为:", name)
+)
+tabs.tab_close_requested.connect(func(idx, name):
+    print("请求关闭标签:", name)
+    # 可在此弹出 GDialog 确认框二次确认
+)
+tabs.tab_added.connect(func(idx, name):
+    print("新增了标签:", name)
+)
+
+# 4. 标签切换前拦截 (Before Leave Hook)
+tabs.set_before_leave(func(cur_idx, next_idx) -> bool:
+    if is_form_dirty:
+        GMessage.warning("表单未保存，无法离开当前标签！")
+        return false
+    return true
+)
+
+# 5. 添加到场景树
+add_child(tabs)</code></pre></div>
+          </div>
+        `,
+        code: `# GDScript: GTabs.new()
+var tabs = GTabs.new()
+tabs.add_tab("Tab 1", panel1)
+tabs.add_tab("Tab 2", panel2)
+tabs.tab_changed.connect(func(idx, name): print(name))
+add_child(tabs)`
+      }
+    ],
+    events: [
+      { name: 'tab_clicked(index, name)', desc: '用户点击选中某个选项卡时触发', params: '(index: int, name: String)' },
+      { name: 'tab_changed(index, name)', desc: '当前激活选项卡发生改变时触发', params: '(index: int, name: String)' },
+      { name: 'tab_added(index, name)', desc: '动态添加新选项卡时触发', params: '(index: int, name: String)' },
+      { name: 'tab_removed(index, name)', desc: '选项卡被移除销毁时触发', params: '(index: int, name: String)' },
+      { name: 'tab_close_requested(index, name)', desc: '用户点击关闭叉号时触发 (可在此拦截或弹窗二次确认)', params: '(index: int, name: String)' }
+    ],
+    methods: [
+      { name: 'add_tab(name, panel, closable=false, icon=null)', desc: '动态追加一个选项卡及关联内容面板', params: '(name: String, panel: Control, closable: bool, icon: Texture2D) -> int' },
+      { name: 'insert_tab(index, name, panel, closable=false, icon=null)', desc: '在指定索引位置插入一个选项卡', params: '(index: int, name: String, panel: Control, closable: bool, icon: Texture2D) -> void' },
+      { name: 'remove_tab(index_or_name)', desc: '根据索引或标题名称移除指定选项卡', params: '(index_or_name: Variant) -> void' },
+      { name: 'clear_tabs()', desc: '清空并销毁所有选项卡及关联面板', params: '() -> void' },
+      { name: 'get_tab_count()', desc: '获取当前选项卡总数量', params: '() -> int' },
+      { name: 'get_tab_name(index)', desc: '获取指定索引的选项卡标题文本', params: '(index: int) -> String' },
+      { name: 'set_tab_title(index, new_title)', desc: '动态修改指定选项卡的标题文本', params: '(index: int, new_title: String) -> void' },
+      { name: 'get_tab_panel(index)', desc: '获取指定索引绑定的内容面板 Control 节点', params: '(index: int) -> Control' },
+      { name: 'set_tab_disabled(index, is_disabled)', desc: '设置指定选项卡是否禁用点击切换', params: '(index: int, is_disabled: bool) -> void' },
+      { name: 'is_tab_disabled(index)', desc: '查询指定选项卡当前是否处于禁用状态', params: '(index: int) -> bool' },
+      { name: 'set_tab_icon(index, icon)', desc: '为指定选项卡动态设置图标纹理', params: '(index: int, icon: Texture2D) -> void' },
+      { name: 'find_tab_by_name(name)', desc: '根据标题名称反查选项卡的索引位置 (-1 为未找到)', params: '(name: String) -> int' },
+      { name: 'next_tab() / prev_tab()', desc: '程序化前进/后退循环切换激活标签', params: '() -> void' },
+      { name: 'set_before_leave(callback)', desc: '设置标签切换拦截钩子函数 Callable(cur, next) -> bool', params: '(callback: Callable) -> void' }
+    ]
+  },
+
   'guide-theme': {
     title: '🎨 主题 Token 与暗黑模式 (Design Tokens & Theming)',
     desc: '深度集成 Vue 主流组件库的设计 Token 系统，支持 Naive UI、Element Plus、Ant Design、Vant UI 风格以及 Dark/Light 明暗模式一键切换。',
