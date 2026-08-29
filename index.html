@@ -134,6 +134,42 @@
     </div>
   </div>
 
+  <!-- Vant Style GActionSheet Simulator -->
+  <div class="g-action-sheet-mask" id="simActionSheetMask" onclick="if(event.target===this) closeSimActionSheet()">
+    <div class="g-action-sheet-panel" id="simActionSheetPanel">
+      <div class="g-action-sheet-header" id="simActionSheetHeader" style="display:none;"></div>
+      <div id="simActionSheetList"></div>
+      <div class="g-action-sheet-cancel" id="simActionSheetCancel" onclick="closeSimActionSheet()">取消</div>
+    </div>
+  </div>
+
+  <!-- Vant Style GPicker Wheel Simulator -->
+  <div class="g-picker-mask" id="simPickerMask" onclick="if(event.target===this) closeSimPicker()">
+    <div class="g-picker-panel" id="simPickerPanel">
+      <div class="g-picker-toolbar">
+        <button class="g-btn g-btn-text" style="color:var(--text-secondary);" onclick="closeSimPicker()">取消</button>
+        <span style="font-weight:600; font-size:15px;" id="simPickerTitle">选择职业</span>
+        <button class="g-btn g-btn-text" style="color:var(--primary); font-weight:700;" onclick="confirmSimPicker()">确定</button>
+      </div>
+      <div class="g-picker-list" id="simPickerList"></div>
+    </div>
+  </div>
+
+  <!-- Element Plus Style GTour Simulator -->
+  <div class="g-tour-mask" id="simTourMask">
+    <div class="g-tour-popover" id="simTourPopover">
+      <div style="font-weight:700; font-size:15px; margin-bottom:6px; color:var(--primary);" id="simTourTitle">步骤标题</div>
+      <div style="font-size:13px; color:var(--text-regular); line-height:1.5; margin-bottom:14px;" id="simTourDesc">步骤描述内容</div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:var(--text-secondary);" id="simTourStepsIndicator">1/3</span>
+        <div style="display:flex; gap:8px;">
+          <button class="g-btn g-btn-default" style="height:28px; padding:0 8px; font-size:11px;" id="simTourPrevBtn" onclick="prevSimTourStep()">上一步</button>
+          <button class="g-btn g-btn-primary" style="height:28px; padding:0 12px; font-size:11px;" id="simTourNextBtn" onclick="nextSimTourStep()">下一步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Global Search Modal Dialog (Command Palette) -->
   <div id="globalSearchModal" class="global-search-backdrop" style="display:none;" onclick="if(event.target===this) closeGlobalSearch()">
     <div class="global-search-card">
@@ -188,21 +224,21 @@
   </div>
 
   <!-- Local Standalone Logic Modules -->
-  <script src="assets/js/ui_helpers.js?v=20260829_10"></script>
-  <script src="assets/js/sidebar_nav.js?v=20260829_10"></script>
-  <script src="assets/js/components_catalog.js?v=20260829_10"></script>
-  <script src="assets/js/game_templates.js?v=20260829_10"></script>
-  <script src="assets/js/api_playground.js?v=20260829_10"></script>
-  <script src="assets/js/imperative_api.js?v=20260829_10"></script>
-  <script src="assets/js/hooks_catalog.js?v=20260829_10"></script>
-  <script src="assets/js/signals_catalog.js?v=20260829_10"></script>
-  <script src="assets/js/decorator_catalog.js?v=20260829_10"></script>
-  <script src="assets/js/storage_catalog.js?v=20260829_10"></script>
-  <script src="assets/js/utils_router_catalog.js?v=20260829_10"></script>
-  <script src="assets/js/lifecycle_catalog.js?v=20260829_10"></script>
-  <script src="assets/js/resource_studio.js?v=20260829_10"></script>
-  <script src="assets/js/global_search.js?v=20260829_10"></script>
-  <script src="assets/js/nav_dropdown.js?v=20260829_10"></script>
-  <script src="assets/js/app.js?v=20260829_10"></script>
+  <script src="assets/js/ui_helpers.js?v=20260829_11"></script>
+  <script src="assets/js/sidebar_nav.js?v=20260829_11"></script>
+  <script src="assets/js/components_catalog.js?v=20260829_11"></script>
+  <script src="assets/js/game_templates.js?v=20260829_11"></script>
+  <script src="assets/js/api_playground.js?v=20260829_11"></script>
+  <script src="assets/js/imperative_api.js?v=20260829_11"></script>
+  <script src="assets/js/hooks_catalog.js?v=20260829_11"></script>
+  <script src="assets/js/signals_catalog.js?v=20260829_11"></script>
+  <script src="assets/js/decorator_catalog.js?v=20260829_11"></script>
+  <script src="assets/js/storage_catalog.js?v=20260829_11"></script>
+  <script src="assets/js/utils_router_catalog.js?v=20260829_11"></script>
+  <script src="assets/js/lifecycle_catalog.js?v=20260829_11"></script>
+  <script src="assets/js/resource_studio.js?v=20260829_11"></script>
+  <script src="assets/js/global_search.js?v=20260829_11"></script>
+  <script src="assets/js/nav_dropdown.js?v=20260829_11"></script>
+  <script src="assets/js/app.js?v=20260829_11"></script>
 </body>
 </html>

@@ -510,6 +510,78 @@ add_child(num)`
   },
 
   // --------------------------------------------------------
+  // 7.1 GStepper 步进器 (Vant UI 对标)
+  // --------------------------------------------------------
+  'stepper': {
+    title: 'Stepper 步进器 (GStepper)',
+    desc: '步进器由增加按钮、减少按钮和输入框组成，用于在一定范围内输入、调整数值。深度对标 Vant UI 步进器规范，支持步长、最大最小值、圆角圆圈按钮与动态限制。',
+    demos: [
+      {
+        title: '1. 基础步进器与圆角按钮 (Basic & Round Theme)',
+        render: `
+          <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap;">
+            <div id="demoStepperBasic" class="g-stepper">
+              <button class="g-stepper-btn" onclick="stepperChange('demoStepperBasic', -1)">-</button>
+              <input class="g-stepper-input" value="1" readonly>
+              <button class="g-stepper-btn" onclick="stepperChange('demoStepperBasic', 1)">+</button>
+            </div>
+            <div id="demoStepperRound" class="g-stepper round">
+              <button class="g-stepper-btn" onclick="stepperChange('demoStepperRound', -1)">-</button>
+              <input class="g-stepper-input" value="5" readonly>
+              <button class="g-stepper-btn" onclick="stepperChange('demoStepperRound', 1)">+</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 基础步进器与圆角风格
+var stepper = GStepper.new()
+stepper.value = 1
+stepper.min_value = 1
+stepper.max_value = 99
+stepper.step = 1
+stepper.round_theme = true
+add_child(stepper)`
+      },
+      {
+        title: '2. 步长与最大最小值限制 (Step & Min/Max Bounds)',
+        render: `
+          <div style="display:flex; gap:16px; align-items:center;">
+            <div id="demoStepperStep" class="g-stepper">
+              <button class="g-stepper-btn" onclick="stepperChange('demoStepperStep', -5, 5, 50)">-</button>
+              <input class="g-stepper-input" value="10" readonly>
+              <button class="g-stepper-btn" onclick="stepperChange('demoStepperStep', 5, 5, 50)">+</button>
+            </div>
+            <span style="font-size:12px; color:var(--text-secondary);">步长: 5 | 范围: [5, 50]</span>
+          </div>
+        `,
+        code: `# GDScript: 自定义步长
+var stepper = GStepper.new()
+stepper.step = 5
+stepper.min_value = 5
+stepper.max_value = 50
+add_child(stepper)`
+      }
+    ],
+    props: [
+      { name: 'value', type: 'float', default: '1.0', desc: '当前输入值' },
+      { name: 'min_value', type: 'float', default: '1.0', desc: '最小值限制' },
+      { name: 'max_value', type: 'float', default: '100.0', desc: '最大值限制' },
+      { name: 'step', type: 'float', default: '1.0', desc: '点击加减按钮每次变化的步长' },
+      { name: 'integer', type: 'boolean', default: 'true', desc: '是否只允许输入整数' },
+      { name: 'disabled', type: 'boolean', default: 'false', desc: '是否禁用步进器' },
+      { name: 'round_theme', type: 'boolean', default: 'false', desc: '是否启用圆角/圆圈极简主题风格' }
+    ],
+    events: [
+      { name: 'value_changed(val)', desc: '当数值发生改变时触发', params: '(val: float)' },
+      { name: 'overlimit(limit_type)', desc: '当点击加减超出限制范围时触发 ("min" / "max")', params: '(limit_type: String)' }
+    ],
+    methods: [
+      { name: 'set_value(val)', desc: '设置当前步进器数值', params: '(val: float) -> void' },
+      { name: 'get_value()', desc: '获取当前步进器数值', params: '() -> float' }
+    ],
+    slots: []
+  },
+
+  // --------------------------------------------------------
   // 8. GSwitch 开关
   // --------------------------------------------------------
   'switch': {
@@ -634,36 +706,101 @@ add_child(rg)`
   },
 
   // --------------------------------------------------------
-  // 11. GSelect 下拉选择器
+  // 11. GSelect 下拉选择器 (Element Plus 对标扩充)
   // --------------------------------------------------------
   'select': {
     title: 'Select 下拉选择器 (GSelect)',
-    desc: '当选项过多时，使用下拉菜单展示并供用户选择内容。支持一键清空与选项禁用。',
+    desc: '当选项过多时，使用下拉菜单展示并供用户选择内容。深度对标 Element Plus Select 规范，支持单选、多选 Tags 折叠、分组选择器与自定义模板。',
     demos: [
       {
-        title: '1. Dropdown Select 下拉选项',
+        title: '1. 基础单选下拉框 (Basic Select)',
         render: `
-          <div style="display:flex; align-items:center; gap:16px;">
-            <select class="select-theme" style="width: 260px; height: 38px;" onchange="showToast('Selected: ' + this.value, 'success')">
-              <option value="Godot 4.3 (Forward+)">Godot 4.3 (Forward+)</option>
-              <option value="Godot 4.4 (Latest)">Godot 4.4 (Latest)</option>
-              <option value="Godot 4.6+ (Future)">Godot 4.6+ (Future)</option>
+          <div style="width: 320px;">
+            <select class="g-select" style="width:100%;" onchange="showToast('已选择引擎内核: ' + this.value, 'success')">
+              <option value="Godot 4.3 (Forward+)">Godot 4.3 (Forward+ 高画质管线)</option>
+              <option value="Godot 4.3 (Mobile)">Godot 4.3 (Mobile 移动端轻量)</option>
+              <option value="Godot 4.4 (Latest)">Godot 4.4 (Latest 最新稳定版)</option>
+              <option value="Godot 4.6+ (Future)">Godot 4.6+ (Future 未来试验特性)</option>
             </select>
           </div>
         `,
-        code: `# GDScript: Select
+        code: `# GDScript: 基础下拉选择
 var sel = GSelect.new()
 sel.options = [
-    {"label": "Godot 4.3", "value": "4.3"},
-    {"label": "Godot 4.4", "value": "4.4"}
+    {"label": "Godot 4.3 (Forward+)", "value": "4.3_forward"},
+    {"label": "Godot 4.4 (Latest)", "value": "4.4"}
 ]
 sel.item_selected.connect(func(idx, val, label): print("Selected:", label))
 add_child(sel)`
+      },
+      {
+        title: '2. 多选标签与折叠展示 (Multiple Tags & Collapse Tags)',
+        render: `
+          <div style="width: 380px; display:flex; flex-direction:column; gap:8px;">
+            <div style="padding:6px 12px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+              <span class="g-tag g-tag-primary" style="font-size:12px;">物理引擎 ×</span>
+              <span class="g-tag g-tag-success" style="font-size:12px;">粒子特效 ×</span>
+              <span class="g-tag g-tag-warning" style="font-size:12px;">+2 更多...</span>
+            </div>
+            <span style="font-size:12px; color:var(--text-secondary);">支持 multiple 多选与 collapse-tags 折叠超长标签展示</span>
+          </div>
+        `,
+        code: `# GDScript: 多选标签选择
+var sel = GSelect.new()
+sel.multiple = true
+sel.collapse_tags = true
+sel.max_collapse_tags = 2
+add_child(sel)`
+      },
+      {
+        title: '3. 分组选择器与禁用项 (Option Grouping & Disabled Option)',
+        render: `
+          <div style="width: 320px;">
+            <select class="g-select" style="width:100%;" onchange="showToast('选择英雄职业: ' + this.value, 'info')">
+              <optgroup label="近战系 (Melee)">
+                <option value="狂暴战">狂暴战 (Warrior)</option>
+                <option value="圣骑士" disabled>圣骑士 (Paladin - 未解锁)</option>
+                <option value="潜行者">潜行者 (Rogue)</option>
+              </optgroup>
+              <optgroup label="远程魔法系 (Caster)">
+                <option value="大法师">大法师 (Archmage)</option>
+                <option value="术士">术士 (Warlock)</option>
+                <option value="德鲁伊">德鲁伊 (Druid)</option>
+              </optgroup>
+            </select>
+          </div>
+        `,
+        code: `# GDScript: 分组选择
+var sel = GSelect.new()
+sel.options = [
+    { "group": "近战系", "options": [{"label": "狂暴战", "value": 1}, {"label": "圣骑士", "disabled": true}] },
+    { "group": "远程系", "options": [{"label": "大法师", "value": 2}] }
+]`
+      },
+      {
+        title: '4. 自定义选项模板与图标 (Custom Option Template & Icons)',
+        render: `
+          <div style="width: 320px; padding:10px 14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="showToast('已展开带头像的自定义角色下拉列表', 'info')">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:20px;">🧙‍♂️</span>
+              <div>
+                <div style="font-weight:600; font-size:13px;">大魔导师·卡德加</div>
+                <div style="font-size:11px; color:var(--text-secondary);">SSR 稀有度 | 99 级</div>
+              </div>
+            </div>
+            <span style="color:var(--text-secondary); font-size:12px;">▼</span>
+          </div>
+        `,
+        code: `# GDScript: 自定义选项模板
+var sel = GSelect.new()
+sel.set_custom_item_template(hero_item_scene)`
       }
     ],
     props: [
       { name: 'options', type: 'Array[Dictionary]', default: '[]', desc: '选项列表 [{"label": "", "value": "", "disabled": false}]' },
       { name: 'selected_index', type: 'int', default: '-1', desc: '当前选中的索引' },
+      { name: 'multiple', type: 'boolean', default: 'false', desc: '是否开启多选模式' },
+      { name: 'collapse_tags', type: 'boolean', default: 'false', desc: '多选模式下是否折叠超长标签' },
       { name: 'placeholder_text', type: 'String', default: '"Select..."', desc: '占位提示' },
       { name: 'clearable', type: 'boolean', default: 'true', desc: '是否可一键清空' },
       { name: 'disabled', type: 'boolean', default: 'false', desc: '是否禁用选择器' }
@@ -679,6 +816,65 @@ add_child(sel)`
     slots: [
       { name: 'prefix', desc: '选择框头部前缀图标', child: 'GIcon / Control' },
       { name: 'empty', desc: '选项列表为空时的占位内容', child: 'Control' }
+    ]
+  },
+
+  // --------------------------------------------------------
+  // 11.1 GPicker 滚轮选择器 (Vant UI 对标)
+  // --------------------------------------------------------
+  'picker': {
+    title: 'Picker 选择器 (GPicker)',
+    desc: '提供多个选项供用户选择，支持单列选择和多列级联选择，常与弹出层配合使用。深度对标 Vant UI 移动端选择器规范。',
+    demos: [
+      {
+        title: '1. 基础职业选择 (Basic Column Picker)',
+        render: `
+          <div style="display:flex; gap:12px; align-items:center;">
+            <button class="g-btn g-btn-primary" onclick="openSimPicker({ title:'选择英雄职业', columns:['狂暴战士 (Warrior)', '奥术法师 (Mage)', '神圣牧师 (Priest)', '暗影刺客 (Rogue)', '猎魔射手 (Hunter)'], defaultIndex:1, onConfirm:(val) => { document.getElementById('pickerRes1').innerText = val; } })">选择职业 (Open Picker)</button>
+            <span style="font-size:13px; color:var(--text-secondary);">已选职业：<b id="pickerRes1" style="color:var(--primary);">奥术法师 (Mage)</b></span>
+          </div>
+        `,
+        code: `# GDScript: 基础选择器
+var picker = GPicker.new()
+picker.title = "选择英雄职业"
+picker.columns = ["战士", "法师", "牧师", "刺客", "射手"]
+picker.confirm.connect(func(vals, idxs): print("Selected:", vals))
+picker.open()`
+      },
+      {
+        title: '2. 地区/关卡难度选择器 (Difficulty Picker)',
+        render: `
+          <div style="display:flex; gap:12px; align-items:center;">
+            <button class="g-btn g-btn-warning" onclick="openSimPicker({ title:'挑选副本难度', columns:['普通难度 (Normal)', '精英难度 (Hard)', '噩梦难度 (Nightmare)', '地狱深渊 (Hell - 推荐 5 人组队)'], defaultIndex:2 })">挑选副本难度</button>
+          </div>
+        `,
+        code: `# GDScript: 难度选择
+var picker = GPicker.new()
+picker.title = "副本难度"
+picker.columns = ["普通", "困难", "噩梦", "地狱"]
+picker.open()`
+      }
+    ],
+    props: [
+      { name: 'title', type: 'String', default: '"请选择"', desc: '顶部工具栏标题' },
+      { name: 'columns', type: 'Array', default: '[]', desc: '选项列表（单列为字符串数组，多列为对象数组）' },
+      { name: 'default_index', type: 'int', default: '0', desc: '单列选择器的默认选中项索引' },
+      { name: 'confirm_button_text', type: 'String', default: '"确认"', desc: '确认按钮文字' },
+      { name: 'cancel_button_text', type: 'String', default: '"取消"', desc: '取消按钮文字' },
+      { name: 'show_toolbar', type: 'boolean', default: 'true', desc: '是否显示顶部工具栏' }
+    ],
+    events: [
+      { name: 'confirm(values, indexes)', desc: '点击完成按钮时触发', params: '(values: Array, indexes: Array)' },
+      { name: 'cancel()', desc: '点击取消按钮时触发', params: '()' },
+      { name: 'change(values, index)', desc: '选项改变时触发', params: '(values: Array, index: int)' }
+    ],
+    methods: [
+      { name: 'open()', desc: '呼出选择器面板', params: '() -> void' },
+      { name: 'close()', desc: '关闭选择器面板', params: '() -> void' },
+      { name: 'get_selected_value()', desc: '获取当前选中的值', params: '() -> Variant' }
+    ],
+    slots: [
+      { name: 'toolbar', desc: '自定义顶部工具栏内容', child: 'Control' }
     ]
   },
 
@@ -1109,6 +1305,174 @@ overlay.open()`
   },
 
   // --------------------------------------------------------
+  // 14.3 GActionSheet 动作面板 (Vant UI 对标)
+  // --------------------------------------------------------
+  'action-sheet': {
+    title: 'ActionSheet 动作面板 (GActionSheet)',
+    desc: '从页面底部弹出的模态操作菜单，用于提供一组与当前上下文相关的备选操作，深度对标 Vant UI 动作面板规范，支持标题、子标题、危险项高亮与取消按钮。',
+    demos: [
+      {
+        title: '1. 基础菜单列表 (Basic ActionSheet)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-primary" onclick="openSimActionSheet({ actions: [{ name:'微信好友分享' }, { name:'朋友圈海报生成' }, { name:'复制活动邀请码' }] })">呼出基础动作面板</button>
+          </div>
+        `,
+        code: `# GDScript: 基础动作面板
+var sheet = GActionSheet.new()
+sheet.actions = [
+    { "name": "微信好友分享" },
+    { "name": "朋友圈海报生成" },
+    { "name": "复制活动邀请码" }
+]
+sheet.select.connect(func(item, idx): print("Action:", item.name))
+sheet.open()`
+      },
+      {
+        title: '2. 带标题与高危警示操作 (Title & Danger Option)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="g-btn g-btn-danger" onclick="openSimActionSheet({ title: '⚠️ 您正在对公会成员进行管理操作', actions: [{ name:'提升为公会副会长' }, { name:'移出公会 (Kick Out)', danger:true }] })">公会管理动作面板 (含高危操作)</button>
+          </div>
+        `,
+        code: `# GDScript: 带标题与高危项
+var sheet = GActionSheet.new()
+sheet.title = "公会成员管理"
+sheet.actions = [
+    { "name": "提升为副会长" },
+    { "name": "踢出公会", "danger": true }
+]
+sheet.open()`
+      }
+    ],
+    props: [
+      { name: 'title', type: 'String', default: '""', desc: '面板顶部标题' },
+      { name: 'description', type: 'String', default: '""', desc: '面板标题下方的描述信息' },
+      { name: 'actions', type: 'Array[Dictionary]', default: '[]', desc: '面板选项列表 [{"name": "", "subname": "", "danger": false, "disabled": false}]' },
+      { name: 'cancel_text', type: 'String', default: '"取消"', desc: '底部取消按钮文字' },
+      { name: 'round_corner', type: 'boolean', default: 'true', desc: '是否显示圆角' }
+    ],
+    events: [
+      { name: 'select(item, index)', desc: '点击选项时触发', params: '(item: Dictionary, index: int)' },
+      { name: 'cancel()', desc: '点击取消按钮时触发', params: '()' }
+    ],
+    methods: [
+      { name: 'open()', desc: '呼出底部动作面板', params: '() -> void' },
+      { name: 'close()', desc: '关闭动作面板', params: '() -> void' }
+    ],
+    slots: []
+  },
+
+  // --------------------------------------------------------
+  // 14.4 GPopover 气泡弹出框 (Vant UI 对标)
+  // --------------------------------------------------------
+  'popover': {
+    title: 'Popover 气泡弹出框 (GPopover)',
+    desc: '基于目标元素定位的气泡卡片，常用于展示快捷操作菜单或轻量信息提示。深度对标 Vant UI 气泡规范，支持 Dark/Light 双色主题与菜单列表。',
+    demos: [
+      {
+        title: '1. 暗黑主题与明亮主题气泡 (Dark & Light Theme)',
+        render: `
+          <div style="display:flex; gap:36px; align-items:center; flex-wrap:wrap;">
+            <div class="g-popover-wrapper">
+              <button class="g-btn g-btn-primary" onclick="toggleSimPopover(this, { theme:'dark' })">暗黑气泡 (Dark Popover)</button>
+              <div class="g-popover-bubble">
+                <div class="g-popover-item" onclick="showToast('点击了发起群聊'); toggleSimPopover(this.parentElement.previousElementSibling);"><i class="fa-solid fa-comments"></i> 发起群聊</div>
+                <div class="g-popover-item" onclick="showToast('点击了添加好友'); toggleSimPopover(this.parentElement.previousElementSibling);"><i class="fa-solid fa-user-plus"></i> 添加好友</div>
+                <div class="g-popover-item" onclick="showToast('点击了扫一扫'); toggleSimPopover(this.parentElement.previousElementSibling);"><i class="fa-solid fa-qrcode"></i> 扫一扫</div>
+              </div>
+            </div>
+
+            <div class="g-popover-wrapper">
+              <button class="g-btn g-btn-default" onclick="toggleSimPopover(this, { theme:'light' })">浅色气泡 (Light Popover)</button>
+              <div class="g-popover-bubble light">
+                <div class="g-popover-item" onclick="showToast('点击了设为星标'); toggleSimPopover(this.parentElement.previousElementSibling);"><i class="fa-solid fa-star" style="color:var(--warning);"></i> 设为星标</div>
+                <div class="g-popover-item" onclick="showToast('点击了静音提醒'); toggleSimPopover(this.parentElement.previousElementSibling);"><i class="fa-solid fa-bell-slash"></i> 静音提醒</div>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 气泡弹出框
+var popover = GPopover.new()
+popover.theme = GPopover.Theme.DARK
+popover.actions = [
+    { "text": "发起群聊", "icon": icon_chat },
+    { "text": "添加好友", "icon": icon_user }
+]
+popover.open_for_node(target_btn)`
+      }
+    ],
+    props: [
+      { name: 'placement', type: 'enum', default: 'BOTTOM', desc: '弹出定位：TOP, BOTTOM, LEFT, RIGHT' },
+      { name: 'theme', type: 'enum', default: 'DARK', desc: '主题风格：DARK (深色), LIGHT (浅色)' },
+      { name: 'actions', type: 'Array[Dictionary]', default: '[]', desc: '菜单选项列表 [{"text": "", "icon": Texture2D, "disabled": false}]' },
+      { name: 'show_arrow', type: 'boolean', default: 'true', desc: '是否显示小三角箭头' }
+    ],
+    events: [
+      { name: 'item_selected(index, action)', desc: '点击菜单项时触发', params: '(index: int, action: Dictionary)' },
+      { name: 'opened()', desc: '气泡打开时触发', params: '()' },
+      { name: 'closed()', desc: '气泡关闭时触发', params: '()' }
+    ],
+    methods: [
+      { name: 'open_for_node(target: Control)', desc: '针对指定控件节点弹出气泡', params: '(target: Control) -> void' },
+      { name: 'close()', desc: '关闭气泡框', params: '() -> void' },
+      { name: 'toggle_for_node(target: Control)', desc: '切换气泡开启/关闭', params: '(target: Control) -> void' }
+    ],
+    slots: [
+      { name: 'default', desc: '自定义气泡内部内容容器', child: 'Control' }
+    ]
+  },
+
+  // --------------------------------------------------------
+  // 14.5 GNoticeBar 通知栏 (Vant UI 对标)
+  // --------------------------------------------------------
+  'notice-bar': {
+    title: 'NoticeBar 通知栏 (GNoticeBar)',
+    desc: '在页面顶部展示通告栏，用于向用户广播消息或系统维护通知。深度对标 Vant UI 通知栏规范，支持平滑滚动跑马灯、警示/信息/成功色彩与关闭按钮。',
+    demos: [
+      {
+        title: '1. 滚动跑马灯通告栏 (Marquee NoticeBar)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+            <div class="g-notice-bar g-notice-bar-warning">
+              <span>📢</span>
+              <div class="g-notice-marquee">
+                <span class="g-notice-content">🔥 [重要通告] 《全域战线》S4 跨服巅峰冠军赛将于今晚 20:00 准时打响，全服限时掉落双倍神话强化石！</span>
+              </div>
+              <button onclick="this.parentElement.style.display='none'; showToast('通告栏已关闭');" style="background:none; border:none; color:inherit; cursor:pointer; font-size:14px;">✕</button>
+            </div>
+
+            <div class="g-notice-bar g-notice-bar-info">
+              <span>🔔</span>
+              <div class="g-notice-marquee">
+                <span class="g-notice-content">技术公告：引擎已全面支持 Godot 4.3 渲染管线与 Vue 响应式 UI 模组。</span>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 跑马灯通知栏
+var bar = GNoticeBar.new()
+bar.text = "🔥 [重要通告] 全服限时掉落双倍神话强化石！"
+bar.scrollable = true
+bar.notice_type = GNoticeBar.NoticeType.WARNING
+add_child(bar)`
+      }
+    ],
+    props: [
+      { name: 'text', type: 'String', default: '""', desc: '通告栏文本内容' },
+      { name: 'scrollable', type: 'boolean', default: 'true', desc: '是否开启水平无缝循环滚动跑马灯' },
+      { name: 'scroll_speed', type: 'float', default: '50.0', desc: '滚动速度 (像素/秒)' },
+      { name: 'notice_type', type: 'enum', default: 'WARNING', desc: '通知色彩风格：WARNING (警示橙), INFO (信息蓝), SUCCESS (成功绿), DANGER (紧急红)' }
+    ],
+    events: [
+      { name: 'click()', desc: '点击通告栏主体时触发', params: '()' },
+      { name: 'close()', desc: '点击右侧关闭图标时触发', params: '()' }
+    ],
+    methods: [],
+    slots: []
+  },
+
+  // --------------------------------------------------------
   // 15. GMessage 全局提示
   // --------------------------------------------------------
   'message': {
@@ -1409,6 +1773,52 @@ skeleton.loading = false`
     ],
     slots: [
       { name: 'default', desc: '骨架屏加载完成后显示的真实内容插槽', child: 'Control' }
+    ]
+  },
+
+  // --------------------------------------------------------
+  // 19.2 GTour 漫游式引导 (Element Plus 对标)
+  // --------------------------------------------------------
+  'tour': {
+    title: 'Tour 漫游式引导 (GTour)',
+    desc: '分步引导用户了解新功能或界面布局。深度对标 Element Plus Tour 规范，提供全屏镂空暗色遮罩、气泡指示卡片与分步上一步/下一步。',
+    demos: [
+      {
+        title: '1. 触发新手引导流程 (Trigger Onboarding Tour)',
+        render: `
+          <div style="display:flex; gap:12px; align-items:center;">
+            <button class="g-btn g-btn-primary" onclick="openSimTour()">🚀 启动系统漫游引导 (Start Tour)</button>
+          </div>
+        `,
+        code: `# GDScript: 漫游式新手引导
+var tour = GTour.new()
+tour.steps = [
+    { "target": node_search, "title": "全局搜索", "description": "按 Ctrl+K 快速检索全部组件" },
+    { "target": node_theme, "title": "主题切换", "description": "随时切换 4 大主题预设" },
+    { "target": node_game, "title": "游戏实战", "description": "体验角色背包与商店模板" }
+]
+tour.start()`
+      }
+    ],
+    props: [
+      { name: 'steps', type: 'Array[Dictionary]', default: '[]', desc: '引导步骤数组 [{"target": NodePath, "title": "", "description": "", "placement": "BOTTOM"}]' },
+      { name: 'current_step', type: 'int', default: '0', desc: '当前激活步骤索引 (从 0 开始)' },
+      { name: 'mask', type: 'boolean', default: 'true', desc: '是否显示全屏半透明遮罩层' },
+      { name: 'show_arrow', type: 'boolean', default: 'true', desc: '是否展示气泡定位小箭头' }
+    ],
+    events: [
+      { name: 'step_change(current_step)', desc: '步骤发生切换时触发', params: '(current_step: int)' },
+      { name: 'finish()', desc: '完成所有引导步骤时触发', params: '()' },
+      { name: 'close()', desc: '用户中途关闭引导时触发', params: '()' }
+    ],
+    methods: [
+      { name: 'start()', desc: '从第一步开始启动漫游引导', params: '() -> void' },
+      { name: 'next()', desc: '前进至下一步', params: '() -> void' },
+      { name: 'prev()', desc: '后退至上一步', params: '() -> void' },
+      { name: 'close_tour()', desc: '关闭并退出漫游引导', params: '() -> void' }
+    ],
+    slots: [
+      { name: 'default', desc: '自定义步骤卡片内容插槽', child: 'Control' }
     ]
   },
 

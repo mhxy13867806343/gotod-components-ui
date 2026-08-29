@@ -183,10 +183,12 @@ window.SIDEBAR_CONFIG = {
           { key: 'input', title: 'GInput 输入框' },
           { key: 'textarea', title: 'GTextarea 文本域' },
           { key: 'input-number', title: 'GInputNumber 数字输入' },
+          { key: 'stepper', title: 'GStepper 步进器' },
           { key: 'switch', title: 'GSwitch 开关' },
           { key: 'checkbox', title: 'GCheckbox 多选框' },
           { key: 'radio', title: 'GRadio 单选框' },
           { key: 'select', title: 'GSelect 下拉选择' },
+          { key: 'picker', title: 'GPicker 选择器' },
           { key: 'slider', title: 'GSlider 滑块' },
           { key: 'form', title: 'GForm 表单布局' }
         ]
@@ -197,12 +199,16 @@ window.SIDEBAR_CONFIG = {
           { key: 'dialog', title: 'GDialog / GModal 弹窗' },
           { key: 'popup', title: 'GPopup 弹出层' },
           { key: 'overlay', title: 'GOverlay 遮罩层' },
+          { key: 'action-sheet', title: 'GActionSheet 动作面板' },
+          { key: 'popover', title: 'GPopover 气泡框' },
+          { key: 'notice-bar', title: 'GNoticeBar 通知栏' },
           { key: 'message', title: 'GMessage 全局提示' },
           { key: 'alert', title: 'GAlert 警告提示' },
           { key: 'drawer', title: 'GDrawer 抽屉' },
           { key: 'tooltip', title: 'GTooltip 悬浮提示' },
           { key: 'loading', title: 'GLoading 加载指示器' },
-          { key: 'skeleton', title: 'GSkeleton 骨架屏' }
+          { key: 'skeleton', title: 'GSkeleton 骨架屏' },
+          { key: 'tour', title: 'GTour 漫游式引导' }
         ]
       },
       {
