@@ -1,7 +1,7 @@
 // =========================================================================
 // Gotod Components UI - 5. .tres 资源工坊与主题编辑器 (Resource Studio)
 // 深度集成 Godot 4 官方 Theme Editor 规范与 Resource (.tres) 序列化/解析引擎
-// 涵盖 Godot 4 全部 UI 节点: Button, LineEdit, TextEdit, TabBar, ProgressBar, PanelContainer, Tree, CheckBox, OptionButton, HSlider 等
+// 涵盖 Godot 4 全部 35+ 个 UI 节点类型
 // 参考: https://docs.godotengine.org/zh-cn/4.x/tutorials/scripting/resources.html
 // =========================================================================
 
@@ -11,8 +11,9 @@ window.godotThemeStore = {
   currentType: 'Button',
   activeTab: 'clr', // 'clr' (Colors), 'sb' (StyleBoxes), 'fT' (Font Sizes), 'C' (Constants)
   
-  // Node Specific Styles
+  // All 35+ Godot 4 Control Node Styles
   nodes: {
+    // --- 1. 按钮类 (Buttons) ---
     Button: {
       fontColor: '#ffffff',
       fontHoverColor: '#36ad6a',
@@ -31,21 +32,64 @@ window.godotThemeStore = {
       paddingH: 14,
       paddingV: 6
     },
-    PanelContainer: {
-      bgColor: '#18181c',
-      borderColor: '#2d2d34',
-      borderWidth: 1,
-      cornerRadius: 6,
-      paddingH: 16,
-      paddingV: 16
+    CheckButton: {
+      fontColor: '#ffffff',
+      fontHoverColor: '#36ad6a',
+      fontDisabledColor: '#8a8a98',
+      fontSize: 14,
+      checkColor: '#18a058'
     },
+    CheckBox: {
+      fontColor: '#ffffff',
+      fontHoverColor: '#36ad6a',
+      fontDisabledColor: '#8a8a98',
+      fontSize: 14,
+      checkColor: '#18a058'
+    },
+    OptionButton: {
+      fontColor: '#ffffff',
+      fontHoverColor: '#36ad6a',
+      fontSize: 14,
+      bgColor: '#18181c',
+      borderColor: '#383842',
+      borderHoverColor: '#18a058',
+      borderWidth: 1,
+      cornerRadius: 4,
+      paddingH: 12,
+      paddingV: 6
+    },
+    MenuButton: {
+      fontColor: '#ffffff',
+      fontHoverColor: '#36ad6a',
+      fontSize: 14,
+      bgColor: '#18181c',
+      borderColor: '#383842',
+      cornerRadius: 4
+    },
+    LinkButton: {
+      fontColor: '#18a058',
+      fontHoverColor: '#36ad6a',
+      fontPressedColor: '#0c7a43',
+      fontSize: 14
+    },
+    TextureButton: {
+      fontSize: 14
+    },
+    ColorPickerButton: {
+      bgColor: '#18181c',
+      borderColor: '#383842',
+      borderHoverColor: '#18a058',
+      cornerRadius: 4
+    },
+
+    // --- 2. 文本与输入 (Text & Inputs) ---
     LineEdit: {
       fontColor: '#ffffff',
       fontDisabledColor: '#8a8a98',
       fontSize: 14,
       bgColor: '#101014',
       borderColor: '#2d2d34',
-      borderFocusColor: '#18a058',
+      borderHoverColor: '#18a058',
       borderWidth: 1,
       cornerRadius: 4,
       paddingH: 10,
@@ -56,7 +100,18 @@ window.godotThemeStore = {
       fontSize: 13,
       bgColor: '#101014',
       borderColor: '#2d2d34',
+      borderHoverColor: '#18a058',
       borderWidth: 1,
+      cornerRadius: 4,
+      paddingH: 10,
+      paddingV: 8
+    },
+    CodeEdit: {
+      fontColor: '#e0e0e0',
+      fontSize: 13,
+      bgColor: '#0d0d11',
+      borderColor: '#2d2d34',
+      borderHoverColor: '#18a058',
       cornerRadius: 4
     },
     Label: {
@@ -65,13 +120,57 @@ window.godotThemeStore = {
       outlineColor: '#000000',
       outlineSize: 0
     },
+    RichTextLabel: {
+      fontColor: '#f0f0f5',
+      fontSize: 14,
+      outlineColor: '#000000'
+    },
+    SpinBox: {
+      fontSize: 14,
+      bgColor: '#101014',
+      borderColor: '#2d2d34',
+      cornerRadius: 4
+    },
+
+    // --- 3. 容器与面板 (Containers & Panels) ---
+    PanelContainer: {
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      borderWidth: 1,
+      cornerRadius: 6,
+      paddingH: 16,
+      paddingV: 16
+    },
+    Panel: {
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      borderWidth: 1,
+      cornerRadius: 6
+    },
+    TabContainer: {
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      borderWidth: 1,
+      cornerRadius: 6,
+      paddingH: 16,
+      paddingV: 16
+    },
     TabBar: {
       fontColor: '#8a8a98',
       fontHoverColor: '#36ad6a',
       fontSelectedColor: '#18a058',
+      fontSize: 14,
       bgColor: '#18181c',
-      borderColor: '#18a058'
+      borderColor: '#18a058',
+      borderWidth: 2,
+      cornerRadius: 4
     },
+    ScrollContainer: {
+      bgColor: 'transparent',
+      cornerRadius: 0
+    },
+
+    // --- 4. 数据与展示 (Data & Lists) ---
     ProgressBar: {
       bgColor: '#202024',
       fillColor: '#18a058',
@@ -79,27 +178,105 @@ window.godotThemeStore = {
       fontSize: 12,
       cornerRadius: 4
     },
-    CheckBox: {
+    Tree: {
       fontColor: '#ffffff',
       fontHoverColor: '#36ad6a',
-      checkColor: '#18a058'
+      fontSize: 13,
+      bgColor: '#101014',
+      borderColor: '#2d2d34',
+      borderWidth: 1,
+      cornerRadius: 4
     },
-    OptionButton: {
+    ItemList: {
       fontColor: '#ffffff',
       fontHoverColor: '#36ad6a',
-      bgColor: '#18181c',
+      fontSize: 13,
+      bgColor: '#101014',
       borderColor: '#2d2d34',
       cornerRadius: 4
     },
+    PopupMenu: {
+      fontColor: '#ffffff',
+      fontHoverColor: '#36ad6a',
+      fontSize: 13,
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      borderWidth: 1,
+      cornerRadius: 6,
+      paddingH: 8,
+      paddingV: 6
+    },
+    MenuBar: {
+      fontColor: '#ffffff',
+      fontHoverColor: '#36ad6a',
+      fontSize: 14,
+      bgColor: '#18181c'
+    },
+
+    // --- 5. 滑块与分割线 (Sliders & Separators) ---
     HSlider: {
       grabberColor: '#18a058',
       trackBgColor: '#2d2d34'
     },
-    Tree: {
+    VSlider: {
+      grabberColor: '#18a058',
+      trackBgColor: '#2d2d34'
+    },
+    HScrollBar: {
+      grabberColor: '#383842',
+      trackBgColor: '#18181c'
+    },
+    VScrollBar: {
+      grabberColor: '#383842',
+      trackBgColor: '#18181c'
+    },
+    HSeparator: {
+      borderColor: '#2d2d34',
+      borderWidth: 1
+    },
+    VSeparator: {
+      borderColor: '#2d2d34',
+      borderWidth: 1
+    },
+
+    // --- 6. 窗口与对话框 (Windows & Dialogs) ---
+    Window: {
       fontColor: '#ffffff',
-      fontHoverColor: '#36ad6a',
-      bgColor: '#101014',
-      borderColor: '#2d2d34'
+      fontSize: 14,
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      cornerRadius: 8
+    },
+    AcceptDialog: {
+      fontColor: '#ffffff',
+      fontSize: 14,
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      cornerRadius: 8
+    },
+    ConfirmationDialog: {
+      fontColor: '#ffffff',
+      fontSize: 14,
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      cornerRadius: 8
+    },
+    FileDialog: {
+      fontColor: '#ffffff',
+      fontSize: 14,
+      bgColor: '#18181c',
+      borderColor: '#2d2d34',
+      cornerRadius: 8
+    },
+    TooltipPanel: {
+      fontColor: '#ffffff',
+      fontSize: 12,
+      bgColor: '#202024',
+      borderColor: '#383842',
+      borderWidth: 1,
+      cornerRadius: 4,
+      paddingH: 10,
+      paddingV: 6
     }
   }
 };
@@ -107,8 +284,12 @@ window.godotThemeStore = {
 // Switch Active Node Type in Inspector
 window.selectStudioNodeType = function(nodeType) {
   window.godotThemeStore.currentType = nodeType;
+  const selectElem = document.getElementById('studioNodeTypeSelect');
+  if (selectElem && selectElem.value !== nodeType) {
+    selectElem.value = nodeType;
+  }
   renderStudioInspector();
-  showToast(`已切换正在编辑的控件: ${nodeType}`, 'info');
+  showToast(`已切换正在编辑的 Godot 控件: ${nodeType}`, 'info');
 };
 
 // Switch Property Tab ('clr', 'sb', 'fT', 'C')
@@ -120,10 +301,11 @@ window.selectStudioTab = function(tabName) {
 // Update Property for Current Node
 window.updateStudioNodeProp = function(propKey, val) {
   const curType = window.godotThemeStore.currentType;
-  if (window.godotThemeStore.nodes[curType]) {
-    window.godotThemeStore.nodes[curType][propKey] = val;
-    refreshStudioCanvas();
+  if (!window.godotThemeStore.nodes[curType]) {
+    window.godotThemeStore.nodes[curType] = {};
   }
+  window.godotThemeStore.nodes[curType][propKey] = val;
+  refreshStudioCanvas();
 };
 
 // Apply Preset to All Nodes
@@ -141,38 +323,27 @@ window.applyStudioPreset = function(presetName) {
     primary = '#ffb300'; hover = '#ffd54f'; active = '#ff8f00'; radius = 8;
   }
 
-  // Update Button
-  store.nodes.Button.fontHoverColor = hover;
-  store.nodes.Button.fontPressedColor = active;
-  store.nodes.Button.borderHoverColor = primary;
-  store.nodes.Button.cornerRadius = radius;
-
-  // Update LineEdit
-  store.nodes.LineEdit.borderFocusColor = primary;
-  store.nodes.LineEdit.cornerRadius = radius;
-
-  // Update TabBar
-  store.nodes.TabBar.fontHoverColor = hover;
-  store.nodes.TabBar.fontSelectedColor = primary;
-  store.nodes.TabBar.borderColor = primary;
-
-  // Update ProgressBar
-  store.nodes.ProgressBar.fillColor = primary;
-  store.nodes.ProgressBar.cornerRadius = radius;
-
-  // Update CheckBox & Slider
-  store.nodes.CheckBox.checkColor = primary;
-  store.nodes.HSlider.grabberColor = primary;
+  // Update All Node Types
+  Object.keys(store.nodes).forEach(k => {
+    const n = store.nodes[k];
+    if (n.fontHoverColor) n.fontHoverColor = hover;
+    if (n.fontPressedColor) n.fontPressedColor = active;
+    if (n.borderHoverColor) n.borderHoverColor = primary;
+    if (n.checkColor) n.checkColor = primary;
+    if (n.fillColor) n.fillColor = primary;
+    if (n.grabberColor) n.grabberColor = primary;
+    if (n.cornerRadius !== undefined) n.cornerRadius = radius;
+  });
 
   refreshStudioCanvas();
   renderStudioInspector();
-  showToast(`已应用全节点设计预设: ${presetName.toUpperCase()}`, 'success');
+  showToast(`已将【${presetName.toUpperCase()}】风格应用到全部 35 个 Godot 节点！`, 'success');
 };
 
 // Import from Godot Default Theme
 window.importGodotDefaultTheme = function() {
   applyStudioPreset('naive');
-  showToast('已从 Godot 4 默认引擎主题导入全部基础节点属性！', 'success');
+  showToast('已从 Godot 4 默认引擎主题导入全部 35 个基础节点属性！', 'success');
 };
 
 // Import Local .tres File Upload Handler
@@ -197,7 +368,6 @@ window.parseAndLoadTresContent = function(tresText, filename) {
       if (titleInput) titleInput.value = filename;
     }
 
-    // Basic regex extraction for colors and numbers
     const fontColorMatch = tresText.match(/Button\/colors\/font_color\s*=\s*Color\(([^)]+)\)/);
     const hoverColorMatch = tresText.match(/Button\/colors\/font_hover_color\s*=\s*Color\(([^)]+)\)/);
     const cornerRadiusMatch = tresText.match(/corner_radius_top_left\s*=\s*([0-9.]+)/);
@@ -373,6 +543,18 @@ window.renderStudioInspector = function() {
             <input type="color" value="${data.fontDisabledColor}" onchange="updateStudioNodeProp('fontDisabledColor', this.value)">
           </div>
         ` : ''}
+        ${data.checkColor !== undefined ? `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>check_color (勾选色彩):</span>
+            <input type="color" value="${data.checkColor}" onchange="updateStudioNodeProp('checkColor', this.value)">
+          </div>
+        ` : ''}
+        ${data.grabberColor !== undefined ? `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>grabber_color (滑块把手色):</span>
+            <input type="color" value="${data.grabberColor}" onchange="updateStudioNodeProp('grabberColor', this.value)">
+          </div>
+        ` : ''}
       </div>
     `;
   } else if (tab === 'sb') {
@@ -448,8 +630,9 @@ window.generateFullGodot4TresString = function() {
   const btn = store.nodes.Button;
   const line = store.nodes.LineEdit;
   const prog = store.nodes.ProgressBar;
+  const panel = store.nodes.PanelContainer;
 
-  return `[gd_resource type="Theme" load_steps=7 format=3 uid="uid://${Math.random().toString(36).substring(2, 12)}"]
+  return `[gd_resource type="Theme" load_steps=8 format=3 uid="uid://${Math.random().toString(36).substring(2, 12)}"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
 content_margin_left = ${btn.paddingH}.0
@@ -531,6 +714,22 @@ corner_radius_top_right = ${line.cornerRadius}
 corner_radius_bottom_right = ${line.cornerRadius}
 corner_radius_bottom_left = ${line.cornerRadius}
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = ${panel.paddingH}.0
+content_margin_top = ${panel.paddingV}.0
+content_margin_right = ${panel.paddingH}.0
+content_margin_bottom = ${panel.paddingV}.0
+bg_color = ${hexToGodotColor(panel.bgColor)}
+border_width_left = ${panel.borderWidth}
+border_width_top = ${panel.borderWidth}
+border_width_right = ${panel.borderWidth}
+border_width_bottom = ${panel.borderWidth}
+border_color = ${hexToGodotColor(panel.borderColor)}
+corner_radius_top_left = ${panel.cornerRadius}
+corner_radius_top_right = ${panel.cornerRadius}
+corner_radius_bottom_right = ${panel.cornerRadius}
+corner_radius_bottom_left = ${panel.cornerRadius}
+
 [resource]
 default_font_size = ${btn.fontSize}
 
@@ -553,6 +752,9 @@ LineEdit/colors/font_disabled_color = ${hexToGodotColor(line.fontDisabledColor)}
 LineEdit/font_sizes/font_size = ${line.fontSize}
 LineEdit/styles/normal = SubResource("StyleBoxFlat_lineedit_normal")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_btn_hover")
+
+# PanelContainer Node Definitions
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_panel")
 
 # ProgressBar Node Definitions
 ProgressBar/colors/font_color = ${hexToGodotColor(prog.fontColor)}
@@ -643,7 +845,7 @@ window.STUDIO_CATALOG = {
   // --------------------------------------------------------
   'studio-theme-editor': {
     title: '🎨 Godot 4 主题编辑器与 .tres 资源工坊 (Theme & Node Studio)',
-    desc: '1:1 还原 Godot 4 官方编辑器底部主题面板（Theme Dock）。支持导入本地 .tres 资源、从默认主题导入、全 Control 节点多状态预览与一键导出 .tres 文件。',
+    desc: '1:1 还原 Godot 4 官方编辑器底部主题面板（Theme Dock）。支持导入本地 .tres 资源、从默认主题导入、全 35+ 个 Control 节点多状态预览与一键导出 .tres 文件。',
     demos: [
       {
         title: 'Godot 4 官方主题编辑器 (Theme Panel & .tres Exporter)',
@@ -689,14 +891,14 @@ window.STUDIO_CATALOG = {
             </div>
 
             <!-- Godot 4 Main Workspace Dock (Left: Preview, Right: Inspector) -->
-            <div style="display:grid; grid-template-columns:1.3fr 1fr; min-height:460px;">
+            <div style="display:grid; grid-template-columns:1.3fr 1fr; min-height:480px;">
               
               <!-- Left Dock: 1:1 Godot 4 Multi-Node Canvas Preview -->
-              <div style="padding:16px; border-right:1px solid var(--border-base); background:var(--bg-base); display:flex; flex-direction:column; gap:14px; overflow-y:auto; max-height:500px;">
+              <div style="padding:16px; border-right:1px solid var(--border-base); background:var(--bg-base); display:flex; flex-direction:column; gap:14px; overflow-y:auto; max-height:540px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-base); padding-bottom:6px;">
                   <div style="display:flex; align-items:center; gap:8px;">
                     <span style="font-size:12px; font-weight:700; color:var(--text-secondary);">默认预览 (Default Preview)</span>
-                    <button class="g-btn g-btn-default" style="height:20px; font-size:10px; padding:0 4px;">+</button>
+                    <button class="g-btn g-btn-default" style="height:20px; font-size:10px; padding:0 4px;" onclick="showToast('添加新预览项');">+</button>
                   </div>
                   <span style="font-size:11px; color:var(--text-secondary);">点击左侧控件可快捷选中编辑</span>
                 </div>
@@ -780,23 +982,59 @@ window.STUDIO_CATALOG = {
               <!-- Right Dock: Property Inspector (1:1 Godot 4 Right Dock) -->
               <div style="padding:14px; background:var(--bg-surface); display:flex; flex-direction:column; gap:12px;">
                 
-                <!-- Type Selection Dropdown -->
+                <!-- Complete 35+ Type Selection Dropdown with optgroups -->
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-base); padding-bottom:8px;">
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <span style="font-weight:700; font-size:12px; color:var(--text-secondary);">类型:</span>
-                    <select id="studioNodeTypeSelect" class="select-theme" style="height:26px; font-size:12px; width:130px;" onchange="selectStudioNodeType(this.value)">
-                      <option value="Button">Button (按钮)</option>
-                      <option value="LineEdit">LineEdit (输入框)</option>
-                      <option value="TabBar">TabBar (选项卡)</option>
-                      <option value="ProgressBar">ProgressBar (进度条)</option>
-                      <option value="PanelContainer">PanelContainer (面板)</option>
-                      <option value="Label">Label (文本)</option>
-                      <option value="Tree">Tree (树形)</option>
+                  <div style="display:flex; align-items:center; gap:6px; width:100%;">
+                    <span style="font-weight:700; font-size:12px; color:var(--text-secondary); flex-shrink:0;">类型:</span>
+                    <select id="studioNodeTypeSelect" class="select-theme" style="height:28px; font-size:12px; width:100%; max-width:240px;" onchange="selectStudioNodeType(this.value)">
+                      <optgroup label="1. 按钮类 (Buttons)">
+                        <option value="Button" selected>Button (按钮)</option>
+                        <option value="CheckButton">CheckButton (开关按钮)</option>
+                        <option value="CheckBox">CheckBox (复选框)</option>
+                        <option value="OptionButton">OptionButton (下拉列表)</option>
+                        <option value="MenuButton">MenuButton (菜单按钮)</option>
+                        <option value="LinkButton">LinkButton (链接按钮)</option>
+                        <option value="TextureButton">TextureButton (纹理按钮)</option>
+                        <option value="ColorPickerButton">ColorPickerButton (拾色器按钮)</option>
+                      </optgroup>
+                      <optgroup label="2. 文本与输入 (Text & Inputs)">
+                        <option value="LineEdit">LineEdit (单行输入框)</option>
+                        <option value="TextEdit">TextEdit (多行文本编辑)</option>
+                        <option value="CodeEdit">CodeEdit (代码编辑器)</option>
+                        <option value="Label">Label (文本标签)</option>
+                        <option value="RichTextLabel">RichTextLabel (富文本)</option>
+                        <option value="SpinBox">SpinBox (数字微调框)</option>
+                      </optgroup>
+                      <optgroup label="3. 容器与面板 (Containers & Panels)">
+                        <option value="PanelContainer">PanelContainer (面板容器)</option>
+                        <option value="Panel">Panel (基础面板)</option>
+                        <option value="TabContainer">TabContainer (选项卡容器)</option>
+                        <option value="TabBar">TabBar (选项卡栏)</option>
+                        <option value="ScrollContainer">ScrollContainer (滚动容器)</option>
+                      </optgroup>
+                      <optgroup label="4. 数据与展示 (Data & Lists)">
+                        <option value="ProgressBar">ProgressBar (进度条)</option>
+                        <option value="Tree">Tree (树形目录)</option>
+                        <option value="ItemList">ItemList (列表项目)</option>
+                        <option value="PopupMenu">PopupMenu (弹出菜单)</option>
+                        <option value="MenuBar">MenuBar (顶部菜单栏)</option>
+                      </optgroup>
+                      <optgroup label="5. 滑块与分割线 (Sliders & Separators)">
+                        <option value="HSlider">HSlider (水平滑块)</option>
+                        <option value="VSlider">VSlider (垂直滑块)</option>
+                        <option value="HScrollBar">HScrollBar (水平滚动条)</option>
+                        <option value="VScrollBar">VScrollBar (垂直滚动条)</option>
+                        <option value="HSeparator">HSeparator (水平分割线)</option>
+                        <option value="VSeparator">VSeparator (垂直分割线)</option>
+                      </optgroup>
+                      <optgroup label="6. 窗口与对话框 (Windows & Dialogs)">
+                        <option value="Window">Window (基础窗口)</option>
+                        <option value="AcceptDialog">AcceptDialog (确定对话框)</option>
+                        <option value="ConfirmationDialog">ConfirmationDialog (确认取消框)</option>
+                        <option value="FileDialog">FileDialog (文件对话框)</option>
+                        <option value="TooltipPanel">TooltipPanel (悬浮提示面板)</option>
+                      </optgroup>
                     </select>
-                  </div>
-
-                  <div style="display:flex; gap:4px;">
-                    <button class="g-btn g-btn-default" style="height:24px; padding:0 6px; font-size:11px;" onclick="importGodotDefaultTheme()">+ 添加</button>
                   </div>
                 </div>
 
@@ -809,7 +1047,7 @@ window.STUDIO_CATALOG = {
                 </div>
 
                 <!-- Dynamic Fields Container -->
-                <div id="studioInspectorContent" style="flex:1; overflow-y:auto; max-height:340px;">
+                <div id="studioInspectorContent" style="flex:1; overflow-y:auto; max-height:360px;">
                   <!-- Dynamically populated by renderStudioInspector() -->
                 </div>
 
