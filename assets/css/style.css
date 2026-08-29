@@ -769,3 +769,49 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
 .search-result-item:hover {
   background: var(--bg-hover) !important;
 }
+
+/* Router Simulator & Transition Animations */
+.sim-page {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.anim-slide-left-in { animation: slideLeftIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-left-out { animation: slideLeftOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-right-in { animation: slideRightIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-right-out { animation: slideRightOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-up-in { animation: slideUpIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-up-out { animation: slideUpOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-fade-in { animation: fadeIn 0.35s ease-out forwards; }
+.anim-fade-out { animation: fadeOut 0.35s ease-out forwards; }
+
+@keyframes slideLeftIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slideLeftOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-35%); opacity: 0.5; }
+}
+@keyframes slideRightIn {
+  from { transform: translateX(-35%); opacity: 0.5; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideRightOut {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+@keyframes slideUpIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideUpOut {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

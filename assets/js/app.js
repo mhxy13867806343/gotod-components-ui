@@ -315,6 +315,17 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('storage-save-slots');
+  } else if (section === 'router') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search router & utils..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Router & Utils 路由与工具</div>
+        <div class="nav-item active" data-key="util-router" onclick="showDoc('util-router')"><span>🚀 GRouter 转场动画路由</span></div>
+        <div class="nav-item" data-key="util-format" onclick="showDoc('util-format')"><span>🎨 GFormat HP颜色与时间格式化</span></div>
+        <div class="nav-item" data-key="util-asset" onclick="showDoc('util-asset')"><span>🎵 GAsset 音视频与纹理导入</span></div>
+      </div>
+    `;
+    showDoc('util-router');
   } else if (section === 'studio') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
@@ -385,7 +396,7 @@ window.showDoc = function(key) {
   window.currentDocKey = key;
   localStorage.setItem('gotod_doc_key', key);
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STORAGE, STUDIO, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STORAGE, UTILS_ROUTER, STUDIO, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
@@ -396,6 +407,7 @@ window.showDoc = function(key) {
     window.SIGNALS_CATALOG || {},
     window.DECORATOR_CATALOG || {},
     window.STORAGE_CATALOG || {},
+    window.UTILS_ROUTER_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
