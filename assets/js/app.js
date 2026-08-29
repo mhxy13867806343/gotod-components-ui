@@ -328,6 +328,16 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('util-router');
+  } else if (section === 'lifecycle') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search lifecycles..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Godot 4 节点生命周期</div>
+        <div class="nav-item active" data-key="lifecycle-overview" onclick="showDoc('lifecycle-overview')"><span>🔄 全量生命周期全景与模拟器</span></div>
+        <div class="nav-item" data-key="lifecycle-apis" onclick="showDoc('lifecycle-apis')"><span>📖 7大阶段 API 示例大全</span></div>
+      </div>
+    `;
+    showDoc('lifecycle-overview');
   } else if (section === 'studio') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
@@ -398,7 +408,7 @@ window.showDoc = function(key) {
   window.currentDocKey = key;
   localStorage.setItem('gotod_doc_key', key);
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STORAGE, UTILS_ROUTER, STUDIO, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STORAGE, UTILS_ROUTER, LIFECYCLE, STUDIO, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
@@ -410,6 +420,7 @@ window.showDoc = function(key) {
     window.DECORATOR_CATALOG || {},
     window.STORAGE_CATALOG || {},
     window.UTILS_ROUTER_CATALOG || {},
+    window.LIFECYCLE_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
@@ -618,6 +629,8 @@ window.showDoc = function(key) {
     if (typeof window.updateCurrentGameStatusUI === 'function') setTimeout(window.updateCurrentGameStatusUI, 30);
   } else if (key === 'storage-lifecycle-guardian') {
     if (typeof window.renderSimGuardianConsole === 'function') setTimeout(window.renderSimGuardianConsole, 30);
+  } else if (key === 'lifecycle-overview') {
+    if (typeof window.renderSimLifecycleUI === 'function') setTimeout(window.renderSimLifecycleUI, 30);
   }
 };
 

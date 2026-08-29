@@ -34,6 +34,7 @@ window.getAllSearchIndex = function() {
   pushCategory(window.DECORATOR_CATALOG, '设计模式 (Decorator)', 'decorator', 'warning');
   pushCategory(window.STORAGE_CATALOG, '数据存储 (Storage)', 'storage', 'success');
   pushCategory(window.UTILS_ROUTER_CATALOG, '工具路由 (Utils & Router)', 'router', 'info');
+  pushCategory(window.LIFECYCLE_CATALOG, '生命周期 (Lifecycle)', 'lifecycle', 'warning');
   pushCategory(window.STUDIO_CATALOG, '资源工坊 (Studio)', 'studio', 'info');
 
   return index;
