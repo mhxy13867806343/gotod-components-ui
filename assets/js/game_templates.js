@@ -239,6 +239,81 @@ GMessage.success("任务完成！获得金币 +100")
 GMessage.error("网络连接断开")`
       }
     ]
+  },
+
+  'guide-treeshaking': {
+    title: '📦 生产环境按需打包与摇树优化 (Tree-Shaking & Export Plugin)',
+    desc: '开发环境支持随意调用全部 28+ 个组件；在项目生产环境发布导出 (Project -> Export) 时，EditorExportPlugin 会自动静态分析项目中所有 .tscn 和 .gd，未被使用的组件会自动被 skip() 排除出最终安装包，大幅减小游戏包体体积！',
+    demos: [
+      {
+        title: '生产环境摇树依赖分析与自动剔除模拟器 (Tree-Shaking Live Analyzer)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
+            <div class="sim-card" style="width:100%;">
+              <div class="sim-card-header">
+                <span style="font-weight:700; font-size:14px; color:var(--primary);">🎯 项目场景组件引用模拟扫描器 (Dependency Scanner)</span>
+                <span class="g-tag g-tag-success" id="shakerOptimizeTag">包体优化率: 82.1%</span>
+              </div>
+              <div style="padding:14px; background:var(--bg-surface); border-radius:var(--radius); margin-top:12px;">
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">勾选您在游戏中实际用到的组件，模拟导出时的按需过滤：</p>
+                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; font-size:12px;" id="shakerCheckGrid">
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GButton (按钮)</label>
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GInput (输入框)</label>
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GTabs (选项卡)</label>
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GDialog (弹窗)</label>
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GProgress (进度条)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GCard (卡片)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSelect (下拉框)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSlider (滑块)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSwitch (开关)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GDrawer (抽屉)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSteps (步骤条)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GCollapse (折叠面板)</label>
+                </div>
+              </div>
+
+              <!-- Output Statistics -->
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:14px;">
+                <div style="padding:12px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); text-align:center;">
+                  <div style="font-size:11px; color:var(--text-secondary);">开发环境全量组件</div>
+                  <div style="font-size:1.4rem; font-weight:700; color:var(--text-primary); margin-top:2px;">28 个</div>
+                </div>
+                <div style="padding:12px; background:var(--bg-surface); border:1px solid var(--primary); border-radius:var(--radius); text-align:center;">
+                  <div style="font-size:11px; color:var(--primary);">生产实际打包组件</div>
+                  <div id="shakerUsedCount" style="font-size:1.4rem; font-weight:700; color:var(--primary); margin-top:2px;">5 个</div>
+                </div>
+                <div style="padding:12px; background:var(--bg-surface); border:1px solid var(--danger); border-radius:var(--radius); text-align:center;">
+                  <div style="font-size:11px; color:var(--danger);">自动 skip() 剔除组件</div>
+                  <div id="shakerUnusedCount" style="font-size:1.4rem; font-weight:700; color:var(--danger); margin-top:2px;">23 个</div>
+                </div>
+              </div>
+
+              <!-- Godot Console Output Simulation -->
+              <div style="margin-top:14px; padding:10px 14px; background:#0d0d11; border:1px solid var(--border-base); border-radius:var(--radius); font-family:var(--font-mono); font-size:11px; color:#cfd0d8;">
+                <div style="color:var(--primary); font-weight:700; margin-bottom:4px;">[Godot 4 EditorExportPlugin 导出日志]:</div>
+                <div id="shakerLogText" style="line-height:1.6; color:#a0a5ad;">
+                  [GotodUI Tree-Shaker] 扫描完成: 实际打包 5 个组件，自动剔除 23 个未引用组件 (GCard, GSelect, GSlider, GSwitch, GDrawer, GSteps, GCollapse...)。
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# Godot 4 生产环境自动运行的 EditorExportPlugin 核心逻辑:
+# addons/gotod_ui/export/gotod_export_plugin.gd
+class_name GotodExportPlugin
+extends EditorExportPlugin
+
+func _export_begin(features: PackedStringArray, is_debug: bool, path: String, flags: int) -> void:
+    # 扫描项目所有场景依赖
+    var result = GotodTreeShaker.analyze_project_used_components()
+    print("[GotodUI Tree-Shaker] 已使用组件: %d, 剔除未引用: %d" % [result.used_count, result.unused_count])
+
+func _export_file(file_path: String, type: String, features: PackedStringArray) -> void:
+    # 未被任何场景引用的组件脚本直接调用 skip() 排除出导出包
+    if file_path in _unused_script_paths:
+        skip()`
+      }
+    ]
   }
 };
 

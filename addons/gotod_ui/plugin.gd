@@ -1,6 +1,8 @@
 @tool
 extends EditorPlugin
 
+var _export_plugin: GotodExportPlugin
+
 const CUSTOM_TYPES = [
 	# General
 	{"name": "GButton", "base": "Button", "script": "res://addons/gotod_ui/components/general/g_button.gd"},
@@ -44,11 +46,20 @@ const CUSTOM_TYPES = [
 ]
 
 func _enter_tree() -> void:
+	# 注册全部 28+ 个自定义节点类型（开发环境中全部可用）
 	for item in CUSTOM_TYPES:
 		var script = load(item["script"])
 		if script:
 			add_custom_type(item["name"], item["base"], script, null)
+			
+	# 注册生产环境按需打包与摇树优化插件
+	_export_plugin = GotodExportPlugin.new()
+	add_export_plugin(_export_plugin)
 
 func _exit_tree() -> void:
 	for item in CUSTOM_TYPES:
 		remove_custom_type(item["name"])
+		
+	if _export_plugin:
+		remove_export_plugin(_export_plugin)
+		_export_plugin = null

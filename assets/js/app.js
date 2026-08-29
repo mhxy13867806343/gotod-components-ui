@@ -283,11 +283,40 @@ window.addDynamicTag = function() {
   showToast(`Added Tag ${count}`, 'success');
 };
 
-// Checkbox Check All
-window.toggleCheckAll = function(master) {
-  const list = document.querySelectorAll('.cb-child');
-  list.forEach(cb => cb.checked = master.checked);
-  showToast(master.checked ? 'Selected all options' : 'Deselected all options', 'info');
+// Tree-Shaking Live Analyzer Calculation
+window.runLiveTreeShaker = function() {
+  const grid = document.getElementById('shakerCheckGrid');
+  if (!grid) return;
+  const checkboxes = grid.querySelectorAll('input[type="checkbox"]');
+  let used = 0;
+  let usedNames = [];
+  let unusedNames = [];
+
+  checkboxes.forEach(cb => {
+    const label = cb.parentElement.innerText.trim().split(' ')[0];
+    if (cb.checked) {
+      used++;
+      usedNames.push(label);
+    } else {
+      unusedNames.push(label);
+    }
+  });
+
+  const total = 28;
+  const unused = total - used;
+  const rate = ((unused / total) * 100).toFixed(1);
+
+  const usedCntElem = document.getElementById('shakerUsedCount');
+  const unusedCntElem = document.getElementById('shakerUnusedCount');
+  const tagElem = document.getElementById('shakerOptimizeTag');
+  const logElem = document.getElementById('shakerLogText');
+
+  if (usedCntElem) usedCntElem.innerText = `${used} 个`;
+  if (unusedCntElem) unusedCntElem.innerText = `${unused} 个`;
+  if (tagElem) tagElem.innerText = `包体优化率: ${rate}%`;
+  if (logElem) {
+    logElem.innerHTML = `[GotodUI Tree-Shaker] 扫描完成: 实际打包 ${used} 个组件 (${usedNames.join(', ')})，自动 skip() 剔除 ${unused} 个未引用组件 (${unusedNames.slice(0, 5).join(', ')}...)。`;
+  }
 };
 
 // ==========================================
@@ -312,6 +341,7 @@ window.switchTopSection = function(section) {
       <div class="nav-group">
         <div class="nav-group-title">Development 指南</div>
         <div class="nav-item active" data-key="guide-install" onclick="showDoc('guide-install')"><span>📥 安装与快速上手</span></div>
+        <div class="nav-item" data-key="guide-treeshaking" onclick="showDoc('guide-treeshaking')"><span>📦 生产环境按需打包与摇树优化</span></div>
         <div class="nav-item" data-key="guide-common-methods" onclick="showDoc('guide-common-methods')"><span>🛠️ 全局通用基类方法与事件</span></div>
         <div class="nav-item" data-key="guide-dynamic-api" onclick="showDoc('guide-dynamic-api')"><span>🧩 GTabs 动态方法与自定义信号</span></div>
         <div class="nav-item" data-key="guide-theme" onclick="showDoc('guide-theme')"><span>🎨 主题 Token 与暗黑模式</span></div>
