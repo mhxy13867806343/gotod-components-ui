@@ -192,7 +192,9 @@ window.runLiveTreeShaker = function() {
 };
 
 // ==========================================
-// Top Navigation Switcher (Guide / Components / Game / Playground / Imperawindow.switchTopSection = function(section, targetDocKey) {
+// Top Navigation Switcher
+// ==========================================
+window.switchTopSection = function(section, targetDocKey) {
   window.currentSection = section;
   localStorage.setItem('gotod_section', section);
 
