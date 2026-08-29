@@ -1,15 +1,44 @@
 // =========================================================================
 // Gotod Components UI - Global UI Helpers & Interactive Simulators
-// 提取自 app.js：主题切换、Toast通知、剪贴板复制、通用模拟器与交互辅助函数
+// 提取自 app.js：主题状态管理、通用表格渲染器、剪贴板复制、通用模拟器与交互辅助函数
 // =========================================================================
 
-// Global Theme & Mode Manager with LocalStorage Persistence
-window.changePreset = function(preset) {
+// ==========================================
+// 1. Unified LocalStorage Persistence Manager
+// ==========================================
+window.StorageUtil = {
+  get: (key, fallback = null) => localStorage.getItem('gotod_' + key) || fallback,
+  set: (key, val) => localStorage.setItem('gotod_' + key, val),
+  getTheme: () => window.StorageUtil.get('theme', 'dark'),
+  setTheme: (t) => window.StorageUtil.set('theme', t),
+  getPreset: () => window.StorageUtil.get('preset', 'naive'),
+  setPreset: (p) => window.StorageUtil.set('preset', p),
+  getSection: () => window.StorageUtil.get('section', 'components'),
+  setSection: (s) => window.StorageUtil.set('section', s),
+  getDocKey: () => window.StorageUtil.get('doc_key', null),
+  setDocKey: (k) => window.StorageUtil.set('doc_key', k)
+};
+
+// ==========================================
+// 2. Global Theme & Preset DOM Sync Handlers
+// ==========================================
+window.syncThemeDOM = function(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const icon = document.getElementById('themeIcon');
+  const text = document.getElementById('themeText');
+  if (icon) icon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  if (text) text.innerText = theme === 'dark' ? 'Dark' : 'Light';
+};
+
+window.syncPresetDOM = function(preset) {
   document.documentElement.setAttribute('data-preset', preset);
-  localStorage.setItem('gotod_preset', preset);
   const selectElem = document.getElementById('presetSelect');
   if (selectElem && selectElem.value !== preset) selectElem.value = preset;
-  
+};
+
+window.changePreset = function(preset) {
+  window.StorageUtil.setPreset(preset);
+  window.syncPresetDOM(preset);
   showToast('Theme preset switched to: ' + preset.toUpperCase() + ' tokens', 'info');
   if (window.currentDocKey && typeof window.showDoc === 'function') {
     window.showDoc(window.currentDocKey);
@@ -17,18 +46,43 @@ window.changePreset = function(preset) {
 };
 
 window.toggleTheme = function() {
-  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const cur = window.StorageUtil.getTheme();
   const next = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('gotod_theme', next);
-  
-  const icon = document.getElementById('themeIcon');
-  const text = document.getElementById('themeText');
-  if (icon) icon.className = next === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-  if (text) text.innerText = next === 'dark' ? 'Dark' : 'Light';
+  window.StorageUtil.setTheme(next);
+  window.syncThemeDOM(next);
 };
 
-// Uni-UI Style FAB Toggle Function
+// ==========================================
+// 3. Generic API Table Component Generator
+// ==========================================
+window.renderApiTable = function(title, headers, rows, subtitle = '') {
+  if (!rows || rows.length === 0) return '';
+  const subHtml = subtitle ? `<p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">${subtitle}</p>` : '';
+  const theadHtml = headers.map(h => `<th style="width:${h.width || 'auto'};">${h.title}</th>`).join('');
+  const tbodyHtml = rows.map(r => `
+    <tr>
+      ${headers.map(h => {
+        const val = r[h.key] !== undefined ? r[h.key] : '';
+        if (h.isCode) return `<td><code>${val}</code></td>`;
+        if (h.className) return `<td class="${h.className}">${val}</td>`;
+        return `<td>${val}</td>`;
+      }).join('')}
+    </tr>
+  `).join('');
+
+  return `
+    <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${title}</h3>
+    ${subHtml}
+    <table class="api-table">
+      <thead><tr>${theadHtml}</tr></thead>
+      <tbody>${tbodyHtml}</tbody>
+    </table>
+  `;
+};
+
+// ==========================================
+// 4. Uni-UI Style FAB Toggle Function
+// ==========================================
 window.toggleFabMenu = function() {
   const menu = document.getElementById('gFabMenu');
   const trigger = document.getElementById('gFabTrigger');
@@ -47,7 +101,9 @@ window.toggleFabMenu = function() {
   }
 };
 
-// Toast Floating Message System
+// ==========================================
+// 5. Toast Floating Message System
+// ==========================================
 window.showToast = function(msg, type = 'info') {
   const container = document.getElementById('toastContainer');
   if (!container) return;
@@ -72,7 +128,9 @@ window.showToast = function(msg, type = 'info') {
   }, 3000);
 };
 
-// Copy Code with Robust Fallback and Auto-Lookup
+// ==========================================
+// 6. Dual-Engine Clipboard Copy Utility
+// ==========================================
 window.copyCode = function(btn, codeText) {
   if (!codeText) {
     const card = btn.closest('.demo-card') || btn.closest('.code-box') || btn.parentElement;
@@ -132,13 +190,17 @@ window.copyCode = function(btn, codeText) {
   }
 };
 
-// HTML Escaping Utility
+// ==========================================
+// 7. HTML Escaping Utility
+// ==========================================
 window.escapeHtml = function(text) {
   if (typeof text !== 'string') return '';
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
 
-// Simulated Interactive Component Helpers
+// ==========================================
+// 8. Simulated Interactive Component Helpers
+// ==========================================
 window.openSimDialog = function(content = "This is a modal dialog content.", title = "GDialog Modal") {
   const modal = document.getElementById('simModal');
   const titleElem = document.getElementById('simModalTitle');

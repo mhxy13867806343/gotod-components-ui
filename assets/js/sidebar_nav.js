@@ -221,6 +221,8 @@ window.SIDEBAR_CONFIG = {
   }
 };
 
+window.SECTION_KEYS = Object.keys(window.SIDEBAR_CONFIG);
+
 // Render Sidebar Navigation Dynamically
 window.renderSidebarNav = function(section, targetDocKey) {
   const sidebar = document.getElementById('sidebarNav');

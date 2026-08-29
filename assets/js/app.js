@@ -12,7 +12,7 @@ window.currentDocKey = 'tabs';
 // ==========================================
 window.switchTopSection = function(section, targetDocKey) {
   window.currentSection = section;
-  localStorage.setItem('gotod_section', section);
+  window.StorageUtil.setSection(section);
 
   // Sync Top Select value
   const topSelect = document.getElementById('topSectionSelect');
@@ -44,8 +44,8 @@ window.findSectionByDocKey = function(docKey) {
   if (window.STUDIO_CATALOG && window.STUDIO_CATALOG[docKey]) return 'studio';
   if (window.COMPONENT_CATALOG && window.COMPONENT_CATALOG[docKey]) return 'components';
 
-  const sectionNames = ['guide', 'components', 'game', 'playground', 'imperative', 'hooks', 'signals', 'decorator', 'storage', 'router', 'lifecycle', 'studio'];
-  if (sectionNames.includes(docKey)) return docKey;
+  const sections = window.SECTION_KEYS || [];
+  if (sections.includes(docKey)) return docKey;
   return 'components';
 };
 
@@ -55,14 +55,14 @@ window.findSectionByDocKey = function(docKey) {
 window.routeFromHash = function() {
   const hash = window.location.hash.replace(/^#/, '').trim();
   if (!hash) {
-    const savedSection = localStorage.getItem('gotod_section') || 'components';
-    const savedDocKey = localStorage.getItem('gotod_doc_key') || (savedSection === 'components' ? 'tabs' : null);
+    const savedSection = window.StorageUtil.getSection();
+    const savedDocKey = window.StorageUtil.getDocKey() || (savedSection === 'components' ? 'tabs' : null);
     switchTopSection(savedSection, savedDocKey);
     return;
   }
 
-  const sectionNames = ['guide', 'components', 'game', 'playground', 'imperative', 'hooks', 'signals', 'decorator', 'storage', 'router', 'lifecycle', 'studio'];
-  if (sectionNames.includes(hash)) {
+  const sections = window.SECTION_KEYS || [];
+  if (sections.includes(hash)) {
     switchTopSection(hash);
   } else {
     const targetSection = findSectionByDocKey(hash);
@@ -79,14 +79,14 @@ window.addEventListener('hashchange', () => {
 // ==========================================
 window.showDoc = function(key) {
   window.currentDocKey = key;
-  localStorage.setItem('gotod_doc_key', key);
+  window.StorageUtil.setDocKey(key);
   
   // Sync URL hash to browser address bar without jarring scrolling
   if (window.location.hash !== '#' + key) {
     history.replaceState(null, '', '#' + key);
   }
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STORAGE, UTILS_ROUTER, LIFECYCLE, STUDIO, COMPONENT
+  // Combine all catalog sources
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
@@ -134,161 +134,63 @@ window.showDoc = function(key) {
     `).join('');
   }
 
-  // Render Props Table
+  // Common Header Definitions for Tables
+  const propHeaders = [
+    { title: '属性名 / Attribute', width: '25%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '40%', key: 'desc' },
+    { title: '类型 / Type', width: '20%', key: 'type', className: 'api-type' },
+    { title: '默认值 / Default', width: '15%', key: 'default', isCode: true }
+  ];
+
+  const methodHeaders = [
+    { title: '方法名 / Method', width: '30%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '45%', key: 'desc' },
+    { title: '参数 / Parameters', width: '25%', key: 'params', className: 'api-type' }
+  ];
+
+  const eventHeaders = [
+    { title: '信号名 / Event Name', width: '30%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '45%', key: 'desc' },
+    { title: '参数 / Parameters', width: '25%', key: 'params', className: 'api-type' }
+  ];
+
+  const slotHeaders = [
+    { title: '插槽名 / Slot Name', width: '30%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '45%', key: 'desc' },
+    { title: '子标签 / Child Node', width: '25%', key: 'child', className: 'api-type' }
+  ];
+
+  const compName = (doc.title || '').split(' ')[0];
   let propsHtml = '';
-  if (doc.props && doc.props.length > 0) {
-    propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Attributes (属性)</h3>
-      <table class="api-table">
-        <thead>
-          <tr>
-            <th style="width:25%;">属性名 / Attribute</th>
-            <th style="width:40%;">说明 / Description</th>
-            <th style="width:20%;">类型 / Type</th>
-            <th style="width:15%;">默认值 / Default</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${doc.props.map(p => `
-            <tr>
-              <td class="api-prop">${p.name}</td>
-              <td>${p.desc}</td>
-              <td class="api-type">${p.type}</td>
-              <td><code>${p.default}</code></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
+
+  // 1. Attributes Table
+  propsHtml += renderApiTable(`${compName} Attributes (属性)`, propHeaders, doc.props);
+
+  // 2. Control/Node Base Methods Table
+  if (window.COMMON_CONTROL_METHODS && !['guide-', 'game-', 'play-', 'studio-', 'imp-'].some(p => key.startsWith(p))) {
+    propsHtml += renderApiTable(
+      'Control & Node Base Methods (全局通用基类方法)',
+      [
+        { title: '通用方法名 / Method', width: '30%', key: 'name', className: 'api-prop' },
+        { title: '功能说明 / Description', width: '45%', key: 'desc' },
+        { title: '参数与返回值 / Signature', width: '25%', key: 'params', className: 'api-type' }
+      ],
+      window.COMMON_CONTROL_METHODS,
+      '所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：'
+    );
   }
 
-  // Render Universal Control/Node Common Methods Table
-  if (window.COMMON_CONTROL_METHODS && window.COMMON_CONTROL_METHODS.length > 0 && !key.startsWith('guide-') && !key.startsWith('game-') && !key.startsWith('play-') && !key.startsWith('studio-') && !key.startsWith('imp-')) {
-    propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">Control & Node Base Methods (全局通用基类方法)</h3>
-      <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：</p>
-      <table class="api-table">
-        <thead>
-          <tr>
-            <th style="width:30%;">通用方法名 / Method</th>
-            <th style="width:45%;">功能说明 / Description</th>
-            <th style="width:25%;">参数与返回值 / Signature</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${window.COMMON_CONTROL_METHODS.map(m => `
-            <tr>
-              <td class="api-prop">${m.name}</td>
-              <td>${m.desc}</td>
-              <td class="api-type">${m.params}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-  }
+  // 3. Specific Methods Table
+  propsHtml += renderApiTable(`${compName} Specific Methods (组件专属外部方法)`, methodHeaders, doc.methods);
 
-  // Render Component Specific Methods Table
-  if (doc.methods && doc.methods.length > 0) {
-    propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Specific Methods (组件专属外部方法)</h3>
-      <table class="api-table">
-        <thead>
-          <tr>
-            <th style="width:30%;">方法名 / Method</th>
-            <th style="width:45%;">说明 / Description</th>
-            <th style="width:25%;">参数 / Parameters</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${doc.methods.map(m => `
-            <tr>
-              <td class="api-prop">${m.name}</td>
-              <td>${m.desc}</td>
-              <td class="api-type">${m.params}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-  }
+  // 4. Events Table
+  propsHtml += renderApiTable(`${compName} Events / Signals (自定义信号)`, eventHeaders, doc.events);
 
-  // Render Events Table
-  if (doc.events && doc.events.length > 0) {
-    propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Events / Signals (自定义信号)</h3>
-      <table class="api-table">
-        <thead>
-          <tr>
-            <th style="width:30%;">信号名 / Event Name</th>
-            <th style="width:45%;">说明 / Description</th>
-            <th style="width:25%;">参数 / Parameters</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${doc.events.map(m => `
-            <tr>
-              <td class="api-prop">${m.name}</td>
-              <td>${m.desc}</td>
-              <td class="api-type">${m.params}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-  }
+  // 5. Slots Table
+  propsHtml += renderApiTable(`${compName} Slots (插槽与节点挂载)`, slotHeaders, doc.slots);
 
-  // Render Slots Table
-  if (doc.slots && doc.slots.length > 0) {
-    propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Slots (插槽与节点挂载)</h3>
-      <table class="api-table">
-        <thead>
-          <tr>
-            <th style="width:30%;">插槽名 / Slot Name</th>
-            <th style="width:45%;">说明 / Description</th>
-            <th style="width:25%;">子标签 / Child Node</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${doc.slots.map(s => `
-            <tr>
-              <td class="api-prop">${s.name}</td>
-              <td>${s.desc}</td>
-              <td class="api-type">${s.child}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-  }
-
-  // Render Sub-component Attributes Table
-  if (doc.paneProps && doc.paneProps.length > 0) {
-    propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">Sub-component Attributes (子组件/子面板属性)</h3>
-      <table class="api-table">
-        <thead>
-          <tr>
-            <th style="width:25%;">属性名 / Attribute</th>
-            <th style="width:40%;">说明 / Description</th>
-            <th style="width:20%;">类型 / Type</th>
-            <th style="width:15%;">默认值 / Default</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${doc.paneProps.map(p => `
-            <tr>
-              <td class="api-prop">${p.name}</td>
-              <td>${p.desc}</td>
-              <td class="api-type">${p.type}</td>
-              <td><code>${p.default}</code></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-  }
+  // 6. Sub-component Attributes Table
+  propsHtml += renderApiTable('Sub-component Attributes (子组件/子面板属性)', propHeaders, doc.paneProps);
 
   document.getElementById('mainContent').innerHTML = `
     <div class="doc-header">
@@ -317,20 +219,10 @@ window.showDoc = function(key) {
 // Default initial render on load
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Restore Theme Mode (dark / light)
-  const savedTheme = localStorage.getItem('gotod_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  const icon = document.getElementById('themeIcon');
-  const text = document.getElementById('themeText');
-  if (icon) icon.className = savedTheme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-  if (text) text.innerText = savedTheme === 'dark' ? 'Dark' : 'Light';
+  // 1. Restore Theme & Preset using unified helpers
+  window.syncThemeDOM(window.StorageUtil.getTheme());
+  window.syncPresetDOM(window.StorageUtil.getPreset());
 
-  // 2. Restore Preset (naive / element / ant / vant)
-  const savedPreset = localStorage.getItem('gotod_preset') || 'naive';
-  document.documentElement.setAttribute('data-preset', savedPreset);
-  const presetSelect = document.getElementById('presetSelect');
-  if (presetSelect) presetSelect.value = savedPreset;
-
-  // 3. Route from URL Hash (or LocalStorage fallback)
+  // 2. Route from URL Hash (or LocalStorage fallback)
   window.routeFromHash();
 });
