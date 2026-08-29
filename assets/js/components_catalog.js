@@ -270,13 +270,20 @@ add_child(icon)`
             </div>
           </div>
         `,
-        code: `# GDScript: Horizontal Uni-UI Fab
+        code: `# GDScript 方式 1: 单项链式添加
 var fab = GFab.new()
 fab.direction = GFab.Direction.HORIZONTAL
 fab.fab_position = GFab.Position.BOTTOM_RIGHT
 fab.add_action("album", "相册", preload("res://icons/image.svg"))
 fab.add_action("home", "首页", preload("res://icons/home.svg"))
 fab.add_action("star", "收藏", preload("res://icons/star.svg"))
+
+# GDScript 方式 2: 批量数组添加 (Batch Actions)
+fab.add_actions([
+    { "name": "album", "label": "相册", "icon": preload("res://icons/image.svg") },
+    { "name": "home", "label": "首页", "icon": preload("res://icons/home.svg") },
+    { "name": "star", "label": "收藏", "icon": preload("res://icons/star.svg") }
+])
 fab.item_clicked.connect(func(idx, name): print("Clicked: ", name))
 add_child(fab)`
       },
@@ -297,9 +304,11 @@ add_child(fab)`
         code: `# GDScript: Vertical Speed Dial
 var fab = GFab.new()
 fab.direction = GFab.Direction.VERTICAL
-fab.add_action("share", "分享", icon_share)
-fab.add_action("download", "下载", icon_download)
-fab.add_action("like", "点赞", icon_like)
+fab.add_actions([
+    { "name": "share", "label": "分享", "icon": icon_share },
+    { "name": "download", "label": "下载", "icon": icon_download },
+    { "name": "like", "label": "点赞", "icon": icon_like }
+])
 add_child(fab)`
       }
     ],
@@ -318,7 +327,8 @@ add_child(fab)`
       { name: 'toggle()', returns: 'void', desc: '切换展开与收起状态' },
       { name: 'expand()', returns: 'void', desc: '主动执行展开动画' },
       { name: 'collapse()', returns: 'void', desc: '主动执行收起动画' },
-      { name: 'add_action(name, label, icon)', returns: 'void', desc: '动态添加子菜单项' }
+      { name: 'add_action(name, label, icon)', returns: 'void', desc: '动态添加单个子菜单项' },
+      { name: 'add_actions(action_list)', returns: 'void', desc: '批量追加一组子菜单项 [{"name": "", "label": "", "icon": null}]' }
     ],
     slots: []
   },
@@ -884,6 +894,8 @@ sel.set_custom_item_template(hero_item_scene)`
       { name: 'cleared()', desc: '点击清空时触发', params: '()' }
     ],
     methods: [
+      { name: 'add_option(label, value=null, disabled=false)', desc: '动态追加单个下拉选项', params: '(label: String, value: Variant, disabled: bool) -> void' },
+      { name: 'add_options(opt_list: Array)', desc: '批量追加一组下拉选项 [{"label": "", "value": ""}]', params: '(opt_list: Array) -> void' },
       { name: 'clear()', desc: '清空当前选中的值', params: '() -> void' },
       { name: 'set_selected_by_value(val: Variant)', desc: '根据绑定的 value 设置选中项', params: '(val: Variant) -> void' }
     ],
@@ -943,6 +955,8 @@ picker.open()`
       { name: 'change(values, index)', desc: '选项改变时触发', params: '(values: Array, index: int)' }
     ],
     methods: [
+      { name: 'set_columns(cols: Array)', desc: '批量设置多列或单列选项数据', params: '(cols: Array) -> void' },
+      { name: 'add_column(items: Array)', desc: '动态追加一列备选数据', params: '(items: Array) -> void' },
       { name: 'open()', desc: '呼出选择器面板', params: '() -> void' },
       { name: 'close()', desc: '关闭选择器面板', params: '() -> void' },
       { name: 'get_selected_value()', desc: '获取当前选中的值', params: '() -> Variant' }
@@ -1392,13 +1406,13 @@ overlay.open()`
             <button class="g-btn g-btn-primary" onclick="openSimActionSheet({ actions: [{ name:'微信好友分享' }, { name:'朋友圈海报生成' }, { name:'复制活动邀请码' }] })">呼出基础动作面板</button>
           </div>
         `,
-        code: `# GDScript: 基础动作面板
+        code: `# GDScript 方式 1: 批量数组添加
 var sheet = GActionSheet.new()
-sheet.actions = [
+sheet.add_actions([
     { "name": "微信好友分享" },
     { "name": "朋友圈海报生成" },
     { "name": "复制活动邀请码" }
-]
+])
 sheet.select.connect(func(item, idx): print("Action:", item.name))
 sheet.open()`
       },
@@ -1412,10 +1426,10 @@ sheet.open()`
         code: `# GDScript: 带标题与高危项
 var sheet = GActionSheet.new()
 sheet.title = "公会成员管理"
-sheet.actions = [
+sheet.add_actions([
     { "name": "提升为副会长" },
     { "name": "踢出公会", "danger": true }
-]
+])
 sheet.open()`
       }
     ],
@@ -1431,6 +1445,8 @@ sheet.open()`
       { name: 'cancel()', desc: '点击取消按钮时触发', params: '()' }
     ],
     methods: [
+      { name: 'add_action(name, subname="", danger=false, disabled=false)', desc: '动态添加单个动作项', params: '(name: String, subname: String, danger: bool, disabled: bool) -> void' },
+      { name: 'add_actions(action_list: Array[Dictionary])', desc: '批量追加一组动作面板选项', params: '(action_list: Array[Dictionary]) -> void' },
       { name: 'open()', desc: '呼出底部动作面板', params: '() -> void' },
       { name: 'close()', desc: '关闭动作面板', params: '() -> void' }
     ],
@@ -1466,13 +1482,14 @@ sheet.open()`
             </div>
           </div>
         `,
-        code: `# GDScript: 气泡弹出框
+        code: `# GDScript: 气泡弹出框 (批量配置菜单)
 var popover = GPopover.new()
 popover.theme = GPopover.Theme.DARK
-popover.actions = [
+popover.add_actions([
     { "text": "发起群聊", "icon": icon_chat },
-    { "text": "添加好友", "icon": icon_user }
-]
+    { "text": "添加好友", "icon": icon_user },
+    { "text": "扫一扫", "icon": icon_scan }
+])
 popover.open_for_node(target_btn)`
       }
     ],
@@ -1488,6 +1505,8 @@ popover.open_for_node(target_btn)`
       { name: 'closed()', desc: '气泡关闭时触发', params: '()' }
     ],
     methods: [
+      { name: 'add_action(text, icon=null, disabled=false)', desc: '动态添加单个气泡菜单项', params: '(text: String, icon: Texture2D, disabled: bool) -> void' },
+      { name: 'add_actions(action_list: Array[Dictionary])', desc: '批量追加一组气泡菜单项', params: '(action_list: Array[Dictionary]) -> void' },
       { name: 'open_for_node(target: Control)', desc: '针对指定控件节点弹出气泡', params: '(target: Control) -> void' },
       { name: 'close()', desc: '关闭气泡框', params: '() -> void' },
       { name: 'toggle_for_node(target: Control)', desc: '切换气泡开启/关闭', params: '(target: Control) -> void' }
@@ -1864,13 +1883,13 @@ skeleton.loading = false`
             <button class="g-btn g-btn-primary" onclick="openSimTour()">🚀 启动系统漫游引导 (Start Tour)</button>
           </div>
         `,
-        code: `# GDScript: 漫游式新手引导
+        code: `# GDScript: 漫游式新手引导 (批量配置步骤)
 var tour = GTour.new()
-tour.steps = [
+tour.add_steps([
     { "target": node_search, "title": "全局搜索", "description": "按 Ctrl+K 快速检索全部组件" },
     { "target": node_theme, "title": "主题切换", "description": "随时切换 4 大主题预设" },
     { "target": node_game, "title": "游戏实战", "description": "体验角色背包与商店模板" }
-]
+])
 tour.start()`
       }
     ],
@@ -1886,6 +1905,8 @@ tour.start()`
       { name: 'close()', desc: '用户中途关闭引导时触发', params: '()' }
     ],
     methods: [
+      { name: 'add_step(step_dict: Dictionary)', desc: '动态追加单个漫游步骤', params: '(step_dict: Dictionary) -> void' },
+      { name: 'add_steps(step_list: Array[Dictionary])', desc: '批量追加一组漫游步骤', params: '(step_list: Array[Dictionary]) -> void' },
       { name: 'start()', desc: '从第一步开始启动漫游引导', params: '() -> void' },
       { name: 'next()', desc: '前进至下一步', params: '() -> void' },
       { name: 'prev()', desc: '后退至上一步', params: '() -> void' },
@@ -2131,12 +2152,20 @@ add_child(p)`
             </div>
           </div>
         `,
-        code: `# GDScript: Basic Tabs
+        code: `# GDScript 方式 1: 单项链式添加
 var tabs = GTabs.new()
 tabs.add_tab("User", user_panel)
 tabs.add_tab("Config", config_panel)
 tabs.add_tab("Role", role_panel)
 tabs.add_tab("Task", task_panel)
+
+# GDScript 方式 2: 批量数组添加 (Batch Array)
+tabs.add_tabs([
+    { "name": "User", "panel": user_panel },
+    { "name": "Config", "panel": config_panel },
+    { "name": "Role", "panel": role_panel, "closable": true },
+    { "name": "Task", "panel": task_panel }
+])
 tabs.tab_changed.connect(func(idx, name): print("Active tab:", name))
 add_child(tabs)`
       },
@@ -2256,6 +2285,7 @@ add_child(tabs)`
     ],
     methods: [
       { name: 'add_tab(name, panel, closable=false, icon=null)', desc: '动态追加一个选项卡及关联内容面板', params: '(name: String, panel: Control, closable: bool, icon: Texture2D) -> int' },
+      { name: 'add_tabs(tab_list: Array[Dictionary])', desc: '批量追加一组选项卡 [{"name": "", "panel": Control, "closable": false}]', params: '(tab_list: Array[Dictionary]) -> void' },
       { name: 'insert_tab(index, name, panel, closable=false, icon=null)', desc: '在指定索引位置插入一个选项卡', params: '(index: int, name: String, panel: Control, closable: bool, icon: Texture2D) -> void' },
       { name: 'remove_tab(index_or_name)', desc: '根据索引或标题名称移除指定选项卡', params: '(index_or_name: Variant) -> void' },
       { name: 'clear_tabs()', desc: '清空并销毁所有选项卡及关联面板', params: '() -> void' },
@@ -2378,9 +2408,12 @@ add_child(col)`
             </div>
           </div>
         `,
-        code: `# GDScript: Steps
+        code: `# GDScript 方式 1: 批量配置步骤名称
 var st = GSteps.new()
-st.steps = ["Step 1", "Step 2", "Step 3"]
+st.add_steps(["角色创建", "技能配置", "进入世界"])
+
+# GDScript 方式 2: 单步动态追加
+st.add_step("探索副本")
 st.current_step = 1
 add_child(st)`
       }
@@ -2395,6 +2428,8 @@ add_child(st)`
       { name: 'step_changed(current_step)', desc: '当前步骤改变时触发', params: '(current_step: int)' }
     ],
     methods: [
+      { name: 'add_step(title: String)', desc: '动态追加单个步骤', params: '(title: String) -> void' },
+      { name: 'add_steps(step_list: Array)', desc: '批量设置/追加步骤列表 ["步骤1", "步骤2"]', params: '(step_list: Array) -> void' },
       { name: 'next()', desc: '前进至下一步', params: '() -> void' },
       { name: 'prev()', desc: '返回上一步', params: '() -> void' },
       { name: 'set_step(index: int)', desc: '直接跳转到指定步骤', params: '(index: int) -> void' }
