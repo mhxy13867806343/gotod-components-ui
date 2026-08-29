@@ -170,9 +170,11 @@ window.SIDEBAR_CONFIG = {
     placeholder: 'Search components...',
     groups: [
       {
-        title: 'General 基础',
+        title: 'Layout & General 基础与布局',
         items: [
           { key: 'button', title: 'GButton 按钮' },
+          { key: 'container', title: 'GContainer 布局容器' },
+          { key: 'space', title: 'GSpace 间距布局' },
           { key: 'text', title: 'GText / GTitle 文本' },
           { key: 'divider', title: 'GDivider 分割线' },
           { key: 'icon', title: 'GIcon 图标' },

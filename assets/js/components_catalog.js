@@ -173,6 +173,136 @@ add_child(txt)`
   },
 
   // --------------------------------------------------------
+  // 2.2 GContainer 布局容器 (Element Plus 对标)
+  // --------------------------------------------------------
+  'container': {
+    title: 'Container 布局容器 (GContainer & Layouts)',
+    desc: '用于快速搭建游戏主界面、系统设置或面板系统的常见整体结构。深度对标 Element Plus Container 规范，提供 GContainer（外层容器）、GHeader（顶栏）、GAside（侧边栏）、GMain（主要区域）与 GFooter（底栏）。当子元素中包含 GHeader 或 GFooter 时自动垂直排列，否则水平排列。',
+    demos: [
+      {
+        title: '1. 常见布局：顶栏 + 主要区域 + 底栏 (Header + Main + Footer)',
+        render: `
+          <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; text-align:center; font-size:13px; font-weight:600;">
+            <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-bottom:1px solid var(--border-base);">GHeader (高度: 60px)</div>
+            <div style="background:rgba(103,194,58,0.12); color:var(--success); padding:36px; min-height:120px; display:flex; align-items:center; justify-content:center;">GMain (自动撑满剩余空间)</div>
+            <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-top:1px solid var(--border-base);">GFooter (高度: 60px)</div>
+          </div>
+        `,
+        code: `# GDScript: Header + Main + Footer 经典上下布局
+var container = GContainer.new()
+
+var header = GHeader.new()
+header.height = 60.0
+
+var main = GMain.new()
+
+var footer = GFooter.new()
+footer.height = 60.0
+
+container.add_child(header)
+container.add_child(main)
+container.add_child(footer)
+add_child(container)`
+      },
+      {
+        title: '2. 常见布局：侧边栏 + 主要区域 (Aside + Main)',
+        render: `
+          <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; text-align:center; font-size:13px; font-weight:600; min-height:160px;">
+            <div style="background:rgba(230,162,60,0.15); color:var(--warning); width:160px; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border-base);">GAside (宽: 200px)</div>
+            <div style="background:rgba(103,194,58,0.12); color:var(--success); flex:1; display:flex; align-items:center; justify-content:center;">GMain (主要内容区域)</div>
+          </div>
+        `,
+        code: `# GDScript: Aside + Main 左右分栏布局
+var container = GContainer.new()
+
+var aside = GAside.new()
+aside.width = 200.0
+
+var main = GMain.new()
+
+container.add_child(aside)
+container.add_child(main)
+add_child(container)`
+      },
+      {
+        title: '3. 常见布局：顶栏通顶 + 侧边与主要区域 + 底栏 (Header + (Aside + Main) + Footer)',
+        render: `
+          <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; text-align:center; font-size:13px; font-weight:600;">
+            <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-bottom:1px solid var(--border-base);">GHeader (顶栏通顶)</div>
+            <div style="display:flex; min-height:140px;">
+              <div style="background:rgba(230,162,60,0.15); color:var(--warning); width:150px; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border-base);">GAside</div>
+              <div style="background:rgba(103,194,58,0.12); color:var(--success); flex:1; display:flex; align-items:center; justify-content:center;">GMain</div>
+            </div>
+            <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:16px; border-top:1px solid var(--border-base);">GFooter</div>
+          </div>
+        `,
+        code: `# GDScript: Header + (Aside + Main) + Footer 嵌套布局
+var root_container = GContainer.new()
+
+var header = GHeader.new()
+var sub_container = GContainer.new()
+var aside = GAside.new()
+var main = GMain.new()
+var footer = GFooter.new()
+
+sub_container.add_child(aside)
+sub_container.add_child(main)
+
+root_container.add_child(header)
+root_container.add_child(sub_container)
+root_container.add_child(footer)
+add_child(root_container)`
+      },
+      {
+        title: '4. 常见布局：侧边栏通顶 + 顶栏与内容 (Aside + (Header + Main + Footer))',
+        render: `
+          <div style="width:100%; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden; display:flex; text-align:center; font-size:13px; font-weight:600;">
+            <div style="background:rgba(230,162,60,0.15); color:var(--warning); width:150px; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border-base);">GAside (通顶导航)</div>
+            <div style="flex:1; display:flex; flex-direction:column;">
+              <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:14px; border-bottom:1px solid var(--border-base);">GHeader</div>
+              <div style="background:rgba(103,194,58,0.12); color:var(--success); min-height:120px; display:flex; align-items:center; justify-content:center;">GMain</div>
+              <div style="background:rgba(64,158,255,0.18); color:var(--primary); padding:14px; border-top:1px solid var(--border-base);">GFooter</div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: Aside + (Header + Main + Footer) 侧边栏通顶布局
+var root_container = GContainer.new()
+
+var aside = GAside.new()
+var right_container = GContainer.new()
+
+var header = GHeader.new()
+var main = GMain.new()
+var footer = GFooter.new()
+
+right_container.add_child(header)
+right_container.add_child(main)
+right_container.add_child(footer)
+
+root_container.add_child(aside)
+root_container.add_child(right_container)
+add_child(root_container)`
+      }
+    ],
+    props: [
+      { name: 'direction', type: 'enum', default: 'AUTO', desc: '子元素排列方向：AUTO (包含 Header/Footer 时自动垂直，否则水平), HORIZONTAL, VERTICAL' }
+    ],
+    events: [],
+    methods: [
+      { name: 'css(rules_or_func: Variant)', desc: '链式设定当前容器的样式规则', params: '(rules_or_func: Variant) -> GContainer' }
+    ],
+    slots: [
+      { name: 'default', desc: '默认插槽，放置子容器或业务组件', child: 'GHeader / GAside / GMain / GFooter / Control' }
+    ],
+    paneProps: [
+      { name: 'GHeader.height', type: 'float', default: '60.0', desc: '顶栏容器的高度 (像素)' },
+      { name: 'GAside.width', type: 'float', default: '200.0', desc: '侧边栏容器的宽度 (像素)' },
+      { name: 'GMain.size_flags', type: 'int', default: 'SIZE_EXPAND_FILL', desc: '主要区域自动撑满并占满可用空间' },
+      { name: 'GFooter.height', type: 'float', default: '60.0', desc: '底栏容器的高度 (像素)' }
+    ]
+  },
+
+  // --------------------------------------------------------
   // 3. GDivider 分割线
   // --------------------------------------------------------
   'divider': {
