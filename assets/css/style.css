@@ -1305,3 +1305,69 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   background: var(--bg-surface);
   color: var(--primary);
 }
+
+/* Vant UI Styled GToast */
+.g-toast-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.001);
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.g-toast-mask.forbid-click {
+  pointer-events: auto;
+}
+.g-toast-box {
+  background: rgba(18, 18, 22, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  max-width: 80%;
+  text-align: center;
+  animation: gToastFadeIn 0.2s ease forwards;
+  pointer-events: auto;
+  user-select: none;
+}
+.g-toast-box.with-icon {
+  min-width: 120px;
+  min-height: 100px;
+  padding: 18px 20px;
+}
+.g-toast-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+.g-toast-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: gSpin 0.8s linear infinite;
+}
+.g-toast-mask.pos-top .g-toast-box {
+  margin-top: 80px;
+  align-self: flex-start;
+}
+.g-toast-mask.pos-bottom .g-toast-box {
+  margin-bottom: 80px;
+  align-self: flex-end;
+}
+@keyframes gToastFadeIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+

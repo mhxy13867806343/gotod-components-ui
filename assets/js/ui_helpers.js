@@ -945,3 +945,66 @@ window.closeSimTour = function() {
     mask.style.display = 'none';
   }
 };
+
+// ==========================================
+// Vant UI Style GToast Simulator Helper
+// ==========================================
+let simToastTimer = null;
+window.openSimToast = function(opts) {
+  if (typeof opts === 'string') opts = { message: opts };
+  const message = opts.message || '轻提示内容';
+  const type = opts.type || 'text';
+  const duration = opts.duration !== undefined ? opts.duration : 2000;
+  const position = opts.position || 'middle';
+  const forbidClick = !!opts.forbidClick;
+  const icon = opts.icon;
+
+  const mask = document.getElementById('simToastMask');
+  const box = document.getElementById('simToastBox');
+  if (!mask || !box) return;
+
+  if (simToastTimer) clearTimeout(simToastTimer);
+
+  mask.className = 'g-toast-mask active';
+  if (forbidClick) mask.classList.add('forbid-click');
+  if (position === 'top') mask.classList.add('pos-top');
+  else if (position === 'bottom') mask.classList.add('pos-bottom');
+  mask.style.display = 'flex';
+
+  let iconHtml = '';
+  let isWithIcon = false;
+  if (type === 'success') {
+    iconHtml = '<div class="g-toast-icon" style="color:var(--success);"><i class="fa-solid fa-circle-check"></i></div>';
+    isWithIcon = true;
+  } else if (type === 'fail') {
+    iconHtml = '<div class="g-toast-icon" style="color:var(--danger);"><i class="fa-solid fa-circle-xmark"></i></div>';
+    isWithIcon = true;
+  } else if (type === 'loading') {
+    iconHtml = '<div class="g-toast-spinner"></div>';
+    isWithIcon = true;
+  } else if (icon) {
+    iconHtml = `<div class="g-toast-icon" style="color:var(--primary);">${icon}</div>`;
+    isWithIcon = true;
+  }
+
+  box.className = 'g-toast-box' + (isWithIcon ? ' with-icon' : '');
+  box.innerHTML = `
+    ${iconHtml}
+    <div id="simToastMsg">${message}</div>
+  `;
+
+  if (duration > 0) {
+    simToastTimer = setTimeout(() => {
+      window.closeSimToast();
+    }, duration);
+  }
+};
+
+window.closeSimToast = function() {
+  const mask = document.getElementById('simToastMask');
+  if (mask) {
+    mask.classList.remove('active');
+    mask.style.display = 'none';
+  }
+};
+

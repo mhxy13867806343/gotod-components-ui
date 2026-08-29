@@ -30,6 +30,7 @@ window.SIDEBAR_CONFIG = {
         title: 'Imperative API 编程式静态调用',
         items: [
           { key: 'imp-message', title: '💬 GMessage 全局消息与 close_all' },
+          { key: 'imp-toast', title: '🍞 GToast Vant 风格轻提示' },
           { key: 'imp-message-box', title: '📦 GMessageBox 命令式弹窗' },
           { key: 'imp-loading', title: '⏳ GLoading 遮罩加载服务' },
           { key: 'imp-notification', title: '🔔 GNotification 四角通知气泡' }
@@ -204,6 +205,7 @@ window.SIDEBAR_CONFIG = {
           { key: 'popover', title: 'GPopover 气泡框' },
           { key: 'notice-bar', title: 'GNoticeBar 通知栏' },
           { key: 'message', title: 'GMessage 全局提示' },
+          { key: 'toast', title: 'GToast 轻提示' },
           { key: 'alert', title: 'GAlert 警告提示' },
           { key: 'drawer', title: 'GDrawer 抽屉' },
           { key: 'tooltip', title: 'GTooltip 悬浮提示' },

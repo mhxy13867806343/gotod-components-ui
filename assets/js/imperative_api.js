@@ -144,6 +144,56 @@ func _on_buy_button_pressed() -> void:
   },
 
   // --------------------------------------------------------
+  // 1.2 GToast Vant 风格轻提示
+  // --------------------------------------------------------
+  'imp-toast': {
+    title: '🍞 GToast 命令式轻提示 (Vant UI Toast)',
+    desc: '在屏幕中间或顶部/底部弹出轻量级黑色半透明气泡，支持纯文字、成功、失败、转圈加载以及倒计时动态更新。',
+    demos: [
+      {
+        title: '常用命令式方法演示 (Show / Success / Fail / Loading)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:14px; width:100%;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="g-btn g-btn-primary" onclick="openSimToast('纯文字轻提示 (居中展示)')">
+                <i class="fa-solid fa-comment-dots"></i> GToast.show()
+              </button>
+              <button class="g-btn g-btn-success" onclick="openSimToast({ message: '装备强化成功！', type: 'success' })">
+                <i class="fa-solid fa-circle-check"></i> GToast.success()
+              </button>
+              <button class="g-btn g-btn-danger" onclick="openSimToast({ message: '金币不足强化失败', type: 'fail' })">
+                <i class="fa-solid fa-circle-xmark"></i> GToast.fail()
+              </button>
+              <button class="g-btn g-btn-warning" onclick="openSimToast({ message: '正在加载游戏资源...', type: 'loading', forbidClick: true, duration: 2500 })">
+                <i class="fa-solid fa-spinner"></i> GToast.loading()
+              </button>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
+              <button class="g-btn g-btn-default" style="color:var(--danger);" onclick="closeSimToast(); showToast('已调用 GToast.clear() 清除所有轻提示', 'info')">
+                <i class="fa-solid fa-ban"></i> GToast.clear() 一键关闭轻提示
+              </button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript 静态命令式调用
+# 1. 文字提示
+GToast.show("纯文字轻提示")
+
+# 2. 状态提示
+GToast.success("强化成功！")
+GToast.fail("金币不足！")
+
+# 3. 加载中提示与手动关闭
+var toast = GToast.loading("正在下载地图资源...", true)
+# 异步任务完成后：
+toast.set_message("加载完成！")
+GToast.clear()`
+      }
+    ]
+  },
+
+  // --------------------------------------------------------
   // 2. GMessageBox 编程式弹窗
   // --------------------------------------------------------
   'imp-message-box': {
