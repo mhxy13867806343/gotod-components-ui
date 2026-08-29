@@ -48,18 +48,6 @@
         <kbd style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:3px; padding:1px 5px; font-size:10px; color:var(--text-secondary); font-family:var(--font-mono);">Ctrl K</kbd>
       </button>
 
-      <!-- Preset Select -->
-      <select id="presetSelect" class="select-theme" onchange="changePreset(this.value)">
-        <option value="naive">Naive UI Style (Green)</option>
-        <option value="element">Element Plus Style (Blue)</option>
-        <option value="ant">Ant Design Style (Geek Blue)</option>
-        <option value="vant">Vant UI Style (Mobile)</option>
-      </select>
-      <!-- Dark/Light Mode -->
-      <button class="btn-icon" onclick="toggleTheme()">
-        <i id="themeIcon" class="fa-solid fa-moon"></i>
-        <span id="themeText">Dark</span>
-      </button>
       <!-- Repository Links Dropdown -->
       <select class="select-theme" style="font-weight:600; font-size:12px; height:32px; padding:0 10px; cursor:pointer;" onchange="if(this.value){window.open(this.value, '_blank'); this.selectedIndex=0;}">
         <option value="" disabled selected>📦 源码仓库 (Repos)</option>
@@ -67,6 +55,20 @@
         <option value="https://gitee.com/fangjiayu/gotod-components-ui">🚩 Gitee (国内镜像)</option>
         <option value="https://gitcode.com/m200s/gotod-components-ui">📦 GitCode 仓库</option>
       </select>
+
+      <!-- Preset Select -->
+      <select id="presetSelect" class="select-theme" onchange="changePreset(this.value)">
+        <option value="naive">Naive UI Style (Green)</option>
+        <option value="element">Element Plus Style (Blue)</option>
+        <option value="ant">Ant Design Style (Geek Blue)</option>
+        <option value="vant">Vant UI Style (Mobile)</option>
+      </select>
+
+      <!-- Dark/Light Mode -->
+      <button class="btn-icon" onclick="toggleTheme()">
+        <i id="themeIcon" class="fa-solid fa-moon"></i>
+        <span id="themeText">Dark</span>
+      </button>
     </div>
   </header>
 
