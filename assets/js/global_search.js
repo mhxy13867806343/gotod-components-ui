@@ -43,6 +43,7 @@ window.openGlobalSearch = function() {
   const input = document.getElementById('globalSearchInput');
   if (!modal) return;
 
+  modal.classList.add('active');
   modal.style.display = 'flex';
   if (input) {
     input.value = '';
@@ -54,7 +55,10 @@ window.openGlobalSearch = function() {
 // Close Global Search Modal
 window.closeGlobalSearch = function() {
   const modal = document.getElementById('globalSearchModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
 };
 
 // Perform Real-time Filtering
