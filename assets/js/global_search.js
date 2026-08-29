@@ -30,6 +30,8 @@ window.getAllSearchIndex = function() {
   pushCategory(window.PLAYGROUND_CATALOG, '属性演练 (Playground)', 'playground', 'success');
   pushCategory(window.IMPERATIVE_CATALOG, '编程式调用 (Imperative)', 'imperative', 'danger');
   pushCategory(window.HOOKS_CATALOG, 'Hooks 钩子 (Hooks)', 'hooks', 'primary');
+  pushCategory(window.SIGNALS_CATALOG, '信号事件 (Signals)', 'signals', 'success');
+  pushCategory(window.DECORATOR_CATALOG, '设计模式 (Decorator)', 'decorator', 'warning');
   pushCategory(window.STUDIO_CATALOG, '资源工坊 (Studio)', 'studio', 'info');
 
   return index;

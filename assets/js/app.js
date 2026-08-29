@@ -286,6 +286,26 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('hook-cooldown');
+  } else if (section === 'signals') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search signals & events..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Class-Based 信号与事件总线</div>
+        <div class="nav-item active" data-key="signal-event-bus" onclick="showDoc('signal-event-bus')"><span>⚡ GEventBus 类化全局事件总线</span></div>
+        <div class="nav-item" data-key="signal-custom-class" onclick="showDoc('signal-custom-class')"><span>📡 GCustomSignal 动态信号对象</span></div>
+      </div>
+    `;
+    showDoc('signal-event-bus');
+  } else if (section === 'decorator') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search decorators..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Decorator 装饰器设计模式</div>
+        <div class="nav-item active" data-key="decorator-weapon" onclick="showDoc('decorator-weapon')"><span>🛡️ 武器多重附魔装饰器</span></div>
+        <div class="nav-item" data-key="decorator-ui" onclick="showDoc('decorator-ui')"><span>🎨 UI 控件能力装饰器</span></div>
+      </div>
+    `;
+    showDoc('decorator-weapon');
   } else if (section === 'studio') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
@@ -356,7 +376,7 @@ window.showDoc = function(key) {
   window.currentDocKey = key;
   localStorage.setItem('gotod_doc_key', key);
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, STUDIO, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STUDIO, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
@@ -364,6 +384,8 @@ window.showDoc = function(key) {
     window.PLAYGROUND_CATALOG || {}, 
     window.IMPERATIVE_CATALOG || {},
     window.HOOKS_CATALOG || {},
+    window.SIGNALS_CATALOG || {},
+    window.DECORATOR_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
