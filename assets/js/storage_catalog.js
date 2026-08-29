@@ -1,11 +1,10 @@
 // =========================================================================
 // Gotod Components UI - 9. 游戏存档与中断存储管理器 (Game Save & Checkpoint Studio)
 // assets/js/storage_catalog.js
-// 基于纯类 (Class-based GSaveManager) 实现中断存储、多槽位读档、覆盖与删除
+// 基于纯类 (Class-based GSaveManager) 实现中断存储、多槽位读档、覆盖与删除 (带完整 LocalStorage 缓存持久化)
 // =========================================================================
 
-// In-Memory Simulated Save Slots State
-window.simSaveSlots = [
+const DEFAULT_SLOTS = [
   {
     slot_id: 'slot_checkpoint',
     is_checkpoint: true,
@@ -56,8 +55,7 @@ window.simSaveSlots = [
   }
 ];
 
-// Current Active Game State
-window.currentGameState = {
+const DEFAULT_GAME_STATE = {
   slot_id: 'slot_checkpoint',
   save_name: '⚡ 自动中断存档 (Checkpoint)',
   chapter: '第三章: 龙之秘境 (遭遇首领前夕)',
@@ -65,6 +63,33 @@ window.currentGameState = {
   hp: 850,
   gold: 14500
 };
+
+// Load Initial State from LocalStorage
+function loadCachedSlots() {
+  try {
+    const raw = localStorage.getItem('gotod_sim_save_slots');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_SLOTS));
+}
+
+function loadCachedGameState() {
+  try {
+    const raw = localStorage.getItem('gotod_cur_game_state');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));
+}
+
+window.simSaveSlots = loadCachedSlots();
+window.currentGameState = loadCachedGameState();
+
+function persistSaveState() {
+  try {
+    localStorage.setItem('gotod_sim_save_slots', JSON.stringify(window.simSaveSlots));
+    localStorage.setItem('gotod_cur_game_state', JSON.stringify(window.currentGameState));
+  } catch(e) {}
+}
 
 // Actions: Trigger Checkpoint Suspend Save
 window.triggerSimCheckpoint = function() {
@@ -77,6 +102,19 @@ window.triggerSimCheckpoint = function() {
     cpSlot.hp = 920;
     cpSlot.gold = window.currentGameState.gold + 500;
   }
+  
+  // Sync to current state
+  window.currentGameState = {
+    slot_id: 'slot_checkpoint',
+    save_name: cpSlot.save_name,
+    chapter: cpSlot.chapter,
+    player_level: cpSlot.player_level,
+    hp: cpSlot.hp,
+    gold: cpSlot.gold
+  };
+
+  persistSaveState();
+  updateCurrentGameStatusUI();
   renderSimSaveSlots();
   showToast('【中断存储】游戏已自动捕获当前进度并写入检查点存档！', 'success');
 };
@@ -98,8 +136,10 @@ window.loadSimSlot = function(slotId) {
     gold: slot.gold
   };
 
+  persistSaveState();
   updateCurrentGameStatusUI();
-  showToast(`【读取存档成功】已加载: ${slot.save_name}`, 'success');
+  renderSimSaveSlots();
+  showToast(`【读取存档成功】已加载: ${slot.save_name} (Lv.${slot.player_level})`, 'success');
 };
 
 // Actions: Overwrite / Save Slot
@@ -116,6 +156,7 @@ window.saveToSimSlot = function(slotId) {
   slot.gold = window.currentGameState.gold;
   slot.saved_at = now;
 
+  persistSaveState();
   renderSimSaveSlots();
   showToast(`【保存成功】数据已写入槽位: ${slot.slot_id}`, 'success');
 };
@@ -133,26 +174,36 @@ window.deleteSimSlot = function(slotId) {
   slot.gold = 0;
   slot.saved_at = '-';
 
+  persistSaveState();
   renderSimSaveSlots();
   showToast(`【删除成功】已清空存档槽位: ${slotId}`, 'info');
 };
 
-// Update UI
+// Reset All Save Slots to Default
+window.resetSimSaveSlots = function() {
+  window.simSaveSlots = JSON.parse(JSON.stringify(DEFAULT_SLOTS));
+  window.currentGameState = JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));
+  persistSaveState();
+  updateCurrentGameStatusUI();
+  renderSimSaveSlots();
+  showToast('已重置所有存档槽位数据', 'info');
+};
+
+// Update Header Status Bar UI
 window.updateCurrentGameStatusUI = function() {
   const s = window.currentGameState;
-  const nameElem = document.getElementById('curGameSaveName');
   const chapElem = document.getElementById('curGameChapter');
   const lvlElem = document.getElementById('curGameLevel');
   const hpElem = document.getElementById('curGameHp');
   const goldElem = document.getElementById('curGameGold');
 
-  if (nameElem) nameElem.innerText = s.save_name;
   if (chapElem) chapElem.innerText = s.chapter;
   if (lvlElem) lvlElem.innerText = `Lv. ${s.player_level}`;
   if (hpElem) hpElem.innerText = `${s.hp} HP`;
   if (goldElem) goldElem.innerText = `${s.gold} G`;
 };
 
+// Render Save Slots List with Clean Inline SVGs
 window.renderSimSaveSlots = function() {
   const container = document.getElementById('simSaveSlotsGrid');
   if (!container) return;
@@ -165,8 +216,9 @@ window.renderSimSaveSlots = function() {
             <div style="font-weight:700; font-size:14px; color:var(--text-disabled);">${slot.save_name}</div>
             <div style="font-size:11px; color:var(--text-disabled); margin-top:4px;">未占用，可随时写入新存档</div>
           </div>
-          <button class="g-btn g-btn-primary" style="height:32px; font-size:12px;" onclick="saveToSimSlot('${slot.slot_id}')">
-            <i class="fa-solid fa-floppy-disk"></i> 写入新存档 (Save)
+          <button class="g-btn g-btn-primary" style="height:32px; font-size:12px; gap:6px;" onclick="saveToSimSlot('${slot.slot_id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <span>写入新存档 (Save)</span>
           </button>
         </div>
       `;
@@ -174,13 +226,15 @@ window.renderSimSaveSlots = function() {
 
     const badgeColor = slot.is_checkpoint ? 'warning' : 'primary';
     const tagText = slot.is_checkpoint ? '中断自动存档' : '玩家手动存档';
+    const isCurrent = window.currentGameState.slot_id === slot.slot_id;
 
     return `
-      <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; gap:10px;">
+      <div style="background:var(--bg-surface); border:1px solid ${isCurrent ? 'var(--primary)' : 'var(--border-base)'}; border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; gap:10px; transition:border-color 0.2s;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-weight:700; font-size:14px; color:var(--text-primary);">${slot.save_name}</span>
             <span class="g-tag g-tag-${badgeColor}" style="font-size:10px;">${tagText}</span>
+            ${isCurrent ? `<span class="g-tag g-tag-success" style="font-size:10px; font-weight:700;">● 当前运行中</span>` : ''}
           </div>
           <span style="font-size:11px; color:var(--text-disabled); font-family:var(--font-mono);">保存时间: ${slot.saved_at}</span>
         </div>
@@ -193,14 +247,17 @@ window.renderSimSaveSlots = function() {
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:2px;">
-          <button class="g-btn g-btn-success" style="height:28px; font-size:11px;" onclick="loadSimSlot('${slot.slot_id}')">
-            <i class="fa-solid fa-play"></i> 读取存档 (Load)
+          <button class="g-btn g-btn-success" style="height:28px; font-size:11px; gap:4px;" onclick="loadSimSlot('${slot.slot_id}')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>读取存档 (Load)</span>
           </button>
-          <button class="g-btn g-btn-primary" style="height:28px; font-size:11px;" onclick="saveToSimSlot('${slot.slot_id}')">
-            <i class="fa-solid fa-floppy-disk"></i> 覆盖保存 (Save)
+          <button class="g-btn g-btn-primary" style="height:28px; font-size:11px; gap:4px;" onclick="saveToSimSlot('${slot.slot_id}')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <span>覆盖保存 (Save)</span>
           </button>
-          <button class="g-btn g-btn-danger" style="height:28px; font-size:11px;" onclick="deleteSimSlot('${slot.slot_id}')">
-            <i class="fa-solid fa-trash"></i> 删除 (Delete)
+          <button class="g-btn g-btn-danger" style="height:28px; font-size:11px; gap:4px;" onclick="deleteSimSlot('${slot.slot_id}')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>删除 (Delete)</span>
           </button>
         </div>
       </div>
@@ -222,11 +279,13 @@ window.STORAGE_CATALOG = {
           <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
             
             <!-- Top Controls & Current Game State Bar -->
-            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:14px 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:14px 18px; flex-wrap:wrap; gap:12px;">
               <div style="display:flex; align-items:center; gap:16px;">
-                <div style="font-size:1.8rem; color:var(--primary);"><i class="fa-solid fa-gamepad"></i></div>
+                <div style="font-size:1.8rem; color:var(--primary);">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
+                </div>
                 <div>
-                  <div style="font-size:11px; color:var(--text-secondary);">当前正在运行的游戏进度状态:</div>
+                  <div style="font-size:11px; color:var(--text-secondary);">当前正在运行的游戏进度状态 (已缓存至 LocalStorage):</div>
                   <div style="display:flex; gap:12px; align-items:center; margin-top:2px;">
                     <strong id="curGameChapter" style="color:var(--text-primary); font-size:14px;">第三章: 龙之秘境</strong>
                     <span id="curGameLevel" class="g-tag g-tag-primary" style="font-size:11px; font-weight:700;">Lv. 48</span>
@@ -236,10 +295,16 @@ window.STORAGE_CATALOG = {
                 </div>
               </div>
 
-              <!-- Quick Trigger Checkpoint Button -->
-              <button class="g-btn g-btn-warning" style="height:34px; font-weight:700;" onclick="triggerSimCheckpoint()">
-                <i class="fa-solid fa-bolt"></i> 触发中断存储 (save_checkpoint)
-              </button>
+              <!-- Quick Trigger Checkpoint Button & Reset -->
+              <div style="display:flex; gap:8px;">
+                <button class="g-btn g-btn-warning" style="height:34px; font-weight:700; gap:6px;" onclick="triggerSimCheckpoint()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  <span>触发中断存储 (save_checkpoint)</span>
+                </button>
+                <button class="g-btn g-btn-default" style="height:34px; font-size:11px;" onclick="resetSimSaveSlots()">
+                  重置槽位
+                </button>
+              </div>
             </div>
 
             <!-- Save Slots List Container -->
