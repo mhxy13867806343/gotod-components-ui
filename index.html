@@ -13,11 +13,27 @@
 
   <!-- Header -->
   <header>
-    <a href="#" class="brand">
-      <i class="fa-solid fa-shapes" style="color: var(--primary);"></i>
-      <span>gotod-components-ui</span>
-      <span class="brand-badge">Godot 4.x + Vue UI</span>
-    </a>
+    <div style="display:flex; align-items:center;">
+      <a href="#" class="brand" onclick="switchTopSection('components')">
+        <i class="fa-solid fa-shapes" style="color: var(--primary);"></i>
+        <span>gotod-components-ui</span>
+        <span class="brand-badge">Godot 4.x + Vue UI</span>
+      </a>
+
+      <!-- 1. 指南 / 2. 组件 / 3. 游戏实战 Top Navigation -->
+      <nav class="top-nav-links">
+        <a href="javascript:void(0)" id="topNavGuide" class="top-nav-item" onclick="switchTopSection('guide')">
+          <i class="fa-solid fa-book-open"></i> <span>1. 指南与安装 (Guide)</span>
+        </a>
+        <a href="javascript:void(0)" id="topNavComponents" class="top-nav-item active" onclick="switchTopSection('components')">
+          <i class="fa-solid fa-cube"></i> <span>2. 组件库 (Components)</span>
+        </a>
+        <a href="javascript:void(0)" id="topNavGame" class="top-nav-item" onclick="switchTopSection('game')">
+          <i class="fa-solid fa-gamepad"></i> <span>3. 游戏实战案例 (Game UI)</span>
+        </a>
+      </nav>
+    </div>
+
     <div class="header-actions">
       <!-- Preset Select -->
       <select id="presetSelect" class="select-theme" onchange="changePreset(this.value)">
@@ -48,53 +64,9 @@
 
   <!-- App Layout -->
   <div class="app-container">
-    <!-- Sidebar -->
-    <aside>
-      <input type="text" class="nav-search" placeholder="Search components..." oninput="filterNav(this.value)">
-      
-      <div class="nav-group">
-        <div class="nav-group-title">General 基础</div>
-        <div class="nav-item active" data-key="button" onclick="showDoc('button')"><span>GButton 按钮</span></div>
-        <div class="nav-item" data-key="text" onclick="showDoc('text')"><span>GText / GTitle 文本</span></div>
-        <div class="nav-item" data-key="divider" onclick="showDoc('divider')"><span>GDivider 分割线</span></div>
-        <div class="nav-item" data-key="icon" onclick="showDoc('icon')"><span>GIcon 图标</span></div>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-group-title">Form 表单</div>
-        <div class="nav-item" data-key="input" onclick="showDoc('input')"><span>GInput 输入框</span></div>
-        <div class="nav-item" data-key="textarea" onclick="showDoc('textarea')"><span>GTextarea 文本域</span></div>
-        <div class="nav-item" data-key="input-number" onclick="showDoc('input-number')"><span>GInputNumber 数字输入</span></div>
-        <div class="nav-item" data-key="switch" onclick="showDoc('switch')"><span>GSwitch 开关</span></div>
-        <div class="nav-item" data-key="checkbox" onclick="showDoc('checkbox')"><span>GCheckbox 多选框</span></div>
-        <div class="nav-item" data-key="radio" onclick="showDoc('radio')"><span>GRadio 单选框</span></div>
-        <div class="nav-item" data-key="select" onclick="showDoc('select')"><span>GSelect 下拉选择</span></div>
-        <div class="nav-item" data-key="slider" onclick="showDoc('slider')"><span>GSlider 滑块</span></div>
-        <div class="nav-item" data-key="form" onclick="showDoc('form')"><span>GForm 表单布局</span></div>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-group-title">Feedback 反馈</div>
-        <div class="nav-item" data-key="dialog" onclick="showDoc('dialog')"><span>GDialog / GModal 弹窗</span></div>
-        <div class="nav-item" data-key="message" onclick="showDoc('message')"><span>GMessage 全局提示</span></div>
-        <div class="nav-item" data-key="alert" onclick="showDoc('alert')"><span>GAlert 警告提示</span></div>
-        <div class="nav-item" data-key="drawer" onclick="showDoc('drawer')"><span>GDrawer 抽屉</span></div>
-        <div class="nav-item" data-key="tooltip" onclick="showDoc('tooltip')"><span>GTooltip 悬浮提示</span></div>
-        <div class="nav-item" data-key="loading" onclick="showDoc('loading')"><span>GLoading 加载指示器</span></div>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-group-title">Data Display 数据</div>
-        <div class="nav-item" data-key="card" onclick="showDoc('card')"><span>GCard 卡片</span></div>
-        <div class="nav-item" data-key="tag" onclick="showDoc('tag')"><span>GTag 标签</span></div>
-        <div class="nav-item" data-key="badge" onclick="showDoc('badge')"><span>GBadge 徽标</span></div>
-        <div class="nav-item" data-key="avatar" onclick="showDoc('avatar')"><span>GAvatar 头像</span></div>
-        <div class="nav-item" data-key="progress" onclick="showDoc('progress')"><span>GProgress 进度条</span></div>
-        <div class="nav-item" data-key="tabs" onclick="showDoc('tabs')"><span>GTabs 标签页</span></div>
-        <div class="nav-item" data-key="collapse" onclick="showDoc('collapse')"><span>GCollapse 折叠面板</span></div>
-        <div class="nav-item" data-key="steps" onclick="showDoc('steps')"><span>GSteps 步骤条</span></div>
-        <div class="nav-item" data-key="space" onclick="showDoc('space')"><span>GSpace 间距布局</span></div>
-      </div>
+    <!-- Dynamic Sidebar -->
+    <aside id="sidebarNav">
+      <!-- Populated dynamically based on 1. Guide / 2. Components / 3. Game UI -->
     </aside>
 
     <!-- Main Content Area -->
@@ -146,8 +118,9 @@
     </div>
   </div>
 
-  <!-- Local Standalone App Logic -->
+  <!-- Local Standalone Logic Modules -->
   <script src="assets/js/components_catalog.js"></script>
+  <script src="assets/js/game_templates.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -1,12 +1,18 @@
 // ==========================================
 // Gotod Components UI - Interactive Docs Engine
-// Inspired by Naive UI, Element Plus, AntD, Vant UI
+// 1. 指南 / 2. 组件库 / 3. 游戏实战案例
 // ==========================================
+
+window.currentTopSection = 'components';
+window.currentDocKey = 'tabs';
 
 // Global Theme & Mode Manager
 window.changePreset = function(preset) {
   document.documentElement.setAttribute('data-preset', preset);
-  showToast('Theme switched to: ' + preset.toUpperCase() + ' design tokens', 'info');
+  showToast('Theme preset switched to: ' + preset.toUpperCase() + ' tokens', 'info');
+  if (window.currentDocKey) {
+    showDoc(window.currentDocKey);
+  }
 };
 
 window.toggleTheme = function() {
@@ -121,7 +127,7 @@ window.switchTabDemo = function(tabIndex, containerId) {
   showToast(`Switched to Tab ${tabIndex + 1}`, 'info');
 };
 
-// Tabs Dynamic Add & Remove (Element Plus style)
+// Tabs Dynamic Add & Remove
 window.addDynamicTabPane = function(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -132,7 +138,6 @@ window.addDynamicTabPane = function(containerId) {
   const currentCount = tabHeaderBox.querySelectorAll('.sim-tab-header').length + 1;
   const newIndex = currentCount - 1;
 
-  // New Tab Header
   const newTab = document.createElement('div');
   newTab.className = 'sim-tab-header';
   newTab.setAttribute('data-tab-type', 'card');
@@ -140,7 +145,6 @@ window.addDynamicTabPane = function(containerId) {
   newTab.innerHTML = `<span>Tab ${currentCount}</span> <button onclick="event.stopPropagation(); removeDynamicTabPane(this, '${containerId}');" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:14px;">×</button>`;
   newTab.onclick = () => switchTabDemo(newIndex, containerId);
 
-  // Insert before add button if any
   const addBtn = tabHeaderBox.querySelector('.sim-tab-add-btn');
   if (addBtn) {
     tabHeaderBox.insertBefore(newTab, addBtn);
@@ -148,14 +152,12 @@ window.addDynamicTabPane = function(containerId) {
     tabHeaderBox.appendChild(newTab);
   }
 
-  // New Tab Panel
   const newPanel = document.createElement('div');
   newPanel.className = 'sim-tab-panel';
   newPanel.style.cssText = 'display:none; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);';
-  newPanel.innerHTML = `<h3>Tab ${currentCount} content</h3><p style="color:var(--text-secondary); margin-top:6px;">This is dynamically created Tab ${currentCount} content.</p>`;
+  newPanel.innerHTML = `<h3>Tab ${currentCount} content</h3><p style="color:var(--text-secondary); margin-top:4px;">This is dynamically created Tab ${currentCount} content.</p>`;
   panelBox.appendChild(newPanel);
 
-  // Activate new tab
   switchTabDemo(newIndex, containerId);
   showToast(`Added Tab ${currentCount}`, 'success');
 };
@@ -175,7 +177,6 @@ window.removeDynamicTabPane = function(btn, containerId) {
     tabHeader.remove();
     if (panels[idx]) panels[idx].remove();
 
-    // Switch to adjacent tab
     const remainingTabs = tabHeaderBox.querySelectorAll('.sim-tab-header');
     if (remainingTabs.length > 0) {
       const nextIdx = Math.max(0, idx - 1);
@@ -259,7 +260,7 @@ window.changeStepDemo = function(delta) {
   }
 };
 
-// Tag Remove Helper
+// Tag Dynamic Add & Remove
 window.removeTagDemo = function(btn) {
   const tag = btn.closest('.g-tag');
   if (tag) {
@@ -271,6 +272,17 @@ window.removeTagDemo = function(btn) {
   }
 };
 
+window.addDynamicTag = function() {
+  const container = document.getElementById('dynamicTagBox');
+  if (!container) return;
+  const count = container.querySelectorAll('.g-tag').length + 1;
+  const newTag = document.createElement('span');
+  newTag.className = 'g-tag g-tag-primary';
+  newTag.innerHTML = `Tag ${count} <button onclick="removeTagDemo(this)" style="background:none;border:none;color:inherit;cursor:pointer;margin-left:4px;">×</button>`;
+  container.appendChild(newTag);
+  showToast(`Added Tag ${count}`, 'success');
+};
+
 // Checkbox Check All
 window.toggleCheckAll = function(master) {
   const list = document.querySelectorAll('.cb-child');
@@ -279,444 +291,119 @@ window.toggleCheckAll = function(master) {
 };
 
 // ==========================================
-// Comprehensive Component Documentation & Demos
+// 1. Guide / 2. Components / 3. Game UI Switcher
 // ==========================================
-const DOCS = {
-  // --------------------------------------------------------
-  // TABS (100% COMPLETE ELEMENT PLUS MATCH)
-  // --------------------------------------------------------
-  'tabs': {
-    title: 'Tabs 标签页 (GTabs)',
-    desc: '分隔内容上有关联但属于不同类别的数据集合。深度还原 Element Plus、Naive UI 与 Ant Design Tabs 规范，支持基础划线、卡片化、边框卡片、自定义图标、动态增减标签、自定义触发器与四方位位置设置。',
-    demos: [
-      {
-        title: '1. 基础用法 (Basic Usage)',
-        render: `
-          <div id="tabsBasicContainer" style="width:100%;">
-            <div class="sim-tab-wrapper" style="display:flex; flex-direction:column;">
-              <div class="sim-tab-nav-list" style="display:flex; gap:24px; border-bottom:1px solid var(--border-base); margin-bottom:16px;">
-                <div class="sim-tab-header active" onclick="switchTabDemo(0, 'tabsBasicContainer')" style="color:var(--primary); font-weight:600; cursor:pointer; padding-bottom:10px; border-bottom:2px solid var(--primary); transition:all 0.2s;">User</div>
-                <div class="sim-tab-header" onclick="switchTabDemo(1, 'tabsBasicContainer')" style="color:var(--text-secondary); cursor:pointer; padding-bottom:10px; border-bottom:2px solid transparent; transition:all 0.2s;">Config</div>
-                <div class="sim-tab-header" onclick="switchTabDemo(2, 'tabsBasicContainer')" style="color:var(--text-secondary); cursor:pointer; padding-bottom:10px; border-bottom:2px solid transparent; transition:all 0.2s;">Role</div>
-                <div class="sim-tab-header" onclick="switchTabDemo(3, 'tabsBasicContainer')" style="color:var(--text-secondary); cursor:pointer; padding-bottom:10px; border-bottom:2px solid transparent; transition:all 0.2s;">Task</div>
-              </div>
-              <div class="sim-tab-panel-box">
-                <div class="sim-tab-panel" style="display:block; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-                  <h3>User</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">User panel content in Godot 4.x GTabs.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-                  <h3>Config</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">Config panel content.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-                  <h3>Role</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">Role panel content.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-                  <h3>Task</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">Task panel content.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `,
-        code: `# GDScript: Basic Tabs
-var tabs = GTabs.new()
-tabs.add_tab("User", user_panel)
-tabs.add_tab("Config", config_panel)
-tabs.add_tab("Role", role_panel)
-tabs.add_tab("Task", task_panel)
-tabs.tab_changed.connect(func(idx, name): print("Active tab:", name))
-add_child(tabs)`
-      },
+window.switchTopSection = function(section) {
+  window.currentTopSection = section;
 
-      {
-        title: '2. 选项卡样式 (Card Style: type="card")',
-        render: `
-          <div id="tabsCardContainer" style="width:100%;">
-            <div class="sim-tab-wrapper" style="display:flex; flex-direction:column;">
-              <div class="sim-tab-nav-list" style="display:flex; gap:0; border-bottom:1px solid var(--border-base);">
-                <div class="sim-tab-header active" data-tab-type="card" onclick="switchTabDemo(0, 'tabsCardContainer')" style="color:var(--primary); font-weight:600; cursor:pointer; padding:8px 20px; border:1px solid var(--border-base); border-bottom:1px solid var(--bg-card); background:var(--bg-card); border-radius:4px 4px 0 0;">User</div>
-                <div class="sim-tab-header" data-tab-type="card" onclick="switchTabDemo(1, 'tabsCardContainer')" style="color:var(--text-secondary); cursor:pointer; padding:8px 20px; border:1px solid var(--border-base); border-left:none; border-bottom:1px solid var(--border-base); background:var(--bg-surface); border-radius:4px 4px 0 0;">Config</div>
-                <div class="sim-tab-header" data-tab-type="card" onclick="switchTabDemo(2, 'tabsCardContainer')" style="color:var(--text-secondary); cursor:pointer; padding:8px 20px; border:1px solid var(--border-base); border-left:none; border-bottom:1px solid var(--border-base); background:var(--bg-surface); border-radius:4px 4px 0 0;">Role</div>
-                <div class="sim-tab-header" data-tab-type="card" onclick="switchTabDemo(3, 'tabsCardContainer')" style="color:var(--text-secondary); cursor:pointer; padding:8px 20px; border:1px solid var(--border-base); border-left:none; border-bottom:1px solid var(--border-base); background:var(--bg-surface); border-radius:4px 4px 0 0;">Task</div>
-              </div>
-              <div class="sim-tab-panel-box">
-                <div class="sim-tab-panel" style="display:block; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>User</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">Card style User content.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>Config</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">Card style Config content.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>Role</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">Card style Role content.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>Task</h3>
-                  <p style="color:var(--text-secondary); margin-top:4px;">Card style Task content.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `,
-        code: `# GDScript: Card Style
-var tabs = GTabs.new()
-tabs.type = GTabs.TabType.CARD
-tabs.add_tab("User", user_panel)
-tabs.add_tab("Config", config_panel)
-add_child(tabs)`
-      },
+  // Toggle active state in top navigation
+  document.getElementById('topNavGuide').classList.toggle('active', section === 'guide');
+  document.getElementById('topNavComponents').classList.toggle('active', section === 'components');
+  document.getElementById('topNavGame').classList.toggle('active', section === 'game');
 
-      {
-        title: '3. 边框卡片化 (Border Card: type="border-card")',
-        render: `
-          <div id="tabsBorderCardContainer" style="width:100%;">
-            <div class="sim-tab-wrapper" style="display:flex; flex-direction:column; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden;">
-              <div class="sim-tab-nav-list" style="display:flex; background:var(--bg-surface); border-bottom:1px solid var(--border-base);">
-                <div class="sim-tab-header active" data-tab-type="border-card" onclick="switchTabDemo(0, 'tabsBorderCardContainer')" style="color:var(--primary); font-weight:600; cursor:pointer; padding:10px 20px; background:var(--bg-card); border-right:1px solid var(--border-base);">User</div>
-                <div class="sim-tab-header" data-tab-type="border-card" onclick="switchTabDemo(1, 'tabsBorderCardContainer')" style="color:var(--text-secondary); cursor:pointer; padding:10px 20px; border-right:1px solid var(--border-base);">Config</div>
-                <div class="sim-tab-header" data-tab-type="border-card" onclick="switchTabDemo(2, 'tabsBorderCardContainer')" style="color:var(--text-secondary); cursor:pointer; padding:10px 20px; border-right:1px solid var(--border-base);">Role</div>
-                <div class="sim-tab-header" data-tab-type="border-card" onclick="switchTabDemo(3, 'tabsBorderCardContainer')" style="color:var(--text-secondary); cursor:pointer; padding:10px 20px;">Task</div>
-              </div>
-              <div class="sim-tab-panel-box" style="padding:18px; background:var(--bg-card);">
-                <div class="sim-tab-panel" style="display:block;"><h3>User</h3><p style="color:var(--text-secondary); margin-top:4px;">Border Card User panel.</p></div>
-                <div class="sim-tab-panel" style="display:none;"><h3>Config</h3><p style="color:var(--text-secondary); margin-top:4px;">Border Card Config panel.</p></div>
-                <div class="sim-tab-panel" style="display:none;"><h3>Role</h3><p style="color:var(--text-secondary); margin-top:4px;">Border Card Role panel.</p></div>
-                <div class="sim-tab-panel" style="display:none;"><h3>Task</h3><p style="color:var(--text-secondary); margin-top:4px;">Border Card Task panel.</p></div>
-              </div>
-            </div>
-          </div>
-        `,
-        code: `# GDScript: Border Card Style
-var tabs = GTabs.new()
-tabs.type = GTabs.TabType.BORDER_CARD
-tabs.add_tab("User", user_panel)
-add_child(tabs)`
-      },
+  const sidebar = document.getElementById('sidebarNav');
+  if (!sidebar) return;
 
-      {
-        title: '4. 自定义标签页内容与图标 (Custom Tab with Icon)',
-        render: `
-          <div id="tabsIconContainer" style="width:100%;">
-            <div class="sim-tab-wrapper" style="display:flex; flex-direction:column;">
-              <div class="sim-tab-nav-list" style="display:flex; gap:24px; border-bottom:1px solid var(--border-base); margin-bottom:16px;">
-                <div class="sim-tab-header active" onclick="switchTabDemo(0, 'tabsIconContainer')" style="color:var(--primary); font-weight:600; cursor:pointer; padding-bottom:10px; border-bottom:2px solid var(--primary); display:inline-flex; align-items:center; gap:6px;">
-                  <i class="fa-solid fa-moon"></i> Route 路线
-                </div>
-                <div class="sim-tab-header" onclick="switchTabDemo(1, 'tabsIconContainer')" style="color:var(--text-secondary); cursor:pointer; padding-bottom:10px; border-bottom:2px solid transparent; display:inline-flex; align-items:center; gap:6px;">
-                  <i class="fa-solid fa-shapes"></i> Config 配置
-                </div>
-                <div class="sim-tab-header" onclick="switchTabDemo(2, 'tabsIconContainer')" style="color:var(--text-secondary); cursor:pointer; padding-bottom:10px; border-bottom:2px solid transparent; display:inline-flex; align-items:center; gap:6px;">
-                  <i class="fa-solid fa-cube"></i> Task 任务
-                </div>
-              </div>
-              <div class="sim-tab-panel-box">
-                <div class="sim-tab-panel" style="display:block; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-                  <h3>Route</h3><p style="color:var(--text-secondary); margin-top:4px;">Custom tab with icon content.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-                  <h3>Config</h3><p style="color:var(--text-secondary); margin-top:4px;">Config panel content.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-                  <h3>Task</h3><p style="color:var(--text-secondary); margin-top:4px;">Task panel content.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `,
-        code: `# GDScript: Custom Icon Tabs
-var tabs = GTabs.new()
-tabs.add_tab("Route", route_panel, false, icon_texture)
-add_child(tabs)`
-      },
+  if (section === 'guide') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search guide..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Development 指南</div>
+        <div class="nav-item active" data-key="guide-install" onclick="showDoc('guide-install')"><span>📥 安装与快速上手</span></div>
+        <div class="nav-item" data-key="guide-theme" onclick="showDoc('guide-theme')"><span>🎨 主题 Token 与暗黑模式</span></div>
+        <div class="nav-item" data-key="guide-autoload" onclick="showDoc('guide-autoload')"><span>⚙️ Autoload 全局服务</span></div>
+      </div>
+    `;
+    showDoc('guide-install');
+  } else if (section === 'game') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search game templates..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Game Templates 游戏实战案例</div>
+        <div class="nav-item active" data-key="game-character" onclick="showDoc('game-character')"><span>👤 角色状态与装备面板</span></div>
+        <div class="nav-item" data-key="game-inventory" onclick="showDoc('game-inventory')"><span>🎒 游戏背包与物品栏</span></div>
+        <div class="nav-item" data-key="game-settings" onclick="showDoc('game-settings')"><span>🎮 游戏系统设置中心</span></div>
+        <div class="nav-item" data-key="game-quest" onclick="showDoc('game-quest')"><span>📜 任务与剧情日志</span></div>
+        <div class="nav-item" data-key="game-shop" onclick="showDoc('game-shop')"><span>🛒 神秘商人道具商城</span></div>
+      </div>
+    `;
+    showDoc('game-character');
+  } else {
+    // Components
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search components..." oninput="filterNav(this.value)">
+      
+      <div class="nav-group">
+        <div class="nav-group-title">General 基础</div>
+        <div class="nav-item" data-key="button" onclick="showDoc('button')"><span>GButton 按钮</span></div>
+        <div class="nav-item" data-key="text" onclick="showDoc('text')"><span>GText / GTitle 文本</span></div>
+        <div class="nav-item" data-key="divider" onclick="showDoc('divider')"><span>GDivider 分割线</span></div>
+        <div class="nav-item" data-key="icon" onclick="showDoc('icon')"><span>GIcon 图标</span></div>
+      </div>
 
-      {
-        title: '5. 动态增减标签页 (Dynamic Add & Remove Tabs: closable & addable)',
-        render: `
-          <div id="tabsDynamicContainer" style="width:100%;">
-            <div class="sim-tab-wrapper" style="display:flex; flex-direction:column;">
-              <div class="sim-tab-nav-list" style="display:flex; gap:0; border-bottom:1px solid var(--border-base); align-items:center;">
-                <div class="sim-tab-header active" data-tab-type="card" onclick="switchTabDemo(0, 'tabsDynamicContainer')" style="color:var(--primary); font-weight:600; cursor:pointer; padding:8px 16px; border:1px solid var(--border-base); border-bottom:1px solid var(--bg-card); background:var(--bg-card); border-radius:4px 4px 0 0; display:inline-flex; align-items:center; gap:8px;">
-                  <span>Tab 1</span> <button onclick="event.stopPropagation(); removeDynamicTabPane(this, 'tabsDynamicContainer');" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:14px;">×</button>
-                </div>
-                <div class="sim-tab-header" data-tab-type="card" onclick="switchTabDemo(1, 'tabsDynamicContainer')" style="color:var(--text-secondary); cursor:pointer; padding:8px 16px; border:1px solid var(--border-base); border-left:none; border-bottom:1px solid var(--border-base); background:var(--bg-surface); border-radius:4px 4px 0 0; display:inline-flex; align-items:center; gap:8px;">
-                  <span>Tab 2</span> <button onclick="event.stopPropagation(); removeDynamicTabPane(this, 'tabsDynamicContainer');" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:14px;">×</button>
-                </div>
-                <button class="sim-tab-add-btn" onclick="addDynamicTabPane('tabsDynamicContainer')" style="margin-left:8px; background:var(--bg-surface); border:1px solid var(--border-base); color:var(--text-primary); border-radius:4px; padding:4px 10px; cursor:pointer; font-size:14px; font-weight:700;">+</button>
-              </div>
-              <div class="sim-tab-panel-box">
-                <div class="sim-tab-panel" style="display:block; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>Tab 1 content</h3><p style="color:var(--text-secondary); margin-top:4px;">Tab 1 initial panel.</p>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>Tab 2 content</h3><p style="color:var(--text-secondary); margin-top:4px;">Tab 2 initial panel.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `,
-        code: `# GDScript: Dynamic Add & Remove Tabs
-var tabs = GTabs.new()
-tabs.type = GTabs.TabType.CARD
-tabs.closable = true
-tabs.addable = true
+      <div class="nav-group">
+        <div class="nav-group-title">Form 表单</div>
+        <div class="nav-item" data-key="input" onclick="showDoc('input')"><span>GInput 输入框</span></div>
+        <div class="nav-item" data-key="textarea" onclick="showDoc('textarea')"><span>GTextarea 文本域</span></div>
+        <div class="nav-item" data-key="input-number" onclick="showDoc('input-number')"><span>GInputNumber 数字输入</span></div>
+        <div class="nav-item" data-key="switch" onclick="showDoc('switch')"><span>GSwitch 开关</span></div>
+        <div class="nav-item" data-key="checkbox" onclick="showDoc('checkbox')"><span>GCheckbox 多选框</span></div>
+        <div class="nav-item" data-key="radio" onclick="showDoc('radio')"><span>GRadio 单选框</span></div>
+        <div class="nav-item" data-key="select" onclick="showDoc('select')"><span>GSelect 下拉选择</span></div>
+        <div class="nav-item" data-key="slider" onclick="showDoc('slider')"><span>GSlider 滑块</span></div>
+        <div class="nav-item" data-key="form" onclick="showDoc('form')"><span>GForm 表单布局</span></div>
+      </div>
 
-tabs.tab_added.connect(func():
-    var count = tabs._tabs_data.size() + 1
-    var p = Label.new()
-    p.text = "New Tab " + str(count) + " Content"
-    tabs.add_tab("Tab " + str(count), p, true)
-)
-tabs.tab_removed.connect(func(tab_name):
-    print("Removed tab: ", tab_name)
-)
-add_child(tabs)`
-      },
+      <div class="nav-group">
+        <div class="nav-group-title">Feedback 反馈</div>
+        <div class="nav-item" data-key="dialog" onclick="showDoc('dialog')"><span>GDialog / GModal 弹窗</span></div>
+        <div class="nav-item" data-key="message" onclick="showDoc('message')"><span>GMessage 全局提示</span></div>
+        <div class="nav-item" data-key="alert" onclick="showDoc('alert')"><span>GAlert 警告提示</span></div>
+        <div class="nav-item" data-key="drawer" onclick="showDoc('drawer')"><span>GDrawer 抽屉</span></div>
+        <div class="nav-item" data-key="tooltip" onclick="showDoc('tooltip')"><span>GTooltip 悬浮提示</span></div>
+        <div class="nav-item" data-key="loading" onclick="showDoc('loading')"><span>GLoading 加载指示器</span></div>
+      </div>
 
-      {
-        title: '6. 自定义增加标签页触发器 (Custom Add Tab Trigger)',
-        render: `
-          <div id="tabsCustomTriggerContainer" style="width:100%; display:flex; flex-direction:column; gap:12px;">
-            <div style="display:flex; justify-content:flex-start;">
-              <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="addDynamicTabPane('tabsCustomTriggerContainer')">add tab 外部触发新增</button>
-            </div>
-            <div class="sim-tab-wrapper" style="display:flex; flex-direction:column;">
-              <div class="sim-tab-nav-list" style="display:flex; gap:0; border-bottom:1px solid var(--border-base);">
-                <div class="sim-tab-header active" data-tab-type="card" onclick="switchTabDemo(0, 'tabsCustomTriggerContainer')" style="color:var(--primary); font-weight:600; cursor:pointer; padding:8px 16px; border:1px solid var(--border-base); border-bottom:1px solid var(--bg-card); background:var(--bg-card); border-radius:4px 4px 0 0; display:inline-flex; align-items:center; gap:8px;">
-                  <span>Tab 1</span>
-                </div>
-                <div class="sim-tab-header" data-tab-type="card" onclick="switchTabDemo(1, 'tabsCustomTriggerContainer')" style="color:var(--text-secondary); cursor:pointer; padding:8px 16px; border:1px solid var(--border-base); border-left:none; border-bottom:1px solid var(--border-base); background:var(--bg-surface); border-radius:4px 4px 0 0; display:inline-flex; align-items:center; gap:8px;">
-                  <span>Tab 2</span> <button onclick="event.stopPropagation(); removeDynamicTabPane(this, 'tabsCustomTriggerContainer');" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:14px;">×</button>
-                </div>
-              </div>
-              <div class="sim-tab-panel-box">
-                <div class="sim-tab-panel" style="display:block; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>Tab 1 content</h3>
-                </div>
-                <div class="sim-tab-panel" style="display:none; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);">
-                  <h3>Tab 2 content</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-        `,
-        code: `# GDScript: Custom Add Trigger Button
-var add_btn = GButton.new()
-add_btn.text = "add tab"
-add_btn.pressed.connect(func():
-    tabs.add_tab("New Tab", custom_panel, true)
-)
-add_child(add_btn)`
-      },
-
-      {
-        title: '7. 位置设置 (Tab Positions: top / right / bottom / left)',
-        render: `
-          <div id="tabsPosContainer" style="width:100%; display:flex; flex-direction:column; gap:16px;">
-            <!-- Position Switcher Radios -->
-            <div style="display:flex; gap:18px; align-items:center;">
-              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="changeTabPosDemo('top', 'tabsPosContainer')"><input type="radio" name="tab_pos_radio" checked> <span>top 上方</span></label>
-              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="changeTabPosDemo('right', 'tabsPosContainer')"><input type="radio" name="tab_pos_radio"> <span>right 右侧</span></label>
-              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="changeTabPosDemo('bottom', 'tabsPosContainer')"><input type="radio" name="tab_pos_radio"> <span>bottom 底部</span></label>
-              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="changeTabPosDemo('left', 'tabsPosContainer')"><input type="radio" name="tab_pos_radio"> <span>left 左侧</span></label>
-            </div>
-
-            <!-- Positioned Tabs Container -->
-            <div class="sim-tab-wrapper" style="display:flex; flex-direction:column; min-height:160px; border:1px solid var(--border-base); border-radius:var(--radius); overflow:hidden;">
-              <div class="sim-tab-nav-list" style="display:flex; gap:20px; padding:10px 16px; background:var(--bg-surface); border-bottom:1px solid var(--border-base);">
-                <div class="sim-tab-header active" onclick="switchTabDemo(0, 'tabsPosContainer')" style="color:var(--primary); font-weight:600; cursor:pointer;">User</div>
-                <div class="sim-tab-header" onclick="switchTabDemo(1, 'tabsPosContainer')" style="color:var(--text-secondary); cursor:pointer;">Config</div>
-                <div class="sim-tab-header" onclick="switchTabDemo(2, 'tabsPosContainer')" style="color:var(--text-secondary); cursor:pointer;">Role</div>
-                <div class="sim-tab-header" onclick="switchTabDemo(3, 'tabsPosContainer')" style="color:var(--text-secondary); cursor:pointer;">Task</div>
-              </div>
-              <div class="sim-tab-panel-box" style="flex:1; padding:18px; background:var(--bg-card);">
-                <div class="sim-tab-panel" style="display:block;"><h3>User Panel</h3><p style="color:var(--text-secondary); margin-top:4px;">Positioned User content.</p></div>
-                <div class="sim-tab-panel" style="display:none;"><h3>Config Panel</h3><p style="color:var(--text-secondary); margin-top:4px;">Positioned Config content.</p></div>
-                <div class="sim-tab-panel" style="display:none;"><h3>Role Panel</h3><p style="color:var(--text-secondary); margin-top:4px;">Positioned Role content.</p></div>
-                <div class="sim-tab-panel" style="display:none;"><h3>Task Panel</h3><p style="color:var(--text-secondary); margin-top:4px;">Positioned Task content.</p></div>
-              </div>
-            </div>
-          </div>
-        `,
-        code: `# GDScript: Position Setting
-var tabs = GTabs.new()
-tabs.tab_position = GTabs.TabPosition.LEFT # TOP, BOTTOM, LEFT, RIGHT
-add_child(tabs)`
-      }
-    ],
-
-    // Exact Element Plus Tabs Attributes
-    props: [
-      { name: 'model-value / current_tab', type: 'string / number', default: '0', desc: '绑定值，选中选项卡的 name 或索引，默认是第一个 tab' },
-      { name: 'type', type: 'enum', default: "'' (LINE)", desc: '风格类型：LINE, CARD, BORDER_CARD, SEGMENT' },
-      { name: 'closable', type: 'boolean', default: 'false', desc: '标签是否可关闭' },
-      { name: 'addable', type: 'boolean', default: 'false', desc: '标签是否可增加' },
-      { name: 'editable', type: 'boolean', default: 'false', desc: '标签是否同时可增加和关闭' },
-      { name: 'tab-position', type: 'enum', default: 'top', desc: '选项卡所在位置：top, bottom, left, right' },
-      { name: 'stretch', type: 'boolean', default: 'false', desc: '标签的宽度是否自撑开' },
-      { name: 'before-leave', type: 'Callable / Function', default: '() => true', desc: '切换标签之前的钩子函数，若返回 false 则阻止切换' }
-    ],
-
-    // Exact Element Plus Tabs Events / Signals
-    events: [
-      { name: 'tab-click(index, name)', desc: 'tab 被选中点击时触发', params: '(index: int, name: String)' },
-      { name: 'tab-change(active_name)', desc: 'activeName 改变时触发', params: '(index: int, name: String)' },
-      { name: 'tab-remove(name)', desc: '点击 tab 移除按钮时触发', params: '(name: String)' },
-      { name: 'tab-add()', desc: '点击 tab 新增按钮时触发', params: '()' },
-      { name: 'edit(target_name, action)', desc: '点击 tab 的新增或移除按钮后触发', params: '(name: String, action: String)' }
-    ],
-
-    // Exact Element Plus Tabs Slots
-    slots: [
-      { name: 'default', desc: '默认插槽，放入 Tab-pane 或各面板内容节点', child: 'Tab-pane / Control' },
-      { name: 'add-icon', desc: '自定义添加按钮图标', child: 'GIcon / Texture2D' }
-    ],
-
-    // Exact Element Plus Tab-pane Attributes
-    paneProps: [
-      { name: 'label', type: 'string', default: "''", desc: '选项卡标题文字' },
-      { name: 'name', type: 'string / number', default: "''", desc: '与选项卡绑定值 value 对应的标识符' },
-      { name: 'disabled', type: 'boolean', default: 'false', desc: '是否禁用该标签页' },
-      { name: 'closable', type: 'boolean', default: 'false', desc: '该标签是否可单独关闭' },
-      { name: 'lazy', type: 'boolean', default: 'false', desc: '标签是否延迟渲染（仅在激活时初始化）' }
-    ]
-  },
-
-  // --------------------------------------------------------
-  // BUTTON (Full Scenarios)
-  // --------------------------------------------------------
-  'button': {
-    title: 'Button 按钮 (GButton)',
-    desc: '融合 Naive UI, Element Plus, Ant Design Vue, Vant UI 特性的通用按钮组件，支持多种色彩主题、形态样式、尺寸规格、加载动效与图标。',
-    demos: [
-      {
-        title: '1. Basic Types 基础色彩类型',
-        render: `
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-default" onclick="showToast('Default button clicked')">Default 默认</button>
-            <button class="g-btn g-btn-primary" onclick="showToast('Primary button clicked', 'success')">Primary 主要</button>
-            <button class="g-btn g-btn-success" onclick="showToast('Success button clicked', 'success')">Success 成功</button>
-            <button class="g-btn g-btn-warning" onclick="showToast('Warning button clicked', 'warning')">Warning 警告</button>
-            <button class="g-btn g-btn-danger" onclick="showToast('Danger button clicked', 'danger')">Danger 危险</button>
-            <button class="g-btn g-btn-info" onclick="showToast('Info button clicked', 'info')">Info 信息</button>
-          </div>
-        `,
-        code: `# GDScript: Basic Types
-var btn_p = GButton.new()
-btn_p.text = "Primary Button"
-btn_p.button_type = GButton.ButtonType.PRIMARY
-add_child(btn_p)`
-      },
-      {
-        title: '2. Variants & Plain 变体形态',
-        render: `
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-primary">Solid 实心</button>
-            <button class="g-btn g-btn-outline">Outline 边框</button>
-            <button class="g-btn g-btn-dashed">Dashed 虚线</button>
-            <button class="g-btn g-btn-text">Text 文本</button>
-            <button class="g-btn g-btn-text" style="text-decoration:underline;">Link 链接</button>
-          </div>
-        `,
-        code: `var outline_btn = GButton.new()
-outline_btn.text = "Outline Button"
-outline_btn.variant = GButton.Variant.OUTLINE
-add_child(outline_btn)`
-      },
-      {
-        title: '3. Shapes & Pill 形状形态',
-        render: `
-          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-            <button class="g-btn g-btn-primary g-btn-round">Round 胶囊圆角</button>
-            <button class="g-btn g-btn-success g-btn-round" style="width:36px; height:36px; padding:0;"><i class="fa-solid fa-check"></i></button>
-            <button class="g-btn g-btn-danger" style="width:36px; height:36px; padding:0;"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `,
-        code: `var round_btn = GButton.new()
-round_btn.text = "Round Pill"
-round_btn.shape = GButton.Shape.ROUND
-add_child(round_btn)`
-      },
-      {
-        title: '4. Loading & Disabled 状态',
-        render: `
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-primary"><i class="fa-solid fa-spinner fa-spin"></i> Loading 加载中</button>
-            <button class="g-btn g-btn-primary" style="opacity:0.5; cursor:not-allowed;" disabled>Disabled 禁用</button>
-          </div>
-        `,
-        code: `var load_btn = GButton.new()
-load_btn.loading = true
-add_child(load_btn)`
-      }
-    ],
-    props: [
-      { name: 'button_type', type: 'ButtonType', default: 'DEFAULT', desc: '色彩类型：DEFAULT, PRIMARY, SUCCESS, WARNING, DANGER, INFO' },
-      { name: 'variant', type: 'Variant', default: 'SOLID', desc: '表现形态：SOLID, OUTLINE, DASHED, TEXT, LINK' },
-      { name: 'button_size', type: 'Size', default: 'MEDIUM', desc: '尺寸规格：SMALL, MEDIUM, LARGE' },
-      { name: 'shape', type: 'Shape', default: 'DEFAULT', desc: '几何形状：DEFAULT, ROUND, CIRCLE, SQUARE' },
-      { name: 'loading', type: 'bool', default: 'false', desc: '是否进入加载动画状态' },
-      { name: 'block', type: 'bool', default: 'false', desc: '是否展开为全宽通栏按钮' }
-    ]
-  },
-
-  // --------------------------------------------------------
-  // INPUT (Full Scenarios)
-  // --------------------------------------------------------
-  'input': {
-    title: 'Input 输入框 (GInput)',
-    desc: '支持前后缀、一键清空、密码掩码切换、多种校验状态描边、字数限制与尺寸切换。',
-    demos: [
-      {
-        title: '1. Basic & Clearable 基础与一键清空',
-        render: `
-          <div style="display:flex; flex-direction:column; gap:14px; width:100%; max-width:340px;">
-            <div class="g-input-wrapper"><input class="g-input" type="text" placeholder="Basic Input 请输入..." value="gotod-ui"></div>
-            <div class="g-input-wrapper" style="position:relative;">
-              <input id="demoClearInput" class="g-input" type="text" placeholder="Clearable 可清空..." value="Click clear button">
-              <button onclick="document.getElementById('demoClearInput').value=''; showToast('Input cleared');" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:16px;">×</button>
-            </div>
-          </div>
-        `,
-        code: `var input = GInput.new()
-input.placeholder_text = "Enter content..."
-input.clearable = true
-add_child(input)`
-      },
-      {
-        title: '2. Password & Reveal 密码明暗文切换',
-        render: `
-          <div class="g-input-wrapper" style="position:relative; width:100%; max-width:340px;">
-            <input id="demoPwdInput" class="g-input" type="password" placeholder="Password input..." value="Godot4Password">
-            <button onclick="let el=document.getElementById('demoPwdInput'); el.type = el.type === 'password' ? 'text' : 'password';" style="background:none; border:none; color:var(--text-secondary); cursor:pointer;"><i class="fa-solid fa-moon"></i></button>
-          </div>
-        `,
-        code: `var pwd_input = GInput.new()
-pwd_input.secret = true
-pwd_input.show_password_toggle = true
-add_child(pwd_input)`
-      }
-    ],
-    props: [
-      { name: 'text', type: 'String', default: '""', desc: '输入框绑定的文本内容' },
-      { name: 'placeholder_text', type: 'String', default: '"Please input..."', desc: '占位提示文字' },
-      { name: 'clearable', type: 'bool', default: 'false', desc: '是否显示一键清空按钮' },
-      { name: 'secret', type: 'bool', default: 'false', desc: '是否开启密码密文模式' },
-      { name: 'status', type: 'Status', default: 'DEFAULT', desc: '校验边框状态：DEFAULT, ERROR, WARNING, SUCCESS' }
-    ]
+      <div class="nav-group">
+        <div class="nav-group-title">Data Display 数据</div>
+        <div class="nav-item" data-key="card" onclick="showDoc('card')"><span>GCard 卡片</span></div>
+        <div class="nav-item" data-key="tag" onclick="showDoc('tag')"><span>GTag 标签</span></div>
+        <div class="nav-item" data-key="badge" onclick="showDoc('badge')"><span>GBadge 徽标</span></div>
+        <div class="nav-item" data-key="avatar" onclick="showDoc('avatar')"><span>GAvatar 头像</span></div>
+        <div class="nav-item" data-key="progress" onclick="showDoc('progress')"><span>GProgress 进度条</span></div>
+        <div class="nav-item active" data-key="tabs" onclick="showDoc('tabs')"><span>GTabs 标签页</span></div>
+        <div class="nav-item" data-key="collapse" onclick="showDoc('collapse')"><span>GCollapse 折叠面板</span></div>
+        <div class="nav-item" data-key="steps" onclick="showDoc('steps')"><span>GSteps 步骤条</span></div>
+        <div class="nav-item" data-key="space" onclick="showDoc('space')"><span>GSpace 间距布局</span></div>
+      </div>
+    `;
+    showDoc('tabs');
   }
 };
 
+// ==========================================
 // Main Render Dispatcher
+// ==========================================
 window.showDoc = function(key) {
-  if (window.COMPONENT_CATALOG) {
-    Object.assign(DOCS, window.COMPONENT_CATALOG);
-  }
-  const doc = DOCS[key] || (window.COMPONENT_CATALOG && window.COMPONENT_CATALOG[key]) || DOCS['tabs'];
+  window.currentDocKey = key;
+  
+  // Combine all sources: GUIDE, GAME, COMPONENT
+  const catalog = Object.assign(
+    {}, 
+    window.GUIDE_CATALOG || {}, 
+    window.GAME_CATALOG || {}, 
+    window.COMPONENT_CATALOG || {}
+  );
+
+  const doc = catalog[key] || catalog['tabs'] || {
+    title: key,
+    desc: 'Document Details',
+    demos: [],
+    props: [],
+    events: [],
+    methods: [],
+    slots: []
+  };
   
   // Sidebar active toggle
   document.querySelectorAll('.nav-item').forEach(item => {
@@ -725,7 +412,7 @@ window.showDoc = function(key) {
 
   // Render Demos
   let demosHtml = '';
-  if (doc.demos) {
+  if (doc.demos && doc.demos.length > 0) {
     doc.demos.forEach((d) => {
       demosHtml += `
         <div class="demo-section">
@@ -748,7 +435,7 @@ window.showDoc = function(key) {
 
   // Render Attributes Table (Props)
   let propsHtml = '';
-  if (doc.props) {
+  if (doc.props && doc.props.length > 0) {
     propsHtml += `
       <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Attributes (属性列表)</h3>
       <table class="api-table">
@@ -775,7 +462,7 @@ window.showDoc = function(key) {
   }
 
   // Render Events Table
-  if (doc.events) {
+  if (doc.events && doc.events.length > 0) {
     propsHtml += `
       <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Events & Signals (事件与信号)</h3>
       <table class="api-table">
@@ -799,8 +486,8 @@ window.showDoc = function(key) {
     `;
   }
 
-  // Render Methods / Exposes Table
-  if (doc.methods) {
+  // Render Methods Table
+  if (doc.methods && doc.methods.length > 0) {
     propsHtml += `
       <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Methods / Exposes (方法名与暴露函数)</h3>
       <table class="api-table">
@@ -825,7 +512,7 @@ window.showDoc = function(key) {
   }
 
   // Render Slots Table
-  if (doc.slots) {
+  if (doc.slots && doc.slots.length > 0) {
     propsHtml += `
       <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Slots (插槽与节点挂载)</h3>
       <table class="api-table">
@@ -850,7 +537,7 @@ window.showDoc = function(key) {
   }
 
   // Render Sub-component Attributes Table
-  if (doc.paneProps) {
+  if (doc.paneProps && doc.paneProps.length > 0) {
     propsHtml += `
       <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">Sub-component Attributes (子组件/子面板属性)</h3>
       <table class="api-table">
@@ -900,5 +587,5 @@ window.filterNav = function(q) {
 
 // Default initial render on load
 document.addEventListener('DOMContentLoaded', () => {
-  showDoc('tabs');
+  switchTopSection('components');
 });
