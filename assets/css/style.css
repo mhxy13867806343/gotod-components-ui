@@ -399,6 +399,35 @@ main {
 .g-btn-text:hover { background: var(--bg-hover); }
 .g-btn-round { border-radius: 999px; }
 
+/* Disabled State for Buttons & Form Controls */
+.g-btn:disabled,
+.g-btn.is-disabled,
+button:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.45 !important;
+  background: var(--border-base) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-disabled) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  pointer-events: none !important;
+}
+.g-btn:disabled *,
+button:disabled * {
+  color: var(--text-disabled) !important;
+}
+
+.g-input:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.55 !important;
+  background-color: var(--bg-hover) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-disabled) !important;
+}
+
 /* Inputs */
 .g-input-wrapper {
   display: inline-flex;
