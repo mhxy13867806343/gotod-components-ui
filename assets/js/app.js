@@ -274,6 +274,18 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('play-tabs');
+  } else if (section === 'hooks') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search hooks..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Vue-Style Hooks 响应式钩子</div>
+        <div class="nav-item active" data-key="hook-cooldown" onclick="showDoc('hook-cooldown')"><span>⏳ useCooldown 技能冷却</span></div>
+        <div class="nav-item" data-key="hook-form" onclick="showDoc('hook-form')"><span>📝 useForm 表单响应式校验</span></div>
+        <div class="nav-item" data-key="hook-pagination" onclick="showDoc('hook-pagination')"><span>📑 usePagination 列表分页器</span></div>
+        <div class="nav-item" data-key="hook-dialog" onclick="showDoc('hook-dialog')"><span>🪟 useDialog 组合式弹窗</span></div>
+      </div>
+    `;
+    showDoc('hook-cooldown');
   } else if (section === 'studio') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
@@ -344,13 +356,14 @@ window.showDoc = function(key) {
   window.currentDocKey = key;
   localStorage.setItem('gotod_doc_key', key);
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, STUDIO, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, STUDIO, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
     window.GAME_CATALOG || {}, 
     window.PLAYGROUND_CATALOG || {}, 
     window.IMPERATIVE_CATALOG || {},
+    window.HOOKS_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
