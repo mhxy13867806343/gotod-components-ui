@@ -1,15 +1,15 @@
 // =========================================================================
 // Gotod Components UI - Top Navigation GSelect Dropdown Component
 // assets/js/nav_dropdown.js
-// 使用 Gotod UI 规范打造的顶部模块快速切换下拉选择器 (GSelect / GDropdown)
 // =========================================================================
 
 window.TOP_SECTIONS = [
   { key: 'guide', label: '1. 指南与安装 (Guide)', icon: 'fa-book-open', desc: '快速上手、全局基类方法、动态实例化指南' },
   { key: 'components', label: '2. 组件库 (Components)', icon: 'fa-cube', desc: '全部 28+ 个 UI 控件全量文档与 API 字典' },
   { key: 'game', label: '3. 游戏实战案例 (Game UI)', icon: 'fa-gamepad', desc: '背包、角色面板、系统设置等游戏场景' },
-  { key: 'playground', label: '4. 属性与方法演练 (API Playground)', icon: 'fa-flask-vial', desc: '实时属性调节器与方法调用测试' },
-  { key: 'studio', label: '5. .tres 资源工坊与主题导出 (Resource Studio)', icon: 'fa-file-code', desc: 'Godot 4 主题面板与 .tres 导入导出' }
+  { key: 'playground', label: '4. 属性与方法演练 (Playground)', icon: 'fa-flask-vial', desc: '实时属性调节器与方法调用测试' },
+  { key: 'imperative', label: '5. 编程式调用 (Imperative API)', icon: 'fa-bolt', desc: 'GMessage/GMessageBox/GLoading/上下文继承' },
+  { key: 'studio', label: '6. .tres 资源工坊 (Studio)', icon: 'fa-file-code', desc: 'Godot 4 主题面板与 .tres 导入导出' }
 ];
 
 // Initialize Top Nav GSelect Dropdown
@@ -24,7 +24,7 @@ window.initTopNavDropdown = function() {
     <div class="g-nav-select" id="gNavSelectDropdown">
       <div class="g-nav-select-trigger" onclick="toggleNavDropdown(event)">
         <i class="fa-solid ${currentItem.icon}" style="color:var(--primary);"></i>
-        <span class="g-nav-select-label" id="gNavSelectLabel">${currentItem.label}</span>
+        <span class="g-nav-select-label" id="gNavSelectLabel">${currentItem.label.split(' ')[1] || currentItem.label}</span>
         <i class="fa-solid fa-chevron-down g-nav-select-arrow" id="gNavSelectArrow"></i>
       </div>
 
@@ -99,7 +99,7 @@ window.syncNavDropdownUI = function(sectionKey) {
   const triggerElem = document.querySelector('.g-nav-select-trigger');
   
   if (labelElem) {
-    labelElem.innerText = item.label;
+    labelElem.innerText = item.label.split(' ')[1] || item.label;
   }
   if (triggerElem) {
     const icon = triggerElem.querySelector('.fa-solid:first-child');

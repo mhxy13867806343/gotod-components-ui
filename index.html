@@ -13,34 +13,25 @@
 
   <!-- Header -->
   <header>
-    <div style="display:flex; align-items:center;">
+    <div style="display:flex; align-items:center; gap:16px;">
       <a href="#" class="brand" onclick="switchTopSection('components')">
         <i class="fa-solid fa-shapes" style="color: var(--primary);"></i>
         <span>gotod-components-ui</span>
         <span class="brand-badge">Godot 4.x + Vue UI</span>
       </a>
 
-      <!-- 1. 指南 / 2. 组件 / 3. 游戏实战 / 4. 属性方法演练 Top Navigation Links -->
-      <nav class="top-nav-links">
-        <a href="javascript:void(0)" id="topNavGuide" class="top-nav-item" onclick="switchTopSection('guide')">
-          <i class="fa-solid fa-book-open"></i> <span>1. 指南与安装 (Guide)</span>
-        </a>
-        <a href="javascript:void(0)" id="topNavComponents" class="top-nav-item active" onclick="switchTopSection('components')">
-          <i class="fa-solid fa-cube"></i> <span>2. 组件库 (Components)</span>
-        </a>
-        <a href="javascript:void(0)" id="topNavGame" class="top-nav-item" onclick="switchTopSection('game')">
-          <i class="fa-solid fa-gamepad"></i> <span>3. 游戏实战案例 (Game UI)</span>
-        </a>
-        <a href="javascript:void(0)" id="topNavPlayground" class="top-nav-item" onclick="switchTopSection('playground')">
-          <i class="fa-solid fa-flask-vial"></i> <span>4. 属性与方法演练 (API Playground)</span>
-        </a>
-        <a href="javascript:void(0)" id="topNavStudio" class="top-nav-item" onclick="switchTopSection('studio')">
-          <i class="fa-solid fa-file-code"></i> <span>5. .tres 资源工坊与主题导出 (Resource Studio)</span>
-        </a>
-      </nav>
-
-      <!-- UI Component GSelect Dropdown for Module Switcher -->
-      <div id="topNavSelectContainer" style="margin-left: 12px;"></div>
+      <!-- Clean Top Section Dropdown (No Overflow, Full Width Clean Navigation) -->
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:12px; font-weight:600; color:var(--text-secondary); white-space:nowrap;">板块:</span>
+        <select id="topSectionSelect" class="select-theme" onchange="switchTopSection(this.value)" style="font-weight:600; font-size:13px; height:32px; padding:0 12px; min-width:240px; border-color:var(--primary); cursor:pointer;">
+          <option value="guide">1. 指南与快速上手 (Guide)</option>
+          <option value="components" selected>2. 组件库全量文档 (Components)</option>
+          <option value="game">3. 游戏实战案例 (Game UI)</option>
+          <option value="playground">4. 属性与方法演练 (API Playground)</option>
+          <option value="imperative">5. 编程式/命令式调用 (Imperative API)</option>
+          <option value="studio">6. .tres 资源工坊与主题导出 (Resource Studio)</option>
+        </select>
+      </div>
     </div>
 
     <div class="header-actions">
@@ -131,6 +122,7 @@
   <script src="assets/js/components_catalog.js"></script>
   <script src="assets/js/game_templates.js"></script>
   <script src="assets/js/api_playground.js"></script>
+  <script src="assets/js/imperative_api.js"></script>
   <script src="assets/js/resource_studio.js"></script>
   <script src="assets/js/nav_dropdown.js"></script>
   <script src="assets/js/app.js"></script>

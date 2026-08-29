@@ -1,14 +1,17 @@
 // ==========================================
 // Gotod Components UI - Interactive Docs Engine
-// 1. 指南 / 2. 组件库 / 3. 游戏实战案例
 // ==========================================
 
 window.currentTopSection = 'components';
 window.currentDocKey = 'tabs';
 
-// Global Theme & Mode Manager
+// Global Theme & Mode Manager with LocalStorage Persistence
 window.changePreset = function(preset) {
   document.documentElement.setAttribute('data-preset', preset);
+  localStorage.setItem('gotod_preset', preset);
+  const selectElem = document.getElementById('presetSelect');
+  if (selectElem && selectElem.value !== preset) selectElem.value = preset;
+  
   showToast('Theme preset switched to: ' + preset.toUpperCase() + ' tokens', 'info');
   if (window.currentDocKey) {
     showDoc(window.currentDocKey);
@@ -16,11 +19,15 @@ window.changePreset = function(preset) {
 };
 
 window.toggleTheme = function() {
-  const cur = document.documentElement.getAttribute('data-theme');
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
-  document.getElementById('themeIcon').className = next === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-  document.getElementById('themeText').innerText = next === 'dark' ? 'Dark' : 'Light';
+  localStorage.setItem('gotod_theme', next);
+  
+  const icon = document.getElementById('themeIcon');
+  const text = document.getElementById('themeText');
+  if (icon) icon.className = next === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  if (text) text.innerText = next === 'dark' ? 'Dark' : 'Light';
 };
 
 // Toast Floating Message System
@@ -62,207 +69,72 @@ window.copyCode = function(btn, codeText) {
   });
 };
 
-// Modal Dialog Controls
-window.openDialog = function(title, body) {
-  document.getElementById('dialogTitle').innerText = title || 'Dialog Modal';
-  document.getElementById('dialogBody').innerText = body || 'Dialog Content';
-  document.getElementById('dialogModal').classList.add('active');
-};
-window.closeDialog = function(e) {
-  if (e.target.id === 'dialogModal') closeDialogDirect();
-};
-window.closeDialogDirect = function() {
-  document.getElementById('dialogModal').classList.remove('active');
-};
-window.confirmDialog = function() {
-  closeDialogDirect();
-  showToast('Dialog operation confirmed!', 'success');
+// Simulated Interactive Component Helpers
+window.openSimDialog = function(content = "This is a modal dialog content.", title = "GDialog Modal") {
+  const modal = document.getElementById('simModal');
+  const titleElem = document.getElementById('simModalTitle');
+  const bodyElem = document.getElementById('simModalBody');
+  if (titleElem) titleElem.innerText = title;
+  if (bodyElem) bodyElem.innerText = content;
+  if (modal) modal.style.display = 'flex';
 };
 
-// Drawer Controls
-window.openDrawer = function(placement) {
-  const drawerBox = document.querySelector('.g-drawer-box');
-  if (drawerBox && placement) {
-    if (placement === 'left') {
-      document.getElementById('drawerModal').style.justifyContent = 'flex-start';
-    } else {
-      document.getElementById('drawerModal').style.justifyContent = 'flex-end';
-    }
-  }
-  document.getElementById('drawerModal').classList.add('active');
+window.closeSimDialog = function() {
+  const modal = document.getElementById('simModal');
+  if (modal) modal.style.display = 'none';
 };
-window.closeDrawer = function(e) {
-  if (e.target.id === 'drawerModal') closeDrawerDirect();
+
+window.openSimDrawer = function(content = "Drawer content body", title = "GDrawer Title") {
+  const drawer = document.getElementById('simDrawer');
+  const titleElem = document.getElementById('simDrawerTitle');
+  if (titleElem) titleElem.innerText = title;
+  if (drawer) drawer.classList.add('open');
 };
+
 window.closeDrawerDirect = function() {
-  document.getElementById('drawerModal').classList.remove('active');
+  const drawer = document.getElementById('simDrawer');
+  if (drawer) drawer.classList.remove('open');
 };
 
-// Tabs Switching Helper
-window.switchTabDemo = function(tabIndex, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const tabs = container.querySelectorAll('.sim-tab-header');
-  const panels = container.querySelectorAll('.sim-tab-panel');
+// Interactive Tab Switcher in Demos
+window.switchDemoTab = function(btn, panelId) {
+  const parent = btn.closest('.sim-tabs-container') || btn.parentElement.parentElement;
+  if (!parent) return;
   
-  tabs.forEach((tab, idx) => {
-    const isActive = (idx === tabIndex);
-    tab.classList.toggle('active', isActive);
-    tab.style.color = isActive ? 'var(--primary)' : 'var(--text-secondary)';
-    if (tab.getAttribute('data-tab-type') === 'card') {
-      tab.style.background = isActive ? 'var(--bg-card)' : 'var(--bg-surface)';
-      tab.style.borderBottomColor = isActive ? 'var(--bg-card)' : 'var(--border-base)';
-    } else if (tab.getAttribute('data-tab-type') === 'border-card') {
-      tab.style.background = isActive ? 'var(--bg-card)' : 'transparent';
-      tab.style.borderBottomColor = isActive ? 'transparent' : 'var(--border-base)';
-    } else {
-      tab.style.borderBottomColor = isActive ? 'var(--primary)' : 'transparent';
-    }
-    tab.style.fontWeight = isActive ? '600' : 'normal';
-  });
+  parent.querySelectorAll('.sim-tab-header-item').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
 
-  panels.forEach((panel, idx) => {
-    panel.style.display = (idx === tabIndex) ? 'block' : 'none';
-  });
-  showToast(`Switched to Tab ${tabIndex + 1}`, 'info');
+  parent.querySelectorAll('.sim-tab-pane').forEach(el => el.style.display = 'none');
+  const target = document.getElementById(panelId);
+  if (target) target.style.display = 'block';
 };
 
-// Tabs Dynamic Add & Remove
-window.addDynamicTabPane = function(containerId) {
-  const container = document.getElementById(containerId);
+// Interactive Steps Next/Prev
+window.simNextStep = function(id) {
+  const container = document.getElementById(id);
   if (!container) return;
-  const tabHeaderBox = container.querySelector('.sim-tab-nav-list');
-  const panelBox = container.querySelector('.sim-tab-panel-box');
-  if (!tabHeaderBox || !panelBox) return;
-
-  const currentCount = tabHeaderBox.querySelectorAll('.sim-tab-header').length + 1;
-  const newIndex = currentCount - 1;
-
-  const newTab = document.createElement('div');
-  newTab.className = 'sim-tab-header';
-  newTab.setAttribute('data-tab-type', 'card');
-  newTab.style.cssText = 'color:var(--text-secondary); cursor:pointer; padding:8px 16px; border:1px solid var(--border-base); border-bottom:1px solid var(--border-base); border-radius:4px 4px 0 0; background:var(--bg-surface); display:inline-flex; align-items:center; gap:8px;';
-  newTab.innerHTML = `<span>Tab ${currentCount}</span> <button onclick="event.stopPropagation(); removeDynamicTabPane(this, '${containerId}');" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:14px;">×</button>`;
-  newTab.onclick = () => switchTabDemo(newIndex, containerId);
-
-  const addBtn = tabHeaderBox.querySelector('.sim-tab-add-btn');
-  if (addBtn) {
-    tabHeaderBox.insertBefore(newTab, addBtn);
+  const steps = container.querySelectorAll('.sim-step-item');
+  let cur = 0;
+  steps.forEach((s, idx) => {
+    if (s.classList.contains('active')) cur = idx;
+  });
+  if (cur < steps.length - 1) {
+    steps[cur].classList.remove('active');
+    steps[cur].classList.add('finished');
+    steps[cur + 1].classList.add('active');
+    showToast(`Step progressed to ${cur + 2}`, 'info');
   } else {
-    tabHeaderBox.appendChild(newTab);
-  }
-
-  const newPanel = document.createElement('div');
-  newPanel.className = 'sim-tab-panel';
-  newPanel.style.cssText = 'display:none; padding:18px; background:var(--bg-card); border:1px solid var(--border-base); border-top:none; border-radius:0 0 var(--radius) var(--radius);';
-  newPanel.innerHTML = `<h3>Tab ${currentCount} content</h3><p style="color:var(--text-secondary); margin-top:4px;">This is dynamically created Tab ${currentCount} content.</p>`;
-  panelBox.appendChild(newPanel);
-
-  switchTabDemo(newIndex, containerId);
-  showToast(`Added Tab ${currentCount}`, 'success');
-};
-
-window.removeDynamicTabPane = function(btn, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const tabHeader = btn.closest('.sim-tab-header');
-  const tabHeaderBox = container.querySelector('.sim-tab-nav-list');
-  const panelBox = container.querySelector('.sim-tab-panel-box');
-  if (!tabHeader || !tabHeaderBox || !panelBox) return;
-
-  const allTabs = Array.from(tabHeaderBox.querySelectorAll('.sim-tab-header'));
-  const idx = allTabs.indexOf(tabHeader);
-  if (idx !== -1) {
-    const panels = panelBox.querySelectorAll('.sim-tab-panel');
-    tabHeader.remove();
-    if (panels[idx]) panels[idx].remove();
-
-    const remainingTabs = tabHeaderBox.querySelectorAll('.sim-tab-header');
-    if (remainingTabs.length > 0) {
-      const nextIdx = Math.max(0, idx - 1);
-      switchTabDemo(nextIdx, containerId);
-    }
-    showToast('Tab closed', 'info');
+    steps.forEach((s, idx) => {
+      s.classList.remove('finished', 'active');
+      if (idx === 0) s.classList.add('active');
+    });
+    showToast('Reset back to Step 1', 'info');
   }
 };
 
-// Tabs Position Changer
-window.changeTabPosDemo = function(pos, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const wrapper = container.querySelector('.sim-tab-wrapper');
-  const navList = container.querySelector('.sim-tab-nav-list');
-  if (!wrapper || !navList) return;
-
-  if (pos === 'left') {
-    wrapper.style.flexDirection = 'row';
-    navList.style.flexDirection = 'column';
-    navList.style.borderBottom = 'none';
-    navList.style.borderRight = '1px solid var(--border-base)';
-  } else if (pos === 'right') {
-    wrapper.style.flexDirection = 'row-reverse';
-    navList.style.flexDirection = 'column';
-    navList.style.borderBottom = 'none';
-    navList.style.borderLeft = '1px solid var(--border-base)';
-  } else if (pos === 'bottom') {
-    wrapper.style.flexDirection = 'column-reverse';
-    navList.style.flexDirection = 'row';
-    navList.style.borderBottom = 'none';
-    navList.style.borderTop = '1px solid var(--border-base)';
-  } else { // top
-    wrapper.style.flexDirection = 'column';
-    navList.style.flexDirection = 'row';
-    navList.style.borderBottom = '1px solid var(--border-base)';
-    navList.style.borderTop = 'none';
-    navList.style.borderLeft = 'none';
-    navList.style.borderRight = 'none';
-  }
-  showToast(`Tab position: ${pos.toUpperCase()}`, 'info');
-};
-
-// Collapse Accordion Helper
-window.toggleCollapseDemo = function(headerElem) {
-  const parent = headerElem.closest('.sim-collapse-item');
-  const body = parent.querySelector('.sim-collapse-body');
-  const arrow = parent.querySelector('.sim-collapse-arrow');
-  const isOpen = body.style.display !== 'none';
-  body.style.display = isOpen ? 'none' : 'block';
-  arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
-};
-
-// Steps Process Helper
-window.changeStepDemo = function(delta) {
-  const box = document.getElementById('demoStepsBox');
-  if (!box) return;
-  let cur = parseInt(box.getAttribute('data-step') || '1');
-  cur = Math.max(1, Math.min(3, cur + delta));
-  box.setAttribute('data-step', cur);
-  
-  for (let i = 1; i <= 3; i++) {
-    const num = document.getElementById('stepNum' + i);
-    const txt = document.getElementById('stepText' + i);
-    const line = document.getElementById('stepLine' + i);
-    if (i <= cur) {
-      if (num) { num.style.background = 'var(--primary)'; num.style.color = '#fff'; num.style.borderColor = 'var(--primary)'; }
-      if (txt) { txt.style.color = 'var(--text-primary)'; txt.style.fontWeight = '600'; }
-    } else {
-      if (num) { num.style.background = 'var(--bg-surface)'; num.style.color = 'var(--text-secondary)'; num.style.borderColor = 'var(--border-base)'; }
-      if (txt) { txt.style.color = 'var(--text-disabled)'; txt.style.fontWeight = 'normal'; }
-    }
-    if (line) {
-      line.style.background = (i < cur) ? 'var(--primary)' : 'var(--border-base)';
-    }
-  }
-  const desc = document.getElementById('stepStatusDesc');
-  if (desc) {
-    const titles = ["Step 1: Configuration & Project Init", "Step 2: Theme Tokens Selection", "Step 3: Build & Export Successfully!"];
-    desc.innerText = titles[cur - 1];
-  }
-};
-
-// Tag Dynamic Add & Remove
+// Dynamic Tag Closable
 window.removeTagDemo = function(btn) {
-  const tag = btn.closest('.g-tag');
+  const tag = btn.parentElement;
   if (tag) {
     tag.style.opacity = '0';
     tag.style.transform = 'scale(0.8)';
@@ -320,20 +192,30 @@ window.runLiveTreeShaker = function() {
 };
 
 // ==========================================
-// 1. Guide / 2. Components / 3. Game UI Switcher
+// Top Navigation Switcher (Guide / Components / Game / Playground / Imperative / Studio)
 // ==========================================
 window.switchTopSection = function(section) {
   window.currentTopSection = section;
+  localStorage.setItem('gotod_section', section);
 
-  // Toggle active state in top navigation
-  document.getElementById('topNavGuide').classList.toggle('active', section === 'guide');
-  document.getElementById('topNavComponents').classList.toggle('active', section === 'components');
-  document.getElementById('topNavGame').classList.toggle('active', section === 'game');
-  document.getElementById('topNavPlayground').classList.toggle('active', section === 'playground');
-  document.getElementById('topNavStudio').classList.toggle('active', section === 'studio');
+  // Toggle active state in top navigation links
+  const gLink = document.getElementById('topNavGuide');
+  const cLink = document.getElementById('topNavComponents');
+  const gaLink = document.getElementById('topNavGame');
+  const pLink = document.getElementById('topNavPlayground');
+  const iLink = document.getElementById('topNavImperative');
+  const sLink = document.getElementById('topNavStudio');
 
-  if (typeof window.syncNavDropdownUI === 'function') {
-    window.syncNavDropdownUI(section);
+  if (gLink) gLink.classList.toggle('active', section === 'guide');
+  if (cLink) cLink.classList.toggle('active', section === 'components');
+  if (gaLink) gaLink.classList.toggle('active', section === 'game');
+  if (pLink) pLink.classList.toggle('active', section === 'playground');
+  if (iLink) iLink.classList.toggle('active', section === 'imperative');
+  if (sLink) sLink.classList.toggle('active', section === 'studio');
+
+  const topSelect = document.getElementById('topSectionSelect');
+  if (topSelect && topSelect.value !== section) {
+    topSelect.value = section;
   }
 
   const sidebar = document.getElementById('sidebarNav');
@@ -354,6 +236,18 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('guide-install');
+  } else if (section === 'imperative') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search imperative API..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">Imperative API 编程式静态调用</div>
+        <div class="nav-item active" data-key="imp-message" onclick="showDoc('imp-message')"><span>💬 GMessage 全局消息与 close_all</span></div>
+        <div class="nav-item" data-key="imp-message-box" onclick="showDoc('imp-message-box')"><span>📦 GMessageBox 命令式弹窗</span></div>
+        <div class="nav-item" data-key="imp-loading" onclick="showDoc('imp-loading')"><span>⏳ GLoading 遮罩加载服务</span></div>
+        <div class="nav-item" data-key="imp-notification" onclick="showDoc('imp-notification')"><span>🔔 GNotification 四角通知气泡</span></div>
+      </div>
+    `;
+    showDoc('imp-message');
   } else if (section === 'game') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search game templates..." oninput="filterNav(this.value)">
@@ -448,28 +342,23 @@ window.switchTopSection = function(section) {
 // ==========================================
 window.showDoc = function(key) {
   window.currentDocKey = key;
+  localStorage.setItem('gotod_doc_key', key);
   
-  // Combine all sources: GUIDE, GAME, PLAYGROUND, STUDIO, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, STUDIO, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
     window.GAME_CATALOG || {}, 
     window.PLAYGROUND_CATALOG || {}, 
+    window.IMPERATIVE_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
 
-  const doc = catalog[key] || catalog['tabs'] || {
-    title: key,
-    desc: 'Document Details',
-    demos: [],
-    props: [],
-    events: [],
-    methods: [],
-    slots: []
-  };
-  
-  // Sidebar active toggle
+  const doc = catalog[key];
+  if (!doc) return;
+
+  // Update active item in sidebar
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.toggle('active', item.getAttribute('data-key') === key);
   });
@@ -477,31 +366,31 @@ window.showDoc = function(key) {
   // Render Demos
   let demosHtml = '';
   if (doc.demos && doc.demos.length > 0) {
-    doc.demos.forEach((d) => {
-      demosHtml += `
-        <div class="demo-section">
-          <div class="demo-section-header">
-            <span class="demo-section-title">${d.title}</span>
-          </div>
-          <div class="demo-canvas">
-            ${d.render}
-          </div>
+    demosHtml = doc.demos.map((d, idx) => `
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <div class="demo-card-title">${d.title}</div>
+          <button class="g-btn g-btn-default" style="height:26px; padding:0 8px; font-size:11px;" onclick="copyCode(this, \`${escapeHtml(d.code || '')}\`)">
+            <i class="fa-regular fa-copy"></i> 复制代码
+          </button>
+        </div>
+        <div class="demo-card-body">
+          ${d.render}
+        </div>
+        ${d.code ? `
           <div class="code-box">
-            <button class="btn-copy" onclick="copyCode(this, \`${d.code.replace(/`/g, '\\`')}\`)">
-              <i class="fa-regular fa-copy"></i> Copy GDScript
-            </button>
             <pre><code>${escapeHtml(d.code)}</code></pre>
           </div>
-        </div>
-      `;
-    });
+        ` : ''}
+      </div>
+    `).join('');
   }
 
-  // Render Attributes Table (Props)
+  // Render Props Table
   let propsHtml = '';
   if (doc.props && doc.props.length > 0) {
     propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Attributes (属性列表)</h3>
+      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Attributes (属性)</h3>
       <table class="api-table">
         <thead>
           <tr>
@@ -525,24 +414,25 @@ window.showDoc = function(key) {
     `;
   }
 
-  // Render Events Table
-  if (doc.events && doc.events.length > 0) {
+  // Render Universal Control/Node Common Methods Table
+  if (window.COMMON_CONTROL_METHODS && window.COMMON_CONTROL_METHODS.length > 0 && !key.startsWith('guide-') && !key.startsWith('game-') && !key.startsWith('play-') && !key.startsWith('studio-') && !key.startsWith('imp-')) {
     propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Events & Signals (事件与信号)</h3>
+      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">Control & Node Base Methods (全局通用基类方法)</h3>
+      <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：</p>
       <table class="api-table">
         <thead>
           <tr>
-            <th style="width:30%;">事件名 / Signal Name</th>
-            <th style="width:45%;">说明 / Description</th>
-            <th style="width:25%;">回调参数 / Parameters</th>
+            <th style="width:30%;">通用方法名 / Method</th>
+            <th style="width:45%;">功能说明 / Description</th>
+            <th style="width:25%;">参数与返回值 / Signature</th>
           </tr>
         </thead>
         <tbody>
-          ${doc.events.map(e => `
+          ${window.COMMON_CONTROL_METHODS.map(m => `
             <tr>
-              <td class="api-prop">${e.name}</td>
-              <td>${e.desc}</td>
-              <td class="api-type">${e.params}</td>
+              <td class="api-prop">${m.name}</td>
+              <td>${m.desc}</td>
+              <td class="api-type">${m.params}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -550,16 +440,16 @@ window.showDoc = function(key) {
     `;
   }
 
-  // Render Methods Table
+  // Render Component Specific Methods Table
   if (doc.methods && doc.methods.length > 0) {
     propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Methods / Exposes (方法名与暴露函数)</h3>
+      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Specific Methods (组件专属外部方法)</h3>
       <table class="api-table">
         <thead>
           <tr>
-            <th style="width:30%;">方法名 / Method Name</th>
+            <th style="width:30%;">方法名 / Method</th>
             <th style="width:45%;">说明 / Description</th>
-            <th style="width:25%;">参数及返回值 / Parameters & Return</th>
+            <th style="width:25%;">参数 / Parameters</th>
           </tr>
         </thead>
         <tbody>
@@ -575,20 +465,20 @@ window.showDoc = function(key) {
     `;
   }
 
-  // Render Common Control Base Methods Table for all UI components
-  if (window.COMMON_CONTROL_METHODS && window.currentTopSection === 'components' && doc.props) {
+  // Render Events Table
+  if (doc.events && doc.events.length > 0) {
     propsHtml += `
-      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">Universal Methods (全部组件共用通用基类方法)</h3>
+      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${doc.title.split(' ')[0]} Events / Signals (自定义信号)</h3>
       <table class="api-table">
         <thead>
           <tr>
-            <th style="width:30%;">通用方法名 / Common Method</th>
+            <th style="width:30%;">信号名 / Event Name</th>
             <th style="width:45%;">说明 / Description</th>
-            <th style="width:25%;">参数及返回值 / Parameters & Return</th>
+            <th style="width:25%;">参数 / Parameters</th>
           </tr>
         </thead>
         <tbody>
-          ${window.COMMON_CONTROL_METHODS.map(m => `
+          ${doc.events.map(m => `
             <tr>
               <td class="api-prop">${m.name}</td>
               <td>${m.desc}</td>
@@ -679,7 +569,31 @@ window.filterNav = function(q) {
   });
 };
 
-// Default initial render on load
+// Default initial render on load with complete LocalStorage state restoration
 document.addEventListener('DOMContentLoaded', () => {
-  switchTopSection('components');
+  // 1. Restore Theme Mode (dark / light)
+  const savedTheme = localStorage.getItem('gotod_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const icon = document.getElementById('themeIcon');
+  const text = document.getElementById('themeText');
+  if (icon) icon.className = savedTheme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  if (text) text.innerText = savedTheme === 'dark' ? 'Dark' : 'Light';
+
+  // 2. Restore Preset (naive / element / ant / vant)
+  const savedPreset = localStorage.getItem('gotod_preset') || 'naive';
+  document.documentElement.setAttribute('data-preset', savedPreset);
+  const presetSelect = document.getElementById('presetSelect');
+  if (presetSelect) presetSelect.value = savedPreset;
+
+  // 3. Restore Section & Doc Key
+  const savedSection = localStorage.getItem('gotod_section') || 'components';
+  const savedDocKey = localStorage.getItem('gotod_doc_key');
+  
+  const topSelect = document.getElementById('topSectionSelect');
+  if (topSelect) topSelect.value = savedSection;
+
+  switchTopSection(savedSection);
+  if (savedDocKey) {
+    setTimeout(() => showDoc(savedDocKey), 10);
+  }
 });
