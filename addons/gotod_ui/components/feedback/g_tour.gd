@@ -25,6 +25,19 @@ var _active_target: Control
 func _ready() -> void:
 	visible = false
 
+func add_step(target: NodePath, title: String, description: String = "", placement: int = 1) -> void:
+	steps.append({
+		"target": target,
+		"title": title,
+		"description": description,
+		"placement": placement
+	})
+
+func add_steps(step_list: Array) -> void:
+	for s in step_list:
+		if s is Dictionary:
+			steps.append(s)
+
 func start() -> void:
 	current_step = 0
 	visible = true

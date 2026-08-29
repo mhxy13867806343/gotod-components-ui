@@ -32,6 +32,20 @@ var _bubble_panel: PanelContainer
 func _ready() -> void:
 	visible = false
 
+func add_action(text: String, icon: Texture2D = null, is_disabled: bool = false) -> void:
+	actions.append({
+		"text": text,
+		"icon": icon,
+		"disabled": is_disabled
+	})
+
+func add_actions(action_list: Array) -> void:
+	for act in action_list:
+		if act is Dictionary:
+			actions.append(act)
+		elif act is String:
+			actions.append({ "text": act })
+
 func open_for_node(target: Control) -> void:
 	_target_node = target
 	_is_open = true

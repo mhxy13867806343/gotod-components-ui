@@ -21,6 +21,12 @@ var _selected_index: int = 0
 func _ready() -> void:
 	visible = false
 
+func add_column(items: Array) -> void:
+	columns.append(items)
+
+func set_columns(column_list: Array) -> void:
+	columns = column_list
+
 func open() -> void:
 	visible = true
 

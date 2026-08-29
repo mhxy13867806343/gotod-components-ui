@@ -67,10 +67,21 @@ func _apply_fab_position() -> void:
 func add_action(item_name: String, label: String = "", icon: Texture2D = null) -> void:
 	var item_data = {
 		"name": item_name,
-		"label": label,
+		"label": label if label != "" else item_name,
 		"icon": icon
 	}
 	items.append(item_data)
+	_rebuild_menu()
+
+func add_actions(action_list: Array) -> void:
+	for act in action_list:
+		if act is Dictionary:
+			var item_data = {
+				"name": act.get("name", act.get("id", act.get("key", ""))),
+				"label": act.get("label", act.get("text", act.get("name", ""))),
+				"icon": act.get("icon", null)
+			}
+			items.append(item_data)
 	_rebuild_menu()
 
 func _rebuild_menu() -> void:

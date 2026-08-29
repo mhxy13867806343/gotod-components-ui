@@ -21,6 +21,21 @@ var _panel: PanelContainer
 func _ready() -> void:
 	visible = false
 
+func add_action(name: String, subname: String = "", is_danger: bool = false, is_disabled: bool = false) -> void:
+	actions.append({
+		"name": name,
+		"subname": subname,
+		"danger": is_danger,
+		"disabled": is_disabled
+	})
+
+func add_actions(action_list: Array) -> void:
+	for act in action_list:
+		if act is Dictionary:
+			actions.append(act)
+		elif act is String:
+			actions.append({ "name": act })
+
 func open() -> void:
 	visible = true
 	opened.emit()

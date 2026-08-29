@@ -18,6 +18,18 @@ func _ready() -> void:
 	if GotodTheme.instance:
 		GotodTheme.instance.theme_changed.connect(_rebuild_steps)
 
+func add_step(title: String) -> void:
+	steps.append(title)
+	_rebuild_steps()
+
+func add_steps(step_list: Array) -> void:
+	for s in step_list:
+		if s is String:
+			steps.append(s)
+		elif s is Dictionary:
+			steps.append(s.get("title", s.get("name", "")))
+	_rebuild_steps()
+
 func _rebuild_steps() -> void:
 	for child in get_children():
 		child.queue_free()

@@ -123,6 +123,16 @@ func add_tab(tab_name: String, panel_content: Control, is_closable: bool = false
 	tab_added.emit(new_idx, tab_name)
 	return new_idx
 
+## 批量追加选项卡 (支持 Array[Dictionary] 格式)
+func add_tabs(tab_list: Array) -> void:
+	for t in tab_list:
+		if t is Dictionary:
+			var t_name = t.get("name", t.get("title", t.get("label", "Tab")))
+			var t_panel = t.get("panel", t.get("content", null))
+			var t_closable = t.get("closable", false)
+			var t_icon = t.get("icon", null)
+			add_tab(t_name, t_panel, t_closable, t_icon)
+
 ## 在指定索引插入选项卡
 func insert_tab(index: int, tab_name: String, panel_content: Control, is_closable: bool = false, icon: Texture2D = null) -> void:
 	index = clamp(index, 0, _tabs_data.size())

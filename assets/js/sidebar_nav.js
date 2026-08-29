@@ -224,6 +224,13 @@ window.SIDEBAR_CONFIG = {
           { key: 'steps', title: 'GSteps 步骤条' },
           { key: 'space', title: 'GSpace 间距布局' }
         ]
+      },
+      {
+        title: 'Godot 核心与全局 API (Engine Core)',
+        items: [
+          { key: 'godot-globals', title: '🌐 Godot 全局方法 & Node 核心 API' },
+          { key: 'godot-docs', title: '📖 Godot 4 官方文档与资源传送门' }
+        ]
       }
     ],
     defaultKey: 'tabs'

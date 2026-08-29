@@ -647,11 +647,50 @@ cb1.text = "Godot 4"
 group.add_child(cb1)
 group.value_changed.connect(func(vals): print("Selected:", vals))
 add_child(group)`
+      },
+      {
+        title: '2. 按钮样式多选框 (Button Style Checkbox)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="g-btn-group-segmented">
+              <label class="g-btn-segmented-item">
+                <input type="checkbox" onchange="this.parentElement.classList.toggle('active', this.checked); showToast('北京: ' + this.checked);">
+                <span>北京 (Beijing)</span>
+              </label>
+              <label class="g-btn-segmented-item active">
+                <input type="checkbox" checked onchange="this.parentElement.classList.toggle('active', this.checked); showToast('上海: ' + this.checked);">
+                <span>上海 (Shanghai)</span>
+              </label>
+              <label class="g-btn-segmented-item active">
+                <input type="checkbox" checked onchange="this.parentElement.classList.toggle('active', this.checked); showToast('广州: ' + this.checked);">
+                <span>广州 (Guangzhou)</span>
+              </label>
+              <label class="g-btn-segmented-item">
+                <input type="checkbox" onchange="this.parentElement.classList.toggle('active', this.checked); showToast('深圳: ' + this.checked);">
+                <span>深圳 (Shenzhen)</span>
+              </label>
+            </div>
+            <span style="font-size:12px; color:var(--text-secondary);">按钮样式的复选框，激活时呈现主题色高亮，常用于多维度筛选。</span>
+          </div>
+        `,
+        code: `# GDScript: 按钮样式多选框组
+var group = GCheckboxGroup.new()
+var cb1 = GCheckbox.new()
+cb1.text = "北京"
+cb1.button_style = true
+
+var cb2 = GCheckbox.new()
+cb2.text = "上海"
+cb2.button_style = true
+
+group.add_child(cb1)
+group.add_child(cb2)`
       }
     ],
     props: [
       { name: 'checked / v-model', type: 'boolean', default: 'false', desc: '是否勾选' },
       { name: 'text / label', type: 'String', default: '"Checkbox"', desc: '说明文字' },
+      { name: 'button_style', type: 'boolean', default: 'false', desc: '是否启用类似分段按钮的样式外观' },
       { name: 'indeterminate', type: 'boolean', default: 'false', desc: '半选/不确定状态' },
       { name: 'disabled', type: 'boolean', default: 'false', desc: '是否禁用' }
     ],
@@ -671,10 +710,10 @@ add_child(group)`
   // --------------------------------------------------------
   'radio': {
     title: 'Radio 单选框 (GRadio & Group)',
-    desc: '在一组备选项中进行单选。配合 GRadioGroup 自动管理选中互斥状态。',
+    desc: '在一组备选项中进行单选。配合 GRadioGroup 自动管理选中互斥状态，支持常规圆形圆点与按钮化 (Button Style) 两种形态。',
     demos: [
       {
-        title: '1. Radio Group 单选选项组',
+        title: '1. Radio Group 单选选项组 (Classic Circles)',
         render: `
           <div style="display:flex; gap:20px; align-items:center;">
             <label style="display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="showToast('Selected Naive UI', 'success')"><input type="radio" name="r_demo" checked> <span>Naive UI</span></label>
@@ -689,11 +728,46 @@ r1.text = "Option 1"
 rg.add_child(r1)
 rg.value_changed.connect(func(v): print("Active:", v))
 add_child(rg)`
+      },
+      {
+        title: '2. 按钮样式单选框 (Button Style Radio Group)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="g-btn-group-segmented" id="radioSegmentGroup">
+              <label class="g-btn-segmented-item active" onclick="document.querySelectorAll('#radioSegmentGroup .g-btn-segmented-item').forEach(e=>e.classList.remove('active')); this.classList.add('active'); showToast('选择画质：极速流畅 (60 FPS)', 'info');">
+                <input type="radio" name="r_btn_demo" checked>
+                <span>流畅 (60 FPS)</span>
+              </label>
+              <label class="g-btn-segmented-item" onclick="document.querySelectorAll('#radioSegmentGroup .g-btn-segmented-item').forEach(e=>e.classList.remove('active')); this.classList.add('active'); showToast('选择画质：高清逼真 (120 FPS)', 'info');">
+                <input type="radio" name="r_btn_demo">
+                <span>高清 (120 FPS)</span>
+              </label>
+              <label class="g-btn-segmented-item" onclick="document.querySelectorAll('#radioSegmentGroup .g-btn-segmented-item').forEach(e=>e.classList.remove('active')); this.classList.add('active'); showToast('选择画质：4K 光追极限 (Ray Tracing)', 'success');">
+                <input type="radio" name="r_btn_demo">
+                <span>4K 光追 (Ultra)</span>
+              </label>
+            </div>
+            <span style="font-size:12px; color:var(--text-secondary);">单选按钮组形态，在游戏画质、阵营切换和分段控制器场景中使用极广。</span>
+          </div>
+        `,
+        code: `# GDScript: 按钮样式单选框
+var rg = GRadioGroup.new()
+var r1 = GRadio.new()
+r1.text = "流畅 60FPS"
+r1.button_style = true
+
+var r2 = GRadio.new()
+r2.text = "高清 120FPS"
+r2.button_style = true
+
+rg.add_child(r1)
+rg.add_child(r2)`
       }
     ],
     props: [
       { name: 'checked / v-model', type: 'boolean', default: 'false', desc: '是否被选中' },
       { name: 'value', type: 'String', default: '""', desc: '选项标识绑定值' },
+      { name: 'button_style', type: 'boolean', default: 'false', desc: '是否开启按钮式外观形态' },
       { name: 'disabled', type: 'boolean', default: 'false', desc: '是否禁用' }
     ],
     events: [

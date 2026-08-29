@@ -109,6 +109,22 @@ func _on_clear_pressed() -> void:
 	_update_display_text()
 	cleared.emit()
 
+func add_option(label: String, value: Variant = null, is_disabled: bool = false) -> void:
+	options.append({
+		"label": label,
+		"value": value if value != null else label,
+		"disabled": is_disabled
+	})
+	_update_display_text()
+
+func add_options(opt_list: Array) -> void:
+	for opt in opt_list:
+		if opt is Dictionary:
+			options.append(opt)
+		elif opt is String:
+			options.append({ "label": opt, "value": opt, "disabled": false })
+	_update_display_text()
+
 func _update_display_text() -> void:
 	if not _label: return
 	if selected_index >= 0 and selected_index < options.size():

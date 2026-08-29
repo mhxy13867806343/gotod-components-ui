@@ -522,6 +522,51 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   font-weight: 600;
 }
 
+/* Button Style Checkbox & Radio (Element Plus / Naive UI style) */
+.g-btn-group-segmented {
+  display: inline-flex;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-base);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+.g-btn-segmented-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-regular);
+  cursor: pointer;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-base);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.g-btn-segmented-item:last-child {
+  border-right: none;
+}
+.g-btn-segmented-item input {
+  display: none;
+}
+.g-btn-segmented-item:hover {
+  color: var(--primary);
+}
+.g-btn-segmented-item.active,
+.g-btn-segmented-item:has(input:checked) {
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+.g-btn-segmented-item.disabled,
+.g-btn-segmented-item:has(input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--bg-hover);
+}
+
 /* Modal / Dialog */
 .g-modal-overlay {
   position: fixed;

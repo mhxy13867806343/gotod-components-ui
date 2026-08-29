@@ -99,6 +99,7 @@ window.showDoc = function(key) {
     window.STORAGE_CATALOG || {},
     window.UTILS_ROUTER_CATALOG || {},
     window.LIFECYCLE_CATALOG || {},
+    window.GODOT_GLOBALS_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
@@ -166,10 +167,22 @@ window.showDoc = function(key) {
   // 1. Attributes Table
   propsHtml += renderApiTable(`${compName} Attributes (属性)`, propHeaders, doc.props);
 
-  // 2. Control/Node Base Methods Table
-  if (window.COMMON_CONTROL_METHODS && !['guide-', 'game-', 'play-', 'studio-', 'imp-'].some(p => key.startsWith(p))) {
+  // 2. Specific Methods Table
+  propsHtml += renderApiTable(`${compName} Specific Methods (组件专属外部方法)`, methodHeaders, doc.methods);
+
+  // 3. Events Table
+  propsHtml += renderApiTable(`${compName} Events / Signals (自定义信号)`, eventHeaders, doc.events);
+
+  // 4. Slots Table
+  propsHtml += renderApiTable(`${compName} Slots (插槽与节点挂载)`, slotHeaders, doc.slots);
+
+  // 5. Sub-component Attributes Table
+  propsHtml += renderApiTable('Sub-component Attributes (子组件/子面板属性)', propHeaders, doc.paneProps);
+
+  // 6. Control/Node Base Methods Table (ONLY rendered on dedicated common methods / godot globals pages)
+  if (key === 'guide-common-methods' && window.COMMON_CONTROL_METHODS) {
     propsHtml += renderApiTable(
-      'Control & Node Base Methods (全局通用基类方法)',
+      'Control & Node Base Methods (全局通用基类方法全览)',
       [
         { title: '通用方法名 / Method', width: '30%', key: 'name', className: 'api-prop' },
         { title: '功能说明 / Description', width: '45%', key: 'desc' },
@@ -178,19 +191,19 @@ window.showDoc = function(key) {
       window.COMMON_CONTROL_METHODS,
       '所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：'
     );
+  } else if (!['guide-', 'game-', 'play-', 'studio-', 'imp-', 'godot-'].some(p => key.startsWith(p))) {
+    // Elegant tip on component pages
+    propsHtml += `
+      <div style="margin-top: 32px; padding: 14px 18px; background: var(--bg-surface); border: 1px solid var(--border-base); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="font-size: 13px; color: var(--text-regular);">
+          💡 <b>基类通用方法提示</b>：本组件天然继承 Godot 4 官方 <code style="color:var(--primary); font-family:var(--font-mono);">Control</code> / <code style="color:var(--primary); font-family:var(--font-mono);">Node</code> 基类全部能力（包括 <code style="color:var(--primary); font-family:var(--font-mono);">add_child()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">queue_free()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">create_tween()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">show()</code> 等）。
+        </div>
+        <button class="g-btn g-btn-default" style="height: 28px; padding: 0 12px; font-size: 12px; white-space: nowrap;" onclick="showDoc('godot-globals')">
+          查阅全局与基类方法速查 →
+        </button>
+      </div>
+    `;
   }
-
-  // 3. Specific Methods Table
-  propsHtml += renderApiTable(`${compName} Specific Methods (组件专属外部方法)`, methodHeaders, doc.methods);
-
-  // 4. Events Table
-  propsHtml += renderApiTable(`${compName} Events / Signals (自定义信号)`, eventHeaders, doc.events);
-
-  // 5. Slots Table
-  propsHtml += renderApiTable(`${compName} Slots (插槽与节点挂载)`, slotHeaders, doc.slots);
-
-  // 6. Sub-component Attributes Table
-  propsHtml += renderApiTable('Sub-component Attributes (子组件/子面板属性)', propHeaders, doc.paneProps);
 
   document.getElementById('mainContent').innerHTML = `
     <div class="doc-header">
