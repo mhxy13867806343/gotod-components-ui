@@ -2,44 +2,47 @@
 class_name GEventBus
 extends RefCounted
 
-## 全局类型安全事件总线 (Class-based Global Event Bus for Godot 4)
-## 支持发布/订阅 (Pub/Sub)、一次性事件监听 (once) 与带有数据载荷的事件派发
+## 全局与局部统一事件总线 (Class-based Unified Event Bus for Godot 4)
+## 同时支持：
+## 1. 跨页面/跨场景全局广播 (Cross-Scene / Cross-Page Global Events via Static Methods)
+## 2. 同页面/单组件局部通信 (Same-Page Local Events via Instance Methods)
 
-static var _listeners: Dictionary = {} # event_name -> Array[Callable]
-static var _once_listeners: Dictionary = {} # event_name -> Array[Callable]
-static var _event_history: Array[Dictionary] = []
+# ==========================================
+# 1. 静态全局跨页面总线 (Cross-Page Global Event Bus)
+# ==========================================
+static var _global_listeners: Dictionary = {}      # event_name -> Array[Callable]
+static var _global_once_listeners: Dictionary = {} # event_name -> Array[Callable]
+static var _global_history: Array[Dictionary] = []
 
-## 注册事件监听器 (Subscribe)
-static func on(event_name: String, callback: Callable) -> void:
-	if not _listeners.has(event_name):
-		_listeners[event_name] = []
-	if not _listeners[event_name].has(callback):
-		_listeners[event_name].append(callback)
+## 跨页面注册全局事件监听 (Cross-Page Subscribe)
+static func on_global(event_name: String, callback: Callable) -> void:
+	if not _global_listeners.has(event_name):
+		_global_listeners[event_name] = []
+	if not _global_listeners[event_name].has(callback):
+		_global_listeners[event_name].append(callback)
 
-## 注册一次性事件监听器 (Subscribe Once)
-static func once(event_name: String, callback: Callable) -> void:
-	if not _once_listeners.has(event_name):
-		_once_listeners[event_name] = []
-	if not _once_listeners[event_name].has(callback):
-		_once_listeners[event_name].append(callback)
+## 跨页面注册一次性事件监听 (Cross-Page Subscribe Once)
+static func once_global(event_name: String, callback: Callable) -> void:
+	if not _global_once_listeners.has(event_name):
+		_global_once_listeners[event_name] = []
+	if not _global_once_listeners[event_name].has(callback):
+		_global_once_listeners[event_name].append(callback)
 
-## 触发/派发事件 (Emit / Dispatch)
-static func emit_event(event_name: String, payload: Variant = null) -> void:
-	_record_history(event_name, payload)
+## 跨页面派发全局事件 (Cross-Page Broadcast)
+static func emit_global(event_name: String, payload: Variant = null) -> void:
+	_record_global_history(event_name, payload)
 	
-	# 触发常规监听器
-	if _listeners.has(event_name):
-		for cb in _listeners[event_name].duplicate():
+	if _global_listeners.has(event_name):
+		for cb in _global_listeners[event_name].duplicate():
 			if cb.is_valid():
 				if payload != null:
 					cb.call(payload)
 				else:
 					cb.call()
 					
-	# 触发一次性监听器并移除
-	if _once_listeners.has(event_name):
-		var list = _once_listeners[event_name].duplicate()
-		_once_listeners.erase(event_name)
+	if _global_once_listeners.has(event_name):
+		var list = _global_once_listeners[event_name].duplicate()
+		_global_once_listeners.erase(event_name)
 		for cb in list:
 			if cb.is_valid():
 				if payload != null:
@@ -47,31 +50,55 @@ static func emit_event(event_name: String, payload: Variant = null) -> void:
 				else:
 					cb.call()
 
-## 移除事件监听器 (Unsubscribe)
-static func off(event_name: String, callback: Callable) -> void:
-	if _listeners.has(event_name):
-		_listeners[event_name].erase(callback)
-	if _once_listeners.has(event_name):
-		_once_listeners[event_name].erase(callback)
+## 跨页面注销全局监听
+static func off_global(event_name: String, callback: Callable) -> void:
+	if _global_listeners.has(event_name):
+		_global_listeners[event_name].erase(callback)
+	if _global_once_listeners.has(event_name):
+		_global_once_listeners[event_name].erase(callback)
 
-## 清空指定事件或所有事件监听器 (Clear All)
-static func clear(event_name: String = "") -> void:
-	if event_name.is_empty():
-		_listeners.clear()
-		_once_listeners.clear()
-	else:
-		_listeners.erase(event_name)
-		_once_listeners.erase(event_name)
+# 兼容简写别名
+static func on(event_name: String, callback: Callable) -> void: on_global(event_name, callback)
+static func emit_event(event_name: String, payload: Variant = null) -> void: emit_global(event_name, payload)
+static func once(event_name: String, callback: Callable) -> void: once_global(event_name, callback)
+static func off(event_name: String, callback: Callable) -> void: off_global(event_name, callback)
 
-## 获取事件历史记录
-static func get_history() -> Array[Dictionary]:
-	return _event_history
 
-static func _record_history(event_name: String, payload: Variant) -> void:
-	_event_history.append({
+# ==========================================
+# 2. 局部同页面实例总线 (Same-Page Local Event Bus Instance)
+# ==========================================
+var _local_listeners: Dictionary = {}
+
+## 局部同页面监听
+func on_local(event_name: String, callback: Callable) -> void:
+	if not _local_listeners.has(event_name):
+		_local_listeners[event_name] = []
+	if not _local_listeners[event_name].has(callback):
+		_local_listeners[event_name].append(callback)
+
+## 局部同页面派发
+func emit_local(event_name: String, payload: Variant = null) -> void:
+	if _local_listeners.has(event_name):
+		for cb in _local_listeners[event_name].duplicate():
+			if cb.is_valid():
+				if payload != null: cb.call(payload)
+				else: cb.call()
+
+## 局部同页面移除监听
+func off_local(event_name: String, callback: Callable) -> void:
+	if _local_listeners.has(event_name):
+		_local_listeners[event_name].erase(callback)
+
+## 局部清空
+func clear_local() -> void:
+	_local_listeners.clear()
+
+
+static func _record_global_history(event_name: String, payload: Variant) -> void:
+	_global_history.append({
 		"event": event_name,
 		"payload": payload,
 		"timestamp": Time.get_ticks_msec()
 	})
-	if _event_history.size() > 100:
-		_event_history.pop_front()
+	if _global_history.size() > 100:
+		_global_history.pop_front()
