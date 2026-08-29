@@ -27,18 +27,31 @@ static var _is_transitioning: bool = false
 ## @param params 传递给目标页面的字典参数
 ## @param transition 转场动画类型 (默认 TransitionType.SLIDE_LEFT 向左滑动)
 ## @param duration 动画过渡时长 (秒)
-static func push(scene_path: String, params: Dictionary = {}, transition: TransitionType = TransitionType.SLIDE_LEFT, duration: float = 0.35, context_node: Node = null) -> void:
-	if _is_transitioning: return
+## @param context_node 当前调用上下文节点 (必须挂载在场景树上)
+## @return GResult 操作结果对象
+static func push(scene_path: String, params: Dictionary = {}, transition: TransitionType = TransitionType.SLIDE_LEFT, duration: float = 0.35, context_node: Node = null) -> GResult:
+	# 强校验节点生命周期: 必须挂载在场景树上
+	if context_node != null:
+		var guard_res = GLifecycleGuard.check(context_node, "GRouter.push")
+		if not guard_res.success:
+			return guard_res
+			
+	if _is_transitioning:
+		return GResult.fail("BUSY", "转场动画执行中，请勿重复调用")
 	_is_transitioning = true
 	
 	var tree = context_node.get_tree() if context_node and context_node.is_inside_tree() else Engine.get_main_loop() as SceneTree
+	if not tree or not tree.root:
+		_is_transitioning = false
+		return GResult.fail("ERR_NO_SCENETREE", "无法获取有效 SceneTree 根节点", "请在合法生命周期内调用")
+		
 	var root = tree.root
 	
 	var packed = load(scene_path) as PackedScene
 	if not packed:
 		push_error("[GRouter] 无法加载目标场景: " + scene_path)
 		_is_transitioning = false
-		return
+		return GResult.fail("ERR_LOAD_FAILED", "无法加载目标场景文件: " + scene_path, "请检查文件路径是否存在")
 		
 	var next_scene = packed.instantiate() as Node
 	_current_params = params.duplicate(true)
@@ -53,6 +66,7 @@ static func push(scene_path: String, params: Dictionary = {}, transition: Transi
 	# 执行转场动画
 	await _play_transition_animation(root, next_scene, transition, duration, false, tree)
 	_is_transitioning = false
+	return GResult.ok(null, "成功跳转至场景: " + scene_path)
 
 # ----------------------------------------------------
 # 2. 页面返回 (Pop / Back Route)

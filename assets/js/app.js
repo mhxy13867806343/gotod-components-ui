@@ -322,6 +322,7 @@ window.switchTopSection = function(section) {
       <div class="nav-group">
         <div class="nav-group-title">Router & Utils 路由与工具</div>
         <div class="nav-item active" data-key="util-router" onclick="showDoc('util-router')"><span>🚀 GRouter 转场动画路由</span></div>
+        <div class="nav-item" data-key="util-lifecycle-guard" onclick="showDoc('util-lifecycle-guard')"><span>🛡️ GLifecycleGuard 生命周期校验</span></div>
         <div class="nav-item" data-key="util-format" onclick="showDoc('util-format')"><span>🎨 GFormat HP颜色与时间格式化</span></div>
         <div class="nav-item" data-key="util-asset" onclick="showDoc('util-asset')"><span>🎵 GAsset 音视频与纹理导入</span></div>
       </div>

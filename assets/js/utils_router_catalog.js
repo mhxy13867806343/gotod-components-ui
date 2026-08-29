@@ -1,7 +1,7 @@
 // =========================================================================
 // Gotod Components UI - 10. 格式化工具、多媒体导入与转场路由 (Utils, Asset & Router)
 // assets/js/utils_router_catalog.js
-// 包含: GFormat 格式化 (HP颜色/时间/缩写) + GAsset 资源导入 + GRouter 向左转场路由
+// 包含: GFormat 格式化 + GAsset 资源导入 + GRouter 转场路由 + GLifecycleGuard 生命周期安全校验
 // =========================================================================
 
 // State for GFormat Interactive Demo
@@ -63,6 +63,34 @@ window.updateSimTimeFormat = function(sec) {
   if (outElem) outElem.innerText = `时分秒: ${fmt1}  |  中文单位: ${fmt2}`;
 };
 
+// Lifecycle Guard Simulator
+window.simTestLifecycleCall = function(isValid) {
+  const outBox = document.getElementById('simLifecycleGuardOutput');
+  if (!outBox) return;
+
+  if (isValid) {
+    const res = {
+      success: true,
+      error_code: "OK",
+      message: "✅ 生命周期状态正常 (Node.is_inside_tree() == true)",
+      hint: "",
+      data: { "action": "GRouter.push", "target": "res://scenes/shop.tscn" }
+    };
+    outBox.innerHTML = `<span style="color:var(--success); font-weight:700;">[Godot Engine OK] API 校验通过:</span>\n` + JSON.stringify(res, null, 2);
+    showToast('✅ [生命周期正常] API 安全执行成功！', 'success');
+  } else {
+    const errRes = {
+      success: false,
+      error_code: "ERR_NOT_IN_SCENETREE",
+      message: "❌ [GotodUI 生命周期异常] API 'GRouter.push' 必须在 Godot 节点生命周期内调用！当前节点 'UnmountedActor' 尚未挂载到场景树 (is_inside_tree == false)。",
+      hint: "请确保在 Node 的 '_ready()'、'_process()' 或通过 'add_child()' 挂载后再调用此 API；切勿在 '_init()' 中调用 UI/路由操作。",
+      data: null
+    };
+    outBox.innerHTML = `<span style="color:var(--danger); font-weight:700;">[Godot Engine push_error] 捕获生命周期异常:</span>\n` + JSON.stringify(errRes, null, 2);
+    showToast('❌ [生命周期异常拦截] 请在 _ready() 或挂载节点中调用！', 'danger');
+  }
+};
+
 // State for GRouter Interactive Viewport Simulator
 window.simRouterState = {
   history: ['res://scenes/main_menu.tscn'],
@@ -76,7 +104,6 @@ window.simRouterPush = function(withParams) {
   if (!viewport) return;
 
   const targetPage = withParams ? 'battle_stage' : 'game_shop';
-  const params = withParams ? { stage_id: 108, boss: '深渊魔龙', difficulty: 'Hell', drop_rate: '+200%' } : {};
 
   // Setup Outgoing & Incoming animation classes
   let animOutClass = 'anim-slide-left-out';
@@ -226,13 +253,15 @@ window.UTILS_ROUTER_CATALOG = {
         code: `# GDScript 页面跳转与动画代码:
 
 # 1. 跳页面 (不带参数, 默认向左滑动动画)
-GRouter.push("res://scenes/shop.tscn")
+GRouter.push("res://scenes/shop.tscn", {}, GRouter.TransitionType.SLIDE_LEFT, 0.35, self)
 
 # 2. 跳页面 (带参数 + 指定动画)
 GRouter.push(
     "res://scenes/battle.tscn", 
     { "stage_id": 108, "boss": "深渊魔龙", "difficulty": "Hell" },
-    GRouter.TransitionType.SLIDE_LEFT # 默认向左滑动
+    GRouter.TransitionType.SLIDE_LEFT,
+    0.35,
+    self
 )
 
 # 3. 在目标页面 _ready() 提取参数:
@@ -242,13 +271,58 @@ func _ready() -> void:
 
 # 4. 返回上一页并传递结果:
 func _on_back_pressed() -> void:
-    GRouter.back({"reward_collected": true})`
+    GRouter.back({"reward_collected": true}, 0.3, self)`
       }
     ]
   },
 
   // --------------------------------------------------------
-  // 2. GFormat 格式化工具类 (HP颜色/时间/缩写)
+  // 2. GLifecycleGuard 生命周期安全校验与异常拦截
+  // --------------------------------------------------------
+  'util-lifecycle-guard': {
+    title: '🛡️ GLifecycleGuard (API 生命周期强校验与异常拦截器)',
+    desc: '强校验所有 API 方法必须在 Godot 节点合法生命周期（`_ready()`、`_process()` 或 `is_inside_tree() == true`）中调用。若非法调用，主动触发 Godot `push_error` 异常并在返回结果中提示开发者与用户！',
+    demos: [
+      {
+        title: '生命周期异常拦截与 GResult 返回演练',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:14px; width:100%; max-width:600px;">
+            
+            <div style="display:flex; gap:10px;">
+              <button class="g-btn g-btn-danger" style="flex:1; height:34px; font-size:12px; font-weight:700;" onclick="simTestLifecycleCall(false)">
+                <i class="fa-solid fa-triangle-exclamation"></i> 模拟脱离生命周期非法调用 (Out of Lifecycle)
+              </button>
+              <button class="g-btn g-btn-success" style="flex:1; height:34px; font-size:12px; font-weight:700;" onclick="simTestLifecycleCall(true)">
+                <i class="fa-solid fa-circle-check"></i> 模拟在 _ready() 正常调用 (Inside Lifecycle)
+              </button>
+            </div>
+
+            <!-- JSON Output Box -->
+            <pre class="code-box" style="margin:0; max-height:220px; overflow-y:auto;"><code id="simLifecycleGuardOutput" style="font-family:var(--font-mono); font-size:11px;">点击上方按钮模拟生命周期校验拦截...</code></pre>
+
+          </div>
+        `,
+        code: `# GDScript: 生命周期异常防御与统一返回值机制
+
+# 1. 业务脚本中调用 API 时传入 self 节点:
+func _ready() -> void:
+    # 挂载在场景树中，调用成功返回 GResult.ok
+    var result: GResult = GRouter.push("res://scenes/shop.tscn", {}, GRouter.TransitionType.SLIDE_LEFT, 0.35, self)
+    if not result.success:
+        GMessage.error("跳转失败: " + result.message, self)
+
+# 2. 如果在 _init() 或未挂载的裸对象中非法调用:
+func _init() -> void:
+    # ❌ 触发 Godot 异常: push_error("API 'GRouter.push' 必须在生命周期内调用...")
+    # 并返回带有清晰排查指引的 GResult.fail 对象给用户
+    var result = GRouter.push("res://scenes/shop.tscn", {}, GRouter.TransitionType.SLIDE_LEFT, 0.35, self)
+    print("错误码:", result.error_code, "修复建议:", result.hint)`
+      }
+    ]
+  },
+
+  // --------------------------------------------------------
+  // 3. GFormat 格式化工具类 (HP颜色/时间/缩写)
   // --------------------------------------------------------
   'util-format': {
     title: '🎨 GFormat (HP血量颜色、时间与数值格式化工具库)',
@@ -307,7 +381,7 @@ var gold_str = GFormat.compact_number(1450000) # 返回 "1.45M"`
   },
 
   // --------------------------------------------------------
-  // 3. GAsset 资源导入器 (音效/图片/视频)
+  // 4. GAsset 资源导入器 (音效/图片/视频)
   // --------------------------------------------------------
   'util-asset': {
     title: '🎵 GAsset (音效、图片纹理与视频流资源导入器)',
@@ -348,7 +422,7 @@ GAsset.preload_batch(assets_to_load, get_tree(),
         loading_progress_bar.value = progress * 100
         status_label.text = "正在加载: " + current_path,
     func():
-        GRouter.push("res://scenes/world.tscn")
+        GRouter.push("res://scenes/world.tscn", {}, GRouter.TransitionType.SLIDE_LEFT, 0.35, self)
 )`
       }
     ]
