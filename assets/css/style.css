@@ -1371,3 +1371,217 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   to { opacity: 1; transform: scale(1); }
 }
 
+/* JRPG Golden Sun / Final Fantasy Style Dialogue Box */
+.g-dialogue-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 99990;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+.g-dialogue-box {
+  width: 90%;
+  max-width: 760px;
+  min-height: 140px;
+  background: linear-gradient(180deg, #0a1f44 0%, #051026 100%);
+  border: 3px solid #d4d9e6;
+  outline: 2px solid #000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  padding: 16px 20px;
+  color: #ffffff;
+  display: flex;
+  gap: 16px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  animation: gToastFadeIn 0.2s ease forwards;
+}
+.g-dialogue-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  flex-shrink: 0;
+}
+.g-dialogue-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.g-dialogue-speaker {
+  display: inline-block;
+  align-self: flex-start;
+  background: linear-gradient(90deg, #1b356d, #0d1e44);
+  border: 1px solid #e6a23c;
+  color: #ffd04b;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 4px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+.g-dialogue-content {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #f1f2f6;
+  text-shadow: 1px 1px 2px #000;
+  font-family: var(--font-sans);
+  letter-spacing: 0.5px;
+}
+.g-dialogue-indicator {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  color: #ffd04b;
+  font-size: 14px;
+  animation: gBlink 0.7s infinite alternate ease-in-out;
+}
+.g-dialogue-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+.g-dialogue-option-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.g-dialogue-option-btn:hover {
+  background: #409eff;
+  border-color: #ffd04b;
+  color: #fff;
+  transform: translateX(4px);
+}
+@keyframes gBlink {
+  from { opacity: 0.3; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(3px); }
+}
+
+/* WeChat & Lifeline Style Chat Stream */
+.g-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+.g-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.g-chat-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 85%;
+}
+.g-chat-row.is-self {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.g-chat-row.is-other {
+  align-self: flex-start;
+}
+.g-chat-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.g-chat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.g-chat-row.is-self .g-chat-col {
+  align-items: flex-end;
+}
+.g-chat-bubble {
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.g-chat-row.is-self .g-chat-bubble {
+  background: #07c160;
+  color: #ffffff;
+  border-top-right-radius: 2px;
+}
+.g-chat-row.is-other .g-chat-bubble {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-base);
+  border-top-left-radius: 2px;
+}
+.g-chat-sys-pill {
+  align-self: center;
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding: 3px 12px;
+  border-radius: 12px;
+  margin: 4px 0;
+}
+
+/* Lifeline Style Dark Bubbles */
+.g-lifeline-container {
+  background: #242426;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--font-sans);
+}
+.g-lifeline-bubble {
+  align-self: flex-start;
+  background: #38383c;
+  color: #e4e4e6;
+  padding: 8px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  max-width: 80%;
+  line-height: 1.5;
+  animation: gToastFadeIn 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.g-lifeline-bubble.highlight {
+  border: 2px solid #f56c6c;
+  background: #44444a;
+}
+
+
+

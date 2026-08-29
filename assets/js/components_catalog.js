@@ -180,108 +180,306 @@ add_child(txt)`
     desc: '用于搭建游戏 HUD 主界面、JRPG 战术面板、MMORPG 战场或后台管理系统的全套整体布局架构。深度对标 Element Plus Container 规范，提供 GContainer（外层弹性容器）、GHeader（顶栏）、GAside（侧边栏）、GMain（主要区域）与 GFooter（底栏）。支持灵活的嵌套组合与自定义游戏主题布局。',
     demos: [
       {
-        title: '1. 经典 JRPG 《最终幻想》(Final Fantasy) 战术战斗 HUD 布局',
+        title: '1. 回合制 JRPG 主菜单与队伍状态布局 (Turn-based RPG Main Menu - 对标截图 1)',
         render: `
-          <div style="width:100%; border:2px solid #3a3a50; border-radius:12px; overflow:hidden; background:#0e0e14; color:#fff; font-size:12px; display:flex; flex-direction:column; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
-            <!-- Top Header: Battle Target & Stage Indicator -->
-            <div style="background:linear-gradient(90deg, #1a1a2e, #16213e); padding:10px 18px; border-bottom:1px solid #2e2e48; display:flex; justify-content:space-between; align-items:center;">
-              <div style="display:flex; align-items:center; gap:10px;">
-                <span style="background:#e6a23c; color:#000; font-weight:800; padding:2px 8px; border-radius:4px; font-size:11px;">BOSS</span>
-                <span style="font-weight:700; font-size:14px; color:#f1f2f6;">巴哈姆特·绝境龙神 (Bahamut Prime)</span>
-              </div>
-              <div style="color:#a4b0be; font-family:var(--font-mono); font-size:11px;">Phase 3 | 极限充能 100%</div>
-            </div>
-
-            <!-- Middle Body: Left Party HUD + Center Battlefield -->
-            <div style="display:flex; min-height:180px;">
-              <!-- Left Aside: Party Stats (Cloud, Tifa, Aerith) -->
-              <div style="width:220px; background:rgba(20, 20, 30, 0.85); border-right:1px solid #2e2e48; padding:12px; display:flex; flex-direction:column; gap:10px;">
-                <div style="background:rgba(255,255,255,0.04); padding:8px 10px; border-radius:6px; border-left:3px solid #409eff;">
-                  <div style="display:flex; justify-content:space-between; font-weight:600; margin-bottom:4px;">
-                    <span>克劳德 (Cloud)</span>
-                    <span style="color:#67c23a;">HP 7850/8000</span>
+          <div style="width:100%; border:2px solid #3d2b1f; border-radius:10px; overflow:hidden; background:#071124; color:#fff; font-size:12px; display:flex; flex-direction:column; padding:16px; gap:12px; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+            <!-- Middle Split: Left Hero Status Panel + Right 2x5 Action Grid & Summary Box -->
+            <div style="display:flex; gap:14px; min-height:220px;">
+              <!-- Left Aside: Big Character Status Box (Gothic Gold Border) -->
+              <div style="flex:1.2; background:#0a1733; border:3px solid #b8860b; border-radius:8px; padding:12px; display:flex; flex-direction:column; gap:10px; position:relative; box-shadow:inset 0 0 15px rgba(0,0,0,0.6);">
+                <div style="display:flex; gap:12px; align-items:center; border-bottom:1px solid #1a2d5a; padding-bottom:8px;">
+                  <div style="width:48px; height:48px; background:rgba(255,255,255,0.08); border:1px solid #b8860b; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:24px;">🧙‍♂️</div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px; color:#ffd700;">
+                      <span>纳哈特</span>
+                      <span>自由人</span>
+                    </div>
+                    <div style="font-size:11px; color:#a4b0be; margin-top:2px;">LV 1 (前排)</div>
                   </div>
-                  <div style="width:100%; height:4px; background:#2c3e50; border-radius:2px; overflow:hidden;"><div style="width:98%; height:100%; background:#67c23a;"></div></div>
-                  <div style="width:100%; height:3px; background:#2c3e50; border-radius:2px; margin-top:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#e6a23c;"></div></div>
+                  <div style="text-align:right; font-size:11px;">
+                    <div style="color:#67c23a; font-weight:700;">HP 10 / 10</div>
+                    <div style="color:#409eff; font-weight:700; margin-top:2px;">MP 20 / 20</div>
+                  </div>
                 </div>
-
-                <div style="background:rgba(255,255,255,0.04); padding:8px 10px; border-radius:6px; border-left:3px solid #f56c6c;">
-                  <div style="display:flex; justify-content:space-between; font-weight:600; margin-bottom:4px;">
-                    <span>蒂法 (Tifa)</span>
-                    <span style="color:#67c23a;">HP 6200/6200</span>
-                  </div>
-                  <div style="width:100%; height:4px; background:#2c3e50; border-radius:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#67c23a;"></div></div>
-                  <div style="width:100%; height:3px; background:#2c3e50; border-radius:2px; margin-top:2px; overflow:hidden;"><div style="width:85%; height:100%; background:#e6a23c;"></div></div>
-                </div>
-
-                <div style="background:rgba(255,255,255,0.04); padding:8px 10px; border-radius:6px; border-left:3px solid #e6a23c;">
-                  <div style="display:flex; justify-content:space-between; font-weight:600; margin-bottom:4px;">
-                    <span>爱丽丝 (Aerith)</span>
-                    <span style="color:#67c23a;">HP 5100/5100</span>
-                  </div>
-                  <div style="width:100%; height:4px; background:#2c3e50; border-radius:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#67c23a;"></div></div>
-                  <div style="width:100%; height:3px; background:#2c3e50; border-radius:2px; margin-top:2px; overflow:hidden;"><div style="width:100%; height:100%; background:#e6a23c;"></div></div>
+                <div style="flex:1; display:flex; align-items:center; justify-content:center; color:#57606f; font-size:11px; border:1px dashed #1a2d5a; border-radius:4px;">
+                  [ 角色 2D 像素待机与装备插槽区域 ]
                 </div>
               </div>
 
-              <!-- Center Main: 3D Tactical Battlefield -->
-              <div style="flex:1; background:radial-gradient(circle at center, #1b2838 0%, #0e1117 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; position:relative;">
-                <div style="font-size:36px; margin-bottom:8px;">🐉</div>
-                <div style="color:#e6a23c; font-weight:700; font-size:13px; text-shadow:0 0 10px rgba(230,162,60,0.5);">【锁定目标】 绝境龙神 · 弱点属性: 冰 (Ice)</div>
-                <div style="margin-top:12px; display:flex; gap:8px;">
-                  <span class="g-tag g-tag-primary">ATB 充能完毕</span>
-                  <span class="g-tag g-tag-warning">LIMIT BREAK READY</span>
+              <!-- Right Column: 2x5 Grid Commands + Time & Gold Summary -->
+              <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+                <!-- 2x5 Action Grid (职业, 能力, 道具, 魔法·技能, 装备, 状态, 队列, 设定, 中断, 储存) -->
+                <div style="background:#0a1733; border:2px solid #b8860b; border-radius:8px; padding:10px; display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">职业</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">能力</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">道具</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">魔法·技能</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">装备</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">状态</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">队列</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">设定</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">中断</button>
+                  <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; font-size:11px; font-weight:700;">储存</button>
+                </div>
+
+                <!-- Bottom Right Summary (TIME & 金币) -->
+                <div style="background:#0a1733; border:2px solid #b8860b; border-radius:8px; padding:8px 12px; font-size:11px; display:flex; flex-direction:column; gap:4px;">
+                  <div style="display:flex; justify-content:space-between; color:#a4b0be;"><span>TIME</span><b style="color:#fff;">0:00</b></div>
+                  <div style="display:flex; justify-content:space-between; color:#a4b0be;"><span>金币</span><b style="color:#ffd700;">10000</b></div>
                 </div>
               </div>
             </div>
 
-            <!-- Bottom Footer: JRPG Command Menu & Action Wheel -->
-            <div style="background:linear-gradient(180deg, #161b26, #0d1117); padding:12px 18px; border-top:1px solid #2e2e48; display:flex; justify-content:space-between; align-items:center;">
-              <div style="display:flex; gap:10px;">
-                <button class="g-btn g-btn-primary" style="font-weight:700; height:32px; font-size:12px;" onclick="showToast('执行: 普通攻击 (Attack)', 'success')">⚔️ 攻击 (Attack)</button>
-                <button class="g-btn g-btn-default" style="font-weight:600; height:32px; font-size:12px;" onclick="showToast('展开魔晶石魔法菜单 (Magic)', 'info')">🔮 魔法 (Magic)</button>
-                <button class="g-btn g-btn-default" style="font-weight:600; height:32px; font-size:12px;" onclick="showToast('打开消耗品背包 (Item)', 'info')">🎒 道具 (Item)</button>
-                <button class="g-btn g-btn-danger" style="font-weight:700; height:32px; font-size:12px;" onclick="showToast('释放极限技: 超究武神霸斩！', 'warning')">⚡ 极限技 (Limit)</button>
-              </div>
-              <div style="color:#747d8c; font-size:11px;">GContainer: Header + (Aside + Main) + Footer 战术嵌套</div>
+            <!-- Bottom Action Row: [ 替换 ] on Left, [ 返回 ] on Right -->
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-top:4px;">
+              <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; padding:0 24px; font-size:11px; font-weight:700;">替换</button>
+              <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; padding:0 24px; font-size:11px; font-weight:700;" onclick="showToast('点击返回上一级菜单')">返回</button>
             </div>
           </div>
         `,
-        code: `# GDScript: 《最终幻想》经典战术战斗 HUD 架构
-var root_hud = GContainer.new() # 根容器 (自动垂直布局)
+        code: `# GDScript: 回合制 JRPG 主菜单结构 (1:1 还原截图 1)
+var menu_root = GContainer.new() # 根容器
 
-# 1. 顶栏：Boss 血条与战场指示
-var header_boss = GHeader.new()
-header_boss.height = 48.0
-header_boss.add_child(boss_health_bar_component)
+# 1. 中间水平双分栏：左侧角色大卡片 + 右侧 2x5 指令与概览
+var mid_box = GContainer.new()
+mid_box.direction = GContainer.Direction.HORIZONTAL
 
-# 2. 中间横向区域：左侧队伍列表 + 中央 3D 战场
-var middle_container = GContainer.new()
-middle_container.direction = GContainer.Direction.HORIZONTAL
+var left_hero_aside = GAside.new()
+left_hero_aside.size_flags_stretch_ratio = 1.2
+left_hero_aside.add_child(hero_status_card)
 
-var aside_party = GAside.new()
-aside_party.width = 220.0
-aside_party.add_child(party_members_vbox)
+var right_col = GContainer.new()
+right_col.direction = GContainer.Direction.VERTICAL
+right_col.add_child(grid_2x5_command_buttons)
+right_col.add_child(time_gold_summary_box)
 
-var main_battlefield = GMain.new()
-main_battlefield.add_child(camera_viewport_3d)
+mid_box.add_child(left_hero_aside)
+mid_box.add_child(right_col)
 
-middle_container.add_child(aside_party)
-middle_container.add_child(main_battlefield)
+# 2. 底栏操作条：左侧【替换】+ 右侧【返回】
+var footer_bar = GFooter.new()
+footer_bar.height = 40.0
+footer_bar.add_child(bottom_replace_and_return_hbox)
 
-# 3. 底栏：ATB 指令控制台 [ 攻击 | 魔法 | 道具 | 极限技 ]
-var footer_command = GFooter.new()
-footer_command.height = 64.0
-footer_command.add_child(command_buttons_hbox)
-
-# 4. 组装至根容器并挂载
-root_hud.add_child(header_boss)
-root_hud.add_child(middle_container)
-root_hud.add_child(footer_command)
-add_child(root_hud)`
+menu_root.add_child(mid_box)
+menu_root.add_child(footer_bar)
+add_child(menu_root)`
       },
       {
-        title: '2. 经典 JRPG 《黄金太阳》(Golden Sun) 精灵矩阵与精神力布局',
+        title: '2. 游戏多分页系统设定面板 (Game Settings Panel - 对标截图 2)',
+        render: `
+          <div style="width:100%; border:2px solid #3d2b1f; border-radius:10px; overflow:hidden; background:#071124; color:#fff; font-size:12px; display:flex; flex-direction:column; padding:16px; gap:12px; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+            <div style="font-weight:700; font-size:15px; color:#fff;">设定 1</div>
+            
+            <!-- Center Main Settings Card (Gothic Gold Frame) -->
+            <div style="background:#0a1733; border:3px solid #b8860b; border-radius:8px; padding:16px 20px; display:flex; flex-direction:column; gap:14px; box-shadow:inset 0 0 15px rgba(0,0,0,0.6);">
+              <div style="font-size:12px; color:#a4b0be; border-bottom:1px solid #1a2d5a; padding-bottom:6px;">设定BGM音量</div>
+              
+              <!-- BGM & SE Sliders -->
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="width:50px; color:#ffd700; font-weight:700;">BGM</span>
+                  <input type="range" style="flex:1;" value="80">
+                </div>
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="width:50px; color:#ffd700; font-weight:700;">SE</span>
+                  <input type="range" style="flex:1;" value="65">
+                </div>
+              </div>
+
+              <!-- Operation Mode [ 默认 | 滑动 | 固定 ] -->
+              <div style="display:flex; align-items:center; gap:14px; margin-top:4px;">
+                <span style="width:50px; color:#ffd700; font-weight:700;">操作</span>
+                <div style="display:flex; gap:8px;">
+                  <button class="g-btn g-btn-primary" style="height:26px; padding:0 14px; font-size:11px;">默认</button>
+                  <button class="g-btn g-btn-default" style="height:26px; padding:0 14px; font-size:11px; background:#132347; border:1px solid #1a2d5a;">滑动</button>
+                  <button class="g-btn g-btn-default" style="height:26px; padding:0 14px; font-size:11px; background:#132347; border:1px solid #1a2d5a;">固定</button>
+                </div>
+              </div>
+
+              <!-- Minimap Toggle [ ON | OFF ] -->
+              <div style="display:flex; align-items:center; gap:14px;">
+                <span style="width:70px; color:#ffd700; font-weight:700;">显示小地图</span>
+                <div style="display:flex; gap:8px;">
+                  <button class="g-btn g-btn-primary" style="height:26px; padding:0 14px; font-size:11px;">ON</button>
+                  <button class="g-btn g-btn-default" style="height:26px; padding:0 14px; font-size:11px; background:#132347; border:1px solid #1a2d5a;">OFF</button>
+                </div>
+              </div>
+
+              <div style="font-size:11px; color:#a4b0be; margin-top:8px;">音量、操作方式和小地图显示会保存到设置档。</div>
+            </div>
+
+            <!-- Bottom Row: [ 1 ] [ 2 ] [ 3 ] on Left, [ 返回 ] on Right -->
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-top:4px;">
+              <div style="display:flex; gap:6px;">
+                <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; width:28px; height:28px; padding:0; font-size:11px; font-weight:700;">1</button>
+                <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; width:28px; height:28px; padding:0; font-size:11px; font-weight:700;">2</button>
+                <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; width:28px; height:28px; padding:0; font-size:11px; font-weight:700;">3</button>
+              </div>
+              <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; padding:0 24px; font-size:11px; font-weight:700;" onclick="showToast('返回主菜单')">返回</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 游戏多分页系统设置面板 (1:1 还原截图 2)
+var settings_root = GContainer.new()
+
+var header_title = GHeader.new()
+header_title.height = 36.0
+header_title.add_child(GText.new().set_text("设定 1"))
+
+var main_settings_card = GMain.new()
+main_settings_card.add_child(audio_sliders_vbox)
+main_settings_card.add_child(control_mode_radio_group)
+main_settings_card.add_child(minimap_toggle_switch)
+
+var footer_nav = GFooter.new()
+footer_nav.height = 40.0
+footer_nav.add_child(pagination_and_back_button_hbox)
+
+settings_root.add_child(header_title)
+settings_root.add_child(main_settings_card)
+settings_root.add_child(footer_nav)
+add_child(settings_root)`
+      },
+      {
+        title: '3. 游戏存储/读档文件管理器 (Save & Load Storage - 对标截图 3)',
+        render: `
+          <div style="width:100%; border:2px solid #3d2b1f; border-radius:10px; overflow:hidden; background:#071124; color:#fff; font-size:12px; display:flex; flex-direction:column; padding:16px; gap:12px; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+            <div style="font-weight:700; font-size:15px; color:#fff;">存储</div>
+            
+            <div style="background:#0a1733; border:1px solid #b8860b; border-radius:4px; padding:4px 12px; text-align:center; font-size:11px; color:#ffd700;">选择存档文件</div>
+
+            <!-- Save Slots List -->
+            <div style="background:#0a1733; border:3px solid #b8860b; border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:8px;">
+              <div style="background:#132347; border:1px solid #b8860b; border-radius:6px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="showToast('选中存档 01', 'info')">
+                <span style="font-weight:700; color:#ffd700;">文件01</span>
+                <span>纳哈特</span>
+                <span>LV 1</span>
+                <span style="color:#a4b0be;">TIME 00:18</span>
+                <span style="color:#67c23a;">非之世界</span>
+              </div>
+              
+              <div style="background:#132347; border:1px solid #b8860b; border-radius:6px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="showToast('选中存档 02', 'info')">
+                <span style="font-weight:700; color:#ffd700;">文件02</span>
+                <span>纳哈特</span>
+                <span>LV 1</span>
+                <span style="color:#a4b0be;">TIME 00:32</span>
+                <span style="color:#67c23a;">非之世界</span>
+              </div>
+
+              <div style="background:#101a30; border:1px dashed #1a2d5a; border-radius:6px; padding:8px; text-align:center; color:#ffd700; font-weight:700; cursor:pointer;" onclick="showToast('已新建存档槽位', 'success')">
+                新增存档
+              </div>
+            </div>
+
+            <!-- Bottom Row: [ 删除 ] on Left, [ 返回 ] on Right -->
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-top:4px;">
+              <button class="g-btn g-btn-danger" style="height:28px; padding:0 24px; font-size:11px; font-weight:700;" onclick="showToast('请选择要删除的存档', 'warning')">删除</button>
+              <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; padding:0 24px; font-size:11px; font-weight:700;" onclick="showToast('返回主菜单')">返回</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 游戏存储与读档面板架构 (1:1 还原截图 3)
+var save_root = GContainer.new()
+
+var header_bar = GHeader.new()
+header_bar.height = 54.0
+header_bar.add_child(storage_title_and_sub_banner)
+
+var main_slots_list = GMain.new()
+main_slots_list.add_child(save_slots_vbox)
+
+var footer_action = GFooter.new()
+footer_action.height = 40.0
+footer_action.add_child(delete_and_return_hbox)
+
+save_root.add_child(header_bar)
+save_root.add_child(main_slots_list)
+save_root.add_child(footer_action)
+add_child(save_root)`
+      },
+      {
+        title: '4. 角色魔法·技能分配双分栏布局 (Magic & Skill Allocator - 对标截图 4)',
+        render: `
+          <div style="width:100%; border:2px solid #3d2b1f; border-radius:10px; overflow:hidden; background:#071124; color:#fff; font-size:12px; display:flex; flex-direction:column; padding:16px; gap:10px; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+            <div style="font-weight:700; font-size:15px; color:#fff;">魔法·技能</div>
+            
+            <!-- Top Character Switch Card (< Avatar > + HP/MP) -->
+            <div style="background:#0a1733; border:3px solid #b8860b; border-radius:8px; padding:8px 14px; display:flex; align-items:center; justify-content:space-between;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #1a2d5a; color:#ffd700; width:24px; height:24px; padding:0;">&lt;</button>
+                <div style="width:36px; height:36px; background:rgba(255,255,255,0.08); border:1px solid #b8860b; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:18px;">🧙‍♂️</div>
+                <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #1a2d5a; color:#ffd700; width:24px; height:24px; padding:0;">&gt;</button>
+                <div>
+                  <div style="font-weight:700; color:#ffd700;">纳哈特 (自由人)</div>
+                  <div style="font-size:11px; color:#a4b0be;">LV 1</div>
+                </div>
+              </div>
+              <div style="text-align:right; font-size:11px;">
+                <div style="color:#67c23a; font-weight:700;">HP 10 / 10</div>
+                <div style="color:#409eff; font-weight:700; margin-top:2px;">MP 20 / 20</div>
+              </div>
+            </div>
+
+            <div style="background:#0a1733; border:1px solid #b8860b; border-radius:4px; padding:3px 10px; font-size:11px; color:#ffd700;">查看习得的白魔法</div>
+
+            <!-- Middle 2-Column: Left Spell Grid (70%) + Right Category Tabs (30%) -->
+            <div style="display:flex; gap:12px; min-height:140px;">
+              <!-- Left Spell Grid -->
+              <div style="flex:2; background:#0a1733; border:3px solid #b8860b; border-radius:8px; padding:10px; display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                <div style="background:#132347; border:1px solid #b8860b; border-radius:4px; padding:6px; display:flex; justify-content:space-between; font-size:11px; cursor:pointer;" onclick="showToast('释放: 小回复 (消耗 MP 10)', 'success')">
+                  <span>小回复</span><b style="color:#409eff;">MP 10</b>
+                </div>
+                <div style="background:#132347; border:1px solid #b8860b; border-radius:4px; padding:6px; display:flex; justify-content:space-between; font-size:11px; cursor:pointer;" onclick="showToast('释放: 解毒 (消耗 MP 6)', 'success')">
+                  <span>解毒</span><b style="color:#409eff;">MP 6</b>
+                </div>
+              </div>
+
+              <!-- Right Category List (白魔法, 黑魔法) -->
+              <div style="flex:1; background:#0a1733; border:3px solid #b8860b; border-radius:8px; padding:10px; display:flex; flex-direction:column; gap:6px;">
+                <button class="g-btn g-btn-primary" style="background:#1e3568; border:1px solid #ffd700; color:#ffd700; height:28px; font-size:11px; font-weight:700;">白魔法</button>
+                <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #1a2d5a; color:#a4b0be; height:28px; font-size:11px;" onclick="showToast('切换至黑魔法列表')">黑魔法</button>
+              </div>
+            </div>
+
+            <!-- Bottom Row: [ 返回 ] on Right -->
+            <div style="display:flex; justify-content:flex-end; align-items:center; padding-top:4px;">
+              <button class="g-btn g-btn-default" style="background:#132347; border:1px solid #b8860b; color:#ffd700; height:28px; padding:0 24px; font-size:11px; font-weight:700;" onclick="showToast('返回上一级')">返回</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 魔法·技能多栏分配面板 (1:1 还原截图 4)
+var magic_root = GContainer.new()
+
+var top_header = GHeader.new()
+top_header.height = 70.0
+top_header.add_child(hero_switch_card_with_arrows)
+
+var mid_split = GContainer.new()
+mid_split.direction = GContainer.Direction.HORIZONTAL
+
+var left_spells_grid = GMain.new()
+left_spells_grid.size_flags_stretch_ratio = 2.0
+left_spells_grid.add_child(spells_2col_grid)
+
+var right_categories = GAside.new()
+right_categories.size_flags_stretch_ratio = 1.0
+right_categories.add_child(magic_type_tabs_vbox)
+
+mid_split.add_child(left_spells_grid)
+mid_split.add_child(right_categories)
+
+var bottom_bar = GFooter.new()
+bottom_bar.height = 40.0
+bottom_bar.add_child(return_button_hbox)
+
+magic_root.add_child(top_header)
+magic_root.add_child(mid_split)
+magic_root.add_child(bottom_bar)
+add_child(magic_root)`
+      },
+      {
+        title: '5. 经典 JRPG 《黄金太阳》(Golden Sun) 精灵矩阵与精神力布局',
         render: `
           <div style="width:100%; border:2px solid #5c4326; border-radius:12px; overflow:hidden; background:#1c1610; color:#eed8ae; font-size:12px; display:flex; flex-direction:column; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
             <!-- Top: 4 Element Djinn Spirits Bar -->
@@ -1721,7 +1919,240 @@ danger_dlg.open()`
   },
 
   // --------------------------------------------------------
-  // 14.1 GPopup 弹出层 (Vant UI 对标)
+  // 14.1 GDialogue 剧情对话系统 (JRPG / AVG / MMO 对标)
+  // --------------------------------------------------------
+  'dialogue': {
+    title: 'Dialogue 剧情对话系统 (GDialogue & Prompts)',
+    desc: '专为 JRPG 战术游戏、文字冒险 AVG / GalGame、MMORPG 任务交接与 NPC 互动设计的全功能剧情对话系统。支持打字机逐字输出、说话者印章姓名牌、立绘插槽、多段对话队列、分支选择支、科幻六边形气泡与头顶悬浮按键提示。',
+    demos: [
+      {
+        title: '1. 《黄金太阳》经典 JRPG 对话框 (Golden Sun Style)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <button class="g-btn g-btn-primary" onclick="openSimDialogue([
+                { text: '修炼精神力的话，会学到不同的招式。', speaker: '神秘长者', avatar: '🧙‍♂️' },
+                { text: '去北方的索罗神殿吧，四大元素的封印正在苏醒！', speaker: '神秘长者', avatar: '🧙‍♂️' }
+              ])">
+                <i class="fa-solid fa-play"></i> 播放黄金太阳经典对话 (打字机效果)
+              </button>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary);">1:1 还原双层银蓝金属边框、深蓝底色与黄色闪烁翻页箭头 ▼</div>
+          </div>
+        `,
+        code: `# GDScript: 《黄金太阳》剧情对话
+GDialogue.say([
+    "修炼精神力的话，会学到不同的招式。",
+    "去北方的索罗神殿吧，四大元素的封印正在苏醒！"
+], "神秘长者", avatar_texture)`
+      },
+      {
+        title: '2. 《梦幻西游》/ MMO NPC 任务交互与分支 (Westward Journey NPC Task)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <button class="g-btn g-btn-warning" onclick="openSimDialogue({
+                text: '敢来挑战我？看来是不要命了！想尝尝我的厉害可以说！',
+                speaker: '首席大弟子',
+                avatar: '🥋',
+                options: [
+                  '【战斗】我奉师傅之命，特来挑战——看招！',
+                  '【闲聊】我是路过拜访你的师傅老人家的。'
+                ]
+              })">
+                <i class="fa-solid fa-comment-dots"></i> 模拟 NPC 任务接取与战斗分支
+              </button>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary);">支持多分支任务选择支，玩家点击选项后触发对应的战斗或交接逻辑。</div>
+          </div>
+        `,
+        code: `# GDScript: NPC 任务交互与选择支
+var diag = GDialogue.ask(
+    "敢来挑战我？看来是不要命了！想尝尝我的厉害可以说！",
+    [
+        "【战斗】我奉师傅之命，特来挑战——看招！",
+        "【闲聊】我是路过拜访你的师傅老人家的。"
+    ],
+    "首席大弟子",
+    avatar_chief
+)
+diag.option_selected.connect(func(idx, text):
+    if idx == 0:
+        start_boss_battle()
+    else:
+        GDialogue.say("哈哈，原来是同门师弟，请进！")
+)`
+      },
+      {
+        title: '3. 国风 / 仙侠 AVG 视觉小说沉浸式对话 (AVG Visual Novel)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <button class="g-btn g-btn-success" onclick="openSimDialogue({
+                text: '意思是我们在最熟悉的地方吗？',
+                speaker: '赵小芸',
+                avatar: '👧'
+              })">
+                <i class="fa-solid fa-feather"></i> 演示国风 AVG 沉浸式对话框
+              </button>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary);">支持通栏半透明剧场底条、印章风格姓名标签与底部控制工具栏。</div>
+          </div>
+        `,
+        code: `# GDScript: 国风 AVG 对话条
+GDialogue.say("意思是我们在最熟悉的地方吗？", "赵小芸", avatar_xiaoyun)`
+      },
+      {
+        title: '4. 像素 RPG 靠近 NPC 头顶悬浮交互按键 (Floating Prompt [ R ] / [ E ])',
+        render: `
+          <div style="background:#1e2b18; padding:20px; border-radius:10px; border:2px solid #3c5a2e; display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:16px;">
+              <div style="font-size:36px; position:relative;">
+                🧔‍♂️
+                <div style="position:absolute; top:-16px; right:-8px; background:#000; color:#fff; border:2px solid #fff; border-radius:50%; width:20px; height:20px; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; animation:gBlink 0.6s infinite alternate;">R</div>
+              </div>
+              <div>
+                <div style="font-weight:700; color:#a3e635; font-size:13px;">湖畔垂钓翁·姜老</div>
+                <div style="font-size:11px; color:#d9f99d; margin-top:2px;">靠近时自动浮现 [ R ] 交互按键，按 R 或点击开始对话</div>
+              </div>
+            </div>
+            <button class="g-btn g-btn-primary" style="height:32px; font-size:12px;" onclick="openSimDialogue({ text: '小伙子，这片湖里的金鳞龙鲤可不是那么好钓的！', speaker: '姜老', avatar: '🎣' })">
+              按 R 键交谈
+            </button>
+          </div>
+        `,
+        code: `# GDScript: 为 2D NPC 绑定头顶交互按键
+GInteractPrompt.attach_to(npc_old_man, "R", func():
+    GDialogue.say("小伙子，这片湖里的金鳞龙鲤可不是那么好钓的！", "姜老", avatar_old_man)
+)`
+      }
+    ],
+    props: [
+      { name: 'typing_speed', type: 'float', default: '0.03', desc: '打字机单字输出时间间隔 (秒)' },
+      { name: 'position', type: 'enum', default: 'BOTTOM', desc: '对话框位置：BOTTOM (底部居中), TOP (顶部), CENTER (居中)' }
+    ],
+    events: [
+      { name: 'text_completed()', desc: '当前句打字机输出完毕时触发', params: '()' },
+      { name: 'dialogue_finished()', desc: '整段对话队列全部播放完毕并关闭时触发', params: '()' },
+      { name: 'option_selected(index, text)', desc: '玩家点击分支选项时触发', params: '(index: int, text: String)' }
+    ],
+    methods: [
+      { name: 'say(lines, speaker="", avatar=null)', desc: '播放单句或多句对话队列', params: '(lines: Variant, speaker: String, avatar: Texture2D) -> GDialogue' },
+      { name: 'ask(question, options, speaker="", avatar=null)', desc: '播放带分支选择支的剧情对话', params: '(question: String, options: Array, speaker: String, avatar: Texture2D) -> GDialogue' }
+    ],
+    slots: []
+  },
+
+  // --------------------------------------------------------
+  // 14.2 GChat 微信 / 气泡对话流 (WeChat & Lifeline Style)
+  // --------------------------------------------------------
+  'chat': {
+    title: 'Chat 微信与气泡对话流 (GChat & Lifeline)',
+    desc: '提供类似微信 (WeChat)、QQ 以及文字冒险解密游戏《生命线 Lifeline》的对话气泡流组件。支持左右双向分色气泡、系统事件时间胶囊、自适应文本长度、打字中动效与底部即时发送工具栏。',
+    demos: [
+      {
+        title: '1. 微信经典双向气泡聊天流 (WeChat IM Stream)',
+        render: `
+          <div class="g-chat-container">
+            <div class="g-chat-messages" id="simChatMsgList">
+              <div class="g-chat-sys-pill">昨天 21:40</div>
+              <div class="g-chat-row is-other">
+                <div class="g-chat-avatar">🧙‍♂️</div>
+                <div class="g-chat-col">
+                  <span style="font-size:11px; color:var(--text-secondary);">神秘贤者</span>
+                  <div class="g-chat-bubble">勇者，你已经准备好前往索罗神殿了吗？</div>
+                </div>
+              </div>
+              <div class="g-chat-row is-self">
+                <div class="g-chat-avatar">⚔️</div>
+                <div class="g-chat-col">
+                  <div class="g-chat-bubble">已经整理好全套神话装备，随时可以出发！</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:10px 14px; background:var(--bg-card); border-top:1px solid var(--border-base); display:flex; gap:8px; align-items:center;">
+              <input type="text" id="simChatInput" class="g-input" placeholder="输入消息..." style="flex:1; height:34px;" onkeydown="if(event.key==='Enter') document.getElementById('simChatSendBtn').click()">
+              <button class="g-btn g-btn-primary" id="simChatSendBtn" style="height:34px; padding:0 16px;" onclick="
+                const inp = document.getElementById('simChatInput');
+                const val = inp.value.trim();
+                if (!val) return;
+                const list = document.getElementById('simChatMsgList');
+                const row = document.createElement('div');
+                row.className = 'g-chat-row is-self';
+                row.innerHTML = '<div class=\\'g-chat-avatar\\'>⚔️</div><div class=\\'g-chat-col\\'><div class=\\'g-chat-bubble\\'>' + val + '</div></div>';
+                list.appendChild(row);
+                inp.value = '';
+                list.scrollTop = list.scrollHeight;
+                setTimeout(() => {
+                  const replyRow = document.createElement('div');
+                  replyRow.className = 'g-chat-row is-other';
+                  replyRow.innerHTML = '<div class=\\'g-chat-avatar\\'>🧙‍♂️</div><div class=\\'g-chat-col\\'><span style=\\'font-size:11px; color:var(--text-secondary);\\'>神秘贤者</span><div class=\\'g-chat-bubble\\'>收到！愿风灵之力庇护你！</div></div>';
+                  list.appendChild(replyRow);
+                  list.scrollTop = list.scrollHeight;
+                }, 800);
+              ">发送</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 微信风格聊天流
+var chat = GChat.new()
+chat.receive_message("勇者，你已经准备好前往索罗神殿了吗？", "神秘贤者", avatar_sage)
+chat.send_self_message("已经整理好全套神话装备，随时可以出发！", avatar_hero)
+
+# 监听用户发送事件
+chat.message_sent.connect(func(text):
+    print("Player sent:", text)
+    # 模拟自动回复
+    await get_tree().create_timer(1.0).timeout
+    chat.receive_message("收到！愿风灵之力庇护你！", "神秘贤者", avatar_sage)
+)`
+      },
+      {
+        title: '2. 《生命线 Lifeline》 文字冒险自适应深色气泡流 (Lifeline Dark Style)',
+        render: `
+          <div class="g-lifeline-container" id="simLifelineBox">
+            <div class="g-lifeline-bubble">不是特别方便说</div>
+            <div class="g-lifeline-bubble highlight">好吧，那如果公司来不及救你的话，现在要怎么办？</div>
+            <div class="g-lifeline-bubble">去科朗2-C地表吧</div>
+            <div class="g-lifeline-bubble">那里有液态水和氧气</div>
+            <div class="g-lifeline-bubble">计算的氧气浓度也适合人类呼吸</div>
+            <div class="g-lifeline-bubble">在那里我能撑更久</div>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+              <button class="g-btn g-btn-default" style="flex:1; border-color:#555; color:#fff;" onclick="showToast('选择了分支：立即前往地表飞船', 'info')">▶ 前往地表飞船</button>
+              <button class="g-btn g-btn-default" style="flex:1; border-color:#555; color:#fff;" onclick="showToast('选择了分支：留在原地继续呼救', 'warning')">▶ 原地等待救援</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 《生命线 Lifeline》自适应文本气泡流
+var lifeline_chat = GChat.new()
+lifeline_chat.self_bubble_color = Color.hex(0x44444a)
+lifeline_chat.other_bubble_color = Color.hex(0x38383c)
+
+lifeline_chat.receive_message("去科朗2-C地表吧")
+lifeline_chat.receive_message("那里有液态水和氧气")
+lifeline_chat.receive_message("计算的氧气浓度也适合人类呼吸")
+lifeline_chat.receive_message("在那里我能撑更久")`
+      }
+    ],
+    props: [
+      { name: 'self_bubble_color', type: 'Color', default: 'Color.hex(0x07c160)', desc: '我方发送气泡底色 (默认微信绿)' },
+      { name: 'other_bubble_color', type: 'Color', default: 'Color.hex(0x242426)', desc: '对方接收气泡底色' },
+      { name: 'auto_scroll', type: 'boolean', default: 'true', desc: '新消息到达时是否自动平滑滚动到底部' }
+    ],
+    events: [
+      { name: 'message_sent(text: String)', desc: '玩家在底部输入框输入并点击发送或回车时触发', params: '(text: String)' }
+    ],
+    methods: [
+      { name: 'send_self_message(text, avatar=null)', desc: '添加一条我方右侧气泡消息', params: '(text: String, avatar: Texture2D) -> GChat' },
+      { name: 'receive_message(text, sender="队友", avatar=null)', desc: '添加一条对方左侧气泡消息', params: '(text: String, sender: String, avatar: Texture2D) -> GChat' },
+      { name: 'add_system_notice(text)', desc: '添加一条居中系统时间戳或事件胶囊', params: '(text: String) -> GChat' },
+      { name: 'clear()', desc: '清空当前聊天记录列表', params: '() -> void' }
+    ],
+    slots: []
+  },
+
+  // --------------------------------------------------------
+  // 14.3 GPopup 弹出层 (Vant UI 对标)
   // --------------------------------------------------------
   'popup': {
     title: 'Popup 弹出层 (GPopup)',

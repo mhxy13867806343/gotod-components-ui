@@ -201,6 +201,8 @@ window.SIDEBAR_CONFIG = {
         title: 'Feedback 反馈',
         items: [
           { key: 'dialog', title: 'GDialog / GModal 弹窗' },
+          { key: 'dialogue', title: 'GDialogue 剧情对话系统' },
+          { key: 'chat', title: 'GChat 微信/气泡对话流' },
           { key: 'popup', title: 'GPopup 弹出层' },
           { key: 'overlay', title: 'GOverlay 遮罩层' },
           { key: 'action-sheet', title: 'GActionSheet 动作面板' },

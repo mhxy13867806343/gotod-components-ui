@@ -1008,3 +1008,107 @@ window.closeSimToast = function() {
   }
 };
 
+// ==========================================
+// Golden Sun / JRPG GDialogue Simulator Helper
+// ==========================================
+let simDialogueQueue = [];
+let simDialogueTimer = null;
+let simDialogueFullText = '';
+let simDialogueCharIdx = 0;
+let simDialogueIsTyping = false;
+
+window.openSimDialogue = function(queue) {
+  if (typeof queue === 'string') queue = [{ text: queue, speaker: '神秘贤者', avatar: '🧙‍♂️' }];
+  else if (!Array.isArray(queue)) queue = [queue];
+  simDialogueQueue = [...queue];
+  
+  const mask = document.getElementById('simDialogueMask');
+  if (!mask) return;
+  mask.style.display = 'flex';
+  window.nextSimDialogue();
+};
+
+window.nextSimDialogue = function() {
+  if (simDialogueIsTyping) {
+    simDialogueCharIdx = simDialogueFullText.length;
+    const txtElem = document.getElementById('simDialogueText');
+    if (txtElem) txtElem.innerText = simDialogueFullText;
+    simDialogueIsTyping = false;
+    const ind = document.getElementById('simDialogueIndicator');
+    if (ind) ind.style.display = 'block';
+    return;
+  }
+  
+  if (simDialogueQueue.length === 0) {
+    window.closeSimDialogue();
+    return;
+  }
+  
+  const item = simDialogueQueue.shift();
+  const avatarElem = document.getElementById('simDialogueAvatar');
+  const speakerElem = document.getElementById('simDialogueSpeaker');
+  const txtElem = document.getElementById('simDialogueText');
+  const indElem = document.getElementById('simDialogueIndicator');
+  const optContainer = document.getElementById('simDialogueOptions');
+  
+  if (item.avatar) {
+    avatarElem.innerHTML = item.avatar;
+    avatarElem.style.display = 'flex';
+  } else {
+    avatarElem.style.display = 'none';
+  }
+  
+  if (item.speaker) {
+    speakerElem.innerText = item.speaker;
+    speakerElem.style.display = 'inline-block';
+  } else {
+    speakerElem.style.display = 'none';
+  }
+  
+  if (optContainer) {
+    optContainer.innerHTML = '';
+    optContainer.style.display = 'none';
+  }
+  if (indElem) indElem.style.display = 'none';
+  
+  simDialogueFullText = item.text || '';
+  simDialogueCharIdx = 0;
+  simDialogueIsTyping = true;
+  if (txtElem) txtElem.innerText = '';
+  
+  if (simDialogueTimer) clearInterval(simDialogueTimer);
+  simDialogueTimer = setInterval(() => {
+    if (simDialogueCharIdx < simDialogueFullText.length) {
+      simDialogueCharIdx++;
+      if (txtElem) txtElem.innerText = simDialogueFullText.substr(0, simDialogueCharIdx);
+    } else {
+      clearInterval(simDialogueTimer);
+      simDialogueIsTyping = false;
+      if (item.options && item.options.length > 0 && optContainer) {
+        optContainer.style.display = 'flex';
+        item.options.forEach((opt) => {
+          const btn = document.createElement('button');
+          btn.className = 'g-dialogue-option-btn';
+          btn.innerHTML = `▶  ${opt}`;
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            showToast(`已选择: ${opt}`, 'success');
+            window.nextSimDialogue();
+          };
+          optContainer.appendChild(btn);
+        });
+      } else if (indElem) {
+        indElem.style.display = 'block';
+      }
+    }
+  }, 25);
+};
+
+window.closeSimDialogue = function() {
+  if (simDialogueTimer) clearInterval(simDialogueTimer);
+  simDialogueIsTyping = false;
+  const mask = document.getElementById('simDialogueMask');
+  if (mask) mask.style.display = 'none';
+};
+
+
