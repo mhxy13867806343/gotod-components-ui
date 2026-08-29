@@ -3,8 +3,7 @@ class_name GDialogue
 extends CanvasLayer
 
 ## =========================================================================
-## GDialogue: 经典 JRPG 剧情对话框 / 气泡组件 (Golden Sun & Final Fantasy Style)
-## 提供打字机逐字输出、说话者姓名牌、头像立绘、多段对话队列、分支选择支与复古对话框样式。
+## GDialogue: 经典 JRPG 剧情对话系统 (支持 2人双向立绘对峙、分支选择支、宝箱调查触发)
 ## =========================================================================
 
 signal text_completed()
@@ -20,9 +19,10 @@ enum Position {
 static var _instance: GDialogue = null
 
 var _box_container: PanelContainer
+var _left_avatar_rect: TextureRect
+var _right_avatar_rect: TextureRect
 var _speaker_panel: PanelContainer
 var _speaker_label: Label
-var _avatar_rect: TextureRect
 var _content_label: RichTextLabel
 var _next_indicator: Label
 var _options_container: VBoxContainer
@@ -41,7 +41,7 @@ func _ready() -> void:
 	
 	# Main Dialog Box
 	_box_container = PanelContainer.new()
-	_box_container.custom_minimum_size = Vector2(680, 140)
+	_box_container.custom_minimum_size = Vector2(760, 150)
 	_box_container.visible = false
 	
 	# Classical JRPG Dark Blue & Double Silver/Gold Border Theme
@@ -58,15 +58,15 @@ func _ready() -> void:
 	var main_hbox = HBoxContainer.new()
 	main_hbox.add_theme_constant_override("separation", 14)
 	
-	# Avatar portrait
-	_avatar_rect = TextureRect.new()
-	_avatar_rect.custom_minimum_size = Vector2(80, 80)
-	_avatar_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_avatar_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_avatar_rect.visible = false
-	main_hbox.add_child(_avatar_rect)
+	# Left Avatar portrait (e.g. Hero / Protagonist)
+	_left_avatar_rect = TextureRect.new()
+	_left_avatar_rect.custom_minimum_size = Vector2(88, 88)
+	_left_avatar_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_left_avatar_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_left_avatar_rect.visible = false
+	main_hbox.add_child(_left_avatar_rect)
 	
-	# Text Box Column
+	# Center Text Box Column
 	var text_vbox = VBoxContainer.new()
 	text_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text_vbox.add_theme_constant_override("separation", 6)
@@ -109,6 +109,14 @@ func _ready() -> void:
 	
 	main_hbox.add_child(text_vbox)
 	
+	# Right Avatar portrait (e.g. NPC / Villain / Companion)
+	_right_avatar_rect = TextureRect.new()
+	_right_avatar_rect.custom_minimum_size = Vector2(88, 88)
+	_right_avatar_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_right_avatar_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_right_avatar_rect.visible = false
+	main_hbox.add_child(_right_avatar_rect)
+	
 	# Blinking Next Indicator Arrow
 	_next_indicator = Label.new()
 	_next_indicator.text = "▼"
@@ -132,7 +140,6 @@ func _process(delta: float) -> void:
 			else:
 				_finish_typing()
 	elif _next_indicator.visible:
-		# Blinking effect
 		_next_indicator.modulate.a = 0.4 + 0.6 * abs(sin(Time.get_ticks_msec() / 200.0))
 
 func _input(event: InputEvent) -> void:
@@ -145,15 +152,12 @@ func _input(event: InputEvent) -> void:
 
 func _on_dialog_clicked() -> void:
 	if _is_typing:
-		# Fast-forward to end of sentence
 		_char_index = _full_text.length()
 		_content_label.text = _full_text
 		_finish_typing()
 	elif _options_container.visible:
-		# Waiting for option selection
 		pass
 	else:
-		# Next line
 		_next_indicator.visible = false
 		_show_next_in_queue()
 
@@ -187,7 +191,7 @@ func _render_options() -> void:
 
 func _reposition_box(pos: Position) -> void:
 	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1152, 648)
-	var box_w = min(vp_size.x - 60, 760)
+	var box_w = min(vp_size.x - 60, 780)
 	_box_container.custom_minimum_size.x = box_w
 	var x = (vp_size.x - box_w) / 2.0
 	var y = vp_size.y - _box_container.custom_minimum_size.y - 24
@@ -201,30 +205,50 @@ func _reposition_box(pos: Position) -> void:
 # 静态调用 API (Static Imperative API)
 # ==========================================
 
-## 播放单句或多句剧情对话
+## 1. 播放单句或多句剧情对话
 static func say(lines: Variant, speaker: String = "", avatar: Texture2D = null, position: Position = Position.BOTTOM) -> GDialogue:
 	var inst = _get_or_create()
 	var arr: Array[Dictionary] = []
 	if lines is String:
-		arr.append({ "text": lines, "speaker": speaker, "avatar": avatar })
+		arr.append({ "text": lines, "speaker": speaker, "avatar": avatar, "side": "left" })
 	elif lines is Array:
 		for l in lines:
 			if l is String:
-				arr.append({ "text": l, "speaker": speaker, "avatar": avatar })
+				arr.append({ "text": l, "speaker": speaker, "avatar": avatar, "side": "left" })
 			elif l is Dictionary:
 				arr.append(l)
 	inst.start_dialogue(arr, position)
 	return inst
 
-## 播放带选项分支的对话
+## 2. 两人面对面双向立绘对话 (Dual-character conversation with active speaker highlighting)
+static func converse(dialogue_script: Array[Dictionary], position: Position = Position.BOTTOM) -> GDialogue:
+	var inst = _get_or_create()
+	inst.start_dialogue(dialogue_script, position)
+	return inst
+
+## 3. 播放带分支选择支的对话
 static func ask(question: String, options: Array[String], speaker: String = "", avatar: Texture2D = null) -> GDialogue:
 	var inst = _get_or_create()
 	inst.start_dialogue([{
 		"text": question,
 		"speaker": speaker,
 		"avatar": avatar,
-		"options": options
+		"options": options,
+		"side": "left"
 	}], Position.BOTTOM)
+	return inst
+
+## 4. 场景物件/石碑调查触发对话 (Inspection Trigger)
+static func inspect(text: String, title: String = "调查发现", icon: Texture2D = null) -> GDialogue:
+	return say(text, title, icon, Position.CENTER)
+
+## 5. 宝箱开启与战利品获得触发对话 (Treasure Chest Loot Trigger)
+static func loot_chest(chest_name: String, items: Array, on_opened: Callable = Callable()) -> GDialogue:
+	var item_str = ", ".join(items)
+	var text = "开启了【%s】！\n获得了：%s" % [chest_name, item_str]
+	var inst = say(text, "宝箱开启", null, Position.CENTER)
+	if on_opened.is_valid():
+		inst.dialogue_finished.connect(on_opened)
 	return inst
 
 static func _get_or_create() -> GDialogue:
@@ -245,12 +269,15 @@ func start_dialogue(dialog_queue: Array[Dictionary], pos: Position = Position.BO
 func _show_next_in_queue() -> void:
 	if _queue.is_empty():
 		_box_container.visible = false
+		_left_avatar_rect.visible = false
+		_right_avatar_rect.visible = false
 		dialogue_finished.emit()
 		return
 	
 	var cur = _queue.pop_front()
 	var speaker = cur.get("speaker", "")
 	var avatar = cur.get("avatar", null)
+	var side = cur.get("side", "left") # "left" or "right"
 	var text = cur.get("text", "")
 	var options = cur.get("options", [])
 	
@@ -259,12 +286,34 @@ func _show_next_in_queue() -> void:
 		_speaker_panel.visible = true
 	else:
 		_speaker_panel.visible = false
-		
-	if avatar:
-		_avatar_rect.texture = avatar
-		_avatar_rect.visible = true
+	
+	# Dual-avatar handling
+	if cur.has("left_avatar") or cur.has("right_avatar"):
+		_left_avatar_rect.visible = cur.has("left_avatar")
+		_right_avatar_rect.visible = cur.has("right_avatar")
+		if cur.has("left_avatar"):
+			_left_avatar_rect.texture = cur["left_avatar"]
+		if cur.has("right_avatar"):
+			_right_avatar_rect.texture = cur["right_avatar"]
+			
+		# Highlight active speaker, dim inactive speaker
+		if side == "left":
+			_left_avatar_rect.modulate = Color(1, 1, 1, 1)
+			_right_avatar_rect.modulate = Color(0.4, 0.4, 0.45, 0.8)
+		else:
+			_right_avatar_rect.modulate = Color(1, 1, 1, 1)
+			_left_avatar_rect.modulate = Color(0.4, 0.4, 0.45, 0.8)
 	else:
-		_avatar_rect.visible = false
+		if side == "left":
+			_left_avatar_rect.visible = (avatar != null)
+			_right_avatar_rect.visible = false
+			if avatar: _left_avatar_rect.texture = avatar
+			_left_avatar_rect.modulate = Color(1, 1, 1, 1)
+		else:
+			_right_avatar_rect.visible = (avatar != null)
+			_left_avatar_rect.visible = false
+			if avatar: _right_avatar_rect.texture = avatar
+			_right_avatar_rect.modulate = Color(1, 1, 1, 1)
 		
 	_active_options = options
 	_full_text = text
