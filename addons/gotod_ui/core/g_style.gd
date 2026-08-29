@@ -16,6 +16,16 @@ static func css(rules_or_func: Variant) -> Object:
 	_global_css_rules.append(rules_or_func)
 	return GStyle
 
+## 1.1 实例级链式 CSS 应用 (返回控件自身支持流畅链式调用)
+static func apply_css_to_instance(ctrl: Control, rules_or_func: Variant) -> Control:
+	if not ctrl:
+		return ctrl
+	if rules_or_func is Dictionary:
+		apply_dict_to_control(ctrl, rules_or_func)
+	elif rules_or_func is Callable and rules_or_func.is_valid():
+		rules_or_func.call(ctrl)
+	return ctrl
+
 ## 2. 针对特定组件类型的全域定制 (.style)
 ## 接受 Dictionary 参数: { "name": "GFab", "func": func(fab): ... }
 static func style(def: Dictionary) -> Object:

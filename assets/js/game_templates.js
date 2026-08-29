@@ -168,6 +168,58 @@ GStyle.style({
 
 # 一键递归应用到当前场景树节点
 GStyle.apply_to(self)`
+      },
+      {
+        title: '3. 实例方法流式链式编程范式 (Fluent Method Chaining Paradigm)',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-lg); border:1px solid var(--border-base); display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:600; font-size:14px; color:var(--text-primary);">🔗 全组件方法原生流式链式支持</span>
+              <span class="g-tag g-tag-primary">Fluent API: return self</span>
+            </div>
+            <p style="font-size:13px; color:var(--text-regular); margin:0; line-height:1.6;">
+              Gotod UI 中所有组件的 <code style="color:var(--primary); font-family:var(--font-mono);">.css()</code>、属性设值器以及动作添加方法均默认返回 <code style="color:var(--primary); font-family:var(--font-mono);">self</code>，支持无需中间临时变量的一行流式声明式构建。
+            </p>
+            <div style="display:flex; gap:12px;">
+              <button class="g-btn g-btn-primary" onclick="showToast('流式链式构造测试通过: GButton + GFab + GTabs 链式初始化', 'success')">
+                <i class="fa-solid fa-code"></i> 测试流式链式实例化
+              </button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 全组件流畅链式调用 (无需中间变量)
+
+# 1. 链式配置按钮
+var btn = GButton.new() \\
+    .set_text("立即加入战斗") \\
+    .css({
+        "bg_color": Color.hex(0x409eff),
+        "corner_radius": 8,
+        "font_color": Color.WHITE,
+        "font_size": 15,
+        "shadow_size": 6
+    }) \\
+    .css(func(b): b.round_theme = true) \\
+    .on_click(func(): print("Button Clicked!"))
+
+# 2. 链式配置悬浮菜单 GFab
+var fab = GFab.new() \\
+    .css({ "bg_color": Color.hex(0xe6a23c), "corner_radius": 99 }) \\
+    .add_action("album", "相册", icon_album) \\
+    .add_action("home", "首页", icon_home) \\
+    .on_clicked(func(idx, name): print("Fab Clicked:", name))
+
+# 3. 链式配置下拉选择 GSelect
+var sel = GSelect.new() \\
+    .css({ "corner_radius": 6, "font_size": 13 }) \\
+    .add_options([
+        { "label": "Godot 4.3 Forward+", "value": "4.3" },
+        { "label": "Godot 4.4 Latest", "value": "4.4" }
+    ]) \\
+    .on_selected(func(idx, val, label): print("Selected:", label))
+
+# 4. 挂载到场景树
+add_child(btn)`
       }
     ],
     props: [
