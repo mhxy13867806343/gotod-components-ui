@@ -1322,15 +1322,28 @@ add_child(tabs)`
       { name: 'before-leave', type: 'Callable / Function', default: '() => true', desc: '切换标签之前的钩子函数，若返回 false 则阻止切换' }
     ],
     events: [
-      { name: 'tab-click(index, name)', desc: 'tab 被选中点击时触发', params: '(index: int, name: String)' },
-      { name: 'tab-change(active_name)', desc: 'activeName 改变时触发', params: '(index: int, name: String)' },
-      { name: 'tab-remove(name)', desc: '点击 tab 移除按钮时触发', params: '(name: String)' },
-      { name: 'tab-add()', desc: '点击 tab 新增按钮时触发', params: '()' }
+      { name: 'tab_clicked(index, name)', desc: '点击选中某个选项卡时触发', params: '(index: int, name: String)' },
+      { name: 'tab_changed(index, name)', desc: '当前激活选项卡发生改变时触发', params: '(index: int, name: String)' },
+      { name: 'tab_added(index, name)', desc: '动态添加新选项卡时触发', params: '(index: int, name: String)' },
+      { name: 'tab_removed(index, name)', desc: '选项卡被移除销毁时触发', params: '(index: int, name: String)' },
+      { name: 'tab_close_requested(index, name)', desc: '用户点击关闭叉号时触发 (可在此拦截或弹窗二次确认)', params: '(index: int, name: String)' }
     ],
     methods: [
-      { name: 'add_tab(name: String, panel: Control, closable: bool = false)', desc: '动态追加一个选项卡及关联面板', params: '(name: String, panel: Control, closable: bool) -> void' },
-      { name: 'remove_tab(index: int)', desc: '根据索引移除选项卡及面板', params: '(index: int) -> void' },
-      { name: 'set_current_tab(index: int)', desc: '程序化切换当前激活标签', params: '(index: int) -> void' }
+      { name: 'add_tab(name, panel, closable=false, icon=null)', desc: '动态追加一个选项卡及关联内容面板', params: '(name: String, panel: Control, closable: bool, icon: Texture2D) -> int' },
+      { name: 'insert_tab(index, name, panel, closable=false, icon=null)', desc: '在指定索引位置插入一个选项卡', params: '(index: int, name: String, panel: Control, closable: bool, icon: Texture2D) -> void' },
+      { name: 'remove_tab(index_or_name)', desc: '根据索引或标题名称移除指定选项卡', params: '(index_or_name: Variant) -> void' },
+      { name: 'clear_tabs()', desc: '清空并销毁所有选项卡及关联面板', params: '() -> void' },
+      { name: 'get_tab_count()', desc: '获取当前选项卡总数量', params: '() -> int' },
+      { name: 'get_tab_name(index)', desc: '获取指定索引的选项卡标题文本', params: '(index: int) -> String' },
+      { name: 'set_tab_title(index, new_title)', desc: '动态修改指定选项卡的标题文本', params: '(index: int, new_title: String) -> void' },
+      { name: 'get_tab_panel(index)', desc: '获取指定索引绑定的内容面板 Control 节点', params: '(index: int) -> Control' },
+      { name: 'set_tab_disabled(index, is_disabled)', desc: '设置指定选项卡是否禁用点击切换', params: '(index: int, is_disabled: bool) -> void' },
+      { name: 'is_tab_disabled(index)', desc: '查询指定选项卡当前是否处于禁用状态', params: '(index: int) -> bool' },
+      { name: 'set_tab_icon(index, icon)', desc: '为指定选项卡动态设置图标纹理', params: '(index: int, icon: Texture2D) -> void' },
+      { name: 'find_tab_by_name(name)', desc: '根据标题名称反查选项卡的索引位置 (-1 为未找到)', params: '(name: String) -> int' },
+      { name: 'next_tab()', desc: '程序化切换至下一个标签页 (循环)', params: '() -> void' },
+      { name: 'prev_tab()', desc: '程序化切换至上一个标签页 (循环)', params: '() -> void' },
+      { name: 'set_before_leave(callback)', desc: '设置标签切换拦截钩子函数 Callable(cur, next) -> bool', params: '(callback: Callable) -> void' }
     ],
     slots: [
       { name: 'default', desc: '默认插槽，放入 Tab-pane 面板节点', child: 'Tab-pane / Control' },
@@ -1501,6 +1514,26 @@ add_child(sp)`
     ]
   }
 };
+
+// =========================================================================
+// 所有组件通用的 Control / Node 基类继承方法 (Universal Common Methods)
+// =========================================================================
+window.COMMON_CONTROL_METHODS = [
+  { name: 'show() / hide()', desc: '显式显示或隐藏当前控件', params: '() -> void' },
+  { name: 'set_visible(visible)', desc: '动态控制控件的可见性', params: '(visible: bool) -> void' },
+  { name: 'is_visible_in_tree()', desc: '查询当前控件在场景树中是否全局可见', params: '() -> bool' },
+  { name: 'grab_focus()', desc: '使控件获取键盘/手柄交互焦点', params: '() -> void' },
+  { name: 'release_focus()', desc: '主动释放当前焦点', params: '() -> void' },
+  { name: 'has_focus()', desc: '查询控件当前是否正处于聚焦状态', params: '() -> bool' },
+  { name: 'set_size(size) / get_size()', desc: '设置或读取控件的实际像素宽高尺寸', params: '(size: Vector2) -> void / Vector2' },
+  { name: 'set_position(pos) / get_position()', desc: '设置或读取控件的相对局部坐标位置', params: '(pos: Vector2) -> void / Vector2' },
+  { name: 'set_tooltip_text(text)', desc: '动态设置鼠标悬停提示气泡文本', params: '(text: String) -> void' },
+  { name: 'queue_free()', desc: '在当前帧末安全销毁并释放节点内存', params: '() -> void' },
+  { name: 'connect(signal_name, callable)', desc: '订阅并绑定信号至指定回调函数', params: '(signal_name: StringName, callable: Callable) -> Error' },
+  { name: 'emit_signal(signal_name, ...)', desc: '手动发射自定义信号与携带参数', params: '(signal_name: StringName, ...) -> Error' },
+  { name: 'add_theme_color_override(name, color)', desc: '动态覆盖控件的主题文字/边框颜色', params: '(name: StringName, color: Color) -> void' },
+  { name: 'add_theme_stylebox_override(name, stylebox)', desc: '动态覆盖控件的主题背景样式盒 StyleBox', params: '(name: StringName, stylebox: StyleBox) -> void' }
+];
 
 // Merge into global DOCS
 if (typeof DOCS !== 'undefined') {

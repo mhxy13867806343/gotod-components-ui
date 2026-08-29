@@ -511,6 +511,31 @@ window.showDoc = function(key) {
     `;
   }
 
+  // Render Common Control Base Methods Table for all UI components
+  if (window.COMMON_CONTROL_METHODS && window.currentTopSection === 'components' && doc.props) {
+    propsHtml += `
+      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">Universal Methods (全部组件共用通用基类方法)</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th style="width:30%;">通用方法名 / Common Method</th>
+            <th style="width:45%;">说明 / Description</th>
+            <th style="width:25%;">参数及返回值 / Parameters & Return</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${window.COMMON_CONTROL_METHODS.map(m => `
+            <tr>
+              <td class="api-prop">${m.name}</td>
+              <td>${m.desc}</td>
+              <td class="api-type">${m.params}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
   // Render Slots Table
   if (doc.slots && doc.slots.length > 0) {
     propsHtml += `
