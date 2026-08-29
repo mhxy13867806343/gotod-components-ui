@@ -1302,6 +1302,117 @@ add_child(loading)`
   },
 
   // --------------------------------------------------------
+  // 19.1 GSkeleton 骨架屏 (Vant UI 对标)
+  // --------------------------------------------------------
+  'skeleton': {
+    title: 'Skeleton 骨架屏 (GSkeleton)',
+    desc: '在页面数据加载完成前，先展示出页面的大致结构与占位图，常用于首屏加载、列表拉取等场景，大幅减少用户等待焦虑。深度对标 Vant UI Skeleton 规范，支持头像、标题、多行段落与流光扫光动效。',
+    demos: [
+      {
+        title: '1. 基础用法 (Basic Skeleton: Title + 3 Rows)',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:8px; border:1px solid var(--border-base); width:100%; max-width:480px;">
+            <div class="g-skeleton-box">
+              <div class="g-skeleton-content">
+                <div class="g-skeleton-title g-skeleton-animate"></div>
+                <div class="g-skeleton-row g-skeleton-animate" style="width:100%;"></div>
+                <div class="g-skeleton-row g-skeleton-animate" style="width:100%;"></div>
+                <div class="g-skeleton-row g-skeleton-animate" style="width:60%;"></div>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 基础骨架屏
+var skeleton = GSkeleton.new()
+skeleton.show_title = true
+skeleton.rows = 3
+skeleton.row_width = [100.0, 100.0, 60.0]
+skeleton.animate = true
+add_child(skeleton)`
+      },
+      {
+        title: '2. 显示头像与形状切换 (Avatar Shape: Round / Square)',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:8px; border:1px solid var(--border-base); width:100%; max-width:480px;">
+            <div class="g-skeleton-box">
+              <div class="g-skeleton-avatar g-skeleton-avatar-round g-skeleton-animate" style="width:44px; height:44px;"></div>
+              <div class="g-skeleton-content">
+                <div class="g-skeleton-title g-skeleton-animate" style="width:50%;"></div>
+                <div class="g-skeleton-row g-skeleton-animate" style="width:100%;"></div>
+                <div class="g-skeleton-row g-skeleton-animate" style="width:80%;"></div>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 带头像骨架屏
+var skeleton = GSkeleton.new()
+skeleton.avatar = true
+skeleton.avatar_shape = GSkeleton.AvatarShape.ROUND
+skeleton.avatar_size = 44.0
+add_child(skeleton)`
+      },
+      {
+        title: '3. 动态加载切换 (Loading Switch / Content Slot)',
+        render: `
+          <div id="demoSkeletonToggle" style="display:flex; flex-direction:column; gap:14px; width:100%; max-width:480px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:13px; color:var(--text-secondary);">切换 loading 状态：</span>
+              <label class="g-switch"><input type="checkbox" checked onchange="toggleSkeletonLoading('demoSkeletonToggle')"><span class="g-switch-slider"></span></label>
+            </div>
+            <div style="background:var(--bg-surface); padding:20px; border-radius:8px; border:1px solid var(--border-base);">
+              <div class="demo-skeleton-box g-skeleton-box">
+                <div class="g-skeleton-avatar g-skeleton-avatar-round g-skeleton-animate" style="width:48px; height:48px;"></div>
+                <div class="g-skeleton-content">
+                  <div class="g-skeleton-title g-skeleton-animate" style="width:40%;"></div>
+                  <div class="g-skeleton-row g-skeleton-animate" style="width:100%;"></div>
+                  <div class="g-skeleton-row g-skeleton-animate" style="width:70%;"></div>
+                </div>
+              </div>
+              <div class="demo-skeleton-real-content" style="display:none;">
+                <div style="display:flex; gap:14px; align-items:center;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff;">🧙‍♂️</div>
+                  <div>
+                    <div style="font-weight:700; color:var(--text-primary); font-size:15px;">大魔导师·卡德加 (Lv.99)</div>
+                    <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">法力值: 18,500 / 18,500 | 达拉然六人议会领袖</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 动态切换加载与真实内容
+var skeleton = GSkeleton.new()
+skeleton.avatar = true
+skeleton.set_content(real_hero_card)
+
+# 数据加载完成时
+skeleton.loading = false`
+      }
+    ],
+    props: [
+      { name: 'loading', type: 'boolean', default: 'true', desc: '是否显示骨架屏，为 false 时自动展示子内容插槽' },
+      { name: 'avatar', type: 'boolean', default: 'false', desc: '是否显示左侧头像占位图' },
+      { name: 'avatar_shape', type: 'enum', default: 'ROUND', desc: '头像占位图形状：ROUND (圆形), SQUARE (方形)' },
+      { name: 'avatar_size', type: 'float', default: '40.0', desc: '头像占位图大小 (像素)' },
+      { name: 'show_title', type: 'boolean', default: 'true', desc: '是否显示标题占位条' },
+      { name: 'title_width', type: 'float', default: '40.0', desc: '标题占位宽度 (百分比 %)' },
+      { name: 'rows', type: 'int', default: '3', desc: '段落占位行数' },
+      { name: 'row_width', type: 'Array[float]', default: '[100.0, 100.0, 60.0]', desc: '各行段落占位宽度数组 (百分比 %)' },
+      { name: 'animate', type: 'boolean', default: 'true', desc: '是否开启波浪扫光流动动画效果' }
+    ],
+    events: [
+      { name: 'loading_changed(is_loading)', desc: '加载状态发生改变时触发', params: '(is_loading: bool)' }
+    ],
+    methods: [
+      { name: 'set_loading(val: bool)', desc: '程序化设置骨架屏加载状态', params: '(val: bool) -> void' },
+      { name: 'set_content(node: Control)', desc: '绑定数据加载完成后显示的真实内容控件', params: '(node: Control) -> void' }
+    ],
+    slots: [
+      { name: 'default', desc: '骨架屏加载完成后显示的真实内容插槽', child: 'Control' }
+    ]
+  },
+
+  // --------------------------------------------------------
   // 20. GCard 卡片
   // --------------------------------------------------------
   'card': {

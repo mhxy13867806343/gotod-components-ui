@@ -483,3 +483,227 @@ window.runLiveTreeShaker = function() {
     logElem.innerHTML = `[GotodUI Tree-Shaker] 扫描完成: 实际打包 ${used} 个组件 (${usedNames.join(', ')})，自动 skip() 剔除 ${unused} 个未引用组件 (${unusedNames.slice(0, 5).join(', ')}...)。`;
   }
 };
+
+// Interactive GSteps Demo Handler
+window.changeStepDemo = function(dir) {
+  const box = document.getElementById('demoStepsBox');
+  const desc = document.getElementById('stepStatusDesc');
+  if (!box) return;
+  let cur = parseInt(box.getAttribute('data-step') || '1');
+  cur = Math.max(1, Math.min(3, cur + dir));
+  box.setAttribute('data-step', cur);
+
+  const stepTitles = [
+    'Step 1: Configuration & Project Init',
+    'Step 2: Custom Theme & Presets Customization',
+    'Step 3: Build, Export & Distribution'
+  ];
+  if (desc) desc.innerText = stepTitles[cur - 1];
+
+  for (let i = 1; i <= 3; i++) {
+    const num = document.getElementById('stepNum' + i);
+    const txt = document.getElementById('stepText' + i);
+    const line = document.getElementById('stepLine' + i);
+
+    if (i < cur) {
+      if (num) {
+        num.style.background = 'var(--success)';
+        num.style.borderColor = 'var(--success)';
+        num.style.color = '#fff';
+        num.innerHTML = '✓';
+      }
+      if (txt) {
+        txt.style.color = 'var(--text-primary)';
+        txt.style.fontWeight = '600';
+      }
+      if (line) line.style.background = 'var(--success)';
+    } else if (i === cur) {
+      if (num) {
+        num.style.background = 'var(--primary)';
+        num.style.borderColor = 'var(--primary)';
+        num.style.color = '#fff';
+        num.innerText = i;
+      }
+      if (txt) {
+        txt.style.color = 'var(--text-primary)';
+        txt.style.fontWeight = '700';
+      }
+      if (line) line.style.background = 'var(--border-base)';
+    } else {
+      if (num) {
+        num.style.background = 'var(--bg-surface)';
+        num.style.borderColor = 'var(--border-base)';
+        num.style.color = 'var(--text-secondary)';
+        num.innerText = i;
+      }
+      if (txt) {
+        txt.style.color = 'var(--text-disabled)';
+        txt.style.fontWeight = 'normal';
+      }
+      if (line) line.style.background = 'var(--border-base)';
+    }
+  }
+  showToast(`当前步骤切换至第 ${cur} 步`, 'info');
+};
+
+// Interactive GTabs Switcher
+window.switchTabDemo = function(idx, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const headers = container.querySelectorAll('.sim-tab-header');
+  const panels = container.querySelectorAll('.sim-tab-panel');
+
+  headers.forEach((h, i) => {
+    const isActive = (i === idx);
+    h.classList.toggle('active', isActive);
+    const tabType = h.getAttribute('data-tab-type') || 'line';
+
+    if (tabType === 'card') {
+      h.style.color = isActive ? 'var(--primary)' : 'var(--text-secondary)';
+      h.style.background = isActive ? 'var(--bg-card)' : 'var(--bg-surface)';
+      h.style.borderBottom = isActive ? '1px solid var(--bg-card)' : '1px solid var(--border-base)';
+    } else if (tabType === 'border-card') {
+      h.style.color = isActive ? 'var(--primary)' : 'var(--text-secondary)';
+      h.style.background = isActive ? 'var(--bg-card)' : 'var(--bg-surface)';
+    } else {
+      h.style.color = isActive ? 'var(--primary)' : 'var(--text-secondary)';
+      h.style.borderBottom = isActive ? '2px solid var(--primary)' : '2px solid transparent';
+    }
+  });
+
+  panels.forEach((p, i) => {
+    p.style.display = (i === idx) ? 'block' : 'none';
+  });
+
+  const log = document.getElementById('playTabsLog');
+  if (log) log.innerText = `[Signal]: tab_changed emitted -> current_tab: ${idx}`;
+  showToast(`切换至 Tab ${idx + 1}`);
+};
+
+// Interactive GTabs Add Tab Pane
+window.addDynamicTabPane = function(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const nav = container.querySelector('#playTabsNav') || container.querySelector('.sim-tab-nav-list');
+  const panels = container.querySelector('#playTabsPanels') || container.querySelector('.sim-tab-panel-box');
+  if (!nav || !panels) return;
+
+  const newIdx = nav.children.length;
+  const header = document.createElement('div');
+  header.className = 'sim-tab-header';
+  header.style.cssText = 'color:var(--text-secondary); cursor:pointer; padding-bottom:8px; border-bottom:2px solid transparent; font-weight:600;';
+  header.innerText = `Tab ${newIdx + 1}`;
+  header.onclick = function() { switchTabDemo(newIdx, containerId); };
+  nav.appendChild(header);
+
+  const panel = document.createElement('div');
+  panel.className = 'sim-tab-panel';
+  panel.style.cssText = 'display:none; padding:16px; background:var(--bg-card); border-radius:var(--radius);';
+  panel.innerHTML = `<h4 style="color:var(--text-primary);">动态标签 ${newIdx + 1}</h4><p style="color:var(--text-secondary); font-size:13px; margin-top:4px;">这是由 add_tab() 动态新增的选项卡内容面板。</p>`;
+  panels.appendChild(panel);
+
+  showToast(`add_tab("Tab ${newIdx + 1}") 追加成功`, 'success');
+};
+
+window.changeTabPosDemo = function(pos, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const wrap = container.querySelector('#playTabsWrapper') || container.firstElementChild;
+  if (!wrap) return;
+  if (pos === 'top') {
+    wrap.style.flexDirection = 'column';
+  } else if (pos === 'bottom') {
+    wrap.style.flexDirection = 'column-reverse';
+  } else if (pos === 'left') {
+    wrap.style.flexDirection = 'row';
+  } else if (pos === 'right') {
+    wrap.style.flexDirection = 'row-reverse';
+  }
+  showToast(`tab_position = ${pos.toUpperCase()}`);
+};
+
+// Aliases for dialog & events
+window.openDialog = function(title, content) {
+  openSimDialog(content, title);
+};
+
+window.triggerCrossPageHeal = function() {
+  const logBox = document.getElementById('simEventLogBox');
+  if (logBox) {
+    const line = document.createElement('div');
+    line.style.color = 'var(--success)';
+    line.innerText = `[${new Date().toLocaleTimeString()}] 跨页面收到信号 on_hero_heal -> HP恢复 +500 点!`;
+    logBox.appendChild(line);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+  showToast('【全服事件总线】广播 on_hero_heal 触发成功！', 'success');
+};
+
+window.clearSimEventLogs = function() {
+  const logBox = document.getElementById('simEventLogBox');
+  if (logBox) logBox.innerHTML = '<div style="color:var(--text-disabled); font-style:italic;">[日志已清空，等待新信号触发...]</div>';
+  showToast('事件日志已清空', 'info');
+};
+
+window.toggleSkeletonLoading = function(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const skeleton = container.querySelector('.demo-skeleton-box');
+  const content = container.querySelector('.demo-skeleton-real-content');
+  if (!skeleton || !content) return;
+
+  const isLoading = skeleton.style.display !== 'none';
+  if (isLoading) {
+    skeleton.style.display = 'none';
+    content.style.display = 'block';
+    showToast('数据加载完成，骨架屏已自动隐藏', 'success');
+  } else {
+    skeleton.style.display = 'flex';
+    content.style.display = 'none';
+    showToast('骨架屏 loading = true', 'info');
+  }
+};
+
+// Interactive GCollapse Accordion Toggle
+window.toggleCollapseDemo = function(header) {
+  const item = header.parentElement;
+  if (!item) return;
+  const body = item.querySelector('.sim-collapse-body');
+  const arrow = item.querySelector('.sim-collapse-arrow');
+  if (!body) return;
+
+  const isOpen = body.style.display !== 'none';
+  if (isOpen) {
+    body.style.display = 'none';
+    if (arrow) arrow.style.transform = 'rotate(0deg)';
+    showToast('收起折叠面板', 'info');
+  } else {
+    body.style.display = 'block';
+    if (arrow) arrow.style.transform = 'rotate(90deg)';
+    showToast('展开折叠面板', 'info');
+  }
+};
+
+// Interactive Dynamic Tab Remove
+window.removeDynamicTabPane = function(btn, containerId) {
+  const header = btn.parentElement;
+  if (!header) return;
+  const nav = header.parentElement;
+  const container = document.getElementById(containerId);
+  if (!nav || !container) return;
+
+  const idx = Array.from(nav.children).indexOf(header);
+  const panels = container.querySelector('.sim-tab-panel-box') || container.querySelector('#playTabsPanels');
+  
+  header.remove();
+  if (panels && panels.children[idx]) {
+    panels.children[idx].remove();
+  }
+
+  // Switch to first remaining tab
+  if (nav.children.length > 0) {
+    switchTabDemo(0, containerId);
+  }
+  showToast('已关闭标签页', 'warning');
+};

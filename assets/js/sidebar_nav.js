@@ -201,7 +201,8 @@ window.SIDEBAR_CONFIG = {
           { key: 'alert', title: 'GAlert 警告提示' },
           { key: 'drawer', title: 'GDrawer 抽屉' },
           { key: 'tooltip', title: 'GTooltip 悬浮提示' },
-          { key: 'loading', title: 'GLoading 加载指示器' }
+          { key: 'loading', title: 'GLoading 加载指示器' },
+          { key: 'skeleton', title: 'GSkeleton 骨架屏' }
         ]
       },
       {
