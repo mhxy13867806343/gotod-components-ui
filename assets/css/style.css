@@ -590,19 +590,19 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.65);
-  z-index: 1000;
+  z-index: 99990;
   display: none;
   animation: fadeIn 0.25s ease-out;
 }
 .g-popup-mask.active {
-  display: block;
+  display: block !important;
 }
 .g-popup-panel {
   background: var(--bg-surface);
   color: var(--text-primary);
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   position: fixed;
-  z-index: 1001;
+  z-index: 99991;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -683,14 +683,14 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
+  z-index: 99990;
   display: none;
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.25s ease-out;
 }
 .g-overlay-mask.active {
-  display: flex;
+  display: flex !important;
 }
 
 /* Alert Simulation */

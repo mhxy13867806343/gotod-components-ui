@@ -253,13 +253,17 @@ window.openSimPopup = function(options = {}) {
     closeBtn.style.display = closeable ? 'block' : 'none';
   }
 
+  mask.style.display = 'block';
   mask.classList.add('active');
   showToast(`GPopup 已触发: [${position.toUpperCase()}] 弹出`, 'info');
 };
 
 window.closeSimPopup = function() {
   const mask = document.getElementById('simPopupMask');
-  if (mask) mask.classList.remove('active');
+  if (mask) {
+    mask.classList.remove('active');
+    mask.style.display = 'none';
+  }
 };
 
 // Vant UI Style GOverlay Simulator Helper
@@ -276,18 +280,63 @@ window.openSimOverlay = function(options = {}) {
   }
 
   if (options.bgColor) {
-    mask.style.background = options.bgColor;
+    mask.style.backgroundColor = options.bgColor;
   } else {
-    mask.style.background = 'rgba(0, 0, 0, 0.7)';
+    mask.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
   }
 
+  mask.style.display = 'flex';
   mask.classList.add('active');
   showToast('GOverlay 遮罩层已开启 (点击背景关闭)', 'info');
 };
 
 window.closeSimOverlay = function() {
   const mask = document.getElementById('simOverlayMask');
-  if (mask) mask.classList.remove('active');
+  if (mask) {
+    mask.classList.remove('active');
+    mask.style.display = 'none';
+  }
+};
+
+// Vant UI Style Preset Demo Dispatchers
+window.openPopupDemo = function(type) {
+  if (type === 'center') {
+    openSimPopup({ position: 'center', round: false, closeable: true, title: '居中弹出层 (Center)', content: '<p>这是基础居中弹出的内容面板，支持点击右上角关闭或点击暗色背景关闭。</p>' });
+  } else if (type === 'top') {
+    openSimPopup({ position: 'top', title: '🔔 顶部系统公告', content: '<div style="text-align:center; padding:12px 0;">服务器将在 10 分钟后进行热更新维护，请提前做好准备！</div>' });
+  } else if (type === 'bottom') {
+    openSimPopup({ position: 'bottom', round: true, title: '底部快捷面板', content: '<div style="display:flex; flex-direction:column; gap:10px;"><button class="g-btn g-btn-default" style="width:100%;" onclick="closeSimPopup(); showToast(\'已选择微信好友分享\', \'success\');">微信好友分享</button><button class="g-btn g-btn-default" style="width:100%;" onclick="closeSimPopup(); showToast(\'已生成朋友圈海报\', \'success\');">朋友圈海报生成</button></div>' });
+  } else if (type === 'left') {
+    openSimPopup({ position: 'left', title: '左侧快捷侧栏', content: '<p>左侧滑出导航菜单与快捷筛选栏。</p>' });
+  } else if (type === 'right') {
+    openSimPopup({ position: 'right', title: '右侧属性详情', content: '<p>右侧滑出装备详情与人物状态查看。</p>' });
+  } else if (type === 'round-bottom') {
+    openSimPopup({ position: 'bottom', round: true, closeable: true, title: '圆角底部抽屉', content: '<p style="margin-bottom:12px;">底部弹出时自动带有 18px 优雅顶部圆角，符合移动端与触控交互审美规范。</p><button class="g-btn g-btn-primary" style="width:100%;" onclick="closeSimPopup()">我知道了</button>' });
+  } else if (type === 'round-center') {
+    openSimPopup({ position: 'center', round: true, closeable: true, title: '圆角居中卡片', content: '<p>居中卡片支持 18px 全圆角，呈现现代感十足的悬浮弹窗。</p>' });
+  } else if (type === 'actionsheet') {
+    openSimPopup({
+      position: 'bottom',
+      round: true,
+      closeable: true,
+      title: '🛒 购买圣剑·艾斯卡诺',
+      content: '<div style="display:flex; gap:16px; align-items:center; margin-bottom:16px;"><div style="width:60px; height:60px; background:var(--bg-card); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:28px;">⚔️</div><div><div style="font-weight:700; color:var(--primary); font-size:16px;">金币: 9,999</div><div style="font-size:12px; color:var(--text-secondary);">库存: 剩余 3 件 | 传奇品质</div></div></div><div style="display:flex; gap:10px;"><button class="g-btn g-btn-default" style="flex:1;" onclick="closeSimPopup()">加入心愿单</button><button class="g-btn g-btn-primary" style="flex:1;" onclick="closeSimPopup(); showToast(\'购买成功！已放入背包\', \'success\');">立即兑换</button></div>'
+    });
+  }
+};
+
+window.openOverlayDemo = function(type) {
+  if (type === 'basic') {
+    openSimOverlay();
+  } else if (type === 'content') {
+    openSimOverlay({
+      content: '<div style="text-align:center;"><div style="font-size:36px; margin-bottom:12px;">⏳</div><div style="font-weight:600; font-size:15px;">资源同步加载中...</div><p style="font-size:12px; color:var(--text-secondary); margin-top:6px;">正在从云存档读取角色数据，请稍候</p><button class="g-btn g-btn-default" style="margin-top:14px; height:28px; font-size:12px;" onclick="closeSimOverlay()">取消加载</button></div>'
+    });
+  } else if (type === 'green') {
+    openSimOverlay({ bgColor: 'rgba(24, 160, 88, 0.45)' });
+  } else if (type === 'danger') {
+    openSimOverlay({ bgColor: 'rgba(208, 48, 80, 0.45)' });
+  }
 };
 
 // Form Layout Helpers

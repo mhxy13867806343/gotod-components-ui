@@ -958,7 +958,7 @@ danger_dlg.open()`
         title: '1. 基础居中弹出 (Basic Center Popup)',
         render: `
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-primary" onclick="openSimPopup({ position:'center', round:false, closeable:true, title:'居中弹出层', content:'<p>这是基础居中弹出的内容面板，支持点击右上角关闭或点击暗色背景关闭。</p>' })">居中弹出 (Center)</button>
+            <button class="g-btn g-btn-primary" onclick="openPopupDemo('center')">居中弹出 (Center)</button>
           </div>
         `,
         code: `# GDScript: 基础居中弹出
@@ -972,10 +972,10 @@ add_child(popup)`
         title: '2. 弹出位置 (Position: Top / Bottom / Left / Right)',
         render: `
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'top', title:'顶部通知条', content:'<div style=\\'text-align:center; padding:10px;\\'>🔔 [系统公告] 服务器将在 10 分钟后进行热更新维护！</div>' })">顶部弹出 (Top)</button>
-            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'bottom', round:true, title:'底部操作面板', content:'<div style=\\'display:flex; flex-direction:column; gap:8px;\\'><button class=\\'g-btn g-btn-default\\' style=\\'width:100%;\\' onclick=\\'closeSimPopup(); showToast(\"微信分享\");\\'>微信好友分享</button><button class=\\'g-btn g-btn-default\\' style=\\'width:100%;\\' onclick=\\'closeSimPopup(); showToast(\"朋友圈\");\\'>朋友圈海报</button></div>' })">底部弹出 (Bottom)</button>
-            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'left', title:'左侧快捷侧栏', content:'<p>左侧滑出导航菜单与快捷筛选栏。</p>' })">左侧弹出 (Left)</button>
-            <button class="g-btn g-btn-default" onclick="openSimPopup({ position:'right', title:'右侧属性详情', content:'<p>右侧滑出装备详情与人物状态查看。</p>' })">右侧弹出 (Right)</button>
+            <button class="g-btn g-btn-default" onclick="openPopupDemo('top')">顶部弹出 (Top)</button>
+            <button class="g-btn g-btn-default" onclick="openPopupDemo('bottom')">底部弹出 (Bottom)</button>
+            <button class="g-btn g-btn-default" onclick="openPopupDemo('left')">左侧弹出 (Left)</button>
+            <button class="g-btn g-btn-default" onclick="openPopupDemo('right')">右侧弹出 (Right)</button>
           </div>
         `,
         code: `# GDScript: 4 方向滑出弹出层
@@ -988,8 +988,8 @@ popup.open()`
         title: '3. 圆角弹窗与关闭图标 (Round Corner & Close Icon)',
         render: `
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-warning" onclick="openSimPopup({ position:'bottom', round:true, closeable:true, title:'圆角底部抽屉', content:'<p style=\\'margin-bottom:12px;\\'>底部弹出时自动带有 18px 优雅顶部圆角，符合移动端与触控交互审美规范。</p><button class=\\'g-btn g-btn-primary\\' style=\\'width:100%;\\' onclick=\\'closeSimPopup()\\'>我知道了</button>' })">底部圆角弹窗 (Round Bottom)</button>
-            <button class="g-btn g-btn-warning" onclick="openSimPopup({ position:'center', round:true, closeable:true, title:'圆角居中卡片', content:'<p>居中卡片支持 18px 全圆角，呈现现代感十足的悬浮弹窗。</p>' })">居中圆角卡片 (Round Center)</button>
+            <button class="g-btn g-btn-warning" onclick="openPopupDemo('round-bottom')">底部圆角弹窗 (Round Bottom)</button>
+            <button class="g-btn g-btn-warning" onclick="openPopupDemo('round-center')">居中圆角卡片 (Round Center)</button>
           </div>
         `,
         code: `# GDScript: 圆角弹窗
@@ -1003,7 +1003,7 @@ popup.open()`
         title: '4. 游戏实战：商品道具购买规格选择器 (Game Item ActionSheet)',
         render: `
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-success" onclick="openSimPopup({ position:'bottom', round:true, closeable:true, title:'🛒 购买圣剑·艾斯卡诺', content:'<div style=\\'display:flex; gap:16px; align-items:center; margin-bottom:16px;\\'><div style=\\'width:60px; height:60px; background:var(--bg-card); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:28px;\\'>⚔️</div><div><div style=\\'font-weight:700; color:var(--primary); font-size:16px;\\'>金币: 9,999</div><div style=\\'font-size:12px; color:var(--text-secondary);\\'>库存: 剩余 3 件 | 传奇品质</div></div></div><div style=\\'display:flex; gap:10px;\\'><button class=\\'g-btn g-btn-default\\' style=\\'flex:1;\\' onclick=\\'closeSimPopup()\\'>加入心愿单</button><button class=\\'g-btn g-btn-primary\\' style=\\'flex:1;\\' onclick=\\'closeSimPopup(); showToast(\"购买成功！已放入背包\", \"success\");\\'>立即兑换</button></div>' })">弹出购买规格浮层 (ActionSheet)</button>
+            <button class="g-btn g-btn-success" onclick="openPopupDemo('actionsheet')">弹出购买规格浮层 (ActionSheet)</button>
           </div>
         `,
         code: `# GDScript: 游戏商品规格选择
@@ -1051,7 +1051,7 @@ popup.open()`
         title: '1. 基础遮罩层 (Basic Overlay)',
         render: `
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-primary" onclick="openSimOverlay()">显示基础遮罩 (点击背景关闭)</button>
+            <button class="g-btn g-btn-primary" onclick="openOverlayDemo('basic')">显示基础遮罩 (点击背景关闭)</button>
           </div>
         `,
         code: `# GDScript: 基础遮罩层
@@ -1063,7 +1063,7 @@ add_child(overlay)`
         title: '2. 嵌入内容 (Embedded Centered Content / Slot)',
         render: `
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-success" onclick="openSimOverlay({ content:'<div style=\\'text-align:center;\\'><div style=\\'font-size:36px; margin-bottom:12px;\\'>⏳</div><div style=\\'font-weight:600; font-size:15px;\\'>资源同步加载中...</div><p style=\\'font-size:12px; color:var(--text-secondary); margin-top:6px;\\'>正在从云存档读取角色数据，请稍候</p><button class=\\'g-btn g-btn-default\\' style=\\'margin-top:14px; height:28px; font-size:12px;\\' onclick=\\'closeSimOverlay()\\'>取消加载</button></div>' })">嵌入居中加载卡片 (Embedded Content)</button>
+            <button class="g-btn g-btn-success" onclick="openOverlayDemo('content')">嵌入居中加载卡片 (Embedded Content)</button>
           </div>
         `,
         code: `# GDScript: 遮罩层嵌入内容
@@ -1077,8 +1077,8 @@ overlay.open()`
         title: '3. 自定义遮罩层颜色与透明度 (Custom Background Color)',
         render: `
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-warning" onclick="openSimOverlay({ bgColor: 'rgba(24, 160, 88, 0.4)' })">绿色沉浸遮罩 (Green Tint)</button>
-            <button class="g-btn g-btn-danger" onclick="openSimOverlay({ bgColor: 'rgba(208, 48, 80, 0.4)' })">红色警戒遮罩 (Danger Tint)</button>
+            <button class="g-btn g-btn-warning" onclick="openOverlayDemo('green')">绿色沉浸遮罩 (Green Tint)</button>
+            <button class="g-btn g-btn-danger" onclick="openOverlayDemo('danger')">红色警戒遮罩 (Danger Tint)</button>
           </div>
         `,
         code: `# GDScript: 自定义遮罩颜色
