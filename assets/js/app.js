@@ -300,6 +300,7 @@ window.switchTopSection = function(section) {
   document.getElementById('topNavGuide').classList.toggle('active', section === 'guide');
   document.getElementById('topNavComponents').classList.toggle('active', section === 'components');
   document.getElementById('topNavGame').classList.toggle('active', section === 'game');
+  document.getElementById('topNavPlayground').classList.toggle('active', section === 'playground');
 
   const sidebar = document.getElementById('sidebarNav');
   if (!sidebar) return;
@@ -330,6 +331,19 @@ window.switchTopSection = function(section) {
       </div>
     `;
     showDoc('game-character');
+  } else if (section === 'playground') {
+    sidebar.innerHTML = `
+      <input type="text" class="nav-search" placeholder="Search API playground..." oninput="filterNav(this.value)">
+      <div class="nav-group">
+        <div class="nav-group-title">API Playground 属性与方法实验室</div>
+        <div class="nav-item active" data-key="play-tabs" onclick="showDoc('play-tabs')"><span>🧪 GTabs 选项卡演练</span></div>
+        <div class="nav-item" data-key="play-button" onclick="showDoc('play-button')"><span>🧪 GButton 按钮演练</span></div>
+        <div class="nav-item" data-key="play-input" onclick="showDoc('play-input')"><span>🧪 GInput 输入框演练</span></div>
+        <div class="nav-item" data-key="play-progress" onclick="showDoc('play-progress')"><span>🧪 GProgress 进度条演练</span></div>
+        <div class="nav-item" data-key="play-dialog" onclick="showDoc('play-dialog')"><span>🧪 GDialog 弹窗演练</span></div>
+      </div>
+    `;
+    showDoc('play-tabs');
   } else {
     // Components
     sidebar.innerHTML = `
@@ -389,11 +403,12 @@ window.switchTopSection = function(section) {
 window.showDoc = function(key) {
   window.currentDocKey = key;
   
-  // Combine all sources: GUIDE, GAME, COMPONENT
+  // Combine all sources: GUIDE, GAME, PLAYGROUND, COMPONENT
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
     window.GAME_CATALOG || {}, 
+    window.PLAYGROUND_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );
 
