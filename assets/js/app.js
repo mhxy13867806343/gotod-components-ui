@@ -192,10 +192,8 @@ window.runLiveTreeShaker = function() {
 };
 
 // ==========================================
-// Top Navigation Switcher (Guide / Components / Game / Playground / Imperative / Studio)
-// ==========================================
-window.switchTopSection = function(section) {
-  window.currentTopSection = section;
+// Top Navigation Switcher (Guide / Components / Game / Playground / Imperawindow.switchTopSection = function(section, targetDocKey) {
+  window.currentSection = section;
   localStorage.setItem('gotod_section', section);
 
   // Toggle active state in top navigation links
@@ -235,7 +233,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="guide-autoload" onclick="showDoc('guide-autoload')"><span>⚙️ Autoload 全局服务</span></div>
       </div>
     `;
-    showDoc('guide-install');
+    showDoc(targetDocKey || 'guide-install');
   } else if (section === 'imperative') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search imperative API..." oninput="filterNav(this.value)">
@@ -247,7 +245,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="imp-notification" onclick="showDoc('imp-notification')"><span>🔔 GNotification 四角通知气泡</span></div>
       </div>
     `;
-    showDoc('imp-message');
+    showDoc(targetDocKey || 'imp-message');
   } else if (section === 'game') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search game templates..." oninput="filterNav(this.value)">
@@ -260,7 +258,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="game-shop" onclick="showDoc('game-shop')"><span>🛒 神秘商人道具商城</span></div>
       </div>
     `;
-    showDoc('game-character');
+    showDoc(targetDocKey || 'game-character');
   } else if (section === 'playground') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search API playground..." oninput="filterNav(this.value)">
@@ -273,7 +271,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="play-dialog" onclick="showDoc('play-dialog')"><span>🧪 GDialog 弹窗演练</span></div>
       </div>
     `;
-    showDoc('play-tabs');
+    showDoc(targetDocKey || 'play-tabs');
   } else if (section === 'hooks') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search hooks..." oninput="filterNav(this.value)">
@@ -285,7 +283,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="hook-dialog" onclick="showDoc('hook-dialog')"><span>🪟 useDialog 组合式弹窗</span></div>
       </div>
     `;
-    showDoc('hook-cooldown');
+    showDoc(targetDocKey || 'hook-cooldown');
   } else if (section === 'signals') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search signals & events..." oninput="filterNav(this.value)">
@@ -295,7 +293,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="signal-custom-class" onclick="showDoc('signal-custom-class')"><span>📡 GCustomSignal 动态信号对象</span></div>
       </div>
     `;
-    showDoc('signal-event-bus');
+    showDoc(targetDocKey || 'signal-event-bus');
   } else if (section === 'decorator') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search decorators..." oninput="filterNav(this.value)">
@@ -305,7 +303,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="decorator-ui" onclick="showDoc('decorator-ui')"><span>🎨 UI 控件能力装饰器</span></div>
       </div>
     `;
-    showDoc('decorator-weapon');
+    showDoc(targetDocKey || 'decorator-weapon');
   } else if (section === 'storage') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search storage & save..." oninput="filterNav(this.value)">
@@ -315,7 +313,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="storage-lifecycle-guardian" onclick="showDoc('storage-lifecycle-guardian')"><span>⚡ 引擎生命周期守护与卡死自动保存</span></div>
       </div>
     `;
-    showDoc('storage-save-slots');
+    showDoc(targetDocKey || 'storage-save-slots');
   } else if (section === 'router') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search router & utils..." oninput="filterNav(this.value)">
@@ -327,7 +325,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="util-asset" onclick="showDoc('util-asset')"><span>🎵 GAsset 音视频与纹理导入</span></div>
       </div>
     `;
-    showDoc('util-router');
+    showDoc(targetDocKey || 'util-router');
   } else if (section === 'lifecycle') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search lifecycles..." oninput="filterNav(this.value)">
@@ -337,7 +335,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="lifecycle-apis" onclick="showDoc('lifecycle-apis')"><span>📖 7大阶段 API 示例大全</span></div>
       </div>
     `;
-    showDoc('lifecycle-overview');
+    showDoc(targetDocKey || 'lifecycle-overview');
   } else if (section === 'studio') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
@@ -347,7 +345,7 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="studio-custom-resource" onclick="showDoc('studio-custom-resource')"><span>💾 自定义 Resource 数据资源 (.tres)</span></div>
       </div>
     `;
-    showDoc('studio-theme-editor');
+    showDoc(targetDocKey || 'studio-theme-editor');
   } else {
     // Components
     sidebar.innerHTML = `
@@ -397,9 +395,53 @@ window.switchTopSection = function(section) {
         <div class="nav-item" data-key="space" onclick="showDoc('space')"><span>GSpace 间距布局</span></div>
       </div>
     `;
-    showDoc('tabs');
+    showDoc(targetDocKey || 'tabs');
   }
 };
+
+// Find which top section a docKey belongs to
+window.findSectionByDocKey = function(docKey) {
+  if (!docKey) return 'components';
+  if (window.GUIDE_CATALOG && window.GUIDE_CATALOG[docKey]) return 'guide';
+  if (window.GAME_CATALOG && window.GAME_CATALOG[docKey]) return 'game';
+  if (window.PLAYGROUND_CATALOG && window.PLAYGROUND_CATALOG[docKey]) return 'playground';
+  if (window.IMPERATIVE_CATALOG && window.IMPERATIVE_CATALOG[docKey]) return 'imperative';
+  if (window.HOOKS_CATALOG && window.HOOKS_CATALOG[docKey]) return 'hooks';
+  if (window.SIGNALS_CATALOG && window.SIGNALS_CATALOG[docKey]) return 'signals';
+  if (window.DECORATOR_CATALOG && window.DECORATOR_CATALOG[docKey]) return 'decorator';
+  if (window.STORAGE_CATALOG && window.STORAGE_CATALOG[docKey]) return 'storage';
+  if (window.UTILS_ROUTER_CATALOG && window.UTILS_ROUTER_CATALOG[docKey]) return 'router';
+  if (window.LIFECYCLE_CATALOG && window.LIFECYCLE_CATALOG[docKey]) return 'lifecycle';
+  if (window.STUDIO_CATALOG && window.STUDIO_CATALOG[docKey]) return 'studio';
+  if (window.COMPONENT_CATALOG && window.COMPONENT_CATALOG[docKey]) return 'components';
+
+  const sectionNames = ['guide', 'components', 'game', 'playground', 'imperative', 'hooks', 'signals', 'decorator', 'storage', 'router', 'lifecycle', 'studio'];
+  if (sectionNames.includes(docKey)) return docKey;
+  return 'components';
+};
+
+// Route from browser address bar URL hash
+window.routeFromHash = function() {
+  const hash = window.location.hash.replace(/^#/, '').trim();
+  if (!hash) {
+    const savedSection = localStorage.getItem('gotod_section') || 'components';
+    const savedDocKey = localStorage.getItem('gotod_doc_key') || (savedSection === 'components' ? 'tabs' : null);
+    switchTopSection(savedSection, savedDocKey);
+    return;
+  }
+
+  const sectionNames = ['guide', 'components', 'game', 'playground', 'imperative', 'hooks', 'signals', 'decorator', 'storage', 'router', 'lifecycle', 'studio'];
+  if (sectionNames.includes(hash)) {
+    switchTopSection(hash);
+  } else {
+    const targetSection = findSectionByDocKey(hash);
+    switchTopSection(targetSection, hash);
+  }
+};
+
+window.addEventListener('hashchange', () => {
+  window.routeFromHash();
+});
 
 // ==========================================
 // Main Render Dispatcher
@@ -407,6 +449,11 @@ window.switchTopSection = function(section) {
 window.showDoc = function(key) {
   window.currentDocKey = key;
   localStorage.setItem('gotod_doc_key', key);
+  
+  // Sync URL hash to browser address bar without jarring scrolling
+  if (window.location.hash !== '#' + key) {
+    history.replaceState(null, '', '#' + key);
+  }
   
   // Combine all sources: GUIDE, GAME, PLAYGROUND, IMPERATIVE, HOOKS, SIGNALS, DECORATOR, STORAGE, UTILS_ROUTER, LIFECYCLE, STUDIO, COMPONENT
   const catalog = Object.assign(
@@ -662,15 +709,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const presetSelect = document.getElementById('presetSelect');
   if (presetSelect) presetSelect.value = savedPreset;
 
-  // 3. Restore Section & Doc Key
-  const savedSection = localStorage.getItem('gotod_section') || 'components';
-  const savedDocKey = localStorage.getItem('gotod_doc_key');
-  
-  const topSelect = document.getElementById('topSectionSelect');
-  if (topSelect) topSelect.value = savedSection;
-
-  switchTopSection(savedSection);
-  if (savedDocKey) {
-    setTimeout(() => showDoc(savedDocKey), 10);
-  }
+  // 3. Route from URL Hash (or LocalStorage fallback)
+  window.routeFromHash();
 });
