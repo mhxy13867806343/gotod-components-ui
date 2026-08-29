@@ -842,20 +842,38 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
 
 .floating-theme-bar .select-theme {
   border-radius: 20px !important;
-  height: 30px !important;
+  height: 32px !important;
   font-size: 12px !important;
+  font-weight: 500 !important;
   padding: 0 12px !important;
   background: var(--bg-surface) !important;
-  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-base) !important;
   cursor: pointer;
+  outline: none;
+}
+
+.floating-theme-bar .select-theme:focus {
+  border-color: var(--primary) !important;
 }
 
 .floating-theme-bar .btn-icon {
   border-radius: 20px !important;
-  height: 30px !important;
+  height: 32px !important;
   padding: 0 12px !important;
   background: var(--bg-surface) !important;
   border: 1px solid var(--border-base) !important;
+  color: var(--text-primary) !important;
   font-size: 12px !important;
+  font-weight: 500 !important;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.floating-theme-bar .btn-icon:hover {
+  background: var(--bg-card);
+  border-color: var(--primary);
+  color: var(--primary);
 }
