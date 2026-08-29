@@ -60,18 +60,13 @@
         <i id="themeIcon" class="fa-solid fa-moon"></i>
         <span id="themeText">Dark</span>
       </button>
-      <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="btn-icon">
-        <i class="fa-brands fa-github"></i>
-        <span>GitHub</span>
-      </a>
-      <a href="https://gitee.com/fangjiayu/gotod-components-ui" target="_blank" class="btn-icon">
-        <i class="fa-solid fa-code-branch"></i>
-        <span>Gitee</span>
-      </a>
-      <a href="https://gitcode.com/m200s/gotod-components-ui" target="_blank" class="btn-icon">
-        <i class="fa-solid fa-cube"></i>
-        <span>GitCode</span>
-      </a>
+      <!-- Repository Links Dropdown -->
+      <select class="select-theme" style="font-weight:600; font-size:12px; height:32px; padding:0 10px; cursor:pointer;" onchange="if(this.value){window.open(this.value, '_blank'); this.selectedIndex=0;}">
+        <option value="" disabled selected>📦 源码仓库 (Repos)</option>
+        <option value="https://github.com/mhxy13867806343/gotod-components-ui">🐙 GitHub 仓库</option>
+        <option value="https://gitee.com/fangjiayu/gotod-components-ui">🚩 Gitee (国内镜像)</option>
+        <option value="https://gitcode.com/m200s/gotod-components-ui">📦 GitCode 仓库</option>
+      </select>
     </div>
   </header>
 
