@@ -55,18 +55,64 @@ window.showToast = function(msg, type = 'info') {
   }, 3000);
 };
 
-// Copy Code
+// Copy Code with Robust Fallback and Auto-Lookup
 window.copyCode = function(btn, codeText) {
-  navigator.clipboard.writeText(codeText).then(() => {
+  if (!codeText) {
+    const card = btn.closest('.demo-card') || btn.closest('.code-box') || btn.parentElement;
+    if (card) {
+      const codeElem = card.querySelector('.code-box pre code') || card.querySelector('pre code') || card.querySelector('code');
+      if (codeElem) codeText = codeElem.innerText;
+    }
+  }
+
+  if (!codeText) {
+    showToast('暂无代码可复制', 'warning');
+    return;
+  }
+
+  function showSuccess() {
     const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-    btn.style.background = 'var(--primary)';
-    showToast('GDScript snippet copied to clipboard!', 'success');
+    btn.innerHTML = '<i class="fa-solid fa-check" style="color:var(--success);"></i> <span style="color:var(--success);">已复制!</span>';
+    showToast('代码已成功复制到剪贴板！', 'success');
     setTimeout(() => {
       btn.innerHTML = orig;
-      btn.style.background = '';
     }, 2000);
-  });
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.left = '0';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (successful) {
+        showSuccess();
+      } else {
+        showToast('复制失败，请手动选择代码复制', 'danger');
+      }
+    } catch (err) {
+      document.body.removeChild(ta);
+      showToast('复制失败: ' + err, 'danger');
+    }
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(codeText).then(() => {
+      showSuccess();
+    }).catch(() => {
+      fallbackCopy(codeText);
+    });
+  } else {
+    fallbackCopy(codeText);
+  }
 };
 
 // Simulated Interactive Component Helpers
@@ -490,7 +536,7 @@ window.showDoc = function(key) {
       <div class="demo-card">
         <div class="demo-card-header">
           <div class="demo-card-title">${d.title}</div>
-          <button class="g-btn g-btn-default" style="height:26px; padding:0 8px; font-size:11px;" onclick="copyCode(this, \`${escapeHtml(d.code || '')}\`)">
+          <button class="g-btn g-btn-default" style="height:26px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
             <i class="fa-regular fa-copy"></i> 复制代码
           </button>
         </div>
