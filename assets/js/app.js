@@ -308,14 +308,13 @@ window.switchTopSection = function(section) {
     showDoc('decorator-weapon');
   } else if (section === 'storage') {
     sidebar.innerHTML = `
-      <input type="text" class="nav-search" placeholder="Search storage..." oninput="filterNav(this.value)">
+      <input type="text" class="nav-search" placeholder="Search storage & save..." oninput="filterNav(this.value)">
       <div class="nav-group">
-        <div class="nav-group-title">Storage 数据存储与本地缓存</div>
-        <div class="nav-item active" data-key="storage-key-value" onclick="showDoc('storage-key-value')"><span>💾 GStorage 本地缓存与落盘</span></div>
-        <div class="nav-item" data-key="storage-datastore" onclick="showDoc('storage-datastore')"><span>📦 GDataStore 集合文档 CRUD</span></div>
+        <div class="nav-group-title">Game Save 游戏存档与中断存储</div>
+        <div class="nav-item active" data-key="storage-save-slots" onclick="showDoc('storage-save-slots')"><span>💾 游戏多槽位存档与中断存储</span></div>
       </div>
     `;
-    showDoc('storage-key-value');
+    showDoc('storage-save-slots');
   } else if (section === 'studio') {
     sidebar.innerHTML = `
       <input type="text" class="nav-search" placeholder="Search resource studio..." oninput="filterNav(this.value)">
@@ -600,6 +599,9 @@ window.showDoc = function(key) {
   if (key === 'studio-theme-editor') {
     if (typeof window.refreshStudioCanvas === 'function') setTimeout(window.refreshStudioCanvas, 50);
     if (typeof window.renderStudioInspector === 'function') setTimeout(window.renderStudioInspector, 50);
+  } else if (key === 'storage-save-slots') {
+    if (typeof window.renderSimSaveSlots === 'function') setTimeout(window.renderSimSaveSlots, 30);
+    if (typeof window.updateCurrentGameStatusUI === 'function') setTimeout(window.updateCurrentGameStatusUI, 30);
   }
 };
 
