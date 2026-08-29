@@ -250,6 +250,56 @@ add_child(icon)`
   },
 
   // --------------------------------------------------------
+  // 4.5. GFab 悬浮按钮 (Uni-UI / FAB Speed Dial)
+  // --------------------------------------------------------
+  'fab': {
+    title: 'Fab 悬浮按钮 (GFab)',
+    desc: '浮动在屏幕角落的操作按钮，支持点击向左/向上展开多子项操作菜单（深度对标 Uni-UI Fab、Material Design Speed Dial 展开菜单）。',
+    demos: [
+      {
+        title: '1. 水平展开悬浮按钮 (Horizontal Uni-UI Speed Dial)',
+        render: `
+          <div style="background:var(--bg-surface); padding:24px; border-radius:12px; border:1px solid var(--border-base); display:flex; justify-content:flex-end; align-items:center;">
+            <div style="display:flex; align-items:center; gap:8px; background:var(--bg-card); padding:6px 12px; border-radius:30px; border:1px solid var(--border-base); box-shadow:0 6px 20px rgba(0,0,0,0.3);">
+              <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了相册', 'info')"><i class="fa-solid fa-image"></i> 相册</button>
+              <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了首页', 'success')"><i class="fa-solid fa-house"></i> 首页</button>
+              <button class="g-btn g-btn-text" style="font-size:12px; padding:4px 8px;" onclick="showToast('点击了收藏', 'warning')"><i class="fa-solid fa-star"></i> 收藏</button>
+              <button class="g-btn g-btn-default g-btn-round" style="width:32px; height:32px; padding:0;" onclick="showToast('收起 FAB')">✕</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: Horizontal Uni-UI Fab
+var fab = GFab.new()
+fab.direction = GFab.Direction.HORIZONTAL
+fab.fab_position = GFab.Position.BOTTOM_RIGHT
+fab.add_action("album", "相册", preload("res://icons/image.svg"))
+fab.add_action("home", "首页", preload("res://icons/home.svg"))
+fab.add_action("star", "收藏", preload("res://icons/star.svg"))
+fab.item_clicked.connect(func(idx, name): print("Clicked: ", name))
+add_child(fab)`
+      }
+    ],
+    props: [
+      { name: 'direction', type: 'enum', default: 'HORIZONTAL', desc: '展开方向：HORIZONTAL (水平向左), VERTICAL (垂直向上)' },
+      { name: 'fab_position', type: 'enum', default: 'BOTTOM_RIGHT', desc: '挂载位置：BOTTOM_RIGHT, BOTTOM_LEFT, TOP_RIGHT, TOP_LEFT' },
+      { name: 'main_icon', type: 'Texture2D', default: 'null', desc: '主触发按钮图标 (默认显示加号/叉号旋转切换)' },
+      { name: 'auto_collapse_on_click', type: 'boolean', default: 'true', desc: '点击子操作项后是否自动收起菜单' },
+      { name: 'expand_duration', type: 'float', default: '0.25', desc: '展开/收起动画过渡时长 (秒)' }
+    ],
+    events: [
+      { name: 'item_clicked', params: 'index: int, item_name: String', desc: '点击子项菜单时触发' },
+      { name: 'expanded_changed', params: 'is_expanded: bool', desc: '展开/收起状态发生变化时触发' }
+    ],
+    methods: [
+      { name: 'toggle()', returns: 'void', desc: '切换展开与收起状态' },
+      { name: 'expand()', returns: 'void', desc: '主动执行展开动画' },
+      { name: 'collapse()', returns: 'void', desc: '主动执行收起动画' },
+      { name: 'add_action(name, label, icon)', returns: 'void', desc: '动态添加子菜单项' }
+    ],
+    slots: []
+  },
+
+  // --------------------------------------------------------
   // 5. GInput 输入框
   // --------------------------------------------------------
   'input': {

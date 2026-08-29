@@ -53,7 +53,6 @@
         <option value="" disabled selected>📦 源码仓库 (Repos)</option>
         <option value="https://github.com/mhxy13867806343/gotod-components-ui">🐙 GitHub 仓库</option>
         <option value="https://gitee.com/fangjiayu/gotod-components-ui">🚩 Gitee (国内镜像)</option>
-        <option value="https://gitcode.com/m200s/gotod-components-ui">📦 GitCode 仓库</option>
       </select>
     </div>
   </header>
@@ -132,34 +131,55 @@
     </div>
   </div>
 
-  <!-- Floating Theme & Preset Sticky Toolbar in Bottom-Right -->
-  <div class="floating-theme-bar">
-    <select id="presetSelect" class="select-theme" onchange="changePreset(this.value)">
-      <option value="naive">Naive UI Style (Green)</option>
-      <option value="element">Element Plus Style (Blue)</option>
-      <option value="ant">Ant Design Style (Geek Blue)</option>
-      <option value="vant">Vant UI Style (Mobile)</option>
-    </select>
-    <button class="btn-icon" onclick="toggleTheme()" title="切换深浅主题">
-      <i id="themeIcon" class="fa-solid fa-moon"></i>
-      <span id="themeText">Dark</span>
+  <!-- Uni-UI Style Expandable FAB Floating Action Toolbar in Bottom-Right -->
+  <div class="g-fab-wrapper" id="gFabWrapper">
+    <!-- Expanded Menu Content -->
+    <div class="g-fab-menu" id="gFabMenu">
+      <div class="g-fab-item">
+        <span class="g-fab-label"><i class="fa-solid fa-palette"></i> 风格:</span>
+        <select id="presetSelect" class="select-theme" onchange="changePreset(this.value)" style="border-radius:16px; height:28px; font-size:11px; padding:0 8px; background:var(--bg-surface);">
+          <option value="naive">Naive UI Style</option>
+          <option value="element">Element Plus Style</option>
+          <option value="ant">Ant Design Style</option>
+          <option value="vant">Vant UI Style</option>
+        </select>
+      </div>
+
+      <div class="g-fab-divider"></div>
+
+      <button class="g-fab-btn" onclick="toggleTheme()" title="切换深浅主题">
+        <i id="themeIcon" class="fa-solid fa-moon"></i>
+        <span id="themeText" style="font-size:11px; font-weight:600;">Dark</span>
+      </button>
+
+      <div class="g-fab-divider"></div>
+
+      <button class="g-fab-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="返回顶部">
+        <i class="fa-solid fa-arrow-up"></i>
+        <span style="font-size:11px; font-weight:600;">顶部</span>
+      </button>
+    </div>
+
+    <!-- Main FAB Trigger Circular Button (uni-ui style with close toggle) -->
+    <button class="g-fab-trigger" id="gFabTrigger" onclick="toggleFabMenu()" title="快捷控制台 (FAB 悬浮按钮)">
+      <i class="fa-solid fa-xmark" id="gFabIcon"></i>
     </button>
   </div>
 
   <!-- Local Standalone Logic Modules -->
-  <script src="assets/js/components_catalog.js?v=20260829_03"></script>
-  <script src="assets/js/game_templates.js?v=20260829_03"></script>
-  <script src="assets/js/api_playground.js?v=20260829_03"></script>
-  <script src="assets/js/imperative_api.js?v=20260829_03"></script>
-  <script src="assets/js/hooks_catalog.js?v=20260829_03"></script>
-  <script src="assets/js/signals_catalog.js?v=20260829_03"></script>
-  <script src="assets/js/decorator_catalog.js?v=20260829_03"></script>
-  <script src="assets/js/storage_catalog.js?v=20260829_03"></script>
-  <script src="assets/js/utils_router_catalog.js?v=20260829_03"></script>
-  <script src="assets/js/lifecycle_catalog.js?v=20260829_03"></script>
-  <script src="assets/js/resource_studio.js?v=20260829_03"></script>
-  <script src="assets/js/global_search.js?v=20260829_03"></script>
-  <script src="assets/js/nav_dropdown.js?v=20260829_03"></script>
-  <script src="assets/js/app.js?v=20260829_03"></script>
+  <script src="assets/js/components_catalog.js?v=20260829_04"></script>
+  <script src="assets/js/game_templates.js?v=20260829_04"></script>
+  <script src="assets/js/api_playground.js?v=20260829_04"></script>
+  <script src="assets/js/imperative_api.js?v=20260829_04"></script>
+  <script src="assets/js/hooks_catalog.js?v=20260829_04"></script>
+  <script src="assets/js/signals_catalog.js?v=20260829_04"></script>
+  <script src="assets/js/decorator_catalog.js?v=20260829_04"></script>
+  <script src="assets/js/storage_catalog.js?v=20260829_04"></script>
+  <script src="assets/js/utils_router_catalog.js?v=20260829_04"></script>
+  <script src="assets/js/lifecycle_catalog.js?v=20260829_04"></script>
+  <script src="assets/js/resource_studio.js?v=20260829_04"></script>
+  <script src="assets/js/global_search.js?v=20260829_04"></script>
+  <script src="assets/js/nav_dropdown.js?v=20260829_04"></script>
+  <script src="assets/js/app.js?v=20260829_04"></script>
 </body>
 </html>

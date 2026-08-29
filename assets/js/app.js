@@ -359,6 +359,7 @@ window.switchTopSection = function(section, targetDocKey) {
         <div class="nav-item" data-key="text" onclick="showDoc('text')"><span>GText / GTitle 文本</span></div>
         <div class="nav-item" data-key="divider" onclick="showDoc('divider')"><span>GDivider 分割线</span></div>
         <div class="nav-item" data-key="icon" onclick="showDoc('icon')"><span>GIcon 图标</span></div>
+        <div class="nav-item" data-key="fab" onclick="showDoc('fab')"><span>GFab 悬浮按钮</span></div>
       </div>
 
       <div class="nav-group">
@@ -693,6 +694,24 @@ window.filterNav = function(q) {
     const text = item.innerText.toLowerCase();
     item.style.display = text.includes(val) ? 'flex' : 'none';
   });
+};
+
+window.toggleFabMenu = function() {
+  const menu = document.getElementById('gFabMenu');
+  const trigger = document.getElementById('gFabTrigger');
+  const icon = document.getElementById('gFabIcon');
+  if (!menu || !trigger) return;
+
+  const isCollapsed = menu.classList.contains('collapsed');
+  if (isCollapsed) {
+    menu.classList.remove('collapsed');
+    trigger.classList.remove('collapsed');
+    if (icon) icon.className = 'fa-solid fa-xmark';
+  } else {
+    menu.classList.add('collapsed');
+    trigger.classList.add('collapsed');
+    if (icon) icon.className = 'fa-solid fa-gear';
+  }
 };
 
 // Default initial render on load with complete LocalStorage state restoration
