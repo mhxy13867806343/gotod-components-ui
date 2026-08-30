@@ -25,7 +25,7 @@
 
 在在线演示中，您可以体验：
 - 4 大主流设计主题切换（**Naive 绿**、**Element 蓝**、**AntD 极客蓝**、**Vant 橙红**）与深浅色模式。
-- 28+ 基础、表单、反馈及数据展示控件的实时交互。
+- 35+ 基础、表单、反馈、数据展示及游戏专用控件的实时交互。
 - 2D 游戏数学、物理运动学、网络请求、跨页面通信与场景转场沙盒。
 - 点击 **"Copy GDScript"** 一键复制组件与系统源码。
 
@@ -33,43 +33,49 @@
 
 ## 🌟 核心体系与特性
 
-### 1. 🧩 28+ 开箱即用 UI 组件
-- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 图标。
-- **表单输入**：Input 输入框、Select 选择器、Switch 开关、Checkbox 复选框、Radio 单选框、Slider 滑块、Rate 评分、Form 响应式表单容器。
-- **反馈交互**：Dialog 模态弹窗、Message 全局浮动吐司、Alert 警告提示条、Drawer 抽屉、Tooltip 文字提示、Popconfirm 气泡确认框。
-- **数据展示**：Card 卡片、Tag 标签、Badge 徽标、Avatar 头像、Progress 进度条、Tabs 选项卡、Collapse 折叠面板、Steps 步骤条、Empty 空状态。
+### 1. 🧩 35+ 开箱即用 UI 组件与游戏专用控件
+- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 图标、Fab 悬浮按钮。
+- **表单输入**：Input 输入框、InputNumber 数字步进、Select 选择器、Switch 开关、Checkbox 复选框、Radio 单选框、Slider 滑块、Stepper 步进器、Picker 拾取器、Form 响应式表单容器。
+- **反馈交互**：Dialog 模态弹窗、Message 全局浮动吐司、NoticeBar 滚动通告栏、Toast 轻提示、Dialogue JRPG/剧情对话流、Chat 微信/即时通讯流、InteractPrompt 浮动交互按键、Alert 警告条、Drawer 抽屉、Tooltip 提示、Popconfirm 气泡确认、Skeleton 骨架屏、Loading 遮罩、Tour 漫游引导。
+- **数据展示**：Card 卡片、Tag 标签、Badge 徽标、Avatar 头像、Progress 进度条、Tabs 选项卡、Collapse 折叠面板、Steps 步骤条、Space 间距容器。
 
-### 2. 🎯 2D 游戏数学与坐标系统 (`GCoord`)
+### 2. 🎰 Vue 风格点语法插槽系统 (`GSlotProxy`)
+- **默认无名插槽**：组件默认指向 default 插槽，`btn.slotName.color = "red"` 或 `btn.slotName.text = "确认支付"` 直接赋值。
+- **具名插槽点语法**：`dlg.header.text = "🔥 获得神话宝箱"`，`dlg.footer.confirm_text = "立即开启"`。
+- **动态自定义插槽**：支持 `card.slotName = "t1"`，`card.t1.color = "cyan"`，`card.t1.text = 124` 动态透传与强转。
+- **保留字防冲突守卫**：全自动拦截 Godot 4 系统属性冲突，提供明确的运行时警告与调试建议。
+
+### 3. 🎯 2D 游戏数学与坐标系统 (`GCoord`)
 - **屏幕边缘视野外目标指示器** (`get_offscreen_indicator_2d`)：自动计算 Boss/精英怪在屏幕边缘的夹持坐标、指示箭头旋转角及世界距离。
 - **2.5D Isometric 等距投影转换** (`cartesian_to_isometric_2d` / `isometric_to_cartesian_2d`)：45° 斜视角与笛卡尔网格互转。
 - **宝箱爆金币抛物线轨迹** (`get_loot_arc_pos_2d`)：二阶贝塞尔抛物线动画。
 - **环形弹幕与护盾点集** (`get_orbit_points_2d`)：均匀分布圆周轨道坐标。
 - **2D 扇形攻击与视野检测** (`is_in_fov_cone_2d`)：圆锥扇形夹角判定。
 
-### 3. ⚙️ 2D 物理运动学与碰撞装配 (`GPhysics`)
+### 4. ⚙️ 2D 物理运动学与碰撞装配 (`GPhysics`)
 - **跳跃物理公式计算**：根据期望跳跃高度 $h$ 与到达顶点时间 $t$，精确求解起跳初速度 $v = \frac{2h}{t}$ 与重力加速度 $g = \frac{2h}{t^2}$。
 - **范围爆炸冲击力** (`apply_explosion_impulse_2d`)：根据距离衰减对周围 `RigidBody2D` 施加径向冲击力。
 - **动态碰撞体装配**：一行代码为节点添加 Box / Circle / Capsule 碰撞体。
 
-### 4. 🌐 网络与多人游戏通信 (`GAxios` / `GWebSocket` / `GMultiplayer`)
+### 5. 🌐 网络与多人游戏通信 (`GAxios` / `GWebSocket` / `GMultiplayer`)
 - **Axios 风格 HTTP 客户端** (`GAxios`)：支持全局请求/响应拦截器、JWT Token 自动注入、超时控制与 RESTful 封装。
 - **WebSocket 实时客户端** (`GWebSocket`)：支持自动心跳保活、断线重连与全双工数据监听。
 - **高阶多人联机房间** (`GMultiplayer`)：基于 ENet 封装的一键开房、加入房间与 RPC 同步。
 
-### 5. ⚡ UniApp / Vue 风格全局跨页面通讯 (`GEvent`)
+### 6. ⚡ UniApp / Vue 风格全局跨页面通讯 (`GEvent`)
 - 还原 `uni.$emit`、`uni.$on`、`uni.$once`、`uni.$off` 语法。
 - **深度防内存泄漏**：支持传入 `self` 节点，节点离开场景树时全自动注销监听！
 - 提供与 Godot 官方推荐 **Autoload + 强类型信号 (Typed Signals)** 的架构对比与标准代码。
 
-### 6. 🚀 场景路由与 8 大转场动画 (`GRouter`)
+### 7. 🚀 场景路由与 8 大转场动画 (`GRouter`)
 - 极简跳转：`GRouter.push("res://scenes/shop.tscn")`
 - 8 种平滑转场：4 方向滑动（左/右/上/下）+ 3 大中心缩放（中心放大展开、远景缩小汇聚、Q弹果冻回弹）+ 经典淡入淡出。
 - **20+ 批量参数自动装配**：`GRouter.apply_params_to(self)` 一键反射注入同名变量。
 
-### 7. 🎨 全能数据格式化 (`GFormat`)
+### 8. 🎨 全能数据格式化 (`GFormat`)
 - HP 动态渐变色（健康绿/警告黄/濒死红）、时长转时分秒、万/亿/K/M/B 大数值缩写、词条属性增减 (+15%/-20)、装备品阶炫彩 BBCode、文件字节与网速。
 
-### 8. 🎵 5 大多媒体资产加载方案 (`GAsset`)
+### 9. 🎵 5 大多媒体资产加载方案 (`GAsset`)
 - 多线程异步加载 (`await GAsset.load_async`)、外部 MOD/本地头像动态读取、16 路全局音效池、BGM 双通道交叉淡入淡出、SpriteSheet 图集网格切片。
 
 ---
@@ -80,7 +86,8 @@
 your-project/
 ├── addons/
 │   └── gotod_ui/
-│       ├── components/    # 28+ Vue/Uni 风格 UI 组件
+│       ├── components/    # 35+ Vue/Uni 风格 UI 组件
+│       ├── core/          # 插槽代理 (GSlotProxy)、样式与生命周期守卫
 │       ├── theme/         # 主题 Token 与样式盒引擎 (Naive, Element, AntD, Vant)
 │       ├── events/        # 全局事件总线 (GEvent uni.$emit / uni.$on)
 │       ├── router/        # 场景转场路由管理器 (GRouter)

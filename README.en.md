@@ -25,7 +25,7 @@ This project includes a complete interactive documentation & live sandbox deploy
 
 In the live web preview, you can:
 - Switch across 4 design themes (**Naive Green**, **Element Blue**, **AntD Geek Blue**, **Vant Red/Orange**) and Dark / Light modes.
-- Interactively test 28+ basic, form, feedback, and data presentation components.
+- Interactively test 35+ basic, form, feedback, data presentation, and game-specific components.
 - Run live sandboxes for 2D game math, physics kinematics, networking, cross-page event broadcasting, and scene routing.
 - Click **"Copy GDScript"** to instantly copy code snippets to your clipboard.
 
@@ -33,25 +33,31 @@ In the live web preview, you can:
 
 ## 🌟 Core Modules & Features
 
-### 1. 🧩 28+ Ready-to-Use UI Components
-- **General**: Button, Typography Text, Divider, Icon.
-- **Form Controls**: Input, Select, Switch, Checkbox, Radio, Slider, Rate, Form responsive container.
-- **Feedback & Overlays**: Modal Dialog, Global Floating Message Toast, Alert banners, Drawer, Tooltip, Popconfirm.
-- **Data Display**: Card, Tag, Badge, Avatar, Progress bar, Tabs, Collapse accordion, Steps, Empty states.
+### 1. 🧩 35+ Ready-to-Use UI Components & Game Controls
+- **Basic**: Button, Text typography, Divider, Icon, Fab floating action button.
+- **Form**: Input, InputNumber, Select, Switch, Checkbox, Radio, Slider, Stepper, Picker, Form responsive container.
+- **Feedback**: Dialog modal, Message toast, NoticeBar ticker, Toast, Dialogue (JRPG/AVG system), Chat (WeChat/Lifeline stream), InteractPrompt (floating key), Alert, Drawer, Tooltip, Popconfirm, Skeleton, Loading overlay, Tour guide.
+- **Data**: Card, Tag, Badge, Avatar, Progress, Tabs, Collapse, Steps, Space container.
 
-### 2. 🎯 2D Game Math & Coordinate Utilities (`GCoord`)
+### 2. 🎰 Vue-Style Dot Slot Property Syntax (`GSlotProxy`)
+- **Default Slot**: Component defaults to default slot, assign properties directly via `btn.slotName.color = "red"` or `btn.slotName.text = "Confirm"`.
+- **Named Slots**: Direct dot access like `dlg.header.text = "🔥 Legendary Chest"`, `dlg.footer.confirm_text = "Open Now"`.
+- **Dynamic Custom Slots**: Set `card.slotName = "t1"` and access dynamically via `card.t1.color = "cyan"` or `card.t1.text = 124`.
+- **Keywords Guard**: Automatic interception of Godot 4 built-in keywords to prevent collision with helpful runtime diagnostics.
+
+### 3. 🎯 2D Game Math & Coordinate Utilities (`GCoord`)
 - **Off-Screen Target Indicator** (`get_offscreen_indicator_2d`): Automatically computes clamped screen boundary coordinates, indicator arrow rotation angle, and world distance for off-screen bosses/enemies.
 - **2.5D Isometric Transformations** (`cartesian_to_isometric_2d` / `isometric_to_cartesian_2d`): Bidirectional 45° isometric tile grid math.
 - **Loot Drop Quadratic Bezier Arcs** (`get_loot_arc_pos_2d`): Natural loot coin/chest pop trajectories.
 - **Orbital Point Patterns** (`get_orbit_points_2d`): Bullet hell patterns and rotating shield coordinates.
 - **2D FoV Cone Detection** (`is_in_fov_cone_2d`): Melee sweep & sector cone vision checks.
 
-### 3. ⚙️ 2D Physics Kinematics & Colliders (`GPhysics`)
+### 4. ⚙️ 2D Physics Kinematics & Colliders (`GPhysics`)
 - **Exact Jump Kinematics**: Calculates initial jump velocity $v = \frac{2h}{t}$ and gravity $g = \frac{2h}{t^2}$ from desired jump height $h$ and time-to-peak $t$.
 - **Radial Explosion Impulse** (`apply_explosion_impulse_2d`): Radial falloff impulse applied to nearby `RigidBody2D` nodes.
 - **Dynamic Collider Attachment**: One-liner creation of Box, Circle, and Capsule collision shapes.
 
-### 4. 🌐 Networking & Multiplayer (`GAxios` / `GWebSocket` / `GMultiplayer`)
+### 5. 🌐 Networking & Multiplayer (`GAxios` / `GWebSocket` / `GMultiplayer`)
 - **Axios-Style HTTP Client** (`GAxios`): Request/response interceptors, automatic JWT injection, timeouts, and RESTful wrappers.
 - **WebSocket Full-Duplex Client** (`GWebSocket`): Auto heartbeat keep-alive, reconnection backoff, and event dispatching.
 - **High-Level Multiplayer Rooms** (`GMultiplayer`): ENet-based room hosting, joining, and RPC synchronization.
@@ -61,7 +67,7 @@ In the live web preview, you can:
 - **Memory-Leak Protection**: Pass `self` to automatically unregister listeners on `_exit_tree`.
 - Complete side-by-side comparison with Godot's official **Autoload + Typed Signals** pattern.
 
-### 6. 🚀 Scene Router & 8 Transition Animations (`GRouter`)
+### 7. 🚀 Scene Router & 8 Transition Animations (`GRouter`)
 - Clean syntax: `GRouter.push("res://scenes/shop.tscn")`
 - 8 transitions: 4-direction slides (Left/Right/Up/Down) + 3 zoom variations (Zoom In expand, Zoom Out focus, Jelly Bounce) + Fade.
 - **Batch 20+ Parameter Injection**: `GRouter.apply_params_to(self)` one-line reflection injection.
@@ -69,7 +75,7 @@ In the live web preview, you can:
 ### 7. 🎨 Game Data Formatter (`GFormat`)
 - HP dynamic color transitions (Safe Green / Warning Yellow / Critical Red), seconds-to-duration conversion, Chinese (万/亿) & English (K/M/B) compact numbers, stat modifiers (+15% / -20), item rarity BBCode styling, and file size / transfer rates.
 
-### 8. 🎵 5 Multimedia Asset Management Schemes (`GAsset`)
+### 9. 🎵 5 Multimedia Asset Management Schemes (`GAsset`)
 - Multi-threaded async loading (`await GAsset.load_async`), external MOD/avatar image loading, 16-channel global audio pool, dual-channel BGM crossfading, and SpriteSheet atlas slicing.
 
 ---
@@ -80,7 +86,8 @@ In the live web preview, you can:
 your-project/
 ├── addons/
 │   └── gotod_ui/
-│       ├── components/    # 28+ Vue/Uni-style UI Controls
+│       ├── components/    # 35+ Vue/Uni-style UI Controls
+│       ├── core/          # Slot Proxy (GSlotProxy), Styling & Lifecycle Guard
 │       ├── theme/         # Design Tokens & StyleBox Engine (Naive, Element, AntD, Vant)
 │       ├── events/        # Global Event Bus (GEvent uni.$emit / uni.$on)
 │       ├── router/        # Scene Transition Router (GRouter)

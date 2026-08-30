@@ -1222,6 +1222,128 @@ func _on_test_live_fetch() -> void:
     
     # ❌ 错误 2: 底层直接使用 config.params 点语法访问 Dictionary 抛出运行时崩溃
     # ❌ 错误 3: method 未经 int() 转换直接传给 HTTPRequest 报错`
+      },
+      {
+        title: '4. 游戏实战 Slot 全阶体系示例 (基础 · 中级 · 高级 · 复杂组合)',
+        render: `
+          <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:18px; display:flex; flex-direction:column; gap:16px;">
+            <!-- Tab Navigation for Slot Levels -->
+            <div style="display:flex; gap:8px; border-bottom:1px solid var(--border-base); padding-bottom:10px; flex-wrap:wrap;">
+              <button class="g-btn g-btn-primary" style="height:28px; font-size:11px;" onclick="switchMemorySlotTab(0, this)">1. 🟢 基础插槽 (Basic #default)</button>
+              <button class="g-btn g-btn-default" style="height:28px; font-size:11px;" onclick="switchMemorySlotTab(1, this)">2. 🟡 中级具名 (Named #header/#footer)</button>
+              <button class="g-btn g-btn-default" style="height:28px; font-size:11px;" onclick="switchMemorySlotTab(2, this)">3. 🟣 高级作用域 (Scoped #card)</button>
+              <button class="g-btn g-btn-default" style="height:28px; font-size:11px;" onclick="switchMemorySlotTab(3, this)">4. 🔴 复杂复合 (Complex HUD & Modal)</button>
+            </div>
+
+            <!-- Panel 0: Basic Slot -->
+            <div id="memorySlotPanel0" class="memory-slot-panel" style="display:flex; flex-direction:column; gap:10px;">
+              <div style="font-weight:700; font-size:13px; color:var(--success);">🟢 基础插槽示例：卡片内容独立封装 (Single #default Slot)</div>
+              <p style="font-size:11px; color:var(--text-secondary); line-height:1.5;">
+                将每张翻牌卡片作为插槽容器，默认插槽可自由放入表情、神话装备图标、贴图或动画精灵，父级无需侵入卡片内部实现。
+              </p>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="width:64px; height:80px; background:linear-gradient(135deg, #1e293b, #0f172a); border:2px solid var(--primary); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer;" onclick="showToast('插槽卡片：神话法杖 (+280 魔力)', 'success')">
+                  <span style="font-size:24px;">🪄</span>
+                  <span style="font-size:9px; color:#fcd34d; font-weight:700; margin-top:2px;">神话法杖</span>
+                </div>
+                <div style="width:64px; height:80px; background:linear-gradient(135deg, #1e293b, #0f172a); border:2px solid var(--warning); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer;" onclick="showToast('插槽卡片：巨龙徽章 (暴击 +15%)', 'warning')">
+                  <span style="font-size:24px;">🐲</span>
+                  <span style="font-size:9px; color:#fcd34d; font-weight:700; margin-top:2px;">巨龙徽章</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 1: Intermediate Named Slots -->
+            <div id="memorySlotPanel1" class="memory-slot-panel" style="display:none; flex-direction:column; gap:10px;">
+              <div style="font-weight:700; font-size:13px; color:var(--warning);">🟡 中级具名插槽示例：胜利结算弹窗全区域定制 (#header / #default / #footer)</div>
+              <p style="font-size:11px; color:var(--text-secondary); line-height:1.5;">
+                胜利结算对话框将顶部星级横幅 (#header)、金币经验结算数据 (#default)、双主控操作按钮 (#footer) 拆分为三大独立插槽。
+              </p>
+              <button class="g-btn g-btn-warning" style="align-self:flex-start;" onclick="
+                openDialog('🏆 SSS级完美通关', '耗时: 24.5s | 翻牌连击: 8 Combo\\n获得: 300 EXP · 500 💰 · 记忆神石×2', '领奖并下一关', '保存战报');
+              ">呼出具名插槽结算弹窗 (Show Victory Modal)</button>
+            </div>
+
+            <!-- Panel 2: Advanced Scoped Slots -->
+            <div id="memorySlotPanel2" class="memory-slot-panel" style="display:none; flex-direction:column; gap:10px;">
+              <div style="font-weight:700; font-size:13px; color:#a855f7;">🟣 高级作用域插槽示例：数据驱动网格 (#card="{ item, index, is_flipped }")</div>
+              <p style="font-size:11px; color:var(--text-secondary); line-height:1.5;">
+                父组件向子插槽透传实时翻面状态与连击系数，插槽内部可根据 <code>is_flipped</code> 决定是否播放流光扫光粒子或显示背面卡背。
+              </p>
+              <div style="display:flex; gap:10px;">
+                <button class="g-btn g-btn-default" style="height:32px; font-size:11px;" onclick="showToast('作用域插槽透传: { id: 101, flipped: true, combo: 3 }', 'info')">查看透传作用域参数 (Inspect Props)</button>
+              </div>
+            </div>
+
+            <!-- Panel 3: Complex Multi-Component Slots -->
+            <div id="memorySlotPanel3" class="memory-slot-panel" style="display:none; flex-direction:column; gap:10px;">
+              <div style="font-weight:700; font-size:13px; color:var(--danger);">🔴 复杂复合插槽示例：全景 HUD + 实时抽屉 + 动态条件插槽协同</div>
+              <p style="font-size:11px; color:var(--text-secondary); line-height:1.5;">
+                在大型游戏中，多个组件的插槽形成联动：顶部 GNoticeBar 动态插槽广播连击 -> GContainer 复合插槽承载网格 -> GDrawer 右侧抽屉内嵌道具背包插槽。
+              </p>
+              <div style="display:flex; gap:8px;">
+                <button class="g-btn g-btn-danger" style="height:32px; font-size:11px;" onclick="showToast('复合插槽游戏场景初始化完毕！', 'success')">体验全套复合插槽管线 (Launch Pipeline)</button>
+              </div>
+            </div>
+          </div>
+        `,
+        diffTip: '💡 架构规范：通过基础默认插槽、具名插槽、作用域透传插槽与复合联动，实现高内聚低耦合的 Godot 游戏 UI。',
+        code: `# =========================================================================
+# 🎴 记忆大师 Slot 全阶实战代码 (Vue 3 模板与 GDScript 对齐)
+# =========================================================================
+
+# -------------------------------------------------------------------------
+# 1. 🟢 基础单插槽 (Basic #default Slot)
+# -------------------------------------------------------------------------
+# Godot GDScript 语法:
+var card = MemoryCard.new()
+card.slotName = ""              # 默认 default 插槽
+card.slotName.color = "gold"    # 修改默认插槽样式
+card.slotName.text = "神话法杖"
+
+# -------------------------------------------------------------------------
+# 2. 🟡 中级具名插槽 (Named #header / #default / #footer Slots)
+# -------------------------------------------------------------------------
+# Godot GDScript 语法:
+var win_dlg = GDialog.new()
+
+# 具名头部插槽
+win_dlg.slotName = "header"
+win_dlg.header.text = "🏆 SSS级完美通关 (8 Combo)"
+win_dlg.header.color = "gold"
+
+# 默认正文插槽
+win_dlg.slotName = ""
+win_dlg.slotName.text = "获得经验: +300 EXP | 金币: +500 💰"
+win_dlg.slotName.color = "white"
+
+# 具名底部插槽
+win_dlg.slotName = "footer"
+win_dlg.footer.confirm_text = "下一关 ▶"
+win_dlg.footer.cancel_text = "再玩一次"
+win_dlg.open()
+
+# -------------------------------------------------------------------------
+# 3. 🟣 高级作用域插槽 (Scoped Slot - 自定义 slotName 绑定)
+# -------------------------------------------------------------------------
+# Godot GDScript 语法:
+var item_slot = GCard.new()
+item_slot.slotName = "t1"       # 绑定具名插槽 t1
+item_slot.t1.color = "cyan"     # 动态修改 t1 插槽色彩
+item_slot.t1.text = 124         # 动态赋值 t1 插槽数值/文本
+item_slot.t1.visible = true
+
+# -------------------------------------------------------------------------
+# 4. 🔴 复杂复合插槽联动 (Complex Multi-Slot Pipeline)
+# -------------------------------------------------------------------------
+var hud = GContainer.new()
+hud.slotName = "notice"
+hud.notice.text = "🔥 全服双倍活动进行中！"
+hud.notice.color = "orange"
+
+hud.slotName = "bag"
+hud.bag.text = "背包 (28/50)"
+hud.bag.count = 28`
       }
     ]
   },

@@ -63,7 +63,10 @@ window.renderApiTable = function(title, headers, rows, subtitle = '') {
     <tr>
       ${headers.map(h => {
         const val = r[h.key] !== undefined ? r[h.key] : '';
-        if (h.isCode) return `<td><code>${val}</code></td>`;
+        if (h.isCode) {
+          const esc = (window.escapeHtml ? window.escapeHtml(val) : String(val).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+          return `<td><code style="word-break:break-all;">${esc}</code></td>`;
+        }
         if (h.className) return `<td class="${h.className}">${val}</td>`;
         return `<td>${val}</td>`;
       }).join('')}
@@ -1376,6 +1379,23 @@ window.simQuestNextStep = function() {
   if (stepDescEl) stepDescEl.innerText = simQuestStepsData[simQuestCurrentStep].desc;
   if (window.showToast) {
     showToast(`【Quest Event】任务进度已更新：${simQuestStepsData[simQuestCurrentStep].title}`, 'info');
+  }
+};
+
+window.switchMemorySlotTab = function(panelIndex, btnEl) {
+  for (let i = 0; i < 4; i++) {
+    const p = document.getElementById('memorySlotPanel' + i);
+    if (p) p.style.display = (i === panelIndex ? 'flex' : 'none');
+  }
+  if (btnEl && btnEl.parentElement) {
+    const btns = btnEl.parentElement.querySelectorAll('button');
+    btns.forEach((b, idx) => {
+      if (idx === panelIndex) {
+        b.className = 'g-btn g-btn-primary';
+      } else {
+        b.className = 'g-btn g-btn-default';
+      }
+    });
   }
 };
 

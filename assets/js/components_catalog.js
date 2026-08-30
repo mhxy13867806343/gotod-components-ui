@@ -93,6 +93,61 @@ var block_btn = GButton.new()
 block_btn.text = "Full Width"
 block_btn.block = true
 add_child(block_btn)`
+      },
+      {
+        title: '6. 插槽自定义内容 (Custom Slot Usage: #default & #icon & #loading)',
+        render: `
+          <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+            <!-- #icon + #default slot -->
+            <button class="g-btn g-btn-primary" onclick="showToast('点击了自定义插槽按钮', 'success')">
+              <i class="fa-solid fa-cart-shopping"></i>
+              <span>购买强化石 <b style="color:#fcd34d; margin-left:4px;">¥99</b></span>
+            </button>
+
+            <!-- Custom #icon slot with Badge -->
+            <button class="g-btn g-btn-default" onclick="showToast('点击了带角标插槽按钮')">
+              <span style="position:relative; display:inline-flex; align-items:center;">
+                <i class="fa-solid fa-bell"></i>
+                <span style="position:absolute; top:-4px; right:-6px; width:6px; height:6px; background:var(--danger); border-radius:50%;"></span>
+              </span>
+              <span style="margin-left:6px;">消息通知</span>
+            </button>
+
+            <!-- Custom #loading slot -->
+            <button class="g-btn g-btn-warning">
+              <i class="fa-solid fa-circle-notch fa-spin" style="color:#fff;"></i>
+              <span style="margin-left:6px;">同步云存档中...</span>
+            </button>
+          </div>
+        `,
+        code: `<!-- 方式 1: Vue 3 模板插槽语法 (Vue Template Slots) -->
+<GButton type="primary">
+  <template #icon>
+    <GIcon name="cart-shopping" color="yellow" />
+  </template>
+  <template #default>
+    <span>购买强化石 <b style="color:#fcd34d;">¥99</b></span>
+  </template>
+</GButton>
+
+# 方式 2: Godot GDScript 点语法直接配置 Slot (Dot Slot Property Syntax)
+var btn = GButton.new()
+btn.button_type = GButton.ButtonType.PRIMARY
+
+# 1. 默认插槽配置 (默认无名字 default slot)
+btn.slotName = ""              # 默认 default 插槽
+btn.slotName.text = "购买强化石"
+btn.slotName.color = "white"
+
+# 2. 具名插槽配置 (Named slot: icon)
+btn.slotName = "icon"
+btn.icon.name = "cart-shopping"
+btn.icon.color = "yellow"
+
+# 3. 自定义具名插槽绑定与赋值 (Custom Slot: t1)
+btn.slotName = "t1"
+btn.t1.color = "#fcd34d"
+btn.t1.text = 99               # 直接修改插槽文本与色彩`
       }
     ],
     props: [
@@ -113,8 +168,9 @@ add_child(block_btn)`
       { name: 'set_disabled(is_disabled: bool)', desc: '动态禁用或启用按钮', params: '(is_disabled: bool) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '按钮内部文字或自定义节点插槽', child: 'Control / Label' },
-      { name: 'icon', desc: '自定义图标插槽', child: 'GIcon / TextureRect' }
+      { name: 'default', desc: '按钮内部文字或自定义节点插槽', child: 'GText / Label / Control', example: '<template #default>确认支付 ¥99</template>' },
+      { name: 'icon', desc: '按钮前置自定义图标插槽', child: 'GIcon / TextureRect', example: '<template #icon><GIcon name="bag-shopping" /></template>' },
+      { name: 'loading', desc: '自定义加载中动画或占位插槽', child: 'GLoading / TextureProgressBar', example: '<template #loading><GLoading size="14" /></template>' }
     ]
   },
 
@@ -169,7 +225,11 @@ add_child(txt)`
     methods: [
       { name: 'set_text(new_text: String)', desc: '更新文本内容', params: '(new_text: String) -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: '文本主体内容插槽', child: 'Label / RichTextLabel', example: '<template #default>这是一段带渐变高亮的正文</template>' },
+      { name: 'prefix', desc: '文本前置修饰插槽（如标签或图标）', child: 'GIcon / GTag / Control', example: '<template #prefix><GTag type="primary">HOT</GTag></template>' },
+      { name: 'suffix', desc: '文本后置修饰插槽（如角标或单位）', child: 'GIcon / GBadge / Control', example: '<template #suffix><GBadge is_dot /></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -849,7 +909,7 @@ add_child(root_container)`
       { name: 'css(rules_or_func: Variant)', desc: '链式设定当前容器的样式规则', params: '(rules_or_func: Variant) -> GContainer' }
     ],
     slots: [
-      { name: 'default', desc: '默认插槽，放置子容器或业务组件', child: 'GHeader / GAside / GMain / GFooter / Control' }
+      { name: 'default', desc: '容器内部承载的子节点插槽', child: 'Control / VBoxContainer / HBoxContainer', example: '<template #default><GButton>内部控件</GButton></template>' }
     ],
     paneProps: [
       { name: 'GHeader.height', type: 'float', default: '60.0', desc: '顶栏容器的高度 (像素)' },
@@ -898,7 +958,7 @@ add_child(div)`
     events: [],
     methods: [],
     slots: [
-      { name: 'default', desc: '自定义分割线内嵌标题内容', child: 'Control' }
+      { name: 'default', desc: '分割线居中或靠左/靠右嵌入的文字/图标内容插槽', child: 'Control / Label / GText', example: '<template #default><span>第三方快捷登录</span></template>' }
     ]
   },
 
@@ -933,7 +993,10 @@ add_child(icon)`
     ],
     events: [],
     methods: [],
-    slots: []
+    slots: [
+      { name: 'default', desc: '自定义矢量图形或纹理节点插槽', child: 'TextureRect / Control', example: '<template #default><TextureRect texture="res://icon.png" /></template>' },
+      { name: 'badge', desc: '图标右上角徽标插槽', child: 'GBadge / Control', example: '<template #badge><GBadge value="99+" /></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -1017,7 +1080,10 @@ add_child(fab)`
       { name: 'add_action(name, label, icon)', returns: 'void', desc: '动态添加单个子菜单项' },
       { name: 'add_actions(action_list)', returns: 'void', desc: '批量追加一组子菜单项 [{"name": "", "label": "", "icon": null}]' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: '悬浮按钮主触发球图标插槽', child: 'GIcon / TextureRect', example: '<template #default><GIcon name="plus" /></template>' },
+      { name: 'menu', desc: '展开的子快捷操作菜单项插槽', child: 'VBoxContainer / Array[GButton]', example: '<template #menu><GButton icon="share">分享</GButton></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -1062,21 +1128,21 @@ add_child(pwd)`
       {
         title: '3. 复合型前缀与后缀输入 (Prefix & Suffix)',
         render: `
-          <div style="display:flex; flex-direction:column; gap:14px; width:100%; max-width:380px;">
-            <div class="g-input-wrapper">
-              <span style="color:var(--text-secondary); font-size:0.85rem; margin-right:8px;">https://</span>
-              <input class="g-input" type="text" value="github.com/mhxy13867806343">
+          <div style="display:flex; flex-direction:column; gap:14px; align-items:flex-start;">
+            <div class="g-input-wrapper" style="width:fit-content; max-width:100%;">
+              <span style="color:var(--text-secondary); font-size:0.85rem; margin-right:8px; white-space:nowrap;">https://</span>
+              <input class="g-input" type="text" value="github.com/mhxy1386780634" style="width:230px; font-family:inherit;">
             </div>
-            <div class="g-input-wrapper">
-              <input class="g-input" type="text" value="99.9">
-              <span style="color:var(--text-secondary); font-size:0.85rem; margin-left:8px;">USD / Month</span>
+            <div class="g-input-wrapper" style="width:fit-content; max-width:100%;">
+              <input class="g-input" type="text" value="99.9" style="width:48px; font-family:inherit;">
+              <span style="color:var(--text-secondary); font-size:0.85rem; margin-left:8px; white-space:nowrap;">USD / Month</span>
             </div>
           </div>
         `,
         code: `# GDScript: Prefix & Suffix
 var input = GInput.new()
 input.prefix_text = "https://"
-input.suffix_text = ".com"
+input.text = "github.com/mhxy1386780634"
 add_child(input)`
       },
       {
@@ -1120,8 +1186,11 @@ add_child(err_inp)`
       { name: 'select_all()', desc: '全选输入框内的所有文本', params: '() -> void' }
     ],
     slots: [
-      { name: 'prefix', desc: '输入框头部前缀内容/图标', child: 'GIcon / Control' },
-      { name: 'suffix', desc: '输入框尾部后缀内容/图标', child: 'GIcon / Control' }
+      { name: 'default', desc: '输入框主体控件插槽', child: 'LineEdit / Control', example: '<template #default><LineEdit placeholder="请输入..." /></template>' },
+      { name: 'prefix', desc: '输入框前置图标或文字插槽', child: 'GIcon / GText / TextureRect', example: '<template #prefix><GIcon name="magnifying-glass" /></template>' },
+      { name: 'suffix', desc: '输入框后置图标或操作按钮插槽', child: 'GIcon / GButton / GText', example: '<template #suffix><GText>USD / Month</GText></template>' },
+      { name: 'prepend', desc: '输入框外层前置复合内容（如协议头或选择器）', child: 'GSelect / GButton / Control', example: '<template #prepend><GSelect options="https://,http://" /></template>' },
+      { name: 'append', desc: '输入框外层后置复合按钮（如搜索或发送验证码）', child: 'GButton / Control', example: '<template #append><GButton type="primary">搜索</GButton></template>' }
     ]
   },
 
@@ -1160,7 +1229,10 @@ add_child(ta)`
     methods: [
       { name: 'clear()', desc: '清空文本域', params: '() -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: '多行文本框主体控件插槽', child: 'TextEdit / Control', example: '<template #default><TextEdit placeholder="请详细描述问题..." /></template>' },
+      { name: 'footer', desc: '文本框底部自定义操作或字数统计栏插槽', child: 'HBoxContainer / GText', example: '<template #footer><span>已输入 18/200 字</span></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -1203,7 +1275,12 @@ add_child(num)`
       { name: 'increase()', desc: '数值按 step 增加', params: '() -> void' },
       { name: 'decrease()', desc: '数值按 step 减少', params: '() -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'decrease-icon', desc: '自定义递减按钮图标插槽', child: 'GIcon / TextureRect', example: '<template #decrease-icon><GIcon name="minus" /></template>' },
+      { name: 'increase-icon', desc: '自定义递增按钮图标插槽', child: 'GIcon / TextureRect', example: '<template #increase-icon><GIcon name="plus" /></template>' },
+      { name: 'prefix', desc: '输入框前置单位插槽（如货币符号 ¥）', child: 'GText / Label', example: '<template #prefix>¥</template>' },
+      { name: 'suffix', desc: '输入框后置单位插槽（如计量单位“件/个”）', child: 'GText / Label', example: '<template #suffix>件</template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -1275,7 +1352,11 @@ add_child(stepper)`
       { name: 'set_value(val)', desc: '设置当前步进器数值', params: '(val: float) -> void' },
       { name: 'get_value()', desc: '获取当前步进器数值', params: '() -> float' }
     ],
-    slots: []
+    slots: [
+      { name: 'minus', desc: '步进器减少按钮插槽', child: 'GIcon / GButton', example: '<template #minus><GIcon name="angle-left" /></template>' },
+      { name: 'plus', desc: '步进器增加按钮插槽', child: 'GIcon / GButton', example: '<template #plus><GIcon name="angle-right" /></template>' },
+      { name: 'default', desc: '步进器中间数值输入/显示区域插槽', child: 'GInput / Label', example: '<template #default><span>Lv. {{ level }}</span></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -1312,7 +1393,11 @@ add_child(sw)`
     methods: [
       { name: 'toggle()', desc: '翻转当前开关状态', params: '() -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'checked-icon', desc: '开启状态滑块内部图标插槽', child: 'GIcon / TextureRect', example: '<template #checked-icon><GIcon name="check" /></template>' },
+      { name: 'unchecked-icon', desc: '关闭状态滑块内部图标插槽', child: 'GIcon / TextureRect', example: '<template #unchecked-icon><GIcon name="xmark" /></template>' },
+      { name: 'default', desc: '开关右侧伴随文本标签插槽', child: 'GText / Label', example: '<template #default><span>开启音效 (SFX)</span></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -1398,7 +1483,8 @@ group.add_child(cb2)`
       { name: 'set_checked(val: bool)', desc: '设置勾选状态', params: '(val: bool) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '自定义复选框文本内容', child: 'Control' }
+      { name: 'default', desc: '复选框右侧描述文本或富文本标签插槽', child: 'Label / RichTextLabel / Control', example: '<template #default>我已阅读并同意《服务协议》</template>' },
+      { name: 'icon', desc: '自定义复选勾选状态图标插槽（透传 { checked }）', child: 'GIcon / TextureRect', example: '<template #icon="{ checked }"><GIcon :name="checked ? \'square-check\' : \'square\'" /></template>' }
     ]
   },
 
@@ -1472,7 +1558,8 @@ rg.add_child(r2)`
     ],
     methods: [],
     slots: [
-      { name: 'default', desc: '自定义单选按钮文本内容', child: 'Control' }
+      { name: 'default', desc: '单选框右侧描述文本插槽', child: 'Label / RichTextLabel / Control', example: '<template #default>顺丰次日达 (+ ¥12)</template>' },
+      { name: 'icon', desc: '自定义单选圆点选中状态图标插槽（透传 { checked }）', child: 'GIcon / TextureRect', example: '<template #icon="{ checked }"><GIcon :name="checked ? \'circle-dot\' : \'circle\'" /></template>' }
     ]
   },
 
@@ -1587,8 +1674,11 @@ sel.set_custom_item_template(hero_item_scene)`
       { name: 'set_selected_by_value(val: Variant)', desc: '根据绑定的 value 设置选中项', params: '(val: Variant) -> void' }
     ],
     slots: [
-      { name: 'prefix', desc: '选择框头部前缀图标', child: 'GIcon / Control' },
-      { name: 'empty', desc: '选项列表为空时的占位内容', child: 'Control' }
+      { name: 'default', desc: '下拉选择框主体触发器展示内容插槽', child: 'Control / GText', example: '<template #default><span>请选择法术流派</span></template>' },
+      { name: 'prefix', desc: '选择框前置图标插槽', child: 'GIcon / TextureRect', example: '<template #prefix><GIcon name="wand-magic" /></template>' },
+      { name: 'arrow', desc: '自定义下拉展开箭头指示器插槽', child: 'GIcon / TextureRect', example: '<template #arrow><GIcon name="chevron-down" /></template>' },
+      { name: 'option', desc: '自定义下拉菜单列表每一项渲染插槽（透传 { item, index }）', child: 'Control / HBoxContainer', example: '<template #option="{ item }"><GIcon :name="item.icon" /> {{ item.label }}</template>' },
+      { name: 'empty', desc: '无匹配搜索结果时的空状态插槽', child: 'Control / GText', example: '<template #empty><span>未找到相关角色</span></template>' }
     ]
   },
 
@@ -1649,7 +1739,8 @@ picker.open()`
       { name: 'get_selected_value()', desc: '获取当前选中的值', params: '() -> Variant' }
     ],
     slots: [
-      { name: 'toolbar', desc: '自定义顶部工具栏内容', child: 'Control' }
+      { name: 'option', desc: '轮盘每一行选项自定义渲染插槽（透传 { item, index }）', child: 'Control / GText', example: '<template #option="{ item }"><b>{{ item.text }}</b></template>' },
+      { name: 'top-toolbar', desc: '选择器顶部自定义工具栏插槽（取消/确认按钮区）', child: 'HBoxContainer / GButton', example: '<template #top-toolbar><GButton>取消</GButton><GButton type="primary">完成</GButton></template>' }
     ]
   },
 
@@ -1690,7 +1781,10 @@ add_child(slider)`
     methods: [
       { name: 'set_value(v: float)', desc: '程序化设置滑块值', params: '(v: float) -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'thumb', desc: '自定义滑块抓手把手插槽', child: 'Control / GIcon / TextureRect', example: '<template #thumb><GIcon name="volume-high" /></template>' },
+      { name: 'mark', desc: '自定义刻度标记渲染插槽（透传 { value, label }）', child: 'Control / GText', example: '<template #mark="{ value }"><span>{{ value }}%</span></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -1843,7 +1937,10 @@ func add_item():
       { name: 'clear_validate()', desc: '清除所有表单项的错误提示状态', params: '() -> void' }
     ],
     slots: [
-      { name: 'default', desc: '表单项 GFormItem 容器插槽', child: 'GFormItem / Control' }
+      { name: 'default', desc: '表单主体内容插槽，放置各类表单控件与 GFormItem', child: 'Control / VBoxContainer', example: '<template #default><GFormItem label="账号"><GInput /></GFormItem></template>' },
+      { name: 'label', desc: '自定义表单项左侧标签栏插槽（透传 { label, required }）', child: 'HBoxContainer / GText', example: '<template #label><span>用户名 <i style="color:red;">*</i></span></template>' },
+      { name: 'error', desc: '自定义表单校验失败错误提示插槽（透传 { error_message }）', child: 'Control / GText', example: '<template #error="{ error_message }"><span class="err">{{ error_message }}</span></template>' },
+      { name: 'extra', desc: '表单项底部额外辅助说明插槽', child: 'Control / GText', example: '<template #extra><small>密码长度建议在 8-16 位之间</small></template>' }
     ],
     paneProps: [
       { name: 'label', type: 'String', default: '""', desc: '表单项标签文本' },
@@ -1889,6 +1986,68 @@ danger_dlg.content_text = "This action is irreversible!"
 danger_dlg.confirm_button_text = "Confirm Delete"
 add_child(danger_dlg)
 danger_dlg.open()`
+      },
+      {
+        title: '3. 插槽自定义对话框 (Custom Slots: #header / #default / #footer / #close)',
+        render: `
+          <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+            <button class="g-btn g-btn-warning" onclick="
+              openDialog(
+                '🔥 获得神话首领宝箱',
+                '<div style=\\'text-align:center; padding:10px;\\'><div style=\\'font-size:48px; margin-bottom:8px;\\'>🎁✨</div><div style=\\'font-weight:700; color:var(--text-primary); font-size:15px;\\'>【史诗战役通关奖励】</div><p style=\\'font-size:12px; color:var(--text-secondary); margin-top:6px;\\'>内含：极品神话圣剑 ×1 · 纯净以太结晶 ×50 · 钻石 ×888</p></div>',
+                '💎 立即开启宝箱',
+                '收入背包'
+              );
+            ">
+              <i class="fa-solid fa-gift"></i> 打开插槽自定义结算弹窗
+            </button>
+          </div>
+        `,
+        code: `<!-- 方式 1: Vue 3 模板多插槽定制 (Vue Template Multi-Slots) -->
+<GDialog v-model:open="showRewardModal">
+  <!-- #header 顶部自定义标题插槽 -->
+  <template #header>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span>🔥 获得神话首领宝箱</span>
+      <GBadge value="HOT" />
+    </div>
+  </template>
+
+  <!-- #default 正文内容插槽 (可内嵌任意子组件或 3D Viewport) -->
+  <template #default>
+    <div class="reward-box">
+      <div class="reward-icon">🎁✨</div>
+      <h4>【史诗战役通关奖励】</h4>
+      <p>内含：极品神话圣剑 ×1 · 纯净以太结晶 ×50</p>
+    </div>
+  </template>
+
+  <!-- #footer 底部操作栏插槽 -->
+  <template #footer>
+    <GButton @click="saveToInventory">收入背包</GButton>
+    <GButton type="warning" @click="openNow">💎 立即开启宝箱</GButton>
+  </template>
+</GDialog>
+
+# 方式 2: Godot GDScript 点语法直接配置 Slot (Dot Slot Property Syntax)
+var dlg = GDialog.new()
+
+# 1. 默认正文插槽 (默认无名字 default slot)
+dlg.slotName = ""              # default 插槽
+dlg.slotName.text = "【史诗战役通关奖励】内含极品神话圣剑！"
+dlg.slotName.color = "white"
+
+# 2. 具名标题插槽 (Named slot: header)
+dlg.slotName = "header"
+dlg.header.text = "🔥 获得神话首领宝箱"
+dlg.header.color = "gold"
+
+# 3. 具名底部插槽 (Named slot: footer)
+dlg.slotName = "footer"
+dlg.footer.confirm_text = "💎 立即开启宝箱"
+dlg.footer.cancel_text = "收入背包"
+
+dlg.open()`
       }
     ],
     props: [
@@ -1912,9 +2071,10 @@ danger_dlg.open()`
       { name: 'close()', desc: '关闭弹窗并播放淡出动画', params: '() -> void' }
     ],
     slots: [
-      { name: 'header', desc: '自定义弹窗顶部标题区域', child: 'Control' },
-      { name: 'default', desc: '弹窗正文内容插槽', child: 'Control' },
-      { name: 'footer', desc: '弹窗底部按钮操作区域', child: 'Control / HBoxContainer' }
+      { name: 'default', desc: '对话框主体内容插槽', child: 'Control / VBoxContainer', example: '<template #default><p>确认要丢弃这件神话装备？</p></template>' },
+      { name: 'header', desc: '对话框顶部标题栏插槽', child: 'HBoxContainer / GText', example: '<template #header><h3>⚠️ 高危操作警告</h3></template>' },
+      { name: 'close', desc: '自定义右上角关闭按钮插槽', child: 'GButton / GIcon', example: '<template #close><GIcon name="xmark" /></template>' },
+      { name: 'footer', desc: '对话框底部操作按钮栏插槽（默认确认/取消）', child: 'HBoxContainer / GSpace / GButton', example: '<template #footer><GButton type="danger">确认丢弃</GButton></template>' }
     ]
   },
 
@@ -2198,7 +2358,13 @@ GInteractPrompt.attach_to(npc_old_man, "R", func():
       { name: 'say(lines, speaker="", avatar=null)', desc: '播放单句或多句对话队列', params: '(lines: Variant, speaker: String, avatar: Texture2D) -> GDialogue' },
       { name: 'ask(question, options, speaker="", avatar=null)', desc: '播放带分支选择支的剧情对话', params: '(question: String, options: Array, speaker: String, avatar: Texture2D) -> GDialogue' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: '剧情对话正文打字机富文本区域', child: 'RichTextLabel / Control', example: '<template #default>勇士，燃烧军团的阴影已笼罩艾泽拉斯！</template>' },
+      { name: 'name', desc: '说话者姓名牌印章区域', child: 'GText / PanelContainer', example: '<template #name><span>大魔导师·卡德加 (Lv.99)</span></template>' },
+      { name: 'avatar', desc: '说话者半身立绘/动态插画插槽', child: 'TextureRect / AnimatedSprite2D', example: '<template #avatar><TextureRect texture="res://npc_khadgar.png" /></template>' },
+      { name: 'options', desc: '分支选择支列表插槽（透传 { option_list }）', child: 'VBoxContainer / GButton', example: '<template #options><GButton>接受拯救世界任务</GButton></template>' },
+      { name: 'next-icon', desc: '右下角打字机完毕后的翻页闪烁指示图标插槽', child: 'GIcon / TextureRect', example: '<template #next-icon><GIcon name="angles-down" /></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -2306,7 +2472,11 @@ lifeline_chat.receive_message("在那里我能撑更久")`
       { name: 'add_system_notice(text)', desc: '添加一条居中系统时间戳或事件胶囊', params: '(text: String) -> GChat' },
       { name: 'clear()', desc: '清空当前聊天记录列表', params: '() -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'message', desc: '单条消息气泡自定义渲染插槽（透传 { message_data, is_self }）', child: 'Control / HBoxContainer', example: '<template #message="{ msg, is_self }"><div :class="is_self ? \'my-msg\' : \'peer-msg\'">{{ msg.text }}</div></template>' },
+      { name: 'avatar', desc: '发言玩家头像插槽（透传 { user_info }）', child: 'GAvatar', example: '<template #avatar="{ user }"><GAvatar :src="user.avatar_url" /></template>' },
+      { name: 'input', desc: '底部自定义输入与表情选择工具栏插槽', child: 'GInput / GButton', example: '<template #input><GInput placeholder="输入消息..." /><GButton>发送</GButton></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -2398,7 +2568,9 @@ popup.open()`
       { name: 'set_content(node)', desc: '动态设置弹出层内部承载的子节点内容', params: '(node: Control) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '弹出层面板内部承载的内容容器', child: 'Control' }
+      { name: 'default', desc: '弹层主体内容插槽', child: 'Control / VBoxContainer', example: '<template #default><div class="goods-sku-panel">...</div></template>' },
+      { name: 'header', desc: '顶部标题/导航栏插槽', child: 'HBoxContainer', example: '<template #header><h4>选择武器精炼规格</h4></template>' },
+      { name: 'close', desc: '自定义关闭按钮插槽', child: 'GButton / GIcon', example: '<template #close><GIcon name="xmark" /></template>' }
     ]
   },
 
@@ -2466,7 +2638,7 @@ overlay.open()`
       { name: 'set_content(node)', desc: '向遮罩层中央插槽挂载自定义控件节点', params: '(node: Control) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '遮罩层居中插槽内容容器', child: 'Control' }
+      { name: 'default', desc: '遮罩层内部居中/挂载的子节点插槽', child: 'Control', example: '<template #default><div class="center-loading-card">数据同步中...</div></template>' }
     ]
   },
 
@@ -2528,7 +2700,11 @@ sheet.open()`
       { name: 'open()', desc: '呼出底部动作面板', params: '() -> void' },
       { name: 'close()', desc: '关闭动作面板', params: '() -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'title', desc: '面板顶部标题或说明插槽', child: 'GText / Label', example: '<template #title><h4>请选择快捷分享方式</h4></template>' },
+      { name: 'action', desc: '自定义每个操作条目渲染插槽（透传 { item, index }）', child: 'Control / GButton', example: '<template #action="{ item }"><GButton icon="share">{{ item.name }}</GButton></template>' },
+      { name: 'cancel', desc: '底部取消按钮插槽', child: 'GButton', example: '<template #cancel><GButton>关闭面板</GButton></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -2590,7 +2766,8 @@ popover.open_for_node(target_btn)`
       { name: 'toggle_for_node(target: Control)', desc: '切换气泡开启/关闭', params: '(target: Control) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '自定义气泡内部内容容器', child: 'Control' }
+      { name: 'default', desc: '触发气泡的宿主目标节点插槽', child: 'GButton / Control', example: '<template #default><GButton icon="ellipsis">更多</GButton></template>' },
+      { name: 'content', desc: '气泡弹出卡片内部自定义内容插槽', child: 'Control / VBoxContainer', example: '<template #content><VBoxContainer><GButton icon="qrcode">扫一扫</GButton></VBoxContainer></template>' }
     ]
   },
 
@@ -2640,7 +2817,11 @@ add_child(bar)`
       { name: 'close()', desc: '点击右侧关闭图标时触发', params: '()' }
     ],
     methods: [],
-    slots: []
+    slots: [
+      { name: 'default', desc: '滚动播报文本主体插槽', child: 'Label / RichTextLabel', example: '<template #default><span>🔥 [重要通告] 全服限时掉落双倍神话强化石！</span></template>' },
+      { name: 'left-icon', desc: '左侧通知喇叭图标插槽', child: 'GIcon / TextureRect', example: '<template #left-icon><GIcon name="bullhorn" /></template>' },
+      { name: 'right-icon', desc: '右侧更多/关闭操作区插槽', child: 'GIcon / GButton', example: '<template #right-icon><GIcon name="chevron-right" /></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -2675,7 +2856,10 @@ GMessage.info("System update ready")`
       { name: 'error(content: String, duration: float = 3.0)', desc: '弹出错误提示', params: '(content: String, duration: float) -> void' },
       { name: 'info(content: String, duration: float = 3.0)', desc: '弹出普通信息提示', params: '(content: String, duration: float) -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: '全局轻量消息正文插槽', child: 'Label / RichTextLabel', example: '<template #default><span>系统配置已成功保存！</span></template>' },
+      { name: 'icon', desc: '自定义前置状态图标插槽', child: 'GIcon / TextureRect', example: '<template #icon><GIcon name="circle-check" style="color:green;" /></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -2777,7 +2961,10 @@ GToast.custom({
       { name: 'set_message(new_msg: String)', desc: '动态更新当前正在展示的轻提示文本 (如倒计时)', params: '(new_msg: String) -> GToast' },
       { name: 'clear()', desc: '一键清除并关闭当前所有正在展示的轻提示', params: '() -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: 'Toast 提示正文内容插槽', child: 'Label / RichTextLabel', example: '<template #default><span>获得成就：初出茅庐 🎖️</span></template>' },
+      { name: 'icon', desc: '自定义 Toast 图标或 Loading 动画插槽', child: 'GIcon / TextureRect / GLoading', example: '<template #icon><GIcon name="medal" /></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -2819,8 +3006,11 @@ add_child(alert)`
       { name: 'close()', desc: '关闭并移除该 Alert', params: '() -> void' }
     ],
     slots: [
-      { name: 'title', desc: '自定义标题插槽', child: 'Control' },
-      { name: 'default', desc: '自定义辅助描述内容插槽', child: 'Control' }
+      { name: 'default', desc: '提示内容正文插槽', child: 'Label / RichTextLabel', example: '<template #default><span>核心渲染节点已就绪，耗时 12ms。</span></template>' },
+      { name: 'title', desc: '提示标题插槽', child: 'GText / Label', example: '<template #title><b>初始化成功</b></template>' },
+      { name: 'icon', desc: '自定义前置状态图标插槽', child: 'GIcon / TextureRect', example: '<template #icon><GIcon name="circle-info" /></template>' },
+      { name: 'close', desc: '自定义右上角关闭按钮插槽', child: 'GButton / GIcon', example: '<template #close><GIcon name="xmark" /></template>' },
+      { name: 'action', desc: '提示右侧/底部快捷操作项插槽', child: 'GButton / HBoxContainer', example: '<template #action><GButton size="small">查看详情</GButton></template>' }
     ]
   },
 
@@ -2845,6 +3035,52 @@ drawer.title = "Configuration Panel"
 drawer.placement = GDrawer.Placement.RIGHT
 add_child(drawer)
 drawer.open()`
+      },
+      {
+        title: '2. 插槽自定义抽屉 (Custom Slots: #header / #default / #footer)',
+        render: `
+          <div style="display:flex; gap:12px;">
+            <button class="g-btn g-btn-success" onclick="
+              openDrawer('right');
+              showToast('已打开内嵌道具背包插槽的抽屉面板', 'success');
+            ">
+              <i class="fa-solid fa-box-archive"></i> 打开道具背包自定义抽屉
+            </button>
+          </div>
+        `,
+        code: `<!-- 方式 1: Vue 3 模板抽屉多插槽定制 (Vue Template Slots) -->
+<GDrawer v-model:open="showInventory" placement="right" size="400">
+  <!-- #header 自定义标题栏插槽 -->
+  <template #header>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <i class="fa-solid fa-backpack"></i>
+      <span>冒险者背包 (28/50)</span>
+    </div>
+  </template>
+
+  <!-- #default 抽屉正文插槽 (承载网格列表与装备描述) -->
+  <template #default>
+    <ScrollContainer>
+      <div class="inventory-grid">
+        <!-- 动态背包网格卡片 -->
+      </div>
+    </ScrollContainer>
+  </template>
+
+  <!-- #footer 抽屉底部操作插槽 -->
+  <template #footer>
+    <GButton @click="sortInventory">一键整理</GButton>
+    <GButton type="primary" @click="saveInventory">保存并关闭</GButton>
+  </template>
+</GDrawer>
+
+# 方式 2: GDScript 代码组装挂载抽屉插槽
+var drawer = GDrawer.new()
+drawer.placement = GDrawer.Placement.RIGHT
+drawer.set_header(custom_header_hbox)
+drawer.set_content(inventory_scroll_container)
+drawer.set_footer(action_buttons_space)
+drawer.open()`
       }
     ],
     props: [
@@ -2863,9 +3099,9 @@ drawer.open()`
       { name: 'close()', desc: '收起并关闭抽屉面板', params: '() -> void' }
     ],
     slots: [
-      { name: 'header', desc: '自定义抽屉头部', child: 'Control' },
-      { name: 'default', desc: '抽屉主体内容插槽', child: 'Control' },
-      { name: 'footer', desc: '抽屉底部操作插槽', child: 'Control' }
+      { name: 'default', desc: '抽屉主体内容插槽', child: 'Control / ScrollContainer', example: '<template #default><ScrollContainer><VBoxContainer>...</VBoxContainer></ScrollContainer></template>' },
+      { name: 'header', desc: '抽屉顶部标题区插槽', child: 'HBoxContainer / GText', example: '<template #header><h3>全局游戏设置</h3></template>' },
+      { name: 'footer', desc: '抽屉底部操作栏插槽', child: 'HBoxContainer / GSpace', example: '<template #footer><GButton type="primary">保存配置</GButton></template>' }
     ]
   },
 
@@ -2900,7 +3136,8 @@ add_child(tip)`
       { name: 'hide_tooltip()', desc: '手动隐藏气泡', params: '() -> void' }
     ],
     slots: [
-      { name: 'content', desc: '自定义复杂气泡内容插槽', child: 'Control' }
+      { name: 'default', desc: '触发提示的宿主目标节点插槽', child: 'GButton / Control', example: '<template #default><GButton icon="circle-question">帮助</GButton></template>' },
+      { name: 'content', desc: '提示内部自定义内容/富文本插槽', child: 'Control / Label', example: '<template #content><RichTextLabel text="[b]神话属性[/b]: 全体攻击力 +20%" /></template>' }
     ]
   },
 
@@ -2935,7 +3172,11 @@ add_child(loading)`
       { name: 'show()', desc: '显示加载指示器', params: '() -> void' },
       { name: 'hide()', desc: '隐藏加载指示器', params: '() -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: '被加载遮罩包裹的主体业务节点插槽', child: 'Control', example: '<template #default><div class="game-data-table">...</div></template>' },
+      { name: 'spinner', desc: '自定义 Loading 旋转图标或序列帧动画插槽', child: 'GIcon / TextureRect', example: '<template #spinner><GIcon name="spinner" class="fa-spin" /></template>' },
+      { name: 'description', desc: '加载提示文本插槽', child: 'Label / GText', example: '<template #description>正在连接游戏服务器，请稍候...</template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -3045,7 +3286,8 @@ skeleton.loading = false`
       { name: 'set_content(node: Control)', desc: '绑定数据加载完成后显示的真实内容控件', params: '(node: Control) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '骨架屏加载完成后显示的真实内容插槽', child: 'Control' }
+      { name: 'default', desc: '加载完成（loading = false）后展示的真实业务组件插槽', child: 'Control', example: '<template #default><HeroCard :hero="heroData" /></template>' },
+      { name: 'template', desc: '自定义骨架占位模版结构插槽', child: 'VBoxContainer / Array[Control]', example: '<template #template><div class="my-custom-skeleton"></div></template>' }
     ]
   },
 
@@ -3093,7 +3335,11 @@ tour.start()`
       { name: 'close_tour()', desc: '关闭并退出漫游引导', params: '() -> void' }
     ],
     slots: [
-      { name: 'default', desc: '自定义步骤卡片内容插槽', child: 'Control' }
+      { name: 'default', desc: '自定义引导气泡内容区插槽（透传 { step, current, total }）', child: 'Control / VBoxContainer', example: '<template #default="{ step }"><h4>{{ step.title }}</h4><p>{{ step.desc }}</p></template>' },
+      { name: 'indicators', desc: '自定义步骤指示器圆点插槽（透传 { current, total }）', child: 'HBoxContainer', example: '<template #indicators="{ current, total }"><span>第 {{ current + 1 }} / {{ total }} 步</span></template>' },
+      { name: 'prev', desc: '自定义上一步按钮插槽', child: 'GButton', example: '<template #prev><GButton>上一步</GButton></template>' },
+      { name: 'next', desc: '自定义下一步按钮插槽', child: 'GButton', example: '<template #next><GButton type="primary">下一步</GButton></template>' },
+      { name: 'finish', desc: '自定义完成按钮插槽', child: 'GButton', example: '<template #finish><GButton type="success">开始冒险</GButton></template>' }
     ]
   },
 
@@ -3135,8 +3381,11 @@ add_child(card)`
     ],
     methods: [],
     slots: [
-      { name: 'header', desc: '自定义卡片头部区域', child: 'Control' },
-      { name: 'default', desc: '卡片正文内容插槽', child: 'Control' }
+      { name: 'default', desc: '卡片主体内容插槽', child: 'Control / VBoxContainer', example: '<template #default><p>跨服巅峰赛小组赛第一轮战报</p></template>' },
+      { name: 'header', desc: '卡片标题区插槽', child: 'GText / Label / HBoxContainer', example: '<template #header><span>战术小队战报</span></template>' },
+      { name: 'extra', desc: '卡片右上角操作区插槽（如“更多”、“编辑”等按钮）', child: 'GButton / GSpace', example: '<template #extra><a href="javascript:void(0)">查看全部 →</a></template>' },
+      { name: 'cover', desc: '卡片顶部封面图片/媒体插槽', child: 'TextureRect / SubViewportContainer', example: '<template #cover><img src="res://cover_s4.png" /></template>' },
+      { name: 'footer', desc: '卡片底部操作栏插槽', child: 'HBoxContainer / GSpace', example: '<template #footer><GButton icon="share">分享战报</GButton></template>' }
     ]
   },
 
@@ -3179,7 +3428,11 @@ add_child(tag)`
       { name: 'clicked()', desc: '点击标签本身时触发', params: '()' }
     ],
     methods: [],
-    slots: []
+    slots: [
+      { name: 'default', desc: '标签内部文字或内容插槽', child: 'Label / Control', example: '<template #default>Godot 4.3 渲染引擎</template>' },
+      { name: 'icon', desc: '标签前置图标插槽', child: 'GIcon / TextureRect', example: '<template #icon><GIcon name="fire" /></template>' },
+      { name: 'close-icon', desc: '自定义可关闭标签的关闭按钮插槽', child: 'GIcon / GButton', example: '<template #close-icon><GIcon name="xmark" /></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -3219,7 +3472,8 @@ add_child(badge)`
     events: [],
     methods: [],
     slots: [
-      { name: 'default', desc: '徽标所依附的宿主控件', child: 'Control' }
+      { name: 'default', desc: '徽标所依附的主体节点插槽', child: 'GButton / GAvatar / GIcon / Control', example: '<template #default><GButton icon="bell">通知中心</GButton></template>' },
+      { name: 'content', desc: '自定义角标内部内容插槽（替代纯数字）', child: 'GIcon / Label', example: '<template #content><GIcon name="fire" style="color:yellow;" /></template>' }
     ]
   },
 
@@ -3253,7 +3507,10 @@ add_child(av)`
     ],
     events: [],
     methods: [],
-    slots: []
+    slots: [
+      { name: 'default', desc: '自定义头像内部文字或自定义图像节点插槽', child: 'Label / TextureRect', example: '<template #default><span>K</span></template>' },
+      { name: 'badge', desc: '头像角标（如在线状态小绿点、等级徽章）插槽', child: 'GBadge / Control', example: '<template #badge><span class="online-status-dot"></span></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -3290,7 +3547,9 @@ add_child(p)`
     methods: [
       { name: 'set_percentage(val: float)', desc: '平滑更新进度条数值', params: '(val: float) -> void' }
     ],
-    slots: []
+    slots: [
+      { name: 'default', desc: '自定义进度条内部/右侧进度文字渲染插槽（透传 { percentage }）', child: 'Label / GText', example: '<template #default="{ percentage }"><span>{{ percentage }}% 已下载</span></template>' }
+    ]
   },
 
   // --------------------------------------------------------
@@ -3482,8 +3741,10 @@ add_child(tabs)`
       { name: 'set_before_leave(callback)', desc: '设置标签切换拦截钩子函数 Callable(cur, next) -> bool', params: '(callback: Callable) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '默认插槽，放入 Tab-pane 面板节点', child: 'Tab-pane / Control' },
-      { name: 'add-icon', desc: '自定义添加按钮图标', child: 'GIcon / Texture2D' }
+      { name: 'default', desc: '标签页内容面板插槽（包含所有 Tab 面板）', child: 'Array[Control]', example: '<template #default><GTabPane label="背包">...</GTabPane></template>' },
+      { name: 'tab', desc: '自定义 Tab 头部标签按钮插槽（透传 { tab_name, active, index }）', child: 'HBoxContainer / GIcon / GText', example: '<template #tab="{ name }"><GIcon name="box" /> <span>{{ name }}</span></template>' },
+      { name: 'prefix', desc: 'Tab 栏最左侧附加控件插槽', child: 'Control / GIcon', example: '<template #prefix><GIcon name="bars" /></template>' },
+      { name: 'suffix', desc: 'Tab 栏最右侧附加操作按钮插槽（如“+ 新增Tab”）', child: 'GButton / GSpace', example: '<template #suffix><GButton icon="plus" size="small" /></template>' }
     ],
     paneProps: [
       { name: 'label', type: 'string', default: "''", desc: '选项卡标题文字' },
@@ -3544,8 +3805,10 @@ add_child(col)`
       { name: 'set_open(open_state: bool)', desc: '显式设置面板展开或收起', params: '(open_state: bool) -> void' }
     ],
     slots: [
-      { name: 'title', desc: '自定义面板标题区域', child: 'Control' },
-      { name: 'default', desc: '折叠内容插槽', child: 'Control' }
+      { name: 'default', desc: '折叠面板展开后的主体内容插槽', child: 'Control / VBoxContainer', example: '<template #default><div>画质等级: 超高 / 60FPS / 动态光影</div></template>' },
+      { name: 'title', desc: '自定义折叠面板标题栏插槽（透传 { is_expanded }）', child: 'HBoxContainer / GText', example: '<template #title="{ is_expanded }"><span>高级图形渲染设置</span></template>' },
+      { name: 'extra', desc: '折叠面板标题栏右侧操作项插槽', child: 'GButton / GTag', example: '<template #extra><GTag type="success">推荐配置</GTag></template>' },
+      { name: 'arrow', desc: '自定义展开/折叠箭头指示图标插槽（透传 { is_expanded }）', child: 'GIcon / TextureRect', example: '<template #arrow="{ is_expanded }"><GIcon :name="is_expanded ? \'angle-up\' : \'angle-down\'" /></template>' }
     ]
   },
 
@@ -3615,7 +3878,9 @@ add_child(st)`
       { name: 'set_step(index: int)', desc: '直接跳转到指定步骤', params: '(index: int) -> void' }
     ],
     slots: [
-      { name: 'default', desc: '自定义步骤子项插槽', child: 'Control' }
+      { name: 'icon', desc: '自定义步骤节点图标插槽（透传 { index, status }）', child: 'GIcon / TextureRect', example: '<template #icon="{ index }"><GIcon name="circle-check" /></template>' },
+      { name: 'title', desc: '自定义步骤标题插槽（透传 { index, title }）', child: 'GText / Label', example: '<template #title="{ index, title }"><span>步骤 {{ index + 1 }}: {{ title }}</span></template>' },
+      { name: 'description', desc: '自定义步骤详细描述插槽（透传 { index, desc }）', child: 'Label / Control', example: '<template #description="{ desc }"><small>{{ desc }}</small></template>' }
     ]
   },
 
@@ -3651,7 +3916,8 @@ add_child(sp)`
     events: [],
     methods: [],
     slots: [
-      { name: 'default', desc: '放置需要保持均匀间距的子节点', child: 'Control' }
+      { name: 'default', desc: '间距容器内所有自动排列的子节点插槽', child: 'Array[Control]', example: '<template #default><GButton>选项A</GButton><GButton>选项B</GButton></template>' },
+      { name: 'split', desc: '子元素之间的自定义分隔符插槽', child: 'GDivider / Control', example: '<template #split><GDivider vertical /></template>' }
     ]
   }
 };

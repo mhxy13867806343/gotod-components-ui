@@ -32,6 +32,7 @@ window.switchTopSection = function(section, targetDocKey) {
 window.findSectionByDocKey = function(docKey) {
   if (!docKey) return 'components';
   if (window.GUIDE_CATALOG && window.GUIDE_CATALOG[docKey]) return 'guide';
+  if (window.SLOTS_CATALOG && window.SLOTS_CATALOG[docKey]) return 'slots';
   if (window.GAME_CATALOG && window.GAME_CATALOG[docKey]) return 'game';
   if (window.PLAYGROUND_CATALOG && window.PLAYGROUND_CATALOG[docKey]) return 'playground';
   if (window.IMPERATIVE_CATALOG && window.IMPERATIVE_CATALOG[docKey]) return 'imperative';
@@ -92,6 +93,7 @@ window.showDoc = function(key) {
   const catalog = Object.assign(
     {}, 
     window.GUIDE_CATALOG || {}, 
+    window.SLOTS_CATALOG || {}, 
     window.GAME_CATALOG || {}, 
     window.PLAYGROUND_CATALOG || {}, 
     window.IMPERATIVE_CATALOG || {},
@@ -226,9 +228,10 @@ window.showDoc = function(key) {
   ];
 
   const slotHeaders = [
-    { title: '插槽名 / Slot Name', width: '30%', key: 'name', className: 'api-prop' },
-    { title: '说明 / Description', width: '45%', key: 'desc' },
-    { title: '子标签 / Child Node', width: '25%', key: 'child', className: 'api-type' }
+    { title: '插槽名 / Slot Name', width: '16%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '30%', key: 'desc' },
+    { title: '子标签 / Child Node', width: '18%', key: 'child', className: 'api-type' },
+    { title: '用法示例 / Example (Vue 模板 & GDScript)', width: '36%', key: 'example', isCode: true }
   ];
 
   const compName = (doc.title || '').split(' ')[0];

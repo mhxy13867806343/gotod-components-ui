@@ -11,6 +11,7 @@ window.SIDEBAR_CONFIG = {
         title: 'Development 指南',
         items: [
           { key: 'guide-install', title: '📥 安装与快速上手' },
+          { key: 'slot-concept', title: '🎰 Vue-Style Slots 插槽系统与点语法' },
           { key: 'guide-third-party', title: '🔌 第三方库配合 (QFramework / Dialogic)' },
           { key: 'guide-css-style-engine', title: '🎨 .css() 与 .style() 样式引擎' },
           { key: 'guide-imperative-api', title: '⚡ 命令式调用与上下文继承' },
@@ -284,6 +285,23 @@ window.SIDEBAR_CONFIG = {
       }
     ],
     defaultKey: 'net-multiplayer'
+  },
+  'slots': {
+    placeholder: 'Search slots & syntax...',
+    groups: [
+      {
+        title: 'Vue-Style Slots 插槽系统专题',
+        items: [
+          { key: 'slot-concept', title: '🎰 插槽设计理念与点语法规范' },
+          { key: 'slot-anything', title: '✨ 万物皆可插槽 (Support ANYTHING)' },
+          { key: 'slot-default-named', title: '🏷️ 默认与具名插槽 (#header / #footer)' },
+          { key: 'slot-custom-dynamic', title: '⚡ 自定义具名与动态插槽 (.t1 / .t2)' },
+          { key: 'slot-scoped', title: '🧬 作用域插槽 (Scoped Slot 数据透传)' },
+          { key: 'slot-engine-impl', title: '⚙️ GSlotProxy 底层实现与引擎原理' }
+        ]
+      }
+    ],
+    defaultKey: 'slot-concept'
   }
 };
 

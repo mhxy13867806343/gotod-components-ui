@@ -24,10 +24,95 @@ signal closed
 
 var _mask: ColorRect
 var _panel: PanelContainer
+var _vbox: VBoxContainer
+var _header_container: HBoxContainer
+var _footer_container: HBoxContainer
+var _close_btn: Button
 var _title_label: Label
 var _body_label: Label
 var _confirm_btn: GButton
 var _cancel_btn: GButton
+
+# Slot Proxy System
+var _current_slot_name: String = ""
+var _slot_proxies: Dictionary = {}
+
+var slotName: Variant:
+	get:
+		var target_name = _current_slot_name if _current_slot_name != "" else "default"
+		return get_slot(target_name)
+	set(val):
+		if val is String or val is StringName:
+			var s_name = str(val)
+			if not GSlotProxy.validate_slot_name(s_name):
+				return
+			_current_slot_name = s_name
+		elif val is Control or val is Node:
+			var target_name = _current_slot_name if _current_slot_name != "" else "default"
+			set_slot_node(target_name, val)
+
+func get_slot(p_slot_name: String) -> GSlotProxy:
+	if not _slot_proxies.has(p_slot_name):
+		var target_node: Control = null
+		match p_slot_name:
+			"header", "title":
+				target_node = _title_label
+			"default", "body", "content":
+				target_node = _body_label
+			"footer":
+				target_node = _confirm_btn
+			"close":
+				target_node = _close_btn
+			_:
+				target_node = _body_label
+		_slot_proxies[p_slot_name] = GSlotProxy.new(target_node, p_slot_name, self)
+	return _slot_proxies[p_slot_name]
+
+func set_slot_node(p_slot_name: String, node: Control) -> void:
+	match p_slot_name:
+		"header":
+			set_header(node)
+		"default", "body", "content":
+			set_content(node)
+		"footer":
+			set_footer(node)
+
+func set_header(node: Control) -> void:
+	if _header_container and is_instance_valid(_header_container):
+		for c in _header_container.get_children():
+			if c != _close_btn:
+				c.queue_free()
+		_header_container.add_child(node)
+		_header_container.move_child(node, 0)
+	get_slot("header").target_node = node
+
+func set_content(node: Control) -> void:
+	if _vbox and is_instance_valid(_vbox):
+		if _body_label and is_instance_valid(_body_label):
+			_body_label.visible = false
+		_vbox.add_child(node)
+		_vbox.move_child(node, 1)
+	get_slot("default").target_node = node
+
+func set_footer(node: Control) -> void:
+	if _footer_container and is_instance_valid(_footer_container):
+		for c in _footer_container.get_children():
+			c.queue_free()
+		_footer_container.add_child(node)
+	get_slot("footer").target_node = node
+
+func _get(property: StringName) -> Variant:
+	var prop_str = str(property)
+	if prop_str in ["header", "default", "footer", "close", "content", "title"] or prop_str.begins_with("t") or _slot_proxies.has(prop_str):
+		return get_slot(prop_str)
+	return null
+
+func _set(property: StringName, value: Variant) -> bool:
+	var prop_str = str(property)
+	if prop_str == "slotName":
+		slotName = value
+		return true
+	return false
 
 func _ready() -> void:
 	anchors_preset = Control.PRESET_FULL_RECT
@@ -59,53 +144,58 @@ func _setup_ui() -> void:
 	_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	
-	var vbox = VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 16)
-	_panel.add_child(vbox)
+	_vbox = VBoxContainer.new()
+	_vbox.add_theme_constant_override("separation", 16)
+	_panel.add_child(_vbox)
 	
 	# Header
-	var header = HBoxContainer.new()
+	_header_container = HBoxContainer.new()
 	_title_label = Label.new()
 	_title_label.text = title
 	_title_label.add_theme_font_size_override("font_size", 18)
 	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(_title_label)
+	_header_container.add_child(_title_label)
 	
-	var close_btn = Button.new()
-	close_btn.text = "×"
-	close_btn.flat = true
-	close_btn.focus_mode = Control.FOCUS_NONE
-	close_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	close_btn.pressed.connect(close)
-	header.add_child(close_btn)
-	vbox.add_child(header)
+	_close_btn = Button.new()
+	_close_btn.text = "×"
+	_close_btn.flat = true
+	_close_btn.focus_mode = Control.FOCUS_NONE
+	_close_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_close_btn.pressed.connect(close)
+	_header_container.add_child(_close_btn)
+	_vbox.add_child(_header_container)
 	
 	# Body
 	_body_label = Label.new()
 	_body_label.text = content_text
 	_body_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vbox.add_child(_body_label)
+	_vbox.add_child(_body_label)
 	
 	# Footer
-	var footer = HBoxContainer.new()
-	footer.alignment = BoxContainer.ALIGNMENT_END
-	footer.add_theme_constant_override("separation", 12)
+	_footer_container = HBoxContainer.new()
+	_footer_container.alignment = BoxContainer.ALIGNMENT_END
+	_footer_container.add_theme_constant_override("separation", 12)
 	
 	if show_cancel_button:
 		_cancel_btn = GButton.new()
 		_cancel_btn.text = cancel_button_text
 		_cancel_btn.button_type = GButton.ButtonType.DEFAULT
 		_cancel_btn.pressed.connect(_on_cancel)
-		footer.add_child(_cancel_btn)
+		_footer_container.add_child(_cancel_btn)
 		
 	_confirm_btn = GButton.new()
 	_confirm_btn.text = confirm_button_text
 	_confirm_btn.button_type = GButton.ButtonType.PRIMARY
 	_confirm_btn.pressed.connect(_on_confirm)
-	footer.add_child(_confirm_btn)
+	_footer_container.add_child(_confirm_btn)
 	
-	vbox.add_child(footer)
+	_vbox.add_child(_footer_container)
 	add_child(_panel)
+	
+	# Sync initial slot proxies
+	if _slot_proxies.has("header"): _slot_proxies["header"].target_node = _title_label
+	if _slot_proxies.has("default"): _slot_proxies["default"].target_node = _body_label
+	if _slot_proxies.has("footer"): _slot_proxies["footer"].target_node = _confirm_btn
 	
 	_update_styles()
 

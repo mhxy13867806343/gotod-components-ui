@@ -78,6 +78,46 @@ enum Shape {
 var _spinner: Control = null
 var _orig_text: String = ""
 
+# Slot Proxy System
+var _current_slot_name: String = ""
+var _slot_proxies: Dictionary = {}
+
+var slotName: Variant:
+	get:
+		var target_name = _current_slot_name if _current_slot_name != "" else "default"
+		return get_slot(target_name)
+	set(val):
+		if val is String or val is StringName:
+			var s_name = str(val)
+			if not GSlotProxy.validate_slot_name(s_name):
+				return
+			_current_slot_name = s_name
+		elif val is Control or val is Node:
+			var target_name = _current_slot_name if _current_slot_name != "" else "default"
+			set_slot_node(target_name, val)
+
+func get_slot(p_slot_name: String) -> GSlotProxy:
+	if not _slot_proxies.has(p_slot_name):
+		_slot_proxies[p_slot_name] = GSlotProxy.new(self, p_slot_name, self)
+	return _slot_proxies[p_slot_name]
+
+func set_slot_node(p_slot_name: String, node: Control) -> void:
+	add_child(node)
+	get_slot(p_slot_name).target_node = node
+
+func _get(property: StringName) -> Variant:
+	var prop_str = str(property)
+	if prop_str in ["default", "icon", "loading", "badge", "prefix", "suffix"] or prop_str.begins_with("t") or _slot_proxies.has(prop_str):
+		return get_slot(prop_str)
+	return null
+
+func _set(property: StringName, value: Variant) -> bool:
+	var prop_str = str(property)
+	if prop_str == "slotName":
+		slotName = value
+		return true
+	return false
+
 func _ready() -> void:
 	focus_mode = Control.FOCUS_ALL
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
