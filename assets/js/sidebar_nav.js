@@ -302,6 +302,18 @@ window.SIDEBAR_CONFIG = {
       }
     ],
     defaultKey: 'slot-concept'
+  },
+  'icons-gallery': {
+    placeholder: 'Search 600+ icons...',
+    groups: [
+      {
+        title: '26,000+ 全场景矢量图库超级中心',
+        items: [
+          { key: 'icon', title: '🎨 🎨 🎨 26,000+ 矢量图标超级中心 (全图库检索与复制代码) (全图库检索与复制代码) (全图库检索与复制代码)' }
+        ]
+      }
+    ],
+    defaultKey: 'icon'
   }
 };
 

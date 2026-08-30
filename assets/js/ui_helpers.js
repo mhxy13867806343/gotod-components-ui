@@ -1631,9 +1631,9 @@ document.addEventListener('click', function(e) {
 });
 
 window.initSelectDemos = function() {
-  // Demo 1: Basic Single Select & Clearable
+  // Demo 1: Basic Select & Clearable
   window.registerCustomSelect('demo_select_basic', {
-    placeholder: '请选择渲染内核...',
+    placeholder: '请选择渲染管线...',
     clearable: true,
     filterable: false,
     selected: '4.3_forward',
@@ -1644,13 +1644,42 @@ window.initSelectDemos = function() {
       { label: 'Godot 4.6+ (Future 未来试验特性)', value: '4.6_future' }
     ],
     onChange: (val, opt) => {
-      if (val && window.showToast) window.showToast(`已选择引擎管线: ${opt ? opt.label : val}`, 'success');
+      if (val && window.showToast) window.showToast(`已选择渲染管线: ${opt ? opt.label : val}`, 'success');
     }
   });
 
-  // Demo 2: Filterable & Searchable Select
+  // Demo 2-A: Option Disabled (有禁用选项)
+  window.registerCustomSelect('demo_select_opt_disabled', {
+    placeholder: '请选择装备强化方案...',
+    clearable: true,
+    filterable: false,
+    selected: 'opt1',
+    options: [
+      { label: '初级强化石 (+1~+5 成功率 100%)', value: 'opt1' },
+      { label: '中级祝福水晶 (+6~+9 需要铁匠 3 级 - 已禁用)', value: 'opt2', disabled: true },
+      { label: '高级天界神石 (+10~+15 成功率 85%)', value: 'opt3' },
+      { label: '太古不灭符文 (未解锁副本 - 已禁用)', value: 'opt4', disabled: true },
+      { label: '神话虚空精粹 (+20 终极附魔)', value: 'opt5' }
+    ],
+    onChange: (val, opt) => {
+      if (val && window.showToast) window.showToast(`已选中强化方案: ${opt ? opt.label : val}`, 'info');
+    }
+  });
+
+  // Demo 2-B: Select Disabled (禁用整个选择器组件)
+  window.registerCustomSelect('demo_select_full_disabled', {
+    placeholder: '选择器已处于全局禁用状态 (disabled = true)',
+    disabled: true,
+    clearable: true,
+    selected: 'locked_val',
+    options: [
+      { label: '已锁定的系统默认配置', value: 'locked_val' }
+    ]
+  });
+
+  // Demo 3: Filterable & Searchable
   window.registerCustomSelect('demo_select_filterable', {
-    placeholder: '🔍 输入关键字搜索框架/组件库...',
+    placeholder: '🔍 输入关键字搜索框架 / 算法...',
     clearable: true,
     filterable: true,
     selected: 'el_plus',
@@ -1658,19 +1687,20 @@ window.initSelectDemos = function() {
       { label: 'Element Plus 现代化组件库 (Select/Dialog)', value: 'el_plus' },
       { label: 'Naive UI 极速类型安全组件 (TypeScript)', value: 'naive' },
       { label: 'Ant Design Vue 极客设计体系 (AntD)', value: 'antd' },
-      { label: 'Vant UI 移动端游戏工具链 (Mobile)', value: 'vant' },
-      { label: 'Vue.js 3 响应式内核 (Reactivity Core)', value: 'vue3' },
-      { label: 'React 19 Server Components (RSC)', value: 'react19' },
+      { label: 'Vant UI 移动端轻提示与选择器 (Mobile)', value: 'vant' },
+      { label: 'Vue.js 3 响应式底层 (Reactivity Core)', value: 'vue3' },
+      { label: 'A* 智能路径寻路算法 (Pathfinding)', value: 'astar' },
+      { label: '二阶贝塞尔弹道抛物线 (GPhysics)', value: 'bezier' },
       { label: 'Godot 4 GDScript 现代化高阶绑定 (Gotod)', value: 'gotod' }
     ],
     onChange: (val, opt) => {
-      if (val && window.showToast) window.showToast(`已实时过滤并选中: ${opt ? opt.label : val}`, 'info');
+      if (val && window.showToast) window.showToast(`已实时搜索并选中: ${opt ? opt.label : val}`, 'info');
     }
   });
 
-  // Demo 3: Multiple Tags & Collapse Tags
+  // Demo 4: Multiple Tags & Collapse Tags
   window.registerCustomSelect('demo_select_multiple', {
-    placeholder: '请多选需要启用的游戏系统模块...',
+    placeholder: '请多选需要启用的游戏核心系统...',
     clearable: true,
     filterable: true,
     multiple: true,
@@ -1678,19 +1708,20 @@ window.initSelectDemos = function() {
     maxCollapseTags: 2,
     selected: ['physics', 'particles', 'dialogue', 'axios'],
     options: [
-      { label: '2D 物理碰撞引擎 (GPhysics)', value: 'physics' },
+      { label: '2D 物理碰撞运动学 (GPhysics)', value: 'physics' },
       { label: '粒子炫彩特效发射器 (GPUParticles2D)', value: 'particles' },
-      { label: 'JRPG 对话分支流 (GDialogue)', value: 'dialogue' },
+      { label: 'JRPG 双人剧情对话流 (GDialogue)', value: 'dialogue' },
       { label: 'Axios 风格 REST 客户端 (GAxios)', value: 'axios' },
       { label: '全双工 WebSocket 长连接 (GWebSocket)', value: 'ws' },
-      { label: '全局路由转场动画 (GRouter)', value: 'router' }
+      { label: '全局路由场景平滑转场 (GRouter)', value: 'router' },
+      { label: '16路全局音效与BGM淡入淡出 (GAsset)', value: 'asset' }
     ],
     onChange: (vals) => {
-      if (window.showToast) window.showToast(`多选状态已变更，当前共选中 ${vals.length} 项`, 'info');
+      if (window.showToast) window.showToast(`多选集合变更，当前已选中 ${vals.length} 项`, 'info');
     }
   });
 
-  // Demo 4: Grouping & Disabled Options
+  // Demo 5: Option Grouping & Group Disabled
   window.registerCustomSelect('demo_select_group', {
     placeholder: '请选择出战英雄职业...',
     clearable: true,
@@ -1698,20 +1729,20 @@ window.initSelectDemos = function() {
     selected: 'warrior',
     options: [
       { label: '狂暴战 (Warrior - 近战输出)', value: 'warrior', group: '近战狂暴系 (Melee)' },
-      { label: '圣骑士 (Paladin - 未解锁/需通关暗影之森)', value: 'paladin', group: '近战狂暴系 (Melee)', disabled: true },
+      { label: '圣骑士 (Paladin - 需暗影通关 - 禁用)', value: 'paladin', group: '近战狂暴系 (Melee)', disabled: true },
       { label: '潜行者 (Rogue - 致命背刺)', value: 'rogue', group: '近战狂暴系 (Melee)' },
       { label: '大魔导师 (Archmage - 暴风雪)', value: 'archmage', group: '远程魔法系 (Caster)' },
       { label: '暗影术士 (Warlock - 诅咒之箭)', value: 'warlock', group: '远程魔法系 (Caster)' },
       { label: '自然德鲁伊 (Druid - 宁静守护)', value: 'druid', group: '远程魔法系 (Caster)' }
     ],
     onChange: (val, opt) => {
-      if (val && window.showToast) window.showToast(`出战职业锁定: ${opt ? opt.label : val}`, 'success');
+      if (val && window.showToast) window.showToast(`已锁定出战职业: ${opt ? opt.label : val}`, 'success');
     }
   });
 
-  // Demo 5: Custom Template & Slots
+  // Demo 6: Custom Option Template & Slots
   window.registerCustomSelect('demo_select_custom', {
-    placeholder: '请挑选神话伙伴...',
+    placeholder: '请挑选神话伙伴出战...',
     clearable: true,
     filterable: true,
     selected: 'kadgar',
@@ -1769,4 +1800,363 @@ window.initSelectDemos = function() {
       if (val && window.showToast) window.showToast(`出战神话伙伴已更新: ${opt ? opt.label : val}`, 'success');
     }
   });
+};
+
+// ==========================================================================
+// 7,300+ Complete Universal Vector Icon Super Center & Pagination Engine
+// ==========================================================================
+window.currentIconLib = 'all';
+window.currentIconCategory = 'all';
+window.currentIconSearch = '';
+window.currentIconSize = 16;
+window.currentIconColor = '#409eff';
+window.iconPageSize = 400;
+window.iconCurrentPage = 1;
+
+window.initIconGallery = function() {
+  const container = document.getElementById('iconGalleryContainer');
+  if (!container) return;
+
+  const totalCount = window.AT_ICONS_LIST ? window.AT_ICONS_LIST.length : 0;
+  const countBadge = document.getElementById('iconCountBadge');
+  if (countBadge) countBadge.innerText = totalCount + ' Icons';
+
+  window.renderIconGalleryGrid();
+};
+
+window.renderIconGalleryGrid = function() {
+  const grid = document.getElementById('iconGridList');
+  if (!grid) return;
+
+  const list = window.AT_ICONS_LIST || [];
+  const q = window.currentIconSearch.toLowerCase().trim();
+  const lib = window.currentIconLib;
+  const cat = window.currentIconCategory;
+
+  const filtered = list.filter(item => {
+    const matchLib = (lib === 'all' || item.lib === lib);
+    const matchCat = (cat === 'all' || item.category === cat);
+    const matchQ = (!q || item.name.toLowerCase().includes(q) || (item.description && item.description.toLowerCase().includes(q)));
+    return matchLib && matchCat && matchQ;
+  });
+
+  const totalCount = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / window.iconPageSize));
+  
+  if (window.iconCurrentPage > totalPages) {
+    window.iconCurrentPage = 1;
+  }
+
+  const countEl = document.getElementById('iconFilteredCount');
+  if (countEl) countEl.innerText = `共检索到 ${totalCount} 个图标 (第 ${window.iconCurrentPage}/${totalPages} 页)`;
+
+  if (totalCount === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 48px 16px; text-align: center; color: var(--text-secondary);">
+        <i class="fa-solid fa-magnifying-glass" style="font-size: 32px; margin-bottom: 12px; opacity: 0.4;"></i>
+        <div style="font-size: 14px; font-weight: 600;">未找到与 "${q}" 匹配的矢量图标</div>
+        <div style="font-size: 12px; margin-top: 4px;">尝试搜索：sword, shield, chest, clear, heart, user, search, home, potion...</div>
+      </div>
+    `;
+    window.renderPaginationBar(0, 1);
+    return;
+  }
+
+  const startIndex = (window.iconCurrentPage - 1) * window.iconPageSize;
+  const endIndex = Math.min(startIndex + window.iconPageSize, totalCount);
+  const displayList = filtered.slice(startIndex, endIndex);
+
+  grid.innerHTML = displayList.map(icon => {
+    return `
+      <div class="icon-gallery-card" onclick="window.copyIconSnippet('${icon.name}', '${icon.resPath}', this)" title="[${icon.libName}] 点击复制 GIcon 代码与 @icon 路径">
+        <div class="icon-preview-box">
+          <span class="icon-svg-host" style="width:var(--gallery-icon-size, ${window.currentIconSize}px); height:var(--gallery-icon-size, ${window.currentIconSize}px); display:inline-flex; align-items:center; justify-content:center; color:var(--gallery-icon-color, ${window.currentIconColor});">
+            ${icon.svg}
+          </span>
+        </div>
+        <div class="icon-card-name" title="${icon.name}">${icon.name}</div>
+        <div class="icon-card-label" title="${icon.libName} · ${icon.description}">${icon.libName}</div>
+      </div>
+    `;
+  }).join('');
+
+  window.renderPaginationBar(totalCount, totalPages);
+};
+
+window.renderPaginationBar = function(totalCount, totalPages) {
+  const container = document.getElementById('iconPaginationBar');
+  if (!container) return;
+
+  if (totalCount === 0 || totalPages <= 1) {
+    if (totalCount > 0) {
+      container.innerHTML = `
+        <div class="icon-pagination-info">
+          <span>共 <strong>${totalCount}</strong> 个图标 (每页 <strong>400</strong> 条)</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary);">单页已展示全部结果</div>
+      `;
+    } else {
+      container.innerHTML = '';
+    }
+    return;
+  }
+
+  const cur = window.iconCurrentPage;
+  
+  // Calculate smart page range
+  let pageButtons = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pageButtons.push(i);
+  } else {
+    if (cur <= 4) {
+      pageButtons = [1, 2, 3, 4, 5, '...', totalPages];
+    } else if (cur >= totalPages - 3) {
+      pageButtons = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    } else {
+      pageButtons = [1, '...', cur - 1, cur, cur + 1, '...', totalPages];
+    }
+  }
+
+  const pageBtnsHtml = pageButtons.map(p => {
+    if (p === '...') {
+      return `<span style="padding: 0 4px; color:var(--text-secondary);">...</span>`;
+    }
+    const activeClass = (p === cur) ? 'active' : '';
+    return `<button class="icon-page-btn ${activeClass}" onclick="window.changeIconPage(${p})">${p}</button>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="icon-pagination-info">
+      <span>共 <strong>${totalCount}</strong> 个图标 · 第 <strong>${cur}</strong> / <strong>${totalPages}</strong> 页 (每页 400 条)</span>
+    </div>
+
+    <div class="icon-pagination-controls">
+      <button class="icon-page-btn" onclick="window.prevIconPage()" ${cur <= 1 ? 'disabled' : ''} title="上一页">
+        <i class="fa-solid fa-chevron-left"></i> 上一页
+      </button>
+
+      ${pageBtnsHtml}
+
+      <button class="icon-page-btn" onclick="window.nextIconPage()" ${cur >= totalPages ? 'disabled' : ''} title="下一页">
+        下一页 <i class="fa-solid fa-chevron-right"></i>
+      </button>
+
+      <div class="icon-page-jumper" style="margin-left: 10px;">
+        <span>前往</span>
+        <input type="number" class="icon-page-input" value="${cur}" min="1" max="${totalPages}"
+               onkeydown="if(event.key==='Enter') window.changeIconPage(parseInt(this.value, 10))"
+               onchange="window.changeIconPage(parseInt(this.value, 10))">
+        <span>页</span>
+      </div>
+    </div>
+  `;
+};
+
+window.changeIconPage = function(page) {
+  const list = window.AT_ICONS_LIST || [];
+  const q = window.currentIconSearch.toLowerCase().trim();
+  const lib = window.currentIconLib;
+  const cat = window.currentIconCategory;
+
+  const filtered = list.filter(item => {
+    const matchLib = (lib === 'all' || item.lib === lib);
+    const matchCat = (cat === 'all' || item.category === cat);
+    const matchQ = (!q || item.name.toLowerCase().includes(q) || (item.description && item.description.toLowerCase().includes(q)));
+    return matchLib && matchCat && matchQ;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / window.iconPageSize));
+  let target = parseInt(page, 10);
+  if (isNaN(target) || target < 1) target = 1;
+  if (target > totalPages) target = totalPages;
+
+  window.iconCurrentPage = target;
+  window.renderIconGalleryGrid();
+  
+  // Smooth scroll back to top of grid
+  const container = document.getElementById('iconGalleryContainer');
+  if (container) {
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
+window.nextIconPage = function() {
+  window.changeIconPage(window.iconCurrentPage + 1);
+};
+
+window.prevIconPage = function() {
+  window.changeIconPage(window.iconCurrentPage - 1);
+};
+
+window.filterIconLib = function(lib, btnEl) {
+  window.currentIconLib = lib;
+  window.iconCurrentPage = 1;
+  if (btnEl && btnEl.parentElement) {
+    btnEl.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  window.renderIconGalleryGrid();
+};
+
+window.filterIconCategory = function(cat, btnEl) {
+  window.currentIconCategory = cat;
+  window.iconCurrentPage = 1;
+  if (btnEl && btnEl.parentElement) {
+    btnEl.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  window.renderIconGalleryGrid();
+};
+
+window.handleIconSearchInput = function(query) {
+  window.currentIconSearch = query;
+  window.iconCurrentPage = 1;
+  const clearBtn = document.getElementById('iconSearchClearBtn');
+  if (clearBtn) {
+    clearBtn.style.display = query && query.trim() ? 'flex' : 'none';
+  }
+  window.renderIconGalleryGrid();
+};
+
+window.clearIconSearch = function() {
+  const input = document.getElementById('iconSearchInput');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  window.handleIconSearchInput('');
+};
+
+window.changeIconSize = function(sizePx, btnEl) {
+  let num = parseInt(sizePx, 10) || 16;
+  if (num % 2 !== 0) num += 1;
+  window.currentIconSize = num;
+  
+  const grid = document.getElementById('iconGridList');
+  if (grid) {
+    grid.style.setProperty('--gallery-icon-size', num + 'px');
+  }
+
+  const input = document.getElementById('iconCustomSizeInput');
+  if (input) {
+    input.value = num;
+  }
+
+  const container = document.getElementById('iconSizeBtnGroup');
+  if (container) {
+    container.querySelectorAll('.icon-size-btn').forEach(b => {
+      if (parseInt(b.getAttribute('data-size'), 10) === num) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+  }
+};
+
+window.changeIconSizeInput = function(val) {
+  let num = parseInt(val, 10);
+  if (isNaN(num) || num < 6) return;
+  if (num > 256) num = 256;
+  
+  window.currentIconSize = num;
+  const grid = document.getElementById('iconGridList');
+  if (grid) {
+    grid.style.setProperty('--gallery-icon-size', num + 'px');
+  }
+
+  const container = document.getElementById('iconSizeBtnGroup');
+  if (container) {
+    container.querySelectorAll('.icon-size-btn').forEach(b => {
+      if (parseInt(b.getAttribute('data-size'), 10) === num) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+  }
+};
+
+window.stepIconSize = function(delta) {
+  let cur = parseInt(window.currentIconSize, 10) || 16;
+  cur += delta;
+  if (cur % 2 !== 0) cur += (delta > 0 ? 1 : -1);
+  if (cur < 8) cur = 8;
+  if (cur > 256) cur = 256;
+  window.changeIconSize(cur, null);
+};
+
+window.changeIconColor = function(colorCss, swatchEl) {
+  window.currentIconColor = colorCss;
+  const grid = document.getElementById('iconGridList');
+  if (grid) {
+    grid.style.setProperty('--gallery-icon-color', colorCss);
+  }
+  if (swatchEl && swatchEl.parentElement) {
+    swatchEl.parentElement.querySelectorAll('.icon-color-swatch').forEach(s => s.classList.remove('active'));
+    swatchEl.classList.add('active');
+  }
+  const colorInput = document.getElementById('iconCustomColorInput');
+  if (colorInput && colorCss.startsWith('#')) {
+    colorInput.value = colorCss;
+  }
+};
+
+window.copyIconSnippet = function(iconName, resPath, cardEl) {
+  const snippet = `var icon = GIcon.new("${iconName}", ${window.currentIconSize}.0, Color("${window.currentIconColor}"))`;
+  const annotation = `@icon("${resPath || 'res://addons/gotod_ui/assets/icons/node/' + iconName + '.svg'}")`;
+  
+  if (cardEl) {
+    cardEl.classList.add('copied-pulse');
+    setTimeout(() => cardEl.classList.remove('copied-pulse'), 400);
+  }
+
+  const fullText = `# GDScript:
+${snippet}
+add_child(icon)
+
+# Node 树类注解:
+${annotation}`;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(fullText).then(() => {
+      window.showToast(`已复制: ${iconName}\n${snippet}`, 'success');
+    }).catch(() => {
+      window.showToast(`已选图标: ${iconName}`, 'success');
+    });
+  } else {
+    window.showToast(`已选图标: ${iconName}`, 'success');
+  }
+};
+
+// ==========================================================================
+// Force Hard Reload & Cache Purge Engine
+// ==========================================================================
+window.forceHardReload = function() {
+  try {
+    if (window.showToast) window.showToast('正在清除本地缓存并强制更新页面...', 'info');
+    
+    // Purge browser caches API if present
+    if (typeof caches !== 'undefined' && caches.keys) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      });
+    }
+
+    // Purge local storage if requested or retain essential themes
+    const currentTheme = window.StorageUtil ? window.StorageUtil.getTheme() : 'dark';
+    const currentPreset = window.StorageUtil ? window.StorageUtil.getPreset() : 'naive';
+
+    setTimeout(() => {
+      const ts = Date.now();
+      const origin = window.location.origin;
+      const pathname = window.location.pathname;
+      const hash = window.location.hash || '';
+      
+      // Navigate with timestamp query param to break all proxy/browser caches
+      window.location.replace(`${origin}${pathname}?_refresh_ts=${ts}${hash}`);
+    }, 150);
+  } catch (err) {
+    window.location.reload(true);
+  }
 };

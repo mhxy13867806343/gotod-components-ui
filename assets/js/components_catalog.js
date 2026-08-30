@@ -965,34 +965,215 @@ add_child(div)`
   // --------------------------------------------------------
   // 4. GIcon 图标
   // --------------------------------------------------------
+  // --------------------------------------------------------
+  // 4. GIcon 矢量图标 (Godot @icons / AT-Icons 620+ 全套图库)
+  // --------------------------------------------------------
+  // --------------------------------------------------------
+  // 4. GIcon 矢量图标 (4,600+ 全场景矢量图库超级中心)
+  // --------------------------------------------------------
+  // --------------------------------------------------------
+  // 4. GIcon 矢量图标 (7,300+ 全场景矢量图库超级中心)
+  // --------------------------------------------------------
+  // --------------------------------------------------------
+  // 4. GIcon 矢量图标 (26,000+ 离线图库 + 300,000+ IconBuddy 全域检索)
+  // --------------------------------------------------------
   'icon': {
-    title: 'Icon 图标 (GIcon)',
-    desc: '可自由缩放尺寸与着色的图标渲染组件。',
+    title: 'Icon 矢量图标 (GIcon)',
+    desc: '专为 Godot 4 打造的高性能全场景矢量图标超级组件库，已完整集成 GameIcons.net (4,134+ 游戏与RPG)、Tabler Icons (6,232+)、SimpleIcons (3,730+ 品牌与科技)、RemixIcon (3,229+)、字节跳动 IconPark (2,658+)、Lucide (1,854+)、FontAwesome 6 (1,407+)、PixelArt 像素艺术 (1,306+)、Nieobie Game (815+) 与 Godot @icons (623+) 全量 26,000+ 本地离线矢量 SVG 图标资产，并支持 IconBuddy / Iconify 300,000+ 全域云端即时检索！',
     demos: [
       {
-        title: '1. 图标展示与着色 (Scalable Icons)',
+        title: '1. 26,000+ 本地离线图库 & 300,000+ 全网图库超级检索中心',
         render: `
-          <div style="display:flex; gap:24px; align-items:center;">
-            <i class="fa-solid fa-gamepad" style="font-size:28px; color:var(--primary);"></i>
-            <i class="fa-solid fa-rocket" style="font-size:28px; color:var(--warning);"></i>
-            <i class="fa-solid fa-heart" style="font-size:28px; color:var(--danger);"></i>
-            <i class="fa-solid fa-cube" style="font-size:28px; color:var(--info);"></i>
+          <div class="icon-gallery-container" id="iconGalleryContainer">
+            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-regular); background:rgba(64, 158, 255, 0.08); border:1px solid rgba(64, 158, 255, 0.25); border-radius:var(--radius); padding:8px 14px;">
+              <i class="fa-solid fa-circle-info" style="color:var(--primary); font-size:14px;"></i>
+              <span>💡 <strong>操作提示</strong>：点击下方任意图标卡片即可直接复制对应图标的 GDScript 实例化代码与 <code>@icon</code> 注解路径。</span>
+            </div>
+
+            <!-- Library Source Selector -->
+            <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+              <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">10 大主流图库:</span>
+              <button class="icon-category-btn active" onclick="window.filterIconLib('all', this)">全部图库 (<span id="iconCountBadge">26,000+</span>)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('gameicons', this)">⚔️ GameIcons RPG (4,134+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('pixel', this)">👾 PixelArt 像素 (1,306+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('nieobie', this)">🎒 Nieobie 游戏 (815+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('at-icons', this)">🎮 Godot @icons (623+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('iconpark', this)">🚀 字节 IconPark (2,658+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('tabler', this)">⚡ Tabler UI (6,232+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('remix', this)">💎 RemixIcon (3,229+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('lucide', this)">✨ Lucide UI (1,854+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('fontawesome', this)">🏷️ FontAwesome 6 (1,407+)</button>
+              <button class="icon-category-btn" onclick="window.filterIconLib('brands', this)">🌐 品牌与科技 (3,730+)</button>
+            </div>
+
+            <!-- Categories and Search -->
+            <div class="icon-toolbar">
+              <div class="icon-category-tabs">
+                <button class="icon-category-btn active" onclick="window.filterIconCategory('all', this)">全部分类</button>
+                <button class="icon-category-btn" onclick="window.filterIconCategory('game', this)">⚔️ 游戏战斗与魔法</button>
+                <button class="icon-category-btn" onclick="window.filterIconCategory('items', this)">🎒 装备道具与食材</button>
+                <button class="icon-category-btn" onclick="window.filterIconCategory('ui', this)">🎛️ 基础 UI 与控件</button>
+                <button class="icon-category-btn" onclick="window.filterIconCategory('media', this)">🎵 媒体音效与设备</button>
+                <button class="icon-category-btn" onclick="window.filterIconCategory('nature', this)">🍃 自然建筑与天气</button>
+                <button class="icon-category-btn" onclick="window.filterIconCategory('system', this)">⚙️ 系统节点与科技</button>
+              </div>
+              <div class="icon-search-wrapper">
+                <input type="text" id="iconSearchInput" class="icon-search-input" placeholder="🔍 搜索 26,000+ 离线 / 300,000+ 全网图标 (如 sword, dragon, clear)..." 
+                       oninput="window.handleIconSearchInput(this.value)">
+                <span id="iconSearchClearBtn" class="icon-search-clear-btn" onclick="window.clearIconSearch()" style="display:none;" title="一键清空搜索内容">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                </span>
+              </div>
+            </div>
+
+            <!-- Size & Color Controls -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--text-secondary); background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); padding:10px 14px;">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span id="iconFilteredCount" style="font-weight:600; color:var(--text-primary); margin-right:6px;">共检索到 25,988 个图标</span>
+                <span>尺寸 (偶数步进):</span>
+                <div style="display:flex; align-items:center; gap:4px;" id="iconSizeBtnGroup">
+                  <button class="icon-size-btn" data-size="10" onclick="window.changeIconSize(10, this)">10px</button>
+                  <button class="icon-size-btn active" data-size="16" onclick="window.changeIconSize(16, this)">16px (默认)</button>
+                  <button class="icon-size-btn" data-size="24" onclick="window.changeIconSize(24, this)">24px</button>
+                  <button class="icon-size-btn" data-size="32" onclick="window.changeIconSize(32, this)">32px</button>
+                  <button class="icon-size-btn" data-size="48" onclick="window.changeIconSize(48, this)">48px</button>
+                  <button class="icon-size-btn" data-size="64" onclick="window.changeIconSize(64, this)">64px</button>
+                  <button class="icon-size-btn" data-size="96" onclick="window.changeIconSize(96, this)">96px</button>
+                  <button class="icon-size-btn" data-size="128" onclick="window.changeIconSize(128, this)">128px</button>
+                </div>
+
+                <div class="icon-size-input-wrapper" title="自定义输入偶数尺寸 (步长 2px)">
+                  <button class="icon-size-step-btn" onclick="window.stepIconSize(-2)" title="减小 2px"><i class="fa-solid fa-minus"></i></button>
+                  <input type="number" id="iconCustomSizeInput" class="icon-custom-size-input" value="16" min="8" max="256" step="2"
+                         oninput="window.changeIconSizeInput(this.value)" onchange="window.changeIconSize(this.value, null)">
+                  <span style="font-size:10px; color:var(--text-secondary); font-weight:600;">px</span>
+                  <button class="icon-size-step-btn" onclick="window.stepIconSize(2)" title="增加 2px"><i class="fa-solid fa-plus"></i></button>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span style="font-weight:500;">Godot 着色方案:</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span class="icon-color-swatch active" style="background:#409eff;" onclick="window.changeIconColor('#409eff', this)" title="Element 蓝 (#409eff)"></span>
+                  <span class="icon-color-swatch" style="background:#8da5f5;" onclick="window.changeIconColor('#8da5f5', this)" title="Godot Node2D 蓝 (#8da5f5)"></span>
+                  <span class="icon-color-swatch" style="background:#8df58d;" onclick="window.changeIconColor('#8df58d', this)" title="Godot Control 绿 (#8df58d)"></span>
+                  <span class="icon-color-swatch" style="background:#fc7f7f;" onclick="window.changeIconColor('#fc7f7f', this)" title="Godot Node3D 红 (#fc7f7f)"></span>
+                  <span class="icon-color-swatch" style="background:#ff9f43;" onclick="window.changeIconColor('#ff9f43', this)" title="Godot Animation 橙 (#ff9f43)"></span>
+                  <span class="icon-color-swatch" style="background:#a855f7;" onclick="window.changeIconColor('#a855f7', this)" title="神话/魔法紫 (#a855f7)"></span>
+                  <span class="icon-color-swatch" style="background:#ffffff;" onclick="window.changeIconColor('#ffffff', this)" title="原生 Node 白 (#ffffff)"></span>
+                  <span class="icon-color-swatch" style="background:#ffd04b;" onclick="window.changeIconColor('#ffd04b', this)" title="金币/成就黄 (#ffd04b)"></span>
+                  
+                  <div style="display:flex; align-items:center; gap:4px; margin-left:4px; padding-left:8px; border-left:1px solid var(--border-base);">
+                    <span style="font-size:11px;">自定义:</span>
+                    <input type="color" id="iconCustomColorInput" class="icon-custom-color-picker" value="#409eff" 
+                           onchange="window.changeIconColor(this.value, null)" oninput="window.changeIconColor(this.value, null)" 
+                           title="点击打开全色域取色盘">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="icon-grid-list" id="iconGridList"></div>
+            <div class="icon-pagination-bar" id="iconPaginationBar"></div>
           </div>
         `,
-        code: `# GDScript: Icon
-var icon = GIcon.new()
-icon.icon_size = 24.0
-icon.icon_color = Color("#18a058")
-add_child(icon)`
+        code: `# GDScript: 1. 动态实例化 GIcon 矢量图标 (支持 26,000+ 本地离线图标)
+var icon = GIcon.new("sword", 16.0, Color("#409eff"))
+add_child(icon)
+
+# GDScript: 2. 在自定义 Node 脚本顶部使用 @icon 注解 (Godot 4.x 原生支持)
+@icon("res://addons/gotod_ui/assets/icons/gameicons/sword.svg")
+class_name MyCustomWeaponNode extends Node2D
+
+# 动态修改图标名称与色彩
+icon.icon_name = "chest"
+icon.icon_color = Color("#e6a23c")
+icon.icon_size = 32.0`
+      },
+      {
+        title: '2. 常用尺寸与主题着色 (Scalable Sizes & Theme Colors)',
+        render: `
+          <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <i class="fa-solid fa-gamepad" style="font-size:16px; color:var(--primary);"></i>
+              <span style="font-size:11px; color:var(--text-secondary);">16px (迷你)</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <i class="fa-solid fa-shield" style="font-size:24px; color:var(--success);"></i>
+              <span style="font-size:11px; color:var(--text-secondary);">24px (标准)</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <i class="fa-solid fa-coins" style="font-size:32px; color:var(--warning);"></i>
+              <span style="font-size:11px; color:var(--text-secondary);">32px (中型)</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <i class="fa-solid fa-wand-magic-sparkles" style="font-size:44px; color:#a855f7;"></i>
+              <span style="font-size:11px; color:var(--text-secondary);">44px (神话特大)</span>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 多尺寸与色彩设定
+var icon_mini = GIcon.new("gamepad", 16.0, GotodTheme.get_color("primary"))
+var icon_std = GIcon.new("shield", 24.0, GotodTheme.get_color("success"))
+var icon_large = GIcon.new("wand-magic-sparkles", 44.0, Color("#a855f7"))
+add_child(icon_large)`
+      },
+      {
+        title: '3. 持续旋转动画 (Spin Animation & Loading)',
+        render: `
+          <div style="display:flex; gap:28px; align-items:center;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-spinner fa-spin" style="font-size:24px; color:var(--primary);"></i>
+              <span style="font-size:13px;">加载中... (spinner spin)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-rotate fa-spin" style="font-size:24px; color:var(--warning);"></i>
+              <span style="font-size:13px;">同步中... (rotate spin)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-gear fa-spin" style="font-size:24px; color:var(--success);"></i>
+              <span style="font-size:13px;">引擎运转中 (gear spin)</span>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 开启持续旋转动画
+var loading_icon = GIcon.new("spinner", 24.0, Color("#409eff"))
+loading_icon.spin = true # 👈 开启持续匀速旋转动画
+add_child(loading_icon)`
+      },
+      {
+        title: '4. 结合按钮、输入框与徽标组件装配 (Component Integration)',
+        render: `
+          <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+            <button class="g-btn g-btn-primary" onclick="showToast('点击了带魔法棒图标的按钮', 'success')">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> 强化附魔
+            </button>
+            <button class="g-btn g-btn-danger" onclick="showToast('点击了战斗开战按钮', 'info')">
+              <i class="fa-solid fa-fire"></i> 立即开战
+            </button>
+            <div style="position:relative; display:inline-block;">
+              <i class="fa-solid fa-bell" style="font-size:22px; color:var(--text-primary);"></i>
+              <span class="g-badge" style="position:absolute; top:-6px; right:-8px; background:var(--danger); color:#fff; font-size:10px; padding:1px 5px; border-radius:10px;">9+</span>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 结合按钮插槽装配图标
+var btn = GButton.new()
+btn.text = "强化附魔"
+btn.icon = GIcon.new("wand-magic-sparkles") # 自动装配前缀图标
+add_child(btn)`
       }
     ],
     props: [
-      { name: 'icon_size', type: 'float', default: '16.0', desc: '图标尺寸 (像素)' },
-      { name: 'icon_color', type: 'Color', default: 'Color.WHITE', desc: '图标着色' },
-      { name: 'spin', type: 'boolean', default: 'false', desc: '是否持续旋转动画' }
+      { name: 'icon_name', type: 'String', default: '"gamepad"', desc: '图标名称（支持 26,000+ 离线矢量图标 & 300,000+ 全网图库）' },
+      { name: 'icon_size', type: 'float', default: '16.0', desc: '图标渲染尺寸（像素宽高）' },
+      { name: 'icon_color', type: 'Color', default: 'Color.WHITE', desc: '图标调制着色' },
+      { name: 'spin', type: 'boolean', default: 'false', desc: '是否开启持续顺时针旋转动画' }
     ],
     events: [],
-    methods: [],
+    methods: [
+      { name: '_init(name="gamepad", size=16.0, color=Color.WHITE)', desc: '便捷构造函数', params: '(name: String, size: float, color: Color) -> void' }
+    ],
     slots: [
       { name: 'default', desc: '自定义矢量图形或纹理节点插槽', child: 'TextureRect / Control', example: '<template #default><TextureRect texture="res://icon.png" /></template>' },
       { name: 'badge', desc: '图标右上角徽标插槽', child: 'GBadge / Control', example: '<template #badge><GBadge value="99+" /></template>' }
@@ -1569,22 +1750,25 @@ rg.add_child(r2)`
   // --------------------------------------------------------
   // 11. GSelect 下拉选择器 (Element Plus 对标)
   // --------------------------------------------------------
+  // --------------------------------------------------------
+  // 11. GSelect 下拉选择器 (Element Plus 对标)
+  // --------------------------------------------------------
   'select': {
     title: 'Select 下拉选择器 (GSelect)',
-    desc: '当选项过多时，使用下拉菜单展示并供用户选择内容。深度对标 Element Plus Select 规范，全功能支持：单选、一键清空 (Clearable)、实时搜索过滤 (Filterable)、多选 Tags 与折叠 (Multiple & Collapse Tags)、分组展示 (Grouping)、禁用项与自定义插槽。',
+    desc: '当选项过多时，使用下拉菜单展示并供用户选择内容。深度对标 Element Plus Select 规范，支持单选、有禁用选项、禁用状态、可清空单选、实时搜索筛选、多选 Tags 折叠、分组选择器与自定义模板。',
     demos: [
       {
-        title: '1. 基础单选与一键清空 (Basic Select & Clearable)',
+        title: '1. 基础用法与可清空单选 (Basic Select & Clearable)',
         render: `
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div id="demo_select_basic" style="width: 340px;"></div>
-            <span style="font-size:12px; color:var(--text-secondary);">💡 鼠标悬浮在已选框上时会出现 <code style="color:var(--danger);">×</code> 按钮，支持一键清空选中值。</span>
+            <span style="font-size:12px; color:var(--text-secondary);">💡 包含 <code style="color:var(--primary);">clearable = true</code> 属性，鼠标悬浮在选择框上时会出现 <code style="color:var(--danger);">×</code> 按钮，点击一键清空。</span>
           </div>
         `,
         code: `# GDScript: 基础单选与一键清空
 var sel = GSelect.new()
+sel.placeholder_text = "请选择渲染管线..."
 sel.clearable = true
-sel.placeholder_text = "请选择渲染内核..."
 sel.options = [
     {"label": "Godot 4.3 (Forward+ 高画质管线)", "value": "4.3_forward"},
     {"label": "Godot 4.3 (Mobile 移动端轻量)", "value": "4.3_mobile"},
@@ -1595,12 +1779,42 @@ sel.item_selected.connect(func(idx, val, label):
     print("已选择内核:", label, "值:", val)
 )
 sel.cleared.connect(func():
-    print("用户一键清空了选择")
+    print("已一键清空选中值")
 )
 add_child(sel)`
       },
       {
-        title: '2. 实时搜索与模糊筛选 (Filterable & Searchable)',
+        title: '2. 有禁用选项与禁用状态 (Disabled Options & Disabled Select)',
+        render: `
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div>
+              <div style="font-size:12px; font-weight:700; color:var(--text-regular); margin-bottom:6px;">① 有禁用选项（在 option 中设定 disabled 为 true）</div>
+              <div id="demo_select_opt_disabled" style="width: 360px;"></div>
+            </div>
+            <div>
+              <div style="font-size:12px; font-weight:700; color:var(--text-regular); margin-bottom:6px;">② 禁用整个选择器组件（为 select 设置 disabled 属性）</div>
+              <div id="demo_select_full_disabled" style="width: 360px;"></div>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 1. 有禁用选项 (Disabled Options)
+var sel_opt = GSelect.new()
+sel_opt.options = [
+    {"label": "初级强化石 (+1~+5 成功率 100%)", "value": "opt1"},
+    {"label": "中级祝福水晶 (+6~+9 铁匠3级解锁 - 禁用)", "value": "opt2", "disabled": true}, # 👈 禁用该项
+    {"label": "高级天界神石 (+10~+15 成功率 85%)", "value": "opt3"},
+    {"label": "太古不灭符文 (未解锁副本 - 禁用)", "value": "opt4", "disabled": true},     # 👈 禁用该项
+    {"label": "神话虚空精粹 (+20 终极附魔)", "value": "opt5"}
+]
+add_child(sel_opt)
+
+# GDScript: 2. 禁用整个选择器组件 (Disabled Select)
+var sel_full = GSelect.new()
+sel_full.disabled = true # 👈 整个组件置灰并阻断点击交互
+add_child(sel_full)`
+      },
+      {
+        title: '3. 实时搜索与模糊筛选 (Filterable & Searchable)',
         render: `
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div id="demo_select_filterable" style="width: 360px;"></div>
@@ -1611,18 +1825,18 @@ add_child(sel)`
 var sel = GSelect.new()
 sel.filterable = true # 开启搜索过滤输入框
 sel.clearable = true
-sel.placeholder_text = "输入关键字搜索组件库..."
+sel.placeholder_text = "输入关键字搜索组件库/算法..."
 sel.options = [
     {"label": "Element Plus 现代化组件库 (Select/Dialog)", "value": "el_plus"},
     {"label": "Naive UI 极速类型安全组件 (TypeScript)", "value": "naive"},
     {"label": "Ant Design Vue 极客设计体系 (AntD)", "value": "antd"},
-    {"label": "Vant UI 移动端游戏工具链 (Mobile)", "value": "vant"},
-    {"label": "Vue.js 3 响应式内核 (Reactivity Core)", "value": "vue3"}
+    {"label": "Vant UI 移动端轻提示与选择器 (Mobile)", "value": "vant"},
+    {"label": "Vue.js 3 响应式底层 (Reactivity Core)", "value": "vue3"}
 ]
 add_child(sel)`
       },
       {
-        title: '3. 多选标签与折叠展示 (Multiple Tags & Collapse Tags)',
+        title: '4. 多选标签与折叠展示 (Multiple Tags & Collapse Tags)',
         render: `
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div id="demo_select_multiple" style="width: 420px;"></div>
@@ -1646,7 +1860,7 @@ sel.selection_changed.connect(func(selected_array):
 add_child(sel)`
       },
       {
-        title: '4. 分组选项与禁用项 (Option Grouping & Disabled Options)',
+        title: '5. 分组选项与禁用项 (Option Grouping & Disabled Options)',
         render: `
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div id="demo_select_group" style="width: 360px;"></div>
@@ -1660,7 +1874,7 @@ sel.clearable = true
 
 sel.options = [
     {"label": "狂暴战 (Warrior - 近战输出)", "value": "warrior", "group": "近战狂暴系 (Melee)"},
-    {"label": "圣骑士 (Paladin - 未解锁)", "value": "paladin", "group": "近战狂暴系 (Melee)", "disabled": true},
+    {"label": "圣骑士 (Paladin - 需暗影通关 - 禁用)", "value": "paladin", "group": "近战狂暴系 (Melee)", "disabled": true},
     {"label": "潜行者 (Rogue - 致命背刺)", "value": "rogue", "group": "近战狂暴系 (Melee)"},
     {"label": "大魔导师 (Archmage - 暴风雪)", "value": "archmage", "group": "远程魔法系 (Caster)"},
     {"label": "暗影术士 (Warlock - 诅咒之箭)", "value": "warlock", "group": "远程魔法系 (Caster)"}
@@ -1668,7 +1882,7 @@ sel.options = [
 add_child(sel)`
       },
       {
-        title: '5. 自定义选项模板与插槽 (Custom Option Template & Slots)',
+        title: '6. 自定义选项模板与插槽 (Custom Option Template & Slots)',
         render: `
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div id="demo_select_custom" style="width: 380px;"></div>
@@ -1705,7 +1919,7 @@ add_child(sel)`
       { name: 'collapse_tags', type: 'boolean', default: 'false', desc: '多选模式下是否折叠超长标签' },
       { name: 'max_collapse_tags', type: 'int', default: '1', desc: '折叠标签模式下最多展示的 Tag 数量' },
       { name: 'placeholder_text', type: 'String', default: '"请选择..."', desc: '选择框未选值时的占位提示文本' },
-      { name: 'disabled', type: 'boolean', default: 'false', desc: '是否完全禁用选择器' }
+      { name: 'disabled', type: 'boolean', default: 'false', desc: '是否禁用整个选择器组件（不可点击交互）' }
     ],
     events: [
       { name: 'item_selected(index, value, label)', desc: '单选模式下选中新选项时触发', params: '(index: int, value: Variant, label: String)' },

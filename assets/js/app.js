@@ -32,6 +32,7 @@ window.switchTopSection = function(section, targetDocKey) {
 window.findSectionByDocKey = function(docKey) {
   if (!docKey) return 'components';
   if (window.GUIDE_CATALOG && window.GUIDE_CATALOG[docKey]) return 'guide';
+  if (docKey === 'icon') return 'icons-gallery';
   if (window.SLOTS_CATALOG && window.SLOTS_CATALOG[docKey]) return 'slots';
   if (window.GAME_CATALOG && window.GAME_CATALOG[docKey]) return 'game';
   if (window.PLAYGROUND_CATALOG && window.PLAYGROUND_CATALOG[docKey]) return 'playground';
@@ -300,6 +301,8 @@ window.showDoc = function(key) {
     if (typeof window.renderSimLifecycleUI === 'function') setTimeout(window.renderSimLifecycleUI, 30);
   } else if (key === 'select') {
     if (typeof window.initSelectDemos === 'function') setTimeout(window.initSelectDemos, 30);
+  } else if (key === 'icon') {
+    if (typeof window.initIconGallery === 'function') setTimeout(window.initIconGallery, 30);
   }
 };
 
