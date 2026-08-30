@@ -8,7 +8,7 @@ enum LabelPosition {
 	RIGHT
 }
 
-@export var label_position: LabelPosition = LabelPosition.LEFT:
+@export_enum("LEFT", "TOP", "RIGHT") var label_position: int = LabelPosition.LEFT:
 	set(val):
 		label_position = val
 		_propagate_props()

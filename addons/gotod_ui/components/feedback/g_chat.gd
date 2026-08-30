@@ -31,6 +31,12 @@ var _send_btn: Button
 var _history: Array[Dictionary] = []
 
 func _ready() -> void:
+	_setup_ui()
+
+func _setup_ui() -> void:
+	if _messages_vbox:
+		return
+		
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
@@ -129,6 +135,9 @@ func add_messages(msgs: Array) -> GChat:
 
 ## 渲染单条聊天项
 func add_message(msg: Dictionary) -> void:
+	if not _messages_vbox:
+		_setup_ui()
+		
 	_history.append(msg)
 	
 	var msg_type = msg.get("type", MessageType.TEXT)
@@ -141,6 +150,9 @@ func add_message(msg: Dictionary) -> void:
 		call_deferred("_scroll_to_bottom")
 
 func _render_system_pill(text: String) -> void:
+	if not _messages_vbox:
+		_setup_ui()
+		
 	var center_box = CenterContainer.new()
 	center_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
@@ -164,6 +176,9 @@ func _render_system_pill(text: String) -> void:
 	_messages_vbox.add_child(center_box)
 
 func _render_bubble(msg: Dictionary) -> void:
+	if not _messages_vbox:
+		_setup_ui()
+		
 	var is_self: bool = msg.get("is_self", false)
 	var text: String = msg.get("text", "")
 	var name_str: String = msg.get("name", "")
@@ -228,11 +243,12 @@ func _render_bubble(msg: Dictionary) -> void:
 	_messages_vbox.add_child(row_hbox)
 
 func _scroll_to_bottom() -> void:
-	if _scroll_container:
+	if _scroll_container and _messages_vbox:
 		_scroll_container.scroll_vertical = int(_messages_vbox.size.y)
 
 ## 清空所有聊天记录
 func clear() -> void:
 	_history.clear()
-	for child in _messages_vbox.get_children():
-		child.queue_free()
+	if _messages_vbox:
+		for child in _messages_vbox.get_children():
+			child.queue_free()

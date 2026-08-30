@@ -27,13 +27,13 @@ var _content_label: RichTextLabel
 var _next_indicator: Label
 var _options_container: VBoxContainer
 
-var _queue: Array[Dictionary] = []
+var _queue: Array = []
 var _is_typing: bool = false
 var _full_text: String = ""
 var _char_index: int = 0
 var _typing_speed: float = 0.03
 var _typing_timer: float = 0.0
-var _active_options: Array[String] = []
+var _active_options: Array = []
 
 func _ready() -> void:
 	_instance = self
@@ -315,7 +315,7 @@ func _show_next_in_queue() -> void:
 			if avatar: _right_avatar_rect.texture = avatar
 			_right_avatar_rect.modulate = Color(1, 1, 1, 1)
 		
-	_active_options = options
+	_active_options = options if options is Array else []
 	_full_text = text
 	_char_index = 0
 	_typing_timer = 0.0

@@ -26,12 +26,15 @@ enum Shape {
 	SQUARE
 }
 
-@export var button_type: ButtonType = ButtonType.DEFAULT:
+## 修复：@export_enum + int，避免 @tool 脚本内部枚举 setter 类型冲突
+@export_enum("DEFAULT", "PRIMARY", "SUCCESS", "WARNING", "DANGER", "INFO") \
+		var button_type: int = ButtonType.DEFAULT:
 	set(val):
 		button_type = val
 		_update_styles()
 
-@export var variant: Variant = Variant.SOLID:
+@export_enum("SOLID", "OUTLINE", "DASHED", "TEXT", "LINK") \
+		var variant: int = Variant.SOLID:
 	set(val):
 		variant = val
 		_update_styles()
@@ -41,10 +44,12 @@ enum Shape {
 		button_size = val
 		_update_styles()
 
-@export var shape: Shape = Shape.DEFAULT:
+@export_enum("DEFAULT", "ROUND", "CIRCLE", "SQUARE") \
+		var shape: int = Shape.DEFAULT:
 	set(val):
 		shape = val
 		_update_styles()
+
 
 @export var loading: bool = false:
 	set(val):

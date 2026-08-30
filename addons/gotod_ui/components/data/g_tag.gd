@@ -20,10 +20,11 @@ enum Variant {
 		type = val
 		_update_styles()
 
-@export var variant: Variant = Variant.LIGHT:
+@export_enum("LIGHT", "OUTLINE", "SOLID") var variant: int = Variant.LIGHT:
 	set(val):
 		variant = val
-		_update_styles()
+		if is_node_ready():
+			_update_styles()
 
 @export var round_shape: bool = false:
 	set(val):

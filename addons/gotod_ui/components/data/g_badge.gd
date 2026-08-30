@@ -22,9 +22,9 @@ extends Control
 		badge_color = val
 		queue_redraw()
 
-@export var hidden: bool = false:
+@export var is_hidden: bool = false:
 	set(val):
-		hidden = val
+		is_hidden = val
 		queue_redraw()
 
 func _ready() -> void:
@@ -33,7 +33,7 @@ func _ready() -> void:
 		GotodTheme.instance.theme_changed.connect(queue_redraw)
 
 func _draw() -> void:
-	if hidden or (value <= 0 and !is_dot): return
+	if is_hidden or (value <= 0 and !is_dot): return
 	
 	var col = badge_color if badge_color != Color.TRANSPARENT else GotodTheme.get_color("danger", Color("#d03050"))
 	var badge_pos = Vector2(size.x, 0)

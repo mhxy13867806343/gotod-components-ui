@@ -62,6 +62,11 @@ func _setup_ui() -> void:
 	_content_box.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_vbox.add_child(_content_box)
 
+func get_content_box() -> VBoxContainer:
+	if not _content_box:
+		_setup_ui()
+	return _content_box
+
 func _update_styles() -> void:
 	var bg_col = GotodTheme.get_color("bg_card", Color("#242428"))
 	var border_col = GotodTheme.get_color("border_base", Color("#383842")) if bordered else Color.TRANSPARENT

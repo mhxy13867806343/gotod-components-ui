@@ -17,7 +17,7 @@ enum Placement {
 		title = val
 		if _title_lbl: _title_lbl.text = title
 
-@export var placement: Placement = Placement.RIGHT
+@export_enum("RIGHT", "LEFT", "TOP", "BOTTOM") var placement: int = Placement.RIGHT
 @export var drawer_size: float = 360.0
 @export var mask_closable: bool = true
 
@@ -70,6 +70,11 @@ func _setup_ui() -> void:
 	vbox.add_child(_content_box)
 	
 	_update_styles()
+
+func get_content_box() -> VBoxContainer:
+	if not _content_box:
+		_setup_ui()
+	return _content_box
 
 func _update_styles() -> void:
 	var bg_col = GotodTheme.get_color("bg_surface", Color("#18181c"))

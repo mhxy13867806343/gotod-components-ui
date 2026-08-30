@@ -163,6 +163,101 @@ var jump_velocity = GPhysics.calculate_jump_velocity(180.0, 0.4) # height 180px,
 
 ---
 
+## 🛠️ Demo Bug Fixes & Before/After Code Comparison
+
+During real-world game development and alignment with `gotod-components-ui-demo` (Memory Match Game), the component library underwent rigorous robustness auditing and bug fixing:
+
+### 1. `GDivider` Vertical Orientation Coordinate & Size Bug
+* **Issue**: Vertical divider drawing calculated X center as `size.y / 2.0` instead of `size.x / 2.0`, causing line displacement in rectangular controls.
+* **Before (Buggy)**:
+  ```gdscript
+  func _draw() -> void:
+      if orientation == Orientation.VERTICAL:
+          var x = size.y / 2.0  # ❌ Used Y-axis height
+          draw_line(Vector2(x, 0), Vector2(x, size.y), col, 1.0)
+  ```
+* **After (Fixed)**:
+  ```gdscript
+  func _draw() -> void:
+      if orientation == Orientation.VERTICAL:
+          var x = size.x / 2.0  # ✅ Used X-axis width
+          draw_line(Vector2(x, 0), Vector2(x, size.y), col, 1.0)
+  ```
+
+### 2. `@tool` Script Enum Setter Collision & `@export_enum` Safety
+* **Issue**: Direct Enum exports in `@tool` mode caused type casting conflicts during Inspector updates or dynamic assignments.
+* **Before (Buggy)**:
+  ```gdscript
+  @export var button_type: ButtonType = ButtonType.DEFAULT:
+      set(val):
+          button_type = val
+          _update_styles()  # ❌ Called before ready -> null reference
+  ```
+* **After (Fixed)**:
+  ```gdscript
+  @export_enum("DEFAULT", "PRIMARY", "SUCCESS", "WARNING", "DANGER", "INFO") \
+          var button_type: int = ButtonType.DEFAULT:
+      set(val):
+          button_type = val
+          if is_node_ready():
+              _update_styles()  # ✅ Protected by is_node_ready() guard
+  ```
+
+### 3. `GFab` Floating Action Button Pre-ready Invocation Crash
+* **Issue**: Calling `add_action()` before node entered tree triggered a crash on uninitialized `_menu_container`.
+* **Before (Buggy)**:
+  ```gdscript
+  func _rebuild_menu() -> void:
+      for child in _menu_container.get_children():  # ❌ null reference
+          child.queue_free()
+  ```
+* **After (Fixed)**:
+  ```gdscript
+  func _rebuild_menu() -> void:
+      if not _menu_container:
+          _setup_layout()  # ✅ Safe pre-ready fallback initialization
+      for child in _menu_container.get_children():
+          child.queue_free()
+  ```
+
+### 4. `GRouter` Scene Transition Deadlock & Freed Node Access Guard
+* **Issue**: Unawaited transitions left `_is_transitioning` permanently locked; rapid transitions accessed previously freed scenes.
+* **Before (Buggy)**:
+  ```gdscript
+  static func push(...) -> GResult:
+      await _play_transition_animation(...)
+      _is_transitioning = false
+  ```
+* **After (Fixed)**:
+  ```gdscript
+  static func push(...) -> Variant:
+      _play_transition_animation(root, next_scene, transition, duration, false, tree, func():
+          _is_transitioning = false  # ✅ Always releases lock upon completion
+      )
+      return GResult.ok(null)
+  
+  tween.finished.connect(func():
+      if old_scene and old_scene != new_scene and is_instance_valid(old_scene):
+          old_scene.queue_free()  # ✅ Protected with is_instance_valid
+  )
+  ```
+
+### 5. `GAxios` Dictionary Bracket Indexing & Method Type Casting
+* **Issue**: Dot notation access `final_config.params` caused runtime crashes on Dictionaries.
+* **Before (Buggy)**:
+  ```gdscript
+  if final_config.has("params") and final_config.params is Dictionary:  # ❌ Dot syntax error
+      for k in final_config.params.keys(): ...
+  ```
+* **After (Fixed)**:
+  ```gdscript
+  if final_config.has("params") and final_config["params"] is Dictionary:  # ✅ Safe bracket syntax
+      for k in final_config["params"].keys(): ...
+  var req_method: int = int(final_config.get("method", HTTPClient.METHOD_GET))  # ✅ Integer casting
+  ```
+
+---
+
 ## 📄 License
 
 This project is licensed under the **[MIT License](LICENSE)**.

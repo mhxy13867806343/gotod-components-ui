@@ -18,11 +18,12 @@ enum LabelPosition {
 		required = val
 		_update_label()
 
-@export var label_position: LabelPosition = LabelPosition.LEFT:
+@export_enum("LEFT", "TOP", "RIGHT") var label_position: int = LabelPosition.LEFT:
 	set(val):
 		label_position = val
 		vertical = (label_position == LabelPosition.TOP)
-		_update_layout()
+		if is_node_ready():
+			_update_layout()
 
 @export var label_width: float = 100.0:
 	set(val):

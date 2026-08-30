@@ -129,13 +129,33 @@ window.showToast = function(msg, type = 'info') {
 };
 
 // ==========================================
+// 5. Code Tab Switcher for Before vs After Diff
+// ==========================================
+window.switchCodeTab = function(btn, tabIndex) {
+  const container = btn.closest('.code-tab-container');
+  if (!container) return;
+  
+  const buttons = container.querySelectorAll('.code-tab-btn');
+  const panels = container.querySelectorAll('.code-tab-panel');
+  
+  buttons.forEach((b, i) => {
+    b.classList.toggle('active', i === tabIndex);
+  });
+  
+  panels.forEach((p, i) => {
+    p.classList.toggle('active', i === tabIndex);
+  });
+};
+
+// ==========================================
 // 6. Dual-Engine Clipboard Copy Utility
 // ==========================================
 window.copyCode = function(btn, codeText) {
   if (!codeText) {
-    const card = btn.closest('.demo-card') || btn.closest('.code-box') || btn.parentElement;
+    const card = btn.closest('.demo-card') || btn.closest('.code-tab-container') || btn.closest('.code-box') || btn.parentElement;
     if (card) {
-      const codeElem = card.querySelector('.code-box pre code') || card.querySelector('pre code') || card.querySelector('code');
+      const activePanel = card.querySelector('.code-tab-panel.active pre code');
+      const codeElem = activePanel || card.querySelector('.code-box pre code') || card.querySelector('pre code') || card.querySelector('code');
       if (codeElem) codeText = codeElem.innerText;
     }
   }

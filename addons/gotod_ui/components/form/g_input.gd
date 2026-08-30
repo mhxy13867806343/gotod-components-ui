@@ -31,10 +31,11 @@ enum Status {
 		input_size = val
 		_update_styles()
 
-@export var status: Status = Status.DEFAULT:
+@export_enum("DEFAULT", "ERROR", "WARNING", "SUCCESS") var status: int = Status.DEFAULT:
 	set(val):
 		status = val
-		_update_styles()
+		if is_node_ready():
+			_update_styles()
 
 @export var clearable: bool = false:
 	set(val):

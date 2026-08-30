@@ -12,10 +12,12 @@ enum ProgressType {
 		percentage = clampf(val, 0.0, 100.0)
 		queue_redraw()
 
-@export var type: ProgressType = ProgressType.LINE:
+## 修复：@export_enum + int，避免内部枚举 setter 类型冲突
+@export_enum("LINE", "CIRCLE") var type: int = ProgressType.LINE:
 	set(val):
 		type = val
-		_update_min_size()
+		if is_node_ready():
+			_update_min_size()
 		queue_redraw()
 
 @export var status: GThemeTokens.Status = GThemeTokens.Status.PRIMARY:
@@ -52,19 +54,17 @@ func _draw() -> void:
 	var ratio = percentage / 100.0
 	var font = get_theme_default_font()
 	var pct_str = "%d%%" % int(round(percentage))
-	
+
 	if type == ProgressType.LINE:
 		var text_w = 40.0 if show_text else 0.0
 		var bar_w = size.x - text_w
 		var y = size.y / 2.0
 		var r = stroke_width / 2.0
-		
-		# Background track
+
 		draw_rect(Rect2(0, y - r, bar_w, stroke_width), bg_col, true, r)
-		# Filled progress
 		if bar_w * ratio > 0:
 			draw_rect(Rect2(0, y - r, bar_w * ratio, stroke_width), col, true, r)
-			
+
 		if show_text:
 			var font_size = 12
 			var str_sz = font.get_string_size(pct_str, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
@@ -72,12 +72,10 @@ func _draw() -> void:
 	else:
 		var center = size / 2.0
 		var radius = min(size.x, size.y) / 2.0 - stroke_width
-		# Background circle
 		draw_arc(center, radius, 0, TAU, 64, bg_col, stroke_width, true)
-		# Progress arc
 		if ratio > 0:
 			draw_arc(center, radius, -PI / 2.0, -PI / 2.0 + TAU * ratio, 64, col, stroke_width, true)
-			
+
 		if show_text:
 			var font_size = int(radius * 0.5)
 			var str_sz = font.get_string_size(pct_str, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)

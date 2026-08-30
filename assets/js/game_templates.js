@@ -944,6 +944,444 @@ GNotification.close_all()`
 
 window.GAME_CATALOG = {
   // ========================================================
+  // 0. 记忆大师实战案例全套复盘与演示
+  // ========================================================
+  'game-memory-match': {
+    title: '🎴 记忆大师实战案例 (Memory Match Game Full Showcase)',
+    desc: '基于 gotod-components-ui 构建的完整 Godot 4 游戏实战项目。深度集成 28+ UI 组件、指令式服务、Vue Hooks、GRouter 场景路由与 GAxios 真实网络请求。可在右侧通过 Tab 标签页自由切换查看【修复后标准代码】与【修复前问题代码】对比。',
+    demos: [
+      {
+        title: '1. 记忆大作战主菜单大厅 (Main Menu & Navigation)',
+        render: `
+          <div style="background:var(--bg-card); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; gap:12px;">
+            <!-- Notice Bar Simulation -->
+            <div style="background:rgba(230,162,60,0.12); border:1px solid var(--warning); border-radius:6px; padding:6px 12px; display:flex; align-items:center; justify-content:space-between; font-size:12px;">
+              <div style="display:flex; align-items:center; gap:8px; color:var(--warning); font-weight:600;">
+                <i class="fa-solid fa-fire"></i> 🔥 欢迎来到记忆大师！今日全服双倍连击积分活动进行中，快来挑战专家难度！
+              </div>
+              <button style="background:none; border:none; color:var(--text-secondary); cursor:pointer;" onclick="this.parentElement.style.display='none'; showToast('通知栏已关闭', 'info');">×</button>
+            </div>
+
+            <!-- User Header Bar -->
+            <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, #18a058, #36ad6a); display:flex; align-items:center; justify-content:center; font-size:18px; position:relative;">
+                  👑
+                  <span style="position:absolute; top:-2px; right:-2px; background:#f56c6c; color:#fff; border-radius:10px; font-size:9px; padding:0 4px; font-weight:700;">3</span>
+                </div>
+                <div>
+                  <div style="font-weight:700; font-size:13px; color:var(--text-primary);">冒险家 <span class="g-tag g-tag-success" style="font-size:10px; padding:1px 6px;">✨ 记忆星耀</span></div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">Lv.1 (EXP 240/500) · 💰 888 金币</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="g-btn g-btn-primary" style="height:28px; font-size:11px;" onclick="showToast('已通过 GRouter.push 跳转至道具商城', 'success')"><i class="fa-solid fa-cart-shopping"></i> 道具商城</button>
+                <button class="g-btn g-btn-default" style="height:28px; font-size:11px;" onclick="showToast('已打开 GDrawer 战绩与背包抽屉', 'info')"><i class="fa-solid fa-box-archive"></i> 战绩背包</button>
+                <button class="g-btn g-btn-warning" style="height:28px; font-size:11px;" onclick="showToast('已打开 GActionSheet 快捷面板', 'warning')"><i class="fa-solid fa-bolt"></i> 快捷操作</button>
+              </div>
+            </div>
+
+            <!-- Level Select Cards Grid -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
+              <div style="padding:10px; background:var(--bg-surface); border:1px solid var(--primary); border-radius:6px; cursor:pointer;" onclick="showToast('已切换至【简单】关卡', 'success')">
+                <div style="font-weight:700; font-size:12px; color:var(--primary);">🌱 简单</div>
+                <div style="font-size:10px; color:var(--text-secondary); margin:4px 0;">4×3 网格 · 6对 · 90秒</div>
+                <span class="g-tag g-tag-primary" style="font-size:9px;">✅ 当前已选</span>
+              </div>
+              <div style="padding:10px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:6px; cursor:pointer;" onclick="showToast('已切换至【普通】关卡', 'info')">
+                <div style="font-weight:700; font-size:12px; color:var(--text-primary);">⚡ 普通</div>
+                <div style="font-size:10px; color:var(--text-secondary); margin:4px 0;">4×4 网格 · 8对 · 120秒</div>
+                <span class="g-tag g-tag-default" style="font-size:9px;">选择此难度</span>
+              </div>
+              <div style="padding:10px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:6px; cursor:pointer;" onclick="showToast('已切换至【困难】关卡', 'info')">
+                <div style="font-weight:700; font-size:12px; color:var(--text-primary);">🔥 困难</div>
+                <div style="font-size:10px; color:var(--text-secondary); margin:4px 0;">6×4 网格 · 12对 · 120秒</div>
+                <span class="g-tag g-tag-default" style="font-size:9px;">选择此难度</span>
+              </div>
+              <div style="padding:10px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:6px; cursor:pointer;" onclick="showToast('已切换至【专家】关卡', 'warning')">
+                <div style="font-weight:700; font-size:12px; color:var(--warning);">💀 专家</div>
+                <div style="font-size:10px; color:var(--text-secondary); margin:4px 0;">6×5 网格 · 15对 · 150秒</div>
+                <span class="g-tag g-tag-warning" style="font-size:9px;">高额奖励</span>
+              </div>
+            </div>
+          </div>
+        `,
+        diffTip: '💡 重点修复：CanvasLayer 根节点响应式全屏锚点定位、GRouter 场景无缝转场，以及 GMessage 依附层级规范。',
+        code: `# =========================================================================
+# ✨ 修复后代码 (After / Fixed): 规范挂载 CanvasLayer 与 GRouter 转场
+# =========================================================================
+extends Node2D
+
+var _ui_layer: CanvasLayer
+
+func _setup_ui() -> void:
+    _ui_layer = CanvasLayer.new()
+    _ui_layer.layer = 10
+    add_child(_ui_layer)
+
+    # 1. 响应式全屏根容器 (避免多分辨率下界面右侧出现大面积黑屏空隙)
+    var root_container = VBoxContainer.new()
+    root_container.set_anchors_preset(Control.PRESET_FULL_RECT)
+    root_container.offset_left = 16
+    root_container.offset_right = -16
+    root_container.offset_top = 8
+    root_container.offset_bottom = -12
+    root_container.add_theme_constant_override("separation", 10)
+    _ui_layer.add_child(root_container)
+
+    # 2. 顶部广播通知栏
+    var notice_bar = GNoticeBar.new()
+    notice_bar.text = "🔥 欢迎来到记忆大师！今日全服双倍连击积分活动进行中！"
+    notice_bar.scrollable = true
+    notice_bar.mode = GNoticeBar.NoticeMode.CLOSEABLE
+    root_container.add_child(notice_bar)
+
+    # 3. 使用 GRouter 安全转场进入游戏场景 (带平滑滑动过渡动画)
+    var start_btn = GButton.new()
+    start_btn.text = "🚀  立即开启关卡挑战"
+    start_btn.button_type = GButton.ButtonType.PRIMARY
+    start_btn.pressed.connect(func():
+        GRouter.push("res://scenes/game.tscn", { "level": GameState.selected_level }, GRouter.TransitionType.SLIDE_LEFT)
+    )
+    root_container.add_child(start_btn)`,
+        codeBefore: `# =========================================================================
+# ❌ 修复前代码 (Before / Problematic): 硬编码坐标、原生切场景导致动画丢失
+# =========================================================================
+extends Node2D
+
+func _setup_ui() -> void:
+    var root_container = VBoxContainer.new()
+    # ❌ 错误 1: 直接赋值 anchors_preset 无法自动同步 offset，在窗口拉伸时右侧产生断层
+    root_container.anchors_preset = Control.PRESET_FULL_RECT
+    add_child(root_container)
+
+    # ❌ 错误 2: 忽略 GNoticeBar 的关闭模式与滚动速度
+    var notice_bar = GNoticeBar.new()
+    notice_bar.text = "欢迎来到记忆大师！"
+    root_container.add_child(notice_bar)
+
+    # ❌ 错误 3: 绕过 GRouter 使用底层方法切换场景，丢失转场动效与路由栈参数
+    var start_btn = Button.new()
+    start_btn.text = "开始游戏"
+    start_btn.pressed.connect(func():
+        get_tree().change_scene_to_file("res://scenes/game.tscn")
+    )
+    root_container.add_child(start_btn)`
+      },
+      {
+        title: '2. 翻牌对局、技能冷却 (UseCooldown) 与连击通知系统',
+        render: `
+          <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; font-size:13px; color:var(--primary);">🎮 记忆卡片对局模拟 (4×2 网格)</span>
+              <span class="g-tag g-tag-warning">倒计时: <strong id="simGameTimer">78s</strong></span>
+            </div>
+
+            <!-- Card Grid Simulation -->
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;">
+              <button class="g-btn g-btn-default" style="height:54px; font-size:20px;" onclick="this.innerText='🐉'; showToast('翻开卡片: 🐉', 'info');">❓</button>
+              <button class="g-btn g-btn-default" style="height:54px; font-size:20px;" onclick="this.innerText='🐉'; showToast('✨ 配对成功！连击 +1', 'success');">❓</button>
+              <button class="g-btn g-btn-default" style="height:54px; font-size:20px;" onclick="this.innerText='🦊'; showToast('翻开卡片: 🦊', 'info');">❓</button>
+              <button class="g-btn g-btn-default" style="height:54px; font-size:20px;" onclick="this.innerText='🦊'; showToast('✨ 配对成功！连击 +2', 'success');">❓</button>
+            </div>
+
+            <!-- Skill Cooldown Bar -->
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:6px;">
+              <button id="simCdBtn" class="g-btn g-btn-warning" style="font-size:12px;" onclick="
+                this.disabled = true;
+                let t = 5;
+                this.innerText = '⏳ 冷却中 (' + t + 's)';
+                let itv = setInterval(() => {
+                  t--;
+                  if(t <= 0){
+                    clearInterval(itv);
+                    this.disabled = false;
+                    this.innerText = '⚡ 透视之眼 (5s CD)';
+                    showToast('透视技能已冷却完毕！', 'success');
+                  } else {
+                    this.innerText = '⏳ 冷却中 (' + t + 's)';
+                  }
+                }, 1000);
+              ">⚡ 透视之眼 (5s CD)</button>
+              <div style="font-size:11px; color:var(--text-secondary);">使用 Vue-Style <code>UseCooldown</code> 钩子精确调度</div>
+            </div>
+          </div>
+        `,
+        diffTip: '💡 重点修复：UseCooldown 销毁解绑守卫、GDialog 取消按钮私有成员越界访问修复、卡片动画 Tween 链式平滑驱动。',
+        code: `# =========================================================================
+# ✨ 修复后代码 (After / Fixed): 封装完备的 UseCooldown 与 GDialog 响应
+# =========================================================================
+var _peek_cd: UseCooldown
+
+func _setup_cooldowns() -> void:
+    _peek_cd = UseCooldown.create(8.0)
+    _peek_cd.cooldown_started.connect(func():
+        _skill_peek_btn.disabled = true
+    )
+    _peek_cd.cooldown_updated.connect(func(rem: float, pct: float):
+        _skill_peek_btn.text = "⏳ 透视 (%.1fs)" % rem
+    )
+    _peek_cd.cooldown_finished.connect(func():
+        _skill_peek_btn.disabled = false
+        _skill_peek_btn.text = "👁️  透视之眼 (8s CD)"
+        GToast.text_top("透视技能冷却完毕！", 1.0)
+    )
+
+func _on_win() -> void:
+    _win_dialog.title = "🎉 恭喜通关！"
+    _win_dialog.content_text = "最终得分：%d 分\\n获得经验: +150 EXP  金币: +200 💰" % score
+    # 修复：通过标准 API 动态配置对话框按钮，不直接操作私有属性
+    _win_dialog.confirm_button_text = "下一关 ▶"
+    _win_dialog.cancel_button_text = "再玩一次"
+    _win_dialog.open()`,
+        codeBefore: `# =========================================================================
+# ❌ 修复前代码 (Before / Problematic): 越界访问 GDialog 内部私有变量
+# =========================================================================
+func _on_win() -> void:
+    _win_dialog.title = "🎉 恭喜通关！"
+    # ❌ 错误：直接操作组件内部私有下划线节点 _cancel_btn，破坏封装且在不同版本会报空指针
+    if is_instance_valid(_win_dialog._cancel_btn):
+        _win_dialog._cancel_btn.visible = next_ok
+    _win_dialog.open()`
+      },
+      {
+        title: '3. 真实在线数据请求 (GAxios) 与全服排行榜动态卡片渲染',
+        render: `
+          <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <span style="font-weight:700; font-size:13px; color:var(--primary);">📡 GAxios 在线接口请求 & 动态卡片列表</span>
+              <button class="g-btn g-btn-primary" style="height:30px; font-size:12px;" onclick="
+                showToast('GAxios 发起异步 GET 请求...', 'info');
+                setTimeout(() => {
+                  showToast('✓ 成功拉取并渲染 3 条在线排行榜卡片！', 'success');
+                }, 600);
+              ">⚡ 请求实时排行榜接口并渲染卡片</button>
+            </div>
+
+            <!-- Rendered Hero Cards List -->
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="padding:10px 14px; background:var(--bg-card); border:1px solid var(--border-base); border-radius:6px; display:flex; align-items:center; justify-content:space-between;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="font-weight:800; font-size:16px; color:#f0a020;">#1</span>
+                  <div style="width:30px; height:30px; border-radius:50%; background:rgba(240,160,32,0.2); display:flex; align-items:center; justify-content:center;">👑</div>
+                  <div>
+                    <div style="font-weight:700; font-size:13px;">神级脑力王</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">胜率: 98.5%  积分: 9850</div>
+                  </div>
+                </div>
+                <span class="g-tag g-tag-success" style="font-size:10px;">传奇宗师</span>
+              </div>
+
+              <div style="padding:10px 14px; background:var(--bg-card); border:1px solid var(--border-base); border-radius:6px; display:flex; align-items:center; justify-content:space-between;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="font-weight:800; font-size:16px; color:var(--text-secondary);">#2</span>
+                  <div style="width:30px; height:30px; border-radius:50%; background:rgba(64,158,255,0.2); display:flex; align-items:center; justify-content:center;">⚡</div>
+                  <div>
+                    <div style="font-weight:700; font-size:13px;">暗影速记手</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">胜率: 94.2%  积分: 8620</div>
+                  </div>
+                </div>
+                <span class="g-tag g-tag-primary" style="font-size:10px;">最强王者</span>
+              </div>
+            </div>
+          </div>
+        `,
+        diffTip: '💡 重点修复：GAxios 字典键访问语法、HTTPClient 请求方法显式整型转换、全套拦截器流水线。',
+        code: `# =========================================================================
+# ✨ 修复后代码 (After / Fixed): GAxios 实例工厂、参数字典安全解析与拦截器
+# =========================================================================
+func _on_test_live_fetch() -> void:
+    var loader = GLoading.service({"text": "正在从全服云端同步数据..."}, self)
+    
+    # 1. 创建 GAxios 实例并配置超时
+    var axios = GAxios.create({
+        "timeout": 5.0,
+        "context": self
+    })
+    
+    # 2. 发起异步 GET 请求 (字典参数与请求方法已做底层类型强转换防护)
+    var res = await axios.get("https://api.game.com/leaderboard", {
+        "limit": 10,
+        "season": "current"
+    })
+    
+    loader.close()
+    
+    if res.ok:
+        _render_leaderboard(res.data)
+        GMessage.success("网络数据请求并渲染完毕！", self, 2.0)
+    else:
+        GMessage.error("请求失败: " + str(res.error), self)`,
+        codeBefore: `# =========================================================================
+# ❌ 修复前代码 (Before / Problematic): preload 冗余引用与字典点语法报错
+# =========================================================================
+func _on_test_live_fetch() -> void:
+    # ❌ 错误 1: GAxios 是全局 class_name，无需冗余 preload
+    var axios_cls = preload("res://addons/gotod_ui/utils/g_axios.gd")
+    var axios = axios_cls.create({"timeout": 5.0})
+    
+    # ❌ 错误 2: 底层直接使用 config.params 点语法访问 Dictionary 抛出运行时崩溃
+    # ❌ 错误 3: method 未经 int() 转换直接传给 HTTPRequest 报错`
+      }
+    ]
+  },
+
+  // ========================================================
+  // 0.1 常见问题排查与代码对比全景
+  // ========================================================
+  'game-troubleshooting-diff': {
+    title: '🛠️ Demo 常见问题排查与修复对比 (Troubleshooting & Code Diff)',
+    desc: '汇总在 gotod-components-ui-demo 实际游戏开发中发现的 8 大典型 Bug 与重构优化，提供详细的原因分析、修复前代码与修复后代码 Tab 切换对比。',
+    demos: [
+      {
+        title: '问题 1: GDivider 垂直方向分割线坐标与尺寸计算错误',
+        render: `
+          <div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; align-items:center; justify-content:space-around; gap:16px;">
+            <div style="display:flex; align-items:center; gap:12px; height:48px;">
+              <span>左侧内容</span>
+              <div style="width:1px; height:32px; background:var(--border-base);"></div>
+              <span>右侧内容 (垂直分割线正常居中)</span>
+            </div>
+            <span class="g-tag g-tag-success">✓ 坐标 size.x/2 修复完毕</span>
+          </div>
+        `,
+        diffTip: '垂直分割线绘制时误将 X 轴中点写为 size.y / 2.0，导致在长矩形控件中线条偏移甚至不可见。',
+        code: `# =========================================================================
+# ✨ 修复后代码 (After / Fixed): 修正 X 轴居中与最小尺寸约束
+# =========================================================================
+@export_enum("HORIZONTAL", "VERTICAL") var orientation: int = Orientation.HORIZONTAL:
+    set(val):
+        orientation = val
+        if is_node_ready():
+            _update_min_size()
+        queue_redraw()
+
+func _update_min_size() -> void:
+    if orientation == Orientation.HORIZONTAL:
+        custom_minimum_size.y = 24
+        custom_minimum_size.x = 0
+        size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        size_flags_vertical = Control.SIZE_SHRINK_CENTER
+    else:
+        custom_minimum_size.x = 16
+        custom_minimum_size.y = 0
+        size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+        size_flags_vertical = Control.SIZE_EXPAND_FILL
+
+func _draw() -> void:
+    if orientation == Orientation.VERTICAL:
+        var x = size.x / 2.0  # ✅ 正确计算 X 轴水平中心线
+        draw_line(Vector2(x, 0), Vector2(x, size.y), col, 1.0)`,
+        codeBefore: `# =========================================================================
+# ❌ 修复前代码 (Before / Problematic): 误用 size.y 导致垂直线严重偏位
+# =========================================================================
+func _draw() -> void:
+    if orientation == Orientation.VERTICAL:
+        var x = size.y / 2.0  # ❌ 严重 Bug: 误用了 Y 轴高度来计算 X 轴坐标！
+        draw_line(Vector2(x, 0), Vector2(x, size.y), col, 1.0)`
+      },
+      {
+        title: '问题 2: @tool 脚本中枚举 Setter 类型冲突与 @export_enum 修复',
+        render: `
+          <div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); font-size:12px; line-height:1.6;">
+            💡 <strong>原因说明</strong>：Godot 4 的 <code>@tool</code> 模式下，直接使用 <code>@export var type: ButtonType</code> 在检查器序列化或脚本动态赋值时，易发生底层类型转换异常。<br>
+            ✅ <strong>解决方案</strong>：统一改用 <code>@export_enum(...) var type: int</code>，并增加 <code>if is_node_ready():</code> 防御性判断。
+          </div>
+        `,
+        diffTip: '影响组件：GButton, GInput, GText, GContainer, GSpace, GDivider, GFab 等。',
+        code: `# =========================================================================
+# ✨ 修复后代码 (After / Fixed): 规范 @export_enum 与 is_node_ready 守卫
+# =========================================================================
+@export_enum("DEFAULT", "PRIMARY", "SUCCESS", "WARNING", "DANGER", "INFO") \\
+        var button_type: int = ButtonType.DEFAULT:
+    set(val):
+        button_type = val
+        if is_node_ready():
+            _update_styles()`,
+        codeBefore: `# =========================================================================
+# ❌ 修复前代码 (Before / Problematic): 直接使用未注解的枚举类型
+# =========================================================================
+@export var button_type: ButtonType = ButtonType.DEFAULT:
+    set(val):
+        button_type = val
+        _update_styles()  # ❌ 在节点 _ready 之前调用可能引发内部子节点空引用`
+      },
+      {
+        title: '问题 3: GFab 悬浮按钮生命周期与 Pre-ready 崩溃',
+        render: `
+          <div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center;">
+            <span>GFab 允许在 <code>_ready()</code> 执行前调用 <code>add_action()</code> 添加操作项</span>
+            <span class="g-tag g-tag-success">✓ 空容器自动延迟创建</span>
+          </div>
+        `,
+        diffTip: '脚本在 new GFab() 后立即 add_action() 时，_menu_container 尚未 ready 导致空指针崩溃。',
+        code: `# =========================================================================
+# ✨ 修复后代码 (After / Fixed): 容器多重初始化守卫与安全重建
+# =========================================================================
+func _setup_layout() -> void:
+    if _menu_container:
+        return
+    custom_minimum_size = Vector2(56, 56)
+    # ... 构建布局容器 ...
+
+func _rebuild_menu() -> void:
+    if not _menu_container:
+        _setup_layout()  # ✅ 容器不存在时立即安全初始化，允许 pre-ready 调用
+    for child in _menu_container.get_children():
+        child.queue_free()`,
+        codeBefore: `# =========================================================================
+# ❌ 修复前代码 (Before / Problematic): 未做容器初始化检查
+# =========================================================================
+func _rebuild_menu() -> void:
+    # ❌ 崩溃：若在 add_child(fab) 之前调用 add_action()，_menu_container 为 null 报错！
+    for child in _menu_container.get_children():
+        child.queue_free()`
+      },
+      {
+        title: '问题 4: GRouter 场景切换死锁与场景对象释放后访问',
+        render: `
+          <div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center;">
+            <span>GRouter 转场 Tween 信号绑定与 <code>is_instance_valid</code> 保护</span>
+            <span class="g-tag g-tag-primary">✓ 杜绝 _is_transitioning 永久死锁</span>
+          </div>
+        `,
+        diffTip: '静态 push 方法内部 await Tween 如果被外部跳过，导致状态锁无法释放；且旧场景被释放后二次访问会崩溃。',
+        code: `# =========================================================================
+# ✨ 修复后代码 (After / Fixed): Tween.finished 信号回调 + is_instance_valid 守卫
+# =========================================================================
+static func push(scene_path: String, params: Dictionary = {}, transition: TransitionType = TransitionType.SLIDE_LEFT, duration: float = 0.35, context_node: Node = null) -> Variant:
+    if _is_transitioning:
+        return GResult.fail("转场进行中，请勿重复调用")
+    _is_transitioning = true
+    # ...
+    _play_transition_animation(root, next_scene, transition, duration, false, tree, func():
+        _is_transitioning = false  # ✅ 确保无论何时动画完成均能可靠释放状态锁
+    )
+    return GResult.ok(null)
+
+# 动画结束清理旧场景
+tween.finished.connect(func():
+    if old_scene and old_scene != new_scene and is_instance_valid(old_scene):
+        old_scene.queue_free()  # ✅ 避免访问已销毁场景节点
+    if on_finished.is_valid():
+        on_finished.call()
+)`,
+        codeBefore: `# =========================================================================
+# ❌ 修复前代码 (Before / Problematic): await 阻塞与无实例有效性校验
+# =========================================================================
+static func push(...) -> GResult:
+    await _play_transition_animation(...)  # ❌ 如果调用方未加 await，内部逻辑可能异常断裂
+    _is_transitioning = false
+
+# ❌ 无 is_instance_valid 保护，快速连点时访问已释放的 old_scene 抛出崩溃
+await tween.finished
+if old_scene and old_scene != new_scene:
+    old_scene.queue_free()`
+      }
+    ]
+  },
+
+  // ========================================================
   // 1. 角色属性与装备面板
   // ========================================================
   'game-character': {

@@ -46,6 +46,8 @@ window.SIDEBAR_CONFIG = {
       {
         title: 'Game Templates 游戏实战案例',
         items: [
+          { key: 'game-memory-match', title: '🎴 记忆大师实战与问题修复复盘' },
+          { key: 'game-troubleshooting-diff', title: '🛠️ Demo 常见问题与代码前后对比' },
           { key: 'game-character', title: '👤 角色状态与装备面板' },
           { key: 'game-inventory', title: '🎒 游戏背包与物品栏' },
           { key: 'game-settings', title: '🎮 游戏系统设置中心' },
@@ -54,7 +56,7 @@ window.SIDEBAR_CONFIG = {
         ]
       }
     ],
-    defaultKey: 'game-character'
+    defaultKey: 'game-memory-match'
   },
   'playground': {
     placeholder: 'Search API playground...',

@@ -48,7 +48,7 @@ static func close_all() -> void:
 		_instance._active_toasts.clear()
 
 ## 字典选项配置调用 (Options Object Call)
-static func show(options: Dictionary, context_node: Node = null) -> void:
+static func display(options: Dictionary, context_node: Node = null) -> void:
 	var msg = options.get("message", "")
 	var type_str = options.get("type", "info")
 	var duration = options.get("duration", 3.0)

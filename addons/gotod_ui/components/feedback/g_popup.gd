@@ -23,10 +23,10 @@ enum CloseIconPosition {
 	BOTTOM_LEFT
 }
 
-@export var position_type: PositionType = PositionType.CENTER
+@export_enum("CENTER", "TOP", "BOTTOM", "LEFT", "RIGHT") var position_type: int = PositionType.CENTER
 @export var round_corner: bool = false
 @export var closeable: bool = false
-@export var close_icon_position: CloseIconPosition = CloseIconPosition.TOP_RIGHT
+@export_enum("TOP_RIGHT", "TOP_LEFT", "BOTTOM_RIGHT", "BOTTOM_LEFT") var close_icon_position: int = CloseIconPosition.TOP_RIGHT
 @export var overlay: bool = true
 @export var close_on_click_overlay: bool = true
 @export var duration: float = 0.3

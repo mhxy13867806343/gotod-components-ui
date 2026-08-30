@@ -30,7 +30,7 @@ static var _current_bgm_channel: int = 0
 ## @param path 资源路径 (如 "res://scenes/world_map.tscn")
 ## @param on_progress 进度回调 func(progress: float)
 ## @return 加载完成的 Resource 对象
-static func load_async(path: String, tree: SceneTree = null, on_progress: Callable = Callable()) -> Resource:
+func load_async(path: String, tree: SceneTree = null, on_progress: Callable = Callable()) -> Resource:
 	if ResourceLoader.has_cached(path):
 		if on_progress.is_valid(): on_progress.call(1.0)
 		return ResourceLoader.load(path)
@@ -61,7 +61,7 @@ static func load_async(path: String, tree: SceneTree = null, on_progress: Callab
 			if main_loop: await main_loop.process_frame
 
 ## 批量异步预加载资源列表
-static func preload_batch(paths: Array[String], tree: SceneTree, on_progress: Callable = Callable(), on_completed: Callable = Callable()) -> void:
+func preload_batch(paths: Array[String], tree: SceneTree, on_progress: Callable = Callable(), on_completed: Callable = Callable()) -> void:
 	var total = paths.size()
 	if total == 0:
 		if on_completed.is_valid(): on_completed.call()

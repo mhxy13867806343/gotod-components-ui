@@ -163,6 +163,101 @@ var jump_velocity = GPhysics.calculate_jump_velocity(180.0, 0.4) # 高度 180px,
 
 ---
 
+## 🛠️ Demo 实战问题排查与修复对比 (Bug Fixes & Before/After Code Comparison)
+
+在针对真实 Godot 4 游戏实战项目 (`gotod-components-ui-demo` 记忆大师) 的开发与对齐中，对组件库底层进行了全方位的健壮性排查与修复：
+
+### 1. `GDivider` 垂直方向分割线坐标与尺寸计算错误
+* **问题现象**：垂直分割线绘制时误将 X 轴中点写为 `size.y / 2.0`，导致在长矩形控件中线条偏移甚至不可见；且切换方向时未同步刷新 `custom_minimum_size`。
+* **修复前 (Before)**：
+  ```gdscript
+  func _draw() -> void:
+      if orientation == Orientation.VERTICAL:
+          var x = size.y / 2.0  # ❌ 错误使用了 Y 轴高度
+          draw_line(Vector2(x, 0), Vector2(x, size.y), col, 1.0)
+  ```
+* **修复后 (After)**：
+  ```gdscript
+  func _draw() -> void:
+      if orientation == Orientation.VERTICAL:
+          var x = size.x / 2.0  # ✅ 正确使用 X 轴宽度居中
+          draw_line(Vector2(x, 0), Vector2(x, size.y), col, 1.0)
+  ```
+
+### 2. `@tool` 脚本枚举类型 Setter 冲突与 `@export_enum` 规范
+* **问题现象**：在 Godot 4 `@tool` 模式下直接使用自定义 Enum 作为 `@export` 类型容易在检查器或动态赋值时触发类型转换异常。
+* **修复前 (Before)**：
+  ```gdscript
+  @export var button_type: ButtonType = ButtonType.DEFAULT:
+      set(val):
+          button_type = val
+          _update_styles()  # ❌ 未就绪前调用易引发子节点空指针
+  ```
+* **修复后 (After)**：
+  ```gdscript
+  @export_enum("DEFAULT", "PRIMARY", "SUCCESS", "WARNING", "DANGER", "INFO") \
+          var button_type: int = ButtonType.DEFAULT:
+      set(val):
+          button_type = val
+          if is_node_ready():
+              _update_styles()  # ✅ 增加 is_node_ready 防御守卫
+  ```
+
+### 3. `GFab` 悬浮按钮生命周期与 Pre-ready 调用崩溃
+* **问题现象**：在 `_ready()` 执行前调用 `add_action()` 时，`_menu_container` 为空抛出 Null Reference。
+* **修复前 (Before)**：
+  ```gdscript
+  func _rebuild_menu() -> void:
+      for child in _menu_container.get_children():  # ❌ _menu_container 未初始化抛异常
+          child.queue_free()
+  ```
+* **修复后 (After)**：
+  ```gdscript
+  func _rebuild_menu() -> void:
+      if not _menu_container:
+          _setup_layout()  # ✅ 允许在节点进入场景树前提前配置动作项
+      for child in _menu_container.get_children():
+          child.queue_free()
+  ```
+
+### 4. `GRouter` 转场动画死锁与旧场景释放后访问保护
+* **问题现象**：静态 `push` 方法内部 `await` Tween 如果被外部跳过，可能导致 `_is_transitioning` 状态锁永久无法释放；快速连续转场时访问已释放的 `old_scene` 崩溃。
+* **修复前 (Before)**：
+  ```gdscript
+  static func push(...) -> GResult:
+      await _play_transition_animation(...)
+      _is_transitioning = false
+  ```
+* **修复后 (After)**：
+  ```gdscript
+  static func push(...) -> Variant:
+      _play_transition_animation(root, next_scene, transition, duration, false, tree, func():
+          _is_transitioning = false  # ✅ 无论何时均能可靠释放状态锁
+      )
+      return GResult.ok(null)
+  
+  tween.finished.connect(func():
+      if old_scene and old_scene != new_scene and is_instance_valid(old_scene):
+          old_scene.queue_free()  # ✅ 增加 is_instance_valid 保护
+  )
+  ```
+
+### 5. `GAxios` 字典安全索引与请求方法强类型转换
+* **问题现象**：使用 `final_config.params` 点语法直接索引 Dictionary 字段报错；请求方法未显式强转为 `int`。
+* **修复前 (Before)**：
+  ```gdscript
+  if final_config.has("params") and final_config.params is Dictionary:  # ❌ 点语法报错
+      for k in final_config.params.keys(): ...
+  ```
+* **修复后 (After)**：
+  ```gdscript
+  if final_config.has("params") and final_config["params"] is Dictionary:  # ✅ 安全键索引
+      for k in final_config["params"].keys(): ...
+  var req_method: int = int(final_config.get("method", HTTPClient.METHOD_GET))  # ✅ 显式整型转换
+  ```
+
+---
+
 ## 📄 开源协议 (License)
 
 本项目基于 **[MIT License](LICENSE)** 宽松开源协议发布。

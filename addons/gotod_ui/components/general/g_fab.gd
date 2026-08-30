@@ -18,8 +18,8 @@ enum Position {
 	TOP_LEFT
 }
 
-@export var direction: Direction = Direction.HORIZONTAL
-@export var fab_position: Position = Position.BOTTOM_RIGHT
+@export_enum("HORIZONTAL", "VERTICAL") var direction: int = Direction.HORIZONTAL
+@export_enum("BOTTOM_RIGHT", "BOTTOM_LEFT", "TOP_RIGHT", "TOP_LEFT") var fab_position: int = Position.BOTTOM_RIGHT
 @export var main_icon: Texture2D
 @export var auto_collapse_on_click: bool = true
 @export var expand_duration: float = 0.25
@@ -36,6 +36,8 @@ func _ready() -> void:
 	_apply_fab_position()
 
 func _setup_layout() -> void:
+	if _menu_container:
+		return
 	custom_minimum_size = Vector2(56, 56)
 	
 	# Menu Container for child actions
@@ -62,7 +64,8 @@ func _setup_layout() -> void:
 func _apply_fab_position() -> void:
 	set_anchors_preset(PRESET_FULL_RECT)
 	mouse_filter = MOUSE_FILTER_IGNORE
-	_trigger_btn.mouse_filter = MOUSE_FILTER_STOP
+	if _trigger_btn:
+		_trigger_btn.mouse_filter = MOUSE_FILTER_STOP
 
 func add_action(item_name: String, label: String = "", icon: Texture2D = null) -> void:
 	var item_data = {
@@ -85,6 +88,9 @@ func add_actions(action_list: Array) -> void:
 	_rebuild_menu()
 
 func _rebuild_menu() -> void:
+	if not _menu_container:
+		_setup_layout()
+		
 	for child in _menu_container.get_children():
 		child.queue_free()
 	

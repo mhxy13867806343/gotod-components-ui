@@ -25,15 +25,17 @@ enum TabPosition {
 	RIGHT
 }
 
-@export var type: TabType = TabType.LINE:
+@export_enum("LINE", "CARD", "BORDER_CARD", "SEGMENT") var type: int = TabType.LINE:
 	set(val):
 		type = val
-		_rebuild_ui()
+		if is_node_ready():
+			_rebuild_ui()
 
-@export var tab_position: TabPosition = TabPosition.TOP:
+@export_enum("TOP", "BOTTOM", "LEFT", "RIGHT") var tab_position: int = TabPosition.TOP:
 	set(val):
 		tab_position = val
-		_update_position_layout()
+		if is_node_ready():
+			_update_position_layout()
 
 @export var current_tab: int = 0:
 	set(val):
@@ -44,8 +46,8 @@ enum TabPosition {
 				return
 			current_tab = val
 			_sync_tab_selection()
-			var t_name = get_tab_name(current_tab)
-			tab_changed.emit(current_tab, t_name)
+			if val >= 0 and val < _tabs_data.size():
+				tab_changed.emit(current_tab, _tabs_data[current_tab]["name"])
 
 @export var closable: bool = false:
 	set(val):
@@ -70,26 +72,34 @@ var _add_button: GButton
 var _tabs_data: Array[Dictionary] = [] # [{"name": "", "panel": Control, "closable": bool, "icon": Texture2D, "disabled": bool}]
 
 func _ready() -> void:
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_setup_structure()
 	if GotodTheme.instance:
 		GotodTheme.instance.theme_changed.connect(_rebuild_ui)
 
 func _setup_structure() -> void:
-	for child in get_children():
-		child.queue_free()
+	if _content_stack:
+		_rebuild_ui()
+		return
 		
 	_update_position_layout()
 	
 	if tab_position == TabPosition.TOP or tab_position == TabPosition.BOTTOM:
 		_tab_bar_box = HBoxContainer.new()
 		_tab_bar_box.add_theme_constant_override("separation", 8)
+		_tab_bar_box.custom_minimum_size = Vector2(0, 36)
 	else:
 		_tab_bar_box = VBoxContainer.new()
 		_tab_bar_box.add_theme_constant_override("separation", 6)
+		_tab_bar_box.custom_minimum_size = Vector2(140, 0)
 		
 	_content_stack = PanelContainer.new()
 	_content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_content_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_content_stack.custom_minimum_size = Vector2(0, 450)
+	var sb = StyleBoxEmpty.new()
+	_content_stack.add_theme_stylebox_override("panel", sb)
 	
 	if tab_position == TabPosition.TOP or tab_position == TabPosition.LEFT:
 		add_child(_tab_bar_box)
@@ -109,6 +119,9 @@ func _update_position_layout() -> void:
 
 ## 动态追加选项卡
 func add_tab(tab_name: String, panel_content: Control, is_closable: bool = false, icon: Texture2D = null) -> int:
+	if not _content_stack:
+		_setup_structure()
+		
 	var new_idx = _tabs_data.size()
 	_tabs_data.append({
 		"name": tab_name,
@@ -118,6 +131,8 @@ func add_tab(tab_name: String, panel_content: Control, is_closable: bool = false
 		"disabled": false
 	})
 	if panel_content:
+		panel_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_content_stack.add_child(panel_content)
 	_rebuild_ui()
 	tab_added.emit(new_idx, tab_name)
@@ -135,6 +150,9 @@ func add_tabs(tab_list: Array) -> void:
 
 ## 在指定索引插入选项卡
 func insert_tab(index: int, tab_name: String, panel_content: Control, is_closable: bool = false, icon: Texture2D = null) -> void:
+	if not _content_stack:
+		_setup_structure()
+		
 	index = clamp(index, 0, _tabs_data.size())
 	_tabs_data.insert(index, {
 		"name": tab_name,
@@ -144,6 +162,8 @@ func insert_tab(index: int, tab_name: String, panel_content: Control, is_closabl
 		"disabled": false
 	})
 	if panel_content:
+		panel_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_content_stack.add_child(panel_content)
 	_rebuild_ui()
 	tab_added.emit(index, tab_name)

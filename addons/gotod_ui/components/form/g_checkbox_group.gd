@@ -4,10 +4,7 @@ extends BoxContainer
 
 signal value_changed(selected_values: Array[String])
 
-@export var vertical: bool = false:
-	set(val):
-		vertical = val
-		vertical = val
+
 
 @export var selected_values: Array[String] = []:
 	set(val):

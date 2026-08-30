@@ -33,7 +33,7 @@ static var _is_transitioning: bool = false
 ## @param duration 动画过渡时长 (秒)
 ## @param context_node 当前调用上下文节点 (必须挂载在场景树上)
 ## @return GResult 操作结果对象
-static func push(scene_path: String, params: Dictionary = {}, transition: TransitionType = TransitionType.SLIDE_LEFT, duration: float = 0.35, context_node: Node = null) -> GResult:
+static func push(scene_path: String, params: Dictionary = {}, transition: TransitionType = TransitionType.SLIDE_LEFT, duration: float = 0.35, context_node: Node = null) -> Variant:
 	# 强校验节点生命周期: 必须挂载在场景树上
 	if context_node != null:
 		var guard_res = GLifecycleGuard.check(context_node, "GRouter.push")
@@ -68,8 +68,9 @@ static func push(scene_path: String, params: Dictionary = {}, transition: Transi
 	})
 	
 	# 执行转场动画
-	await _play_transition_animation(root, next_scene, transition, duration, false, tree)
-	_is_transitioning = false
+	_play_transition_animation(root, next_scene, transition, duration, false, tree, func():
+		_is_transitioning = false
+	)
 	return GResult.ok(null, "成功跳转至场景: " + scene_path)
 
 # ----------------------------------------------------
@@ -93,8 +94,9 @@ static func back(result_data: Dictionary = {}, duration: float = 0.3, context_no
 	_current_params = result_data.duplicate(true)
 	
 	# 反向播放转场动画
-	await _play_transition_animation(root, prev_scene, current_route.get("transition", TransitionType.SLIDE_LEFT), duration, true, tree)
-	_is_transitioning = false
+	_play_transition_animation(root, prev_scene, current_route.get("transition", TransitionType.SLIDE_LEFT), duration, true, tree, func():
+		_is_transitioning = false
+	)
 
 # ----------------------------------------------------
 # 3. 参数获取 (Get Route Params)
@@ -122,7 +124,7 @@ static func apply_params_to(target_object: Object) -> int:
 # ----------------------------------------------------
 # 4. 内部转场动画驱动 (Tween Animation Engine)
 # ----------------------------------------------------
-static func _play_transition_animation(root: Window, new_scene: Node, transition: TransitionType, duration: float, is_reverse: bool, tree: SceneTree) -> void:
+static func _play_transition_animation(root: Window, new_scene: Node, transition: TransitionType, duration: float, is_reverse: bool, tree: SceneTree, on_finished: Callable = Callable()) -> void:
 	var viewport_size = root.get_viewport().get_visible_rect().size
 	var old_scene = root.get_child(root.get_child_count() - 1)
 	
@@ -130,6 +132,7 @@ static func _play_transition_animation(root: Window, new_scene: Node, transition
 	
 	if transition == TransitionType.NONE:
 		if old_scene: old_scene.queue_free()
+		if on_finished.is_valid(): on_finished.call()
 		return
 		
 	var tween = tree.create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -240,6 +243,9 @@ static func _play_transition_animation(root: Window, new_scene: Node, transition
 		if old_scene and old_scene is CanvasItem:
 			tween.tween_property(old_scene, "modulate:a", 0.0, duration)
 			
-	await tween.finished
-	if old_scene and old_scene != new_scene:
-		old_scene.queue_free()
+	tween.finished.connect(func():
+		if old_scene and old_scene != new_scene and is_instance_valid(old_scene):
+			old_scene.queue_free()
+		if on_finished.is_valid():
+			on_finished.call()
+	)

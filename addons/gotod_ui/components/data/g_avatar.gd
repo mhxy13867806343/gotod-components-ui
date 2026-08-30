@@ -17,7 +17,7 @@ enum Shape {
 		avatar_texture = val
 		queue_redraw()
 
-@export var shape: Shape = Shape.CIRCLE:
+@export_enum("CIRCLE", "SQUARE") var shape: int = Shape.CIRCLE:
 	set(val):
 		shape = val
 		queue_redraw()

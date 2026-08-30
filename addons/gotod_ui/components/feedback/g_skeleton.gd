@@ -17,7 +17,7 @@ enum AvatarShape {
 		loading_changed.emit(loading)
 
 @export var avatar: bool = false
-@export var avatar_shape: AvatarShape = AvatarShape.ROUND
+@export_enum("ROUND", "SQUARE") var avatar_shape: int = AvatarShape.ROUND
 @export var avatar_size: float = 40.0
 @export var show_title: bool = true
 @export var title_width: float = 40.0 # 百分比 %

@@ -118,24 +118,91 @@ window.showDoc = function(key) {
   // Render Demos
   let demosHtml = '';
   if (doc.demos && doc.demos.length > 0) {
-    demosHtml = doc.demos.map((d, idx) => `
-      <div class="demo-card">
-        <div class="demo-card-header">
-          <div class="demo-card-title">${d.title}</div>
-          <button class="g-btn g-btn-default" style="height:26px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
-            <i class="fa-regular fa-copy"></i> 复制代码
+    demosHtml = doc.demos.map((d, idx) => {
+      let codeSection = '';
+      if (d.codeTabs && Array.isArray(d.codeTabs)) {
+        const tabBtns = d.codeTabs.map((t, tIdx) => `
+          <button class="code-tab-btn ${t.type === 'before' ? 'tab-before' : 'tab-after'} ${tIdx === 0 ? 'active' : ''}" onclick="switchCodeTab(this, ${tIdx})">
+            ${t.type === 'before' ? '<i class="fa-solid fa-triangle-exclamation"></i>' : '<i class="fa-solid fa-wand-magic-sparkles"></i>'}
+            ${t.title}
           </button>
-        </div>
-        <div class="demo-card-body">
-          ${d.render}
-        </div>
-        ${d.code ? `
+        `).join('');
+
+        const tabPanels = d.codeTabs.map((t, tIdx) => `
+          <div class="code-tab-panel ${tIdx === 0 ? 'active' : ''}" data-index="${tIdx}">
+            ${t.desc ? `<div class="code-diff-tip"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> <span>${t.desc}</span></div>` : ''}
+            <div class="code-box" style="${t.type === 'before' ? 'background:#1a1418;' : ''}">
+              <pre><code style="${t.type === 'before' ? 'color:#fca5a5;' : ''}">${escapeHtml(t.code)}</code></pre>
+            </div>
+          </div>
+        `).join('');
+
+        codeSection = `
+          <div class="code-tab-container">
+            <div class="code-tab-bar">
+              <div class="code-tab-buttons">${tabBtns}</div>
+              <button class="g-btn g-btn-default" style="height:24px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
+                <i class="fa-regular fa-copy"></i> 复制当前代码
+              </button>
+            </div>
+            ${tabPanels}
+          </div>
+        `;
+      } else if (d.codeBefore && d.code) {
+        // Automatically render 2-tab diff view
+        codeSection = `
+          <div class="code-tab-container">
+            <div class="code-tab-bar">
+              <div class="code-tab-buttons">
+                <button class="code-tab-btn tab-after active" onclick="switchCodeTab(this, 0)">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ 修复后代码 (After / Fixed)
+                </button>
+                <button class="code-tab-btn tab-before" onclick="switchCodeTab(this, 1)">
+                  <i class="fa-solid fa-triangle-exclamation"></i> ❌ 修复前代码 (Before / Problematic)
+                </button>
+              </div>
+              <button class="g-btn g-btn-default" style="height:24px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
+                <i class="fa-regular fa-copy"></i> 复制当前代码
+              </button>
+            </div>
+            ${d.diffTip ? `<div class="code-diff-tip"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> <span>${d.diffTip}</span></div>` : ''}
+            <div class="code-tab-panel active" data-index="0">
+              <div class="code-box">
+                <pre><code>${escapeHtml(d.code)}</code></pre>
+              </div>
+            </div>
+            <div class="code-tab-panel" data-index="1">
+              <div class="code-box" style="background:#1a1418;">
+                <pre><code style="color:#fca5a5;">${escapeHtml(d.codeBefore)}</code></pre>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (d.code) {
+        codeSection = `
           <div class="code-box">
             <pre><code>${escapeHtml(d.code)}</code></pre>
           </div>
-        ` : ''}
-      </div>
-    `).join('');
+        `;
+      }
+
+      return `
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-card-title">${d.title}</div>
+            ${!d.codeTabs && !d.codeBefore && d.code ? `
+              <button class="g-btn g-btn-default" style="height:26px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
+                <i class="fa-regular fa-copy"></i> 复制代码
+              </button>
+            ` : ''}
+          </div>
+          <div class="demo-card-body">
+            ${d.render}
+          </div>
+          ${codeSection}
+        </div>
+      `;
+    }).join('');
   }
 
   // Common Header Definitions for Tables

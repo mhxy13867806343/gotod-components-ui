@@ -19,8 +19,8 @@ enum Theme {
 	LIGHT
 }
 
-@export var placement: Placement = Placement.BOTTOM
-@export var theme: Theme = Theme.DARK
+@export_enum("TOP", "BOTTOM", "LEFT", "RIGHT") var placement: int = Placement.BOTTOM
+@export_enum("DARK", "LIGHT") var theme_mode: int = Theme.DARK
 @export var show_arrow: bool = true
 @export var offset: Vector2 = Vector2(0, 8)
 @export var actions: Array[Dictionary] = [] # [{ text: "选项1", icon: Texture2D, disabled: false }]

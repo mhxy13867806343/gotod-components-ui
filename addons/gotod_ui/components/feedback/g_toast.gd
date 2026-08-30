@@ -78,13 +78,23 @@ func _ready() -> void:
 # 静态命令式快捷调用 (Static Imperative API)
 # ==========================================
 
-## 文字提示
-static func show(message: String, duration: float = 2.0, position: Position = Position.MIDDLE) -> GToast:
+## 文字提示（原 show，因与父类 show()->void 冲突已重命名为 text）
+static func text(message: String, duration: float = 2.0, position: Position = Position.MIDDLE) -> GToast:
 	return _display_toast({
 		"message": message,
 		"type": ToastType.TEXT,
 		"duration": duration,
 		"position": position,
+		"forbid_click": false
+	})
+
+## 顶部文字提示快捷方法
+static func text_top(message: String, duration: float = 1.5) -> GToast:
+	return _display_toast({
+		"message": message,
+		"type": ToastType.TEXT,
+		"duration": duration,
+		"position": Position.TOP,
 		"forbid_click": false
 	})
 
@@ -145,16 +155,17 @@ func _show_internal(opts: Dictionary) -> void:
 	var duration = opts.get("duration", 2.0)
 	var pos = opts.get("position", Position.MIDDLE)
 	var forbid_click = opts.get("forbid_click", false)
-	
+
 	_overlay_mask.visible = forbid_click
 	_overlay_mask.mouse_filter = Control.MOUSE_FILTER_STOP if forbid_click else Control.MOUSE_FILTER_IGNORE
-	
+
 	_msg_label.text = msg
-	
+
 	match type:
 		ToastType.TEXT:
 			_icon_label.visible = false
-			_toast_box.custom_minimum_size = Vector2(0, 0)
+			# ✅ 修复：给文字 toast 设定最小宽度，避免 autowrap 把文字竖排
+			_toast_box.custom_minimum_size = Vector2(220, 44)
 		ToastType.SUCCESS:
 			_icon_label.visible = true
 			_icon_label.text = "✓"
@@ -175,32 +186,43 @@ func _show_internal(opts: Dictionary) -> void:
 			if opts.has("icon_text"):
 				_icon_label.text = str(opts["icon_text"])
 			_toast_box.custom_minimum_size = Vector2(120, 100)
-	
-	# Layout Position
+
 	_toast_box.visible = true
 	_toast_box.modulate = Color(1, 1, 1, 0)
-	
-	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1152, 648)
-	var box_size = _toast_box.get_combined_minimum_size()
-	
+
+	# ✅ 修复：延迟一帧后再定位，确保布局已计算完成
+	_stored_pos = pos
+	call_deferred("_apply_position_and_animate", duration)
+
+var _stored_pos: int = 1  # Position.MIDDLE
+
+func _apply_position_and_animate(duration: float) -> void:
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	var box_size = _toast_box.size
+
+	# 如果 size 还是 0，用 minimum_size 作为后备
+	if box_size.x <= 0:
+		box_size = _toast_box.get_combined_minimum_size()
+
 	var x = (vp_size.x - box_size.x) / 2.0
-	var y = (vp_size.y - box_size.y) / 2.0
-	match pos:
-		Position.TOP:
-			y = vp_size.y * 0.15
-		Position.BOTTOM:
-			y = vp_size.y * 0.82
-		Position.MIDDLE:
+	var y: float
+	match _stored_pos:
+		0:  # TOP
+			y = vp_size.y * 0.10
+		2:  # BOTTOM
+			y = vp_size.y * 0.80
+		_:  # MIDDLE
 			y = (vp_size.y - box_size.y) / 2.0
-	
+
 	_toast_box.position = Vector2(x, y)
-	
-	# Animate in
+
+	# 淡入动画
 	if _tween and _tween.is_valid():
 		_tween.kill()
 	_tween = create_tween()
 	_tween.tween_property(_toast_box, "modulate:a", 1.0, 0.2)
-	
+
+
 	# Auto dismiss
 	if duration > 0:
 		_auto_timer = get_tree().create_timer(duration)

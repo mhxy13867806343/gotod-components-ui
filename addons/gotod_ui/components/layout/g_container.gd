@@ -13,10 +13,11 @@ enum Direction {
 	VERTICAL
 }
 
-@export var direction: Direction = Direction.AUTO:
+@export_enum("AUTO", "HORIZONTAL", "VERTICAL") var direction: int = Direction.AUTO:
 	set(val):
 		direction = val
-		_update_direction()
+		if is_node_ready():
+			_update_direction()
 
 func _ready() -> void:
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL

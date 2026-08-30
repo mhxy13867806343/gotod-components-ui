@@ -14,7 +14,7 @@ enum Align {
 	BASELINE
 }
 
-@export var direction: Direction = Direction.HORIZONTAL:
+@export_enum("HORIZONTAL", "VERTICAL") var direction: int = Direction.HORIZONTAL:
 	set(val):
 		direction = val
 		queue_sort()

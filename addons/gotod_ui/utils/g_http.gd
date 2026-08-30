@@ -6,15 +6,19 @@
 class_name GHttp
 extends RefCounted
 
-## 响应数据结构字典
-## { "ok": bool, "status": int, "data": String, "json": Variant, "headers": Dictionary, "error": String }
+static var _instance: GHttp = null
 
-## 静态 GET 请求
-static func get(url: String, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Dictionary:
-	return await _request(url, HTTPClient.METHOD_GET, "", headers, timeout, context)
+static func client() -> GHttp:
+	if not _instance:
+		_instance = GHttp.new()
+	return _instance
 
-## 静态 POST JSON 请求
-static func post_json(url: String, json_data: Variant, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Dictionary:
+## 实例 GET 请求
+func get_req(url: String, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Variant:
+	return await request(url, HTTPClient.METHOD_GET, "", headers, timeout, context)
+
+## 实例 POST JSON 请求
+func post_json(url: String, json_data: Variant, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Variant:
 	var final_headers = Array(headers)
 	var has_content_type = false
 	for h in final_headers:
@@ -25,10 +29,10 @@ static func post_json(url: String, json_data: Variant, headers: PackedStringArra
 		final_headers.append("Content-Type: application/json")
 	
 	var body_str = JSON.stringify(json_data)
-	return await _request(url, HTTPClient.METHOD_POST, body_str, PackedStringArray(final_headers), timeout, context)
+	return await request(url, HTTPClient.METHOD_POST, body_str, PackedStringArray(final_headers), timeout, context)
 
-## 静态 POST 表单请求
-static func post_form(url: String, form_data: Dictionary, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Dictionary:
+## 实例 POST 表单请求
+func post_form(url: String, form_data: Dictionary, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Variant:
 	var final_headers = Array(headers)
 	final_headers.append("Content-Type: application/x-www-form-urlencoded")
 	
@@ -36,21 +40,21 @@ static func post_form(url: String, form_data: Dictionary, headers: PackedStringA
 	for k in form_data.keys():
 		query_parts.append("%s=%s" % [str(k).uri_encode(), str(form_data[k]).uri_encode()])
 	var body_str = "&".join(query_parts)
-	return await _request(url, HTTPClient.METHOD_POST, body_str, PackedStringArray(final_headers), timeout, context)
+	return await request(url, HTTPClient.METHOD_POST, body_str, PackedStringArray(final_headers), timeout, context)
 
-## 静态 PUT 请求
-static func put_json(url: String, json_data: Variant, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Dictionary:
+## 实例 PUT 请求
+func put_json(url: String, json_data: Variant, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Variant:
 	var final_headers = Array(headers)
 	final_headers.append("Content-Type: application/json")
 	var body_str = JSON.stringify(json_data)
-	return await _request(url, HTTPClient.METHOD_PUT, body_str, PackedStringArray(final_headers), timeout, context)
+	return await request(url, HTTPClient.METHOD_PUT, body_str, PackedStringArray(final_headers), timeout, context)
 
-## 静态 DELETE 请求
-static func delete(url: String, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Dictionary:
-	return await _request(url, HTTPClient.METHOD_DELETE, "", headers, timeout, context)
+## 实例 DELETE 请求
+func delete(url: String, headers: PackedStringArray = [], timeout: float = 10.0, context: Node = null) -> Variant:
+	return await request(url, HTTPClient.METHOD_DELETE, "", headers, timeout, context)
 
-## 内部底层请求调度器
-static func _request(url: String, method: int, body: String, headers: PackedStringArray, timeout: float, context: Node) -> Dictionary:
+## 核心底层请求调度器
+func request(url: String, method: int, body: String, headers: PackedStringArray, timeout: float, context: Node) -> Variant:
 	var root: SceneTree = Engine.get_main_loop() as SceneTree
 	if not root or not root.current_scene:
 		return { "ok": false, "status": 0, "data": "", "json": null, "headers": {}, "error": "SceneTree unavailable" }

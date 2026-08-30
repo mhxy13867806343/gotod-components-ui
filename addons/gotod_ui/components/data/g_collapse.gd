@@ -56,6 +56,8 @@ func _setup_ui() -> void:
 	add_child(_body_container)
 
 func get_body_container() -> PanelContainer:
+	if not _body_container:
+		_setup_ui()
 	return _body_container
 
 func _on_header_input(event: InputEvent) -> void:
