@@ -25,8 +25,8 @@ window.GUIDE_CATALOG = {
                 </div>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod_ui-v1.0.0.zip" class="g-btn g-btn-primary" style="height:32px; font-size:12px; font-weight:700;">
-                  <i class="fa-solid fa-download"></i> 立即下载 gotod_ui-v1.0.0.zip
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod-components-ui-v1.0.0.zip" class="g-btn g-btn-primary" style="height:32px; font-size:12px; font-weight:700;">
+                  <i class="fa-solid fa-download"></i> 立即下载 gotod-components-ui-v1.0.0.zip
                 </a>
                 <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases" target="_blank" class="g-btn g-btn-success" style="height:32px; font-size:11px;">
                   <i class="fa-brands fa-github"></i> GitHub Releases
@@ -57,7 +57,7 @@ window.GUIDE_CATALOG = {
           </div>
         `,
         code: `# 方式 1: 直接下载官方 Release 独立安装包 (推荐，免 Git)
-# 下载直链: https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod_ui-v1.0.0.zip
+# 下载直链: https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod-components-ui-v1.0.0.zip
 
 # 方式 2: Git 仓库克隆方式
 git clone https://github.com/mhxy13867806343/gotod-components-ui.git`
