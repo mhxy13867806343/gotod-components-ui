@@ -106,7 +106,7 @@ your-project/
 
 ### 方式 1: 直接下载发行版压缩包 (推荐)
 - 👉 **[GitHub Releases 发行版页面下载](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[一键直链下载 v1.0.3 压缩包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.3.zip)**
+- 📦 **[一键直链下载 v1.0.4 压缩包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.4.zip)**
 
 下载并解压后，将 `addons/gotod_ui` 文件夹直接复制到您的 Godot 4 项目根目录下的 `res://addons/` 中即可。
 
