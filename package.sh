@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
-# Gotod Components UI Automated Release Packaging Script
+# Gotod Components UI Automated Release Packaging & Publishing Script
+
+TARGET_VER=""
+PUBLISH_RELEASE=false
+
+for arg in "$@"; do
+  if [ "$arg" = "--release" ] || [ "$arg" = "-r" ]; then
+    PUBLISH_RELEASE=true
+  elif [ -z "$TARGET_VER" ]; then
+    TARGET_VER="$arg"
+  fi
+done
 
 # 1. Determine Version
-TARGET_VER="$1"
-
 if [ -z "$TARGET_VER" ]; then
   CURRENT_VER=$(grep -E '^version=' addons/gotod_ui/plugin.cfg | cut -d'"' -f2)
   if [ -z "$CURRENT_VER" ]; then
@@ -42,3 +51,13 @@ zip -r "$ZIP_NAME" addons/gotod_ui/ -x "*.DS_Store" -x "*.uid" > /dev/null
 
 echo "✅ Package created successfully: $ZIP_NAME"
 ls -lh "$ZIP_NAME"
+
+# 6. Publish to GitHub Releases if requested
+if [ "$PUBLISH_RELEASE" = true ]; then
+  echo "📤 Publishing release v${TARGET_VER} to GitHub..."
+  git tag -a "v${TARGET_VER}" -m "Release v${TARGET_VER}" 2>/dev/null || true
+  git push origin "v${TARGET_VER}" 2>/dev/null || true
+  gh release create "v${TARGET_VER}" "$ZIP_NAME" --title "v${TARGET_VER}: Release - Gotod Components UI" --generate-notes 2>/dev/null || \
+  gh release upload "v${TARGET_VER}" "$ZIP_NAME" --clobber
+  echo "🎉 Release v${TARGET_VER} published successfully!"
+fi
