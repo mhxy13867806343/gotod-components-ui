@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Questions & Discussions
+    url: https://github.com/mhxy13867806343/gotod-components-ui/discussions
+    about: 有问题或想法？欢迎在 Discussions 中讨论 | Have questions? Use GitHub Discussions.
+  - name: 🌐 Online Demo
+    url: https://mhxy13867806343.github.io/gotod-components-ui/
+    about: 在线演示与文档 | Interactive demo and documentation.
+  - name: 🟠 Gitee Issues
+    url: https://gitee.com/fangjiayu/gotod-components-ui/issues
+    about: Gitee 用户也可以在这里提交 issue | Gitee users can also submit issues here.

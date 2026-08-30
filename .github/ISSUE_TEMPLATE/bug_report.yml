@@ -1,0 +1,92 @@
+name: 🐛 Bug Report
+description: 提交一个 Bug 帮助我们改进 | Submit a bug to help us improve
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你花时间填写这份 Bug 报告！请尽量详细描述，这将帮助我们更快地定位和修复问题。
+        Thanks for taking the time to fill out this bug report!
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 提交前检查 | Preflight Checklist
+      options:
+        - label: 我已搜索过现有 Issues，确认这是一个新问题 | I've searched existing issues and this is new
+          required: true
+        - label: 我使用的是 Godot 4.x (4.6+) | I'm using Godot 4.x (4.6+)
+          required: true
+
+  - type: input
+    id: godot-version
+    attributes:
+      label: Godot 版本 | Godot Version
+      placeholder: "例如 / e.g. 4.6.stable"
+    validations:
+      required: true
+
+  - type: input
+    id: gotod-ui-version
+    attributes:
+      label: Gotod UI 版本 | Gotod UI Version
+      placeholder: "例如 / e.g. v1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: 操作系统 | Operating System
+      placeholder: "例如 / e.g. Windows 11, macOS 14, Ubuntu 22.04"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug 描述 | Bug Description
+      description: 清晰简洁地描述问题是什么 | A clear and concise description of what the bug is.
+      placeholder: "描述你遇到的问题..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤 | Steps to Reproduce
+      description: 如何复现该问题？
+      placeholder: |
+        1. 打开场景 '...'
+        2. 添加组件 '...'
+        3. 运行后看到错误 '...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为 | Expected Behavior
+      placeholder: "你期望发生什么？"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为 | Actual Behavior
+      placeholder: "实际发生了什么？"
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图 / 录屏 | Screenshots / Video
+      description: 如果有截图或录屏，请粘贴在这里 | If applicable, add screenshots or videos.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 补充信息 | Additional Context
+      description: 其他任何有助于说明问题的信息 | Any other context about the problem.

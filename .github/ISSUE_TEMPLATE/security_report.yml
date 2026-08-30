@@ -1,0 +1,46 @@
+name: 🔒 Report a Security Vulnerability
+description: 报告安全漏洞（请勿公开披露细节）| Report a security vulnerability (please do not disclose publicly)
+labels: ["security"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **请勿在公开 Issue 中包含漏洞的详细利用方式。**
+        如果是严重漏洞，建议通过 GitHub [Private Security Advisory](https://github.com/mhxy13867806343/gotod-components-ui/security/advisories/new) 私密提交。
+        
+        ⚠️ **Please do NOT include exploit details in a public issue.**
+        For critical vulnerabilities, consider using GitHub [Private Security Advisory](https://github.com/mhxy13867806343/gotod-components-ui/security/advisories/new).
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 严重程度 | Severity
+      options:
+        - 🔴 Critical（严重）
+        - 🟠 High（高危）
+        - 🟡 Medium（中危）
+        - 🟢 Low（低危）
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 漏洞描述 | Vulnerability Description
+      description: 简要描述漏洞类型和影响范围（不要包含详细利用步骤）
+      placeholder: "该漏洞可能导致..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected
+    attributes:
+      label: 影响版本 | Affected Versions
+      placeholder: "例如 / e.g. v1.0.0 及以下 / and below"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 其他信息 | Additional Information
