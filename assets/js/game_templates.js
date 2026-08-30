@@ -10,15 +10,25 @@ window.GUIDE_CATALOG = {
     desc: '了解如何在 Godot 4.x (4.6+) 引擎项目中引入 gotod-components-ui 并快速开始构建游戏界面与核心逻辑系统。',
     demos: [
       {
-        title: 'Step 1: 复制插件目录至项目 addons/',
+        title: 'Step 1: 获取插件压缩包或通过 Git 克隆 (Download Zip / Git Clone)',
         render: `
           <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; flex-direction:column; gap:12px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--text-primary); font-size:12px;">将 <code>addons/gotod_ui</code> 文件夹复制到您的 Godot 4 项目根目录下的 <code>res://addons/</code> 中：</span>
-              <a href="https://mhxy13867806343.github.io/gotod-components-ui/" target="_blank" class="g-btn g-btn-primary" style="height:26px; font-size:11px;">
-                <i class="fa-solid fa-globe"></i> 在线实时预览站点
-              </a>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <span style="color:var(--text-primary); font-size:12px; font-weight:700;">📦 获取 gotod-components-ui 插件安装包：</span>
+              <div style="display:flex; gap:8px;">
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases" target="_blank" class="g-btn g-btn-success" style="height:28px; font-size:11px;">
+                  <i class="fa-solid fa-file-zipper"></i> GitHub Releases 压缩包下载
+                </a>
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.0.zip" class="g-btn g-btn-primary" style="height:28px; font-size:11px;">
+                  <i class="fa-solid fa-download"></i> 立即下载 v1.0.0 (.zip)
+                </a>
+              </div>
             </div>
+            
+            <p style="color:var(--text-secondary); font-size:11px; margin:0;">
+              将解压得到的 <code>addons/gotod_ui</code> 文件夹复制到您的 Godot 4 项目根目录下的 <code>res://addons/</code> 中：
+            </p>
+
             <div class="code-box" style="margin:0;"><pre><code>your-project/
 ├── addons/
 │   └── gotod_ui/
@@ -33,7 +43,10 @@ window.GUIDE_CATALOG = {
 └── project.godot</code></pre></div>
           </div>
         `,
-        code: `# Git 仓库克隆方式
+        code: `# 方式 1: 直接下载发行版压缩包 (免 Git)
+# 下载链接: https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.0.zip
+
+# 方式 2: Git 仓库克隆方式
 git clone https://github.com/mhxy13867806343/gotod-components-ui.git`
       },
       {

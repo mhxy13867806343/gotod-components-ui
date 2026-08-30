@@ -97,15 +97,22 @@ your-project/
 
 ## 🚀 Installation & Quick Start
 
-1. Clone or download this repository:
-   ```bash
-   git clone https://github.com/mhxy13867806343/gotod-components-ui.git
-   ```
-2. Copy `addons/gotod_ui` into your project's `res://addons/` directory.
-3. In Godot 4 Editor:
-   - Go to **Project -> Project Settings -> Plugins**.
-   - Check the **Enable** box for **Gotod Components UI**.
-4. Start adding component nodes in your scenes or calling utility classes directly in GDScript.
+### Method 1: Download Release Archive (.zip) (Recommended)
+- 👉 **[GitHub Releases Page](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
+- 📦 **[Direct Download v1.0.0 Archive (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.0.zip)**
+
+Extract the archive and copy the `addons/gotod_ui` folder directly into your Godot 4 project root at `res://addons/`.
+
+### Method 2: Clone via Git
+```bash
+git clone https://github.com/mhxy13867806343/gotod-components-ui.git
+```
+
+### Enabling the Plugin
+1. Open Godot 4 Editor.
+2. Go to **Project -> Project Settings -> Plugins**.
+3. Check the **Enable** box for **Gotod Components UI**.
+4. Start adding component nodes in your scenes or calling utility classes directly in GDScript!
 
 ---
 

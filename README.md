@@ -97,15 +97,22 @@ your-project/
 
 ## 🚀 安装与快速上手
 
-1. 克隆或下载本仓库到本地：
-   ```bash
-   git clone https://github.com/mhxy13867806343/gotod-components-ui.git
-   ```
-2. 将 `addons/gotod_ui` 复制到您的 Godot 4 项目根目录下的 `res://addons/` 中。
-3. 打开 Godot 4 编辑器：
-   - 点击顶部菜单 **项目 (Project) -> 项目设置 (Project Settings) -> 插件 (Plugins)**。
-   - 勾选启用 **Gotod Components UI**。
-4. 启用后即可直接在场景树中添加组件节点，或在 GDScript 脚本中直接调用全部工具类。
+### 方式 1: 直接下载发行版压缩包 (推荐)
+- 👉 **[GitHub Releases 发行版页面下载](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
+- 📦 **[一键直链下载 v1.0.0 压缩包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.0.zip)**
+
+下载并解压后，将 `addons/gotod_ui` 文件夹直接复制到您的 Godot 4 项目根目录下的 `res://addons/` 中即可。
+
+### 方式 2: 通过 Git 克隆仓库
+```bash
+git clone https://github.com/mhxy13867806343/gotod-components-ui.git
+```
+
+### 启用插件步骤
+1. 打开 Godot 4 编辑器。
+2. 点击顶部菜单 **项目 (Project) -> 项目设置 (Project Settings) -> 插件 (Plugins)**。
+3. 勾选启用 **Gotod Components UI**。
+4. 启用后即可直接在场景树中添加组件节点，或在 GDScript 脚本中直接调用全部工具类！
 
 ---
 
