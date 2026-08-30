@@ -116,7 +116,13 @@ window.showToast = function(msg, type = 'info') {
   
   let icon = 'fa-info-circle';
   let col = 'var(--info)';
-  if (type === 'success') { icon = 'fa-check-circle'; col = 'var(--success)'; }
+  if (type === 'info') {
+    iconHtml = '<div class="g-toast-icon" style="color:var(--primary);"><i class="fa-solid fa-circle-info"></i></div>';
+    isWithIcon = true;
+  } else if (type === 'warning') {
+    iconHtml = '<div class="g-toast-icon" style="color:var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i></div>';
+    isWithIcon = true;
+  } else if (type === 'success') { icon = 'fa-check-circle'; col = 'var(--success)'; }
   if (type === 'warning') { icon = 'fa-exclamation-triangle'; col = 'var(--warning)'; }
   if (type === 'danger' || type === 'error') { icon = 'fa-times-circle'; col = 'var(--danger)'; }
 

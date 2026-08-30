@@ -155,8 +155,14 @@ func _on_buy_button_pressed() -> void:
         render: `
           <div style="display:flex; flex-direction:column; gap:14px; width:100%;">
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="g-btn g-btn-primary" onclick="openSimToast('纯文字轻提示 (居中展示)')">
-                <i class="fa-solid fa-comment-dots"></i> GToast.show()
+              <button class="g-btn g-btn-default" onclick="openSimToast('纯文字轻提示 (居中展示)')">
+                <i class="fa-solid fa-comment-dots"></i> GToast.text()
+              </button>
+              <button class="g-btn g-btn-primary" onclick="openSimToast({ message: '当前网络正常', type: 'info' })">
+                <i class="fa-solid fa-circle-info"></i> GToast.info()
+              </button>
+              <button class="g-btn g-btn-warning" onclick="openSimToast({ message: '生命值过低！', type: 'warning' })">
+                <i class="fa-solid fa-triangle-exclamation"></i> GToast.warning()
               </button>
               <button class="g-btn g-btn-success" onclick="openSimToast({ message: '装备强化成功！', type: 'success' })">
                 <i class="fa-solid fa-circle-check"></i> GToast.success()

@@ -2880,17 +2880,19 @@ GMessage.info("System update ready")`
         `,
         code: `# GDScript: 文字轻提示
 # 1. 默认居中展示
-GToast.show("这是一条纯文字轻提示")
+GToast.text("这是一条纯文字轻提示")
 
 # 2. 顶部或底部展示
-GToast.show("顶部轻提示", 2.0, GToast.Position.TOP)
-GToast.show("底部轻提示", 2.0, GToast.Position.BOTTOM)`
+GToast.text_top("顶部轻提示", 2.0, GToast.Position.TOP)
+GToast.text("底部轻提示", 2.0, GToast.Position.BOTTOM)`
       },
       {
         title: '2. 成功与失败状态 (Success & Fail)',
         render: `
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="g-btn g-btn-success" onclick="openSimToast({ message: '装备强化成功！', type: 'success' })">成功提示 (Success Toast)</button>
+            <button class="g-btn g-btn-primary" onclick="openSimToast({ message: '当前网络延迟 25ms', type: 'info' })">信息提示 (Info)</button>
+            <button class="g-btn g-btn-warning" onclick="openSimToast({ message: '生命值过低警告！', type: 'warning' })">警告提示 (Warning)</button>
+            <button class="g-btn g-btn-success" onclick="openSimToast({ message: '装备强化成功！', type: 'success' })">成功提示 (Success)</button>
             <button class="g-btn g-btn-danger" onclick="openSimToast({ message: '金币不足强化失败', type: 'fail' })">失败提示 (Fail Toast)</button>
           </div>
         `,
@@ -2945,7 +2947,7 @@ GToast.custom({
       }
     ],
     props: [
-      { name: 'type', type: 'enum', default: 'TEXT', desc: '提示类型：TEXT (纯文字), SUCCESS (成功), FAIL (失败), LOADING (加载转圈), CUSTOM (自定义)' },
+      { name: 'type', type: 'enum', default: 'TEXT', desc: '提示类型：TEXT (纯文字), INFO (信息), WARNING (警告), SUCCESS (成功), FAIL (失败), LOADING (加载转圈), CUSTOM (自定义)' },
       { name: 'message', type: 'String', default: '""', desc: '提示文本内容' },
       { name: 'position', type: 'enum', default: 'MIDDLE', desc: '提示显示位置：TOP, MIDDLE, BOTTOM' },
       { name: 'duration', type: 'float', default: '2.0', desc: '展示时长 (秒)，设置为 0 时不自动关闭' },

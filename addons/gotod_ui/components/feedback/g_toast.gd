@@ -4,7 +4,7 @@ extends CanvasLayer
 
 ## =========================================================================
 ## GToast: 轻提示 (Toast Prompt benchmarked against Vant UI)
-## 在页面中间或顶部/底部弹出轻量级反馈提示，支持文字、成功、失败、加载与自定义图标。
+## 在页面中间或顶部/底部弹出轻量级反馈提示，支持文字、信息、警告、成功、失败、加载与自定义图标。
 ## =========================================================================
 
 enum Position {
@@ -15,6 +15,8 @@ enum Position {
 
 enum ToastType {
 	TEXT,
+	INFO,
+	WARNING,
 	SUCCESS,
 	FAIL,
 	LOADING,
@@ -98,6 +100,26 @@ static func text_top(message: String, duration: float = 1.5) -> GToast:
 		"forbid_click": false
 	})
 
+## 信息提示 (Info Toast)
+static func info(message: String, duration: float = 2.0, position: Position = Position.MIDDLE) -> GToast:
+	return _display_toast({
+		"message": message,
+		"type": ToastType.INFO,
+		"duration": duration,
+		"position": position,
+		"forbid_click": false
+	})
+
+## 警告提示 (Warning Toast)
+static func warning(message: String, duration: float = 2.0, position: Position = Position.MIDDLE) -> GToast:
+	return _display_toast({
+		"message": message,
+		"type": ToastType.WARNING,
+		"duration": duration,
+		"position": position,
+		"forbid_click": false
+	})
+
 ## 成功提示
 static func success(message: String, duration: float = 2.0) -> GToast:
 	return _display_toast({
@@ -117,6 +139,10 @@ static func fail(message: String, duration: float = 2.0) -> GToast:
 		"position": Position.MIDDLE,
 		"forbid_click": false
 	})
+
+## 错误提示别名
+static func error(message: String, duration: float = 2.0) -> GToast:
+	return fail(message, duration)
 
 ## 加载中提示
 static func loading(message: String = "加载中...", forbid_click: bool = true, duration: float = 0.0) -> GToast:
@@ -164,8 +190,18 @@ func _show_internal(opts: Dictionary) -> void:
 	match type:
 		ToastType.TEXT:
 			_icon_label.visible = false
-			# ✅ 修复：给文字 toast 设定最小宽度，避免 autowrap 把文字竖排
+			# 给文字 toast 设定最小宽度，避免 autowrap 把文字竖排
 			_toast_box.custom_minimum_size = Vector2(220, 44)
+		ToastType.INFO:
+			_icon_label.visible = true
+			_icon_label.text = "ℹ"
+			_icon_label.add_theme_color_override("font_color", Color.hex(0x409eff))
+			_toast_box.custom_minimum_size = Vector2(120, 100)
+		ToastType.WARNING:
+			_icon_label.visible = true
+			_icon_label.text = "⚠"
+			_icon_label.add_theme_color_override("font_color", Color.hex(0xe6a23c))
+			_toast_box.custom_minimum_size = Vector2(120, 100)
 		ToastType.SUCCESS:
 			_icon_label.visible = true
 			_icon_label.text = "✓"
@@ -190,7 +226,7 @@ func _show_internal(opts: Dictionary) -> void:
 	_toast_box.visible = true
 	_toast_box.modulate = Color(1, 1, 1, 0)
 
-	# ✅ 修复：延迟一帧后再定位，确保布局已计算完成
+	# 延迟一帧后再定位，确保布局已计算完成
 	_stored_pos = pos
 	call_deferred("_apply_position_and_animate", duration)
 
@@ -221,7 +257,6 @@ func _apply_position_and_animate(duration: float) -> void:
 		_tween.kill()
 	_tween = create_tween()
 	_tween.tween_property(_toast_box, "modulate:a", 1.0, 0.2)
-
 
 	# Auto dismiss
 	if duration > 0:
