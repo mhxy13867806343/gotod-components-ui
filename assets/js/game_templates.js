@@ -7,20 +7,29 @@
 window.GUIDE_CATALOG = {
   'guide-install': {
     title: '📥 安装与快速上手 (Installation & Quick Start)',
-    desc: '了解如何在 Godot 4.x (4.6+) 引擎项目中引入 gotod-components-ui 并快速开始构建游戏界面。',
+    desc: '了解如何在 Godot 4.x (4.6+) 引擎项目中引入 gotod-components-ui 并快速开始构建游戏界面与核心逻辑系统。',
     demos: [
       {
         title: 'Step 1: 复制插件目录至项目 addons/',
         render: `
-          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius);">
-            <p style="color:var(--text-primary); margin-bottom:10px;">将 <code>addons/gotod_ui</code> 文件夹复制到您的 Godot 4 项目根目录下的 <code>res://addons/</code> 中：</p>
+          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="color:var(--text-primary); font-size:12px;">将 <code>addons/gotod_ui</code> 文件夹复制到您的 Godot 4 项目根目录下的 <code>res://addons/</code> 中：</span>
+              <a href="https://mhxy13867806343.github.io/gotod-components-ui/" target="_blank" class="g-btn g-btn-primary" style="height:26px; font-size:11px;">
+                <i class="fa-solid fa-globe"></i> 在线实时预览站点
+              </a>
+            </div>
             <div class="code-box" style="margin:0;"><pre><code>your-project/
 ├── addons/
 │   └── gotod_ui/
-│       ├── components/    # 全部 28+ 个 UI 组件
-│       ├── theme/         # 主题 Token 与样式盒引擎
+│       ├── components/    # 全部 28+ 个 UI 组件 (Button, Dialog, Tabs, Input, Select, etc.)
+│       ├── theme/         # 主题 Token 与样式盒引擎 (Naive, Element, AntD, Vant)
+│       ├── events/        # 全局事件总线 (GEvent uni.$emit / uni.$on)
+│       ├── router/        # 场景转场路由管理器 (GRouter 4向滑动+3大缩放)
+│       ├── utils/         # 网络(Axios/WS/联机)、2D坐标计算、物理公式、格式化、资产加载
+│       ├── lifecycle/     # 生命周期安全守卫 (GLifecycleGuard)
 │       ├── plugin.cfg     # 插件配置文件
-│       └── plugin.gd      # 节点注册脚本
+│       └── plugin.gd      # 节点自动注册插件脚本
 └── project.godot</code></pre></div>
           </div>
         `,
@@ -30,18 +39,53 @@ git clone https://github.com/mhxy13867806343/gotod-components-ui.git`
       {
         title: 'Step 2: 在 Godot 项目设置中启用插件',
         render: `
-          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); line-height:1.7;">
+          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); line-height:1.7; font-size:12px;">
             <p>1. 打开 Godot 4 编辑器，点击顶部菜单 <strong>Project (项目) -> Project Settings (项目设置)</strong>。</p>
             <p>2. 切换到 <strong>Plugins (插件)</strong> 标签页。</p>
             <p>3. 找到 <code>gotod-components-ui</code> 并勾选 <strong>Enable (启用)</strong> 复选框。</p>
-            <p>4. 启用后，编辑器节点列表中将自动出现 <code>GButton</code>、<code>GInput</code>、<code>GDialog</code>、<code>GTabs</code> 等全套自定义控件。</p>
+            <p>4. 启用后，编辑器节点列表中将自动注册 <code>GButton</code>、<code>GInput</code>、<code>GDialog</code>、<code>GTabs</code> 等全套自定义控件，且 <code>GEvent</code>、<code>GRouter</code>、<code>GAxios</code>、<code>GCoord</code>、<code>GPhysics</code>、<code>GFormat</code>、<code>GAsset</code> 均为静态工具类，直接在脚本中调用即可！</p>
           </div>
         `,
-        code: `# 插件启用后，在任何脚本中均可直接实例化组件
+        code: `# 插件启用后，在任何脚本中均可直接实例化组件与调用工具类
+# 1. UI 控件
 var btn = GButton.new()
 btn.text = "Hello Godot 4"
 btn.button_type = GButton.ButtonType.PRIMARY
-add_child(btn)`
+add_child(btn)
+
+# 2. 路由跳转 (带默认向左滑入动画)
+GRouter.push("res://scenes/shop.tscn")
+
+# 3. 全局事件广播 (uni.$emit)
+GEvent.emit("player_level_up", { "new_level": 50 })
+
+# 4. Axios 风格异步请求
+var res = await GAxios.get("https://api.game.com/player/info")`
+      },
+      {
+        title: 'Step 3: 开源协议与在线文档 (MIT License & Online Preview)',
+        render: `
+          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; flex-direction:column; gap:10px; font-size:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; color:var(--primary);">📄 MIT License 开源协议</span>
+              <span class="g-tag g-tag-success">Commercial & Personal Free</span>
+            </div>
+            <p style="color:var(--text-secondary); margin:0; line-height:1.6;">
+              本项目基于 <strong>MIT 宽松开源协议</strong> 发布，完全免费允许商业及个人游戏开发使用、修改与二次分发，无需支付授权费用。
+            </p>
+            <div style="display:flex; gap:10px; margin-top:4px;">
+              <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="g-btn g-btn-default" style="height:30px; font-size:11px;">
+                <i class="fa-brands fa-github"></i> GitHub 源码仓库
+              </a>
+              <a href="https://mhxy13867806343.github.io/gotod-components-ui/" target="_blank" class="g-btn g-btn-primary" style="height:30px; font-size:11px;">
+                <i class="fa-solid fa-up-right-from-square"></i> GitHub Pages 实时预览
+              </a>
+            </div>
+          </div>
+        `,
+        code: `# MIT License
+# Copyright (c) 2026 gotod-components-ui Contributors
+# 允许任何个人或团队自由用于商业/非商业游戏项目。`
       }
     ]
   },

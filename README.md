@@ -1,176 +1,165 @@
 # Gotod Components UI 🎨
 
 <p align="center">
-  <b>专为 Godot 4.x (4.6+) 打造的 Vue 风格现代化 UI 组件库</b>
+  <b>专为 Godot 4.x (4.6+) 打造的 Vue / UniApp 风格现代化 UI 组件库与全套游戏研发工具链</b>
   <br>
   <i>融合 Naive UI、Element Plus、Ant Design Vue 与 Vant UI 设计精髓</i>
 </p>
 
 <p align="center">
+  <a href="https://mhxy13867806343.github.io/gotod-components-ui/"><img src="https://img.shields.io/badge/Online%20Demo-GitHub%20Pages-success.svg?logo=githubpages" alt="Online Demo"></a>
   <a href="https://github.com/mhxy13867806343/gotod-components-ui"><img src="https://img.shields.io/badge/GitHub-gotod--components--ui-blue.svg?logo=github" alt="GitHub"></a>
   <a href="https://gitee.com/fangjiayu/gotod-components-ui"><img src="https://img.shields.io/badge/Gitee-gotod--components--ui-red.svg?logo=gitee" alt="Gitee"></a>
   <a href="https://gitcode.com/m200s/gotod-components-ui"><img src="https://img.shields.io/badge/GitCode-gotod--components--ui-orange.svg" alt="GitCode"></a>
   <img src="https://img.shields.io/badge/Godot-4.x%20%7C%204.6%2B-478cbf?logo=godotengine&logoColor=white" alt="Godot 4.x">
-  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
+  <a href="#-开源协议-license"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
 </p>
 
 ---
 
-## 🌟 核心特性
+## 🌐 在线实时交互预览站点
 
-- 🧩 **Vue 风格开发体验**：深度吸纳 **Naive UI**、**Element Plus**、**Ant Design Vue** 及 **Vant UI** 的组件 API 规范与视觉质感。
-- 🎨 **多套主流主题预设**：内置 **Naive 绿**、**Element 蓝**、**AntD 极客蓝**、**Vant 橙红**及深浅色（Dark/Light）模式动态换肤。
-- 📦 **开箱即用丰富组件**：涵盖基础（Button、Text、Divider）、表单（Input、Select、Switch、Checkbox、Radio、Slider、Form）、反馈（Dialog、Message Toast、Alert、Drawer）及数据展示（Card、Tag、Badge、Avatar、Progress、Tabs、Collapse、Steps）。
-- 💻 **网页在线预览与复制代码**：配备交互式 Web 演示系统，支持实时模拟组件交互，一键复制 GDScript 代码与场景属性。
-- ⚡ **纯 GDScript 轻量高效**：基于 Godot 4 渲染机制深度优化，支持跨平台（Desktop / Mobile / Web Export）。
+本项目自带完整的单页文档与交互式演练系统，已部署上线：
 
----
+👉 **[https://mhxy13867806343.github.io/gotod-components-ui/](https://mhxy13867806343.github.io/gotod-components-ui/)**
 
-## 🚀 网页在线预览
-
-本项目自带单页文档与交互式预览系统（可直接部署于 GitHub/Gitee/GitCode Pages）：
-
-1. 直接在浏览器打开项目根目录下的 `index.html`。
-2. 或开启本地简易服务器：
-   ```bash
-   python3 -m http.server 8080
-   # 访问 http://localhost:8080
-   ```
-3. 在网页中您可以：
-   - 实时切换 4 大主流主题预设（Naive / Element / AntD / Vant）
-   - 切换深色 / 浅色模式
-   - 点击预览各种组件动效与弹窗交互
-   - 点击 **"Copy GDScript"** 一键复制代码至剪贴板
+在在线演示中，您可以体验：
+- 4 大主流设计主题切换（**Naive 绿**、**Element 蓝**、**AntD 极客蓝**、**Vant 橙红**）与深浅色模式。
+- 28+ 基础、表单、反馈及数据展示控件的实时交互。
+- 2D 游戏数学、物理运动学、网络请求、跨页面通信与场景转场沙盒。
+- 点击 **"Copy GDScript"** 一键复制组件与系统源码。
 
 ---
 
-## 📦 安装与配置
+## 🌟 核心体系与特性
 
-### 方式一：作为 Godot 插件安装（推荐）
+### 1. 🧩 28+ 开箱即用 UI 组件
+- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 图标。
+- **表单输入**：Input 输入框、Select 选择器、Switch 开关、Checkbox 复选框、Radio 单选框、Slider 滑块、Rate 评分、Form 响应式表单容器。
+- **反馈交互**：Dialog 模态弹窗、Message 全局浮动吐司、Alert 警告提示条、Drawer 抽屉、Tooltip 文字提示、Popconfirm 气泡确认框。
+- **数据展示**：Card 卡片、Tag 标签、Badge 徽标、Avatar 头像、Progress 进度条、Tabs 选项卡、Collapse 折叠面板、Steps 步骤条、Empty 空状态。
 
-1. 将本仓库克隆或下载解压到您的 Godot 项目中：
+### 2. 🎯 2D 游戏数学与坐标系统 (`GCoord`)
+- **屏幕边缘视野外目标指示器** (`get_offscreen_indicator_2d`)：自动计算 Boss/精英怪在屏幕边缘的夹持坐标、指示箭头旋转角及世界距离。
+- **2.5D Isometric 等距投影转换** (`cartesian_to_isometric_2d` / `isometric_to_cartesian_2d`)：45° 斜视角与笛卡尔网格互转。
+- **宝箱爆金币抛物线轨迹** (`get_loot_arc_pos_2d`)：二阶贝塞尔抛物线动画。
+- **环形弹幕与护盾点集** (`get_orbit_points_2d`)：均匀分布圆周轨道坐标。
+- **2D 扇形攻击与视野检测** (`is_in_fov_cone_2d`)：圆锥扇形夹角判定。
+
+### 3. ⚙️ 2D 物理运动学与碰撞装配 (`GPhysics`)
+- **跳跃物理公式计算**：根据期望跳跃高度 $h$ 与到达顶点时间 $t$，精确求解起跳初速度 $v = \frac{2h}{t}$ 与重力加速度 $g = \frac{2h}{t^2}$。
+- **范围爆炸冲击力** (`apply_explosion_impulse_2d`)：根据距离衰减对周围 `RigidBody2D` 施加径向冲击力。
+- **动态碰撞体装配**：一行代码为节点添加 Box / Circle / Capsule 碰撞体。
+
+### 4. 🌐 网络与多人游戏通信 (`GAxios` / `GWebSocket` / `GMultiplayer`)
+- **Axios 风格 HTTP 客户端** (`GAxios`)：支持全局请求/响应拦截器、JWT Token 自动注入、超时控制与 RESTful 封装。
+- **WebSocket 实时客户端** (`GWebSocket`)：支持自动心跳保活、断线重连与全双工数据监听。
+- **高阶多人联机房间** (`GMultiplayer`)：基于 ENet 封装的一键开房、加入房间与 RPC 同步。
+
+### 5. ⚡ UniApp / Vue 风格全局跨页面通讯 (`GEvent`)
+- 还原 `uni.$emit`、`uni.$on`、`uni.$once`、`uni.$off` 语法。
+- **深度防内存泄漏**：支持传入 `self` 节点，节点离开场景树时全自动注销监听！
+- 提供与 Godot 官方推荐 **Autoload + 强类型信号 (Typed Signals)** 的架构对比与标准代码。
+
+### 6. 🚀 场景路由与 8 大转场动画 (`GRouter`)
+- 极简跳转：`GRouter.push("res://scenes/shop.tscn")`
+- 8 种平滑转场：4 方向滑动（左/右/上/下）+ 3 大中心缩放（中心放大展开、远景缩小汇聚、Q弹果冻回弹）+ 经典淡入淡出。
+- **20+ 批量参数自动装配**：`GRouter.apply_params_to(self)` 一键反射注入同名变量。
+
+### 7. 🎨 全能数据格式化 (`GFormat`)
+- HP 动态渐变色（健康绿/警告黄/濒死红）、时长转时分秒、万/亿/K/M/B 大数值缩写、词条属性增减 (+15%/-20)、装备品阶炫彩 BBCode、文件字节与网速。
+
+### 8. 🎵 5 大多媒体资产加载方案 (`GAsset`)
+- 多线程异步加载 (`await GAsset.load_async`)、外部 MOD/本地头像动态读取、16 路全局音效池、BGM 双通道交叉淡入淡出、SpriteSheet 图集网格切片。
+
+---
+
+## 📦 项目目录结构
+
+```
+your-project/
+├── addons/
+│   └── gotod_ui/
+│       ├── components/    # 28+ Vue/Uni 风格 UI 组件
+│       ├── theme/         # 主题 Token 与样式盒引擎 (Naive, Element, AntD, Vant)
+│       ├── events/        # 全局事件总线 (GEvent uni.$emit / uni.$on)
+│       ├── router/        # 场景转场路由管理器 (GRouter)
+│       ├── utils/         # 网络 (Axios/WS/联机)、2D坐标、物理公式、格式化、资产加载
+│       ├── lifecycle/     # 生命周期安全守卫 (GLifecycleGuard)
+│       ├── plugin.cfg     # 插件配置文件
+│       └── plugin.gd      # 节点自动注册插件脚本
+├── assets/                # 在线交互文档样式与脚本资源
+├── index.html             # 交互式文档预览系统单页
+└── project.godot
+```
+
+---
+
+## 🚀 安装与快速上手
+
+1. 克隆或下载本仓库到本地：
    ```bash
    git clone https://github.com/mhxy13867806343/gotod-components-ui.git
    ```
-2. 复制 `addons/gotod_ui` 目录至您项目的 `addons/` 文件夹下。
+2. 将 `addons/gotod_ui` 复制到您的 Godot 4 项目根目录下的 `res://addons/` 中。
 3. 打开 Godot 4 编辑器：
-   - 进入 **项目 (Project) -> 项目设置 (Project Settings) -> 插件 (Plugins)**。
-   - 启用 **Gotod Components UI**。
-4. 在 **Autoload (全局加载)** 中添加（若未自动配置）：
-   - `GMessage`: `res://addons/gotod_ui/components/feedback/g_message.gd`
-   - `GotodTheme`: `res://addons/gotod_ui/theme/gotod_theme.gd`
+   - 点击顶部菜单 **项目 (Project) -> 项目设置 (Project Settings) -> 插件 (Plugins)**。
+   - 勾选启用 **Gotod Components UI**。
+4. 启用后即可直接在场景树中添加组件节点，或在 GDScript 脚本中直接调用全部工具类。
 
 ---
 
-## 📚 组件目录与示例
+## 📚 快速代码范例
 
-### 1. Button 按钮 (`GButton`)
-
+### 1. 创建 UI 按钮与提示
 ```gdscript
-# 创建 Primary 主要按钮
 var btn = GButton.new()
-btn.text = "提交数据"
+btn.text = "进入战斗"
 btn.button_type = GButton.ButtonType.PRIMARY
-btn.variant = GButton.Variant.SOLID
-btn.shape = GButton.Shape.ROUND
-btn.pressed.connect(func(): GMessage.success("操作成功！"))
+btn.pressed.connect(func():
+    GMessage.success("正在前往副本战场！")
+    GRouter.push("res://scenes/battle.tscn", { "stage_id": 108 }, GRouter.TransitionType.ZOOM_IN)
+)
 add_child(btn)
 ```
 
-### 2. Message 全局提示 (`GMessage`)
-
+### 2. 跨页面全局通信 (GEvent / uni.$emit)
 ```gdscript
-# 全局静态调用悬浮吐司
-GMessage.success("保存成功！")
-GMessage.warning("请注意检查输入项")
-GMessage.error("网络连接超时")
-GMessage.info("有新版本可用")
+# 发送端:
+GEvent.emit("user_info_updated", { "nickname": "龙骑士", "gold": 99999 })
+
+# 接收端:
+func _ready() -> void:
+    GEvent.on("user_info_updated", func(data):
+        $Nickname.text = data.get("nickname")
+        $Gold.text = str(data.get("gold"))
+    , self)
 ```
 
-### 3. Dialog 模态弹窗 (`GDialog`)
-
+### 3. Axios 风格异步请求
 ```gdscript
-var dialog = GDialog.new()
-dialog.title = "确认删除"
-dialog.content_text = "确认删除该配置项？此操作不可撤回。"
-dialog.confirmed.connect(func(): GMessage.success("已确认删除"))
-dialog.cancelled.connect(func(): GMessage.info("已取消操作"))
-add_child(dialog)
-
-dialog.open()
+var res: Dictionary = await GAxios.get("https://api.game.com/player/profile", { "id": 1001 })
+if res.success:
+    print("玩家数据获取成功:", res.data)
 ```
 
-### 4. Form 表单与输入 (`GInput`, `GSwitch`, `GSelect`)
-
+### 4. 2D 视野外敌人边缘指示与跳跃物理
 ```gdscript
-var input = GInput.new()
-input.placeholder_text = "请输入用户名..."
-input.clearable = true
-input.text_changed.connect(func(val): print("输入值: ", val))
-add_child(input)
+# 1. 计算视野外 Boss 屏幕边缘指示器坐标与旋转角
+var indicator = GCoord.get_offscreen_indicator_2d(self, boss.global_position, 40.0)
+$ArrowIcon.position = indicator.screen_pos
+$ArrowIcon.rotation = indicator.angle
 
-var switch = GSwitch.new()
-switch.checked = true
-switch.toggled.connect(func(is_on): print("开关状态: ", is_on))
-add_child(switch)
+# 2. 精确起跳速度计算
+var jump_velocity = GPhysics.calculate_jump_velocity(180.0, 0.4) # 高度 180px, 时间 0.4s
 ```
 
 ---
 
-## 🎨 主题动态切换
+## 📄 开源协议 (License)
 
-您可以随时在运行时切换主题与深浅模式：
+本项目基于 **[MIT License](LICENSE)** 宽松开源协议发布。
 
-```gdscript
-# 切换为 Element Plus 风格
-GotodTheme.instance.current_preset = GThemeTokens.Preset.ELEMENT_PLUS
+允许任何个人或商业公司免费用于商业/非商业游戏开发、修改及二次分发，无需支付授权费用。
 
-# 切换为 Ant Design 风格
-GotodTheme.instance.current_preset = GThemeTokens.Preset.ANT_DESIGN
-
-# 切换为浅色模式
-GotodTheme.instance.current_mode = GThemeTokens.Mode.LIGHT
-```
-
----
-
-## 📂 项目结构
-
-```
-gotod-components-ui/
-├── addons/
-│   └── gotod_ui/                     # 核心组件库与插件
-│       ├── plugin.cfg                # 插件配置文件
-│       ├── plugin.gd                 # 自定义节点注册
-│       ├── theme/                    # 主题引擎与 Token 定义
-│       │   ├── gotod_theme.gd        # 全局主题管理器
-│       │   └── theme_tokens.gd       # Naive/Element/AntD/Vant 调色板
-│       └── components/               # GDScript 组件集合
-│           ├── general/              # GButton, GText, GDivider, GIcon
-│           ├── form/                 # GInput, GTextarea, GSelect, GSwitch, GCheckbox, GRadio, GSlider, GForm
-│           ├── feedback/             # GDialog, GMessage, GAlert, GDrawer, GTooltip, GLoading
-│           ├── data/                 # GCard, GTag, GBadge, GAvatar, GProgress, GTabs, GCollapse, GSteps
-│           └── layout/               # GSpace
-├── demo/                             # 引擎内交互式演示场景
-│   ├── demo_main.tscn
-│   └── demo_main.gd
-├── index.html                        # 网页在线交互式预览与文档系统
-├── project.godot                     # Godot 4.x 项目配置
-├── LICENSE                           # MIT 开源协议
-├── README.md                         # 中文文档
-└── README.en.md                      # 英文文档
-```
-
----
-
-## 🔗 代码仓库
-
-- **GitCode**: [https://gitcode.com/m200s/gotod-components-ui.git](https://gitcode.com/m200s/gotod-components-ui.git)
-- **GitHub**: [https://github.com/mhxy13867806343/gotod-components-ui.git](https://github.com/mhxy13867806343/gotod-components-ui.git)
-- **Gitee**: [https://gitee.com/fangjiayu/gotod-components-ui.git](https://gitee.com/fangjiayu/gotod-components-ui.git)
-
----
-
-## 📄 开源许可
-
-本项目基于 [MIT License](LICENSE) 许可协议开源。
+Copyright (c) 2026 gotod-components-ui Contributors
