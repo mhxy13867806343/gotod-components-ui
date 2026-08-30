@@ -1695,3 +1695,210 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
 
 
 
+
+/* ==========================================================================
+   Element Plus Style High-Fidelity Custom Select Component
+   ========================================================================== */
+.g-custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  font-family: var(--font-sans);
+  user-select: none;
+}
+
+.g-custom-select-control {
+  min-height: 38px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  gap: 8px;
+}
+
+.g-custom-select-control:hover {
+  border-color: var(--primary);
+}
+
+.g-custom-select-control.is-focused,
+.g-custom-select-control.is-open {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+.g-custom-select-control.is-disabled {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-base);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.g-custom-select-value-area {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.g-custom-select-placeholder {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.g-custom-select-single-value {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.g-custom-select-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.g-custom-select-clear {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--border-base);
+  color: var(--text-primary);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.g-custom-select-clear:hover {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.g-custom-select-control:hover .g-custom-select-clear.has-value {
+  display: flex;
+}
+
+.g-custom-select-control:hover .g-custom-select-clear.has-value + .g-custom-select-arrow {
+  display: none;
+}
+
+.g-custom-select-arrow {
+  font-size: 10px;
+  transition: transform 0.25s ease;
+}
+
+.g-custom-select-control.is-open .g-custom-select-arrow {
+  transform: rotate(180deg);
+}
+
+.g-custom-select-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: gDropdownFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.g-custom-select-dropdown.is-open {
+  display: flex;
+}
+
+@keyframes gDropdownFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.g-custom-select-search-box {
+  padding: 8px;
+  border-bottom: 1px solid var(--border-base);
+  background: var(--bg-surface);
+}
+
+.g-custom-select-search-input {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.g-custom-select-search-input:focus {
+  border-color: var(--primary);
+}
+
+.g-custom-select-options-list {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.g-custom-select-group-header {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.g-custom-select-option {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.g-custom-select-option:hover:not(.is-disabled) {
+  background: rgba(64, 158, 255, 0.12);
+  color: var(--primary);
+}
+
+.g-custom-select-option.is-selected {
+  color: var(--primary);
+  font-weight: 600;
+  background: rgba(64, 158, 255, 0.08);
+}
+
+.g-custom-select-option.is-disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.g-custom-select-empty {
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+}

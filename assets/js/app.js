@@ -298,6 +298,8 @@ window.showDoc = function(key) {
     if (typeof window.renderSimGuardianConsole === 'function') setTimeout(window.renderSimGuardianConsole, 30);
   } else if (key === 'lifecycle-overview') {
     if (typeof window.renderSimLifecycleUI === 'function') setTimeout(window.renderSimLifecycleUI, 30);
+  } else if (key === 'select') {
+    if (typeof window.initSelectDemos === 'function') setTimeout(window.initSelectDemos, 30);
   }
 };
 
