@@ -10,23 +10,36 @@ window.GUIDE_CATALOG = {
     desc: '了解如何在 Godot 4.x (4.6+) 引擎项目中引入 gotod-components-ui 并快速开始构建游戏界面与核心逻辑系统。',
     demos: [
       {
-        title: 'Step 1: 获取插件压缩包或通过 Git 克隆 (Download Zip / Git Clone)',
+        title: 'Step 1: 下载插件压缩包安装或通过 Git 克隆 (Download Release Zip / Git Clone)',
         render: `
-          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; flex-direction:column; gap:12px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-              <span style="color:var(--text-primary); font-size:12px; font-weight:700;">📦 获取 gotod-components-ui 插件安装包：</span>
-              <div style="display:flex; gap:8px;">
-                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases" target="_blank" class="g-btn g-btn-success" style="height:28px; font-size:11px;">
-                  <i class="fa-solid fa-file-zipper"></i> GitHub Releases 压缩包下载
+          <div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); display:flex; flex-direction:column; gap:14px;">
+            
+            <!-- Prominent Download Banner Card -->
+            <div style="background:linear-gradient(135deg, rgba(64,158,255,0.1), rgba(103,194,58,0.1)); border:1px solid var(--primary); padding:14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div>
+                <div style="font-weight:800; font-size:13px; color:var(--primary); display:flex; align-items:center; gap:6px;">
+                  <i class="fa-solid fa-box-archive"></i> gotod-components-ui v1.0.0 独立安装包 (.zip)
+                </div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
+                  免装 Git 工具，直接下载压缩包解压即用 (包含完整 28+ 组件与全部工具库)
+                </div>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod_ui-v1.0.0.zip" class="g-btn g-btn-primary" style="height:32px; font-size:12px; font-weight:700;">
+                  <i class="fa-solid fa-download"></i> 立即下载 gotod_ui-v1.0.0.zip
                 </a>
-                <a href="https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.0.zip" class="g-btn g-btn-primary" style="height:28px; font-size:11px;">
-                  <i class="fa-solid fa-download"></i> 立即下载 v1.0.0 (.zip)
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases" target="_blank" class="g-btn g-btn-success" style="height:32px; font-size:11px;">
+                  <i class="fa-brands fa-github"></i> GitHub Releases
+                </a>
+                <a href="https://gitee.com/fangjiayu/gotod-components-ui/releases" target="_blank" class="g-btn g-btn-warning" style="height:32px; font-size:11px;">
+                  <i class="fa-solid fa-bolt"></i> Gitee 国内下载
                 </a>
               </div>
             </div>
-            
-            <p style="color:var(--text-secondary); font-size:11px; margin:0;">
-              将解压得到的 <code>addons/gotod_ui</code> 文件夹复制到您的 Godot 4 项目根目录下的 <code>res://addons/</code> 中：
+
+            <!-- Path instructions -->
+            <p style="color:var(--text-secondary); font-size:11px; margin:0; line-height:1.6;">
+              📥 <strong>安装目录指引</strong>：将解压得到的 <code>addons/gotod_ui</code> 文件夹直接复制到您的 Godot 4 项目根目录下的 <code>res://addons/</code> 中：
             </p>
 
             <div class="code-box" style="margin:0;"><pre><code>your-project/
@@ -43,8 +56,8 @@ window.GUIDE_CATALOG = {
 └── project.godot</code></pre></div>
           </div>
         `,
-        code: `# 方式 1: 直接下载发行版压缩包 (免 Git)
-# 下载链接: https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.0.zip
+        code: `# 方式 1: 直接下载官方 Release 独立安装包 (推荐，免 Git)
+# 下载直链: https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod_ui-v1.0.0.zip
 
 # 方式 2: Git 仓库克隆方式
 git clone https://github.com/mhxy13867806343/gotod-components-ui.git`
