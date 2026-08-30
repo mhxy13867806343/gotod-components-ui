@@ -46,6 +46,256 @@ add_child(btn)`
     ]
   },
 
+  'guide-third-party': {
+    title: '🔌 与第三方库生态配合 (QFramework / Dialogic / 状态机实战)',
+    desc: 'Gotod Components UI 专职负责表现层 (View / Control)，遵循 Godot 4 标准节点与信号规范，能够以极其纯粹的解耦方式与 QFramework (架构层)、Dialogic 2.x (剧情对话系统)、状态机、任务及背包系统协同工作。',
+    demos: [
+      {
+        title: '1. 与 QFramework (GD-QFramework) 架构层配合实战 (M-C-S-V 架构)',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-lg); border:1px solid var(--border-base); display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; font-size:14px; color:var(--primary);">🧩 QFramework 响应式 Model 绑定与 Command 指令流演练</span>
+              <span class="g-tag g-tag-primary">M-C-S-V 解耦</span>
+            </div>
+
+            <!-- Simulated Game UI Panel (View Layer) -->
+            <div style="background:var(--bg-card); border:1px solid var(--border-base); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; gap:14px;">
+              <!-- Model State Display -->
+              <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+                <span class="g-tag g-tag-warning" style="font-size:13px; padding:4px 10px;">
+                  💰 金币 (Model.gold): <strong id="simQFGoldCount" style="margin-left:4px;">1200</strong>
+                </span>
+                <span class="g-tag g-tag-success" style="font-size:13px; padding:4px 10px;">
+                  🧪 生命药水 (Model.potion): <strong id="simQFPotionCount" style="margin-left:4px;">5</strong> 瓶
+                </span>
+                <span class="g-tag g-tag-info" style="font-size:13px; padding:4px 10px;">
+                  🛡️ 角色等级: <strong>Lv.18 游侠</strong>
+                </span>
+              </div>
+
+              <!-- View Layer Triggers Commands & Events -->
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+                <button class="g-btn g-btn-primary" onclick="simQFrameworkBuy()">
+                  <i class="fa-solid fa-cart-shopping"></i> 发送指令: BuyPotionCommand (消耗 100 G)
+                </button>
+                <button class="g-btn g-btn-warning" onclick="simQFrameworkFull()">
+                  <i class="fa-solid fa-bell"></i> 广播事件: InventoryFullEvent (背包已满)
+                </button>
+                <button class="g-btn g-btn-danger" onclick="
+                  openSimDialogue({
+                    text: '【QFramework Command】确认执行【清空角色存档数据】指令吗？此操作不可逆！',
+                    speaker: '安全卫士',
+                    avatar: '⚠️',
+                    options: ['确认发送 DeleteSaveCommand', '取消操作']
+                  })
+                ">
+                  <i class="fa-solid fa-trash"></i> 弹窗确认: DeleteSaveCommand
+                </button>
+              </div>
+            </div>
+
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+              💡 <strong>核心模式</strong>：View 节点通过 <code>this.get_model()</code> 获取响应式数据并更新 Gotod UI；用户点击 Gotod 按钮时，通过 <code>this.send_command()</code> 派发业务指令，保持 UI 无业务逻辑。
+            </div>
+          </div>
+        `,
+        code: `# =========================================================================
+# QFramework + Gotod UI 实战：View 层绑定与指令分发 (GDScript 4.x)
+# =========================================================================
+extends Control
+# 实现 QFramework IController 接口
+
+@onready var gold_tag: GTag = $Header/GoldTag
+@onready var potion_tag: GTag = $Header/PotionTag
+@onready var buy_btn: GButton = $ShopPanel/BuyBtn
+@onready var count_stepper: GStepper = $ShopPanel/CountStepper
+
+func _ready() -> void:
+    var player_model = this.get_model(PlayerModel)
+    
+    # 1. 响应式绑定：Model 数据变化时，自动驱动 Gotod UI 刷新
+    player_model.gold.register_with_init_value(func(val):
+        gold_tag.text = "金币: %d" % val
+    ).unbind_on_tree_exited(self)
+    
+    player_model.potion_count.register_with_init_value(func(val):
+        potion_tag.text = "生命药水: %d 瓶" % val
+    ).unbind_on_tree_exited(self)
+    
+    # 2. 交互分发：Gotod UI 按钮点击 -> 发送业务 Command
+    buy_btn.pressed.connect(func():
+        var count = int(count_stepper.value)
+        this.send_command(BuyPotionCommand.new(count))
+    )
+    
+    # 3. 监听全局事件：Event 触发 -> 调用 Gotod 全局提示
+    this.register_event(InventoryFullEvent, func(e):
+        GMessage.warning("背包已满，无法放入更多药水！", self)
+    ).unbind_on_tree_exited(self)
+
+    this.register_event(ItemBoughtSuccessEvent, func(e):
+        GMessage.success("购买成功！消耗金币 %d" % e.cost, self)
+    ).unbind_on_tree_exited(self)`
+      },
+      {
+        title: '2. 与 Dialogic 2.x 剧情系统配合实战 (Timeline 触发与信号联动)',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-lg); border:1px solid var(--border-base); display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; font-size:14px; color:var(--primary);">🎭 Dialogic 2.x 剧情时间线启动与 Gotod 结算通知</span>
+              <span class="g-tag g-tag-success">剧情与结算闭环</span>
+            </div>
+
+            <!-- NPC Interactor Card -->
+            <div style="background:var(--bg-card); border:1px solid var(--border-base); border-radius:var(--radius); padding:16px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="font-size:40px;">🧝‍♀️</div>
+                <div>
+                  <div style="font-weight:700; color:var(--text-primary); font-size:14px;">森林魔女·爱丽丝</div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">NPC 头顶绑定 GInteractPrompt [ E ]，靠近时触发 Dialogic 时间线</div>
+                </div>
+              </div>
+              <button class="g-btn g-btn-primary" onclick="
+                showToast('已启动 Dialogic.start(\\'alice_quest_timeline\\')', 'info');
+                setTimeout(() => {
+                  showToast('Dialogic timeline_ended: 剧情结束，派发 Gotod 任务结算通知！', 'success');
+                }, 1200);
+              ">
+                <i class="fa-solid fa-comment-dots"></i> 按 E 触发 Dialogic 剧情
+              </button>
+            </div>
+
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+              💡 <strong>核心模式</strong>：NPC 挂载 <code>GInteractPrompt</code> 负责探测玩家距离并展示 <code>[E]</code> 交互按键；玩家按下后调用 <code>Dialogic.start(...)</code>；剧情结束或在 timeline 触发 <code>signal_event</code> 时，桥接到 Gotod 的 <code>GNotification</code> 与 <code>GMessage</code> 弹出任务结算奖励。
+            </div>
+          </div>
+        `,
+        code: `# =========================================================================
+# Dialogic 2.x + Gotod UI 实战：头顶按键触发与剧情信号结算 (GDScript 4.x)
+# =========================================================================
+extends CharacterBody2D
+
+@export var timeline_name: String = "alice_encounter"
+
+func _ready() -> void:
+    # 1. 使用 Gotod 的头顶悬浮按键组件绑定 NPC
+    GInteractPrompt.attach_to(self, "E", func():
+        # 靠近按下 E 键启动 Dialogic 剧情时间线
+        Dialogic.start(timeline_name)
+    )
+    
+    # 2. 监听 Dialogic 时间线结束信号 -> 弹出 Gotod 任务通知
+    Dialogic.timeline_ended.connect(func():
+        GNotification.show({
+            "title": "任务更新",
+            "message": "已完成【森林魔女爱丽丝的试炼】！",
+            "type": "success"
+        })
+    )
+    
+    # 3. 监听 Dialogic 中发送的自定义事件 (Dialogic.signal_event)
+    Dialogic.signal_event.connect(func(param: String):
+        if param == "give_shadow_wand":
+            GMessage.success("获得任务奖励：【暗影魔杖 +9】x1！")
+        elif param == "trigger_boss_fight":
+            GMessage.error("爱丽丝发起了决斗！进入战斗！")
+    )`
+      },
+      {
+        title: '3. 与任务追踪系统 (Quest System) & 背包状态联动',
+        render: `
+          <div style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-lg); border:1px solid var(--border-base); display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; font-size:14px; color:var(--primary);">📜 GSteps 步骤条与 GCollapse 折叠面板追踪游戏任务状态</span>
+              <span class="g-tag g-tag-warning">任务与背包联动</span>
+            </div>
+
+            <!-- Quest Status Card -->
+            <div style="background:var(--bg-card); border:1px solid var(--border-base); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span id="simQuestStepBadge" style="font-weight:700; font-size:14px; color:var(--primary);">阶段 1/3: 前往暗影森林调查</span>
+                <button class="g-btn g-btn-default" style="height:26px; font-size:11px;" onclick="simQuestNextStep()">
+                  <i class="fa-solid fa-forward-step"></i> 推进下一阶段
+                </button>
+              </div>
+              <div id="simQuestStepDesc" style="font-size:13px; color:var(--text-secondary);">
+                靠近爱丽丝并进行交谈，查明暗影魔术的真相。
+              </div>
+            </div>
+          </div>
+        `,
+        code: `# =========================================================================
+# 任务系统 QuestManager 与 Gotod UI GSteps 步骤条联动
+# =========================================================================
+extends Control
+
+@onready var quest_steps: GSteps = $QuestPanel/GSteps
+@onready var quest_log_collapse: GCollapse = $QuestPanel/GCollapse
+
+func _ready() -> void:
+    # 监听任务管理器阶段变更信号
+    QuestManager.quest_step_changed.connect(func(quest_id: String, step_index: int, title: String):
+        quest_steps.current_step = step_index
+        GMessage.info("任务进度已更新: %s" % title, self)
+    )
+    
+    # 监听新装备获得信号 -> 更新背包 Tab 徽标红点
+    InventoryManager.item_added.connect(func(item_data):
+        $MainTabs.set_tab_badge(1, "NEW") # 在“装备”分页打上红点
+        GToast.show("获得了新物品: %s" % item_data.name)
+    )`
+      },
+      {
+        title: '4. 第三方库生态协作矩阵与架构职责边界',
+        render: `
+          <div style="overflow-x:auto;">
+            <table class="api-table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th style="width:20%;">系统 / 框架</th>
+                  <th style="width:25%;">第三方框架负责的职责</th>
+                  <th style="width:30%;">Gotod UI 负责的职责</th>
+                  <th style="width:25%;">推荐桥接机制</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:var(--primary);">QFramework (GD-QF)</strong></td>
+                  <td>Model 数据状态、Command 业务逻辑分发、Event 事件总线、System 核心服务</td>
+                  <td>View 表现层渲染（GButton, GInput, GDialog, GMessage, GTheme 换肤）</td>
+                  <td><code>send_command()</code><br><code>register_event()</code></td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--success);">Dialogic 2.x</strong></td>
+                  <td>剧情 Timeline 编排、分支对话树、角色与变量存储系统、音效与立绘切换</td>
+                  <td>头顶按键 (<code>GInteractPrompt</code>)、结算通知 (<code>GNotification</code>)、样式定制</td>
+                  <td><code>Dialogic.timeline_ended</code><br><code>Dialogic.signal_event</code></td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--warning);">LimboAI / StateMachine</strong></td>
+                  <td>有限状态机/行为树运转（巡逻、追击、战斗、死亡等 AI 与玩家状态）</td>
+                  <td>状态 HUD 显示（血条 <code>GProgress</code>、受击闪烁、头顶状态图标 <code>GBadge</code>）</td>
+                  <td><code>state_changed(new_state)</code> 信号</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:#ba55d3);">Quest / Inventory</strong></td>
+                  <td>任务条件判断、背包道具堆叠、掉落物计算、存档持久化</td>
+                  <td>任务步骤条 (<code>GSteps</code>)、背包卡片 (<code>GCard</code>)、分类 (<code>GTabs</code>)、红点 (<code>GBadge</code>)</td>
+                  <td><code>item_added</code> / <code>quest_updated</code> 信号</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `,
+        code: `# 架构职责总结：
+# 1. Gotod UI 永远只通过 Signal (发出交互) 和 Props (接收数据) 与外界沟通。
+# 2. 避免在 Gotod UI 组件内部直接编写复杂的游戏核心业务逻辑。
+# 3. 让 QFramework / Dialogic / 业务 Manager 专注逻辑，让 Gotod UI 专注极速打造高颜值界面！`
+      }
+    ]
+  },
+
   'guide-css-style-engine': {
     title: '🎨 .css() 与 .style() 动态样式引擎 (Dynamic Style Engine)',
     desc: '提供类似现代前端 CSS / Tailwind 的链式与字典化样式定义体系。支持通过 .css() 进行全局或实例级快速样式定义，以及通过 .style({ name, func }).css() 针对特定组件进行深度全域定制，全面兼容 Godot 4 官方全部 StyleBox、Color、Font 与 Theme 规范。',

@@ -2039,37 +2039,40 @@ func _on_treasure_chest_clicked():
       {
         title: '3. 二次元/手游立绘剧场对话与【跳过剧情 >>】(Anime Story Theater - 对标截图)',
         render: `
-          <div style="position:relative; width:100%; min-height:220px; background:linear-gradient(135deg, #180d2b 0%, #0d0617 100%); border:2px solid #5a2e8c; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; padding:16px;">
+          <div style="position:relative; width:100%; min-height:220px; background:linear-gradient(135deg, #180d2b 0%, #0d0617 100%); border:2px solid #5a2e8c; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; padding:16px; user-select:none;">
             <!-- Top Right: Skip Story Button [ 跳过剧情 >> ] -->
             <div style="display:flex; justify-content:flex-end;">
-              <button class="g-btn g-btn-default" style="background:rgba(230,162,60,0.15); border:1px solid #ffd04b; color:#ffd04b; font-weight:800; font-size:12px; height:28px; padding:0 14px; border-radius:14px; cursor:pointer;" onclick="showToast('已跳过当前剧情章节', 'info')">
+              <button class="g-btn g-btn-default" style="background:rgba(230,162,60,0.15); border:1px solid #ffd04b; color:#ffd04b; font-weight:800; font-size:12px; height:28px; padding:0 14px; border-radius:14px; cursor:pointer; transition:all 0.2s;" onmouseenter="this.style.background='rgba(230,162,60,0.3)'" onmouseleave="this.style.background='rgba(230,162,60,0.15)'" onclick="simAnimeTheaterSkip()">
                 跳过剧情 &gt;&gt;
               </button>
             </div>
 
             <!-- Left Character Standee + Bottom Dialogue Bar -->
             <div style="display:flex; align-items:flex-end; gap:16px;">
-              <div style="font-size:72px; line-height:1; filter:drop-shadow(0 0 16px rgba(186,85,211,0.5)); flex-shrink:0;">🎭</div>
+              <div id="animeStandeeAvatar" style="font-size:72px; line-height:1; filter:drop-shadow(0 0 16px rgba(186,85,211,0.5)); flex-shrink:0; transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">🎭</div>
               
-              <!-- Full-width Translucent Purple Dialogue Bar -->
-              <div style="flex:1; background:rgba(35, 15, 60, 0.88); border:1px solid #8a4baf; border-radius:8px; padding:12px 18px; position:relative; box-shadow:0 8px 24px rgba(0,0,0,0.6);">
-                <div style="font-weight:800; color:#ffd04b; font-size:14px; margin-bottom:4px; text-shadow:0 0 8px rgba(255,208,75,0.6);">疯狂得爱丽丝啊</div>
-                <div style="font-size:13px; color:#f1f2f6; line-height:1.5;">
+              <!-- Full-width Translucent Purple Dialogue Bar (Clickable to continue) -->
+              <div id="animeDialogueBox" title="点击继续剧情" style="flex:1; background:rgba(35, 15, 60, 0.88); border:1px solid #8a4baf; border-radius:8px; padding:12px 18px; position:relative; box-shadow:0 8px 24px rgba(0,0,0,0.6); cursor:pointer; transition:all 0.2s;" onmouseenter="this.style.borderColor='#ffd04b'; this.style.boxShadow='0 0 16px rgba(255,208,75,0.25)';" onmouseleave="this.style.borderColor='#8a4baf'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.6)';" onclick="simAnimeTheaterNext()">
+                <div id="animeDialogueSpeaker" style="font-weight:800; color:#ffd04b; font-size:14px; margin-bottom:4px; text-shadow:0 0 8px rgba(255,208,75,0.6);">疯狂得爱丽丝啊</div>
+                <div id="animeDialogueText" style="font-size:13px; color:#f1f2f6; line-height:1.5; min-height:40px;">
                   来，品尝一下火焰的滋味吧！开玩笑的，这么好看的衣服，万一被烧坏就可惜了。
                 </div>
-                <!-- Golden Next Chevron > -->
-                <div style="position:absolute; right:14px; bottom:10px; color:#ffd04b; font-size:18px; font-weight:800; animation:gBlink 0.6s infinite alternate;">&gt;</div>
+                <!-- Golden Next Chevron > (Clickable button) -->
+                <div id="animeDialogueNextBtn" title="点击继续" style="position:absolute; right:14px; bottom:10px; color:#ffd04b; font-size:18px; font-weight:800; animation:gBlink 0.6s infinite alternate; padding:2px 8px; border-radius:4px; background:rgba(255,208,75,0.1); border:1px solid rgba(255,208,75,0.3);">&gt;</div>
               </div>
             </div>
           </div>
         `,
-        code: `# GDScript: 二次元手游剧场式立绘对话 (带跳过剧情按钮)
+        code: `# GDScript: 二次元手游剧场式立绘对话 (带跳过剧情按钮与点击继续)
 var theater_dialog = GDialogue.say({
     "speaker": "疯狂得爱丽丝啊",
     "avatar": preload("res://portraits/alice_mask.png"),
     "text": "来，品尝一下火焰的滋味吧！开玩笑的，这么好看的衣服，万一被烧坏就可惜了。",
     "allow_skip": true
-})`
+})
+theater_dialog.next_line_triggered.connect(func():
+    print("玩家点击继续，进入下一句剧场台词")
+)`
       },
       {
         title: '4. 《梦幻西游》经典 NPC 任务交接与红色选项分支 (Westward Journey NPC Quest)',
@@ -2119,20 +2122,20 @@ diag.option_selected.connect(func(idx, text):
       {
         title: '5. 科幻/二次元斜切六边形气泡 (Sci-Fi Hexagonal Polygon Bubble - 对标截图)',
         render: `
-          <div style="background:radial-gradient(circle at center, #1b2640 0%, #0a0f1d 100%); border:2px solid #2b4c7e; border-radius:12px; padding:20px; position:relative; overflow:hidden; display:flex; flex-direction:column; gap:16px;">
+          <div style="background:radial-gradient(circle at center, #1b2640 0%, #0a0f1d 100%); border:2px solid #2b4c7e; border-radius:12px; padding:20px; position:relative; overflow:hidden; display:flex; flex-direction:column; gap:16px; user-select:none;">
             <!-- Top Controls [ AUTO ] [ SKIP ] -->
             <div style="display:flex; justify-content:flex-end; gap:8px;">
-              <button class="g-btn g-btn-default" style="background:#1b356d; border:1px solid #409eff; color:#fff; font-size:11px; height:24px; padding:0 10px; border-radius:12px;">AUTO</button>
-              <button class="g-btn g-btn-default" style="background:#1b356d; border:1px solid #409eff; color:#fff; font-size:11px; height:24px; padding:0 10px; border-radius:12px;">SKIP</button>
+              <button id="scifiAutoBtn" class="g-btn g-btn-default" style="background:#1b356d; border:1px solid #409eff; color:#fff; font-size:11px; height:24px; padding:0 10px; border-radius:12px; cursor:pointer; transition:all 0.2s;" onclick="simSciFiToggleAuto()">AUTO</button>
+              <button class="g-btn g-btn-default" style="background:#1b356d; border:1px solid #409eff; color:#fff; font-size:11px; height:24px; padding:0 10px; border-radius:12px; cursor:pointer; transition:all 0.2s;" onclick="simSciFiSkip()">SKIP</button>
             </div>
 
             <!-- Hexagonal Tech Dialogue Bubble -->
-            <div style="position:relative; background:#0d1a33; border:2px solid #409eff; padding:16px 24px; border-radius:14px; clip-path:polygon(0% 0%, 94% 0%, 100% 50%, 94% 100%, 0% 100%); box-shadow:0 0 16px rgba(64,158,255,0.3);">
+            <div id="scifiDialogueBox" title="点击继续对话" style="position:relative; background:#0d1a33; border:2px solid #409eff; padding:16px 24px; border-radius:14px; clip-path:polygon(0% 0%, 94% 0%, 100% 50%, 94% 100%, 0% 100%); box-shadow:0 0 16px rgba(64,158,255,0.3); cursor:pointer; min-height:80px;" onclick="simSciFiNext()">
               <!-- Speaker Tag Badge -->
-              <div style="position:absolute; top:-12px; left:20px; background:#409eff; color:#fff; font-size:11px; font-weight:800; padding:2px 14px; border-radius:4px; clip-path:polygon(0% 0%, 88% 0%, 100% 100%, 0% 100%);">
+              <div id="scifiSpeakerTag" style="position:absolute; top:-12px; left:20px; background:#409eff; color:#fff; font-size:11px; font-weight:800; padding:2px 14px; border-radius:4px; clip-path:polygon(0% 0%, 88% 0%, 100% 100%, 0% 100%);">
                 シマトラ
               </div>
-              <div style="color:#fff; font-size:13px; line-height:1.6; margin-top:2px;">
+              <div id="scifiDialogueText" style="color:#fff; font-size:13px; line-height:1.6; margin-top:2px;">
                 誰が、どうやって、何の目的で――<br>そのあたりは、これから調査するのである
               </div>
               <div style="position:absolute; right:36px; bottom:10px; color:#409eff; font-size:14px; font-weight:800; animation:gBlink 0.6s infinite alternate;">&gt;&gt;</div>

@@ -11,6 +11,7 @@ window.SIDEBAR_CONFIG = {
         title: 'Development 指南',
         items: [
           { key: 'guide-install', title: '📥 安装与快速上手' },
+          { key: 'guide-third-party', title: '🔌 第三方库配合 (QFramework / Dialogic)' },
           { key: 'guide-css-style-engine', title: '🎨 .css() 与 .style() 样式引擎' },
           { key: 'guide-imperative-api', title: '⚡ 命令式调用与上下文继承' },
           { key: 'guide-treeshaking', title: '📦 生产环境按需打包与摇树优化' },
@@ -90,14 +91,15 @@ window.SIDEBAR_CONFIG = {
     placeholder: 'Search signals & events...',
     groups: [
       {
-        title: 'Class-Based 信号与事件总线',
+        title: 'UniApp / Vue 风格全局事件通讯与信号',
         items: [
-          { key: 'signal-event-bus', title: '⚡ GEventBus 类化全局事件总线' },
+          { key: 'signal-uni-emit', title: '⚡ GEvent (uni.$emit / uni.$on 页面通讯)' },
+          { key: 'signal-event-bus', title: '🌐 跨场景/跨页面全局事件联动' },
           { key: 'signal-custom-class', title: '📡 GCustomSignal 动态信号对象' }
         ]
       }
     ],
-    defaultKey: 'signal-event-bus'
+    defaultKey: 'signal-uni-emit'
   },
   'decorator': {
     placeholder: 'Search decorators...',
@@ -255,6 +257,31 @@ window.SIDEBAR_CONFIG = {
       }
     ],
     defaultKey: 'godot-globals'
+  },
+  'networking': {
+    placeholder: 'Search networking & physics...',
+    groups: [
+      {
+        title: 'Networking 网络通信与多人联机',
+        items: [
+          { key: 'net-multiplayer', title: '🌐 高级多人联机与 RPC 架构' },
+          { key: 'net-axios', title: '🚀 GAxios: Axios 风格 HTTP 客户端' },
+          { key: 'net-http', title: '📡 GHttp 异步请求与 RESTful API' },
+          { key: 'net-websocket', title: '⚡ GWebSocket 实时长连接与心跳' },
+          { key: 'net-webrtc', title: '🤝 WebRTC 点对点 P2P 联机通信' }
+        ]
+      },
+      {
+        title: 'Physics 程序化物理与坐标计算',
+        items: [
+          { key: 'phys-character-rigidbody', title: '🏃 CharacterBody 运动学与 RigidBody 刚体' },
+          { key: 'phys-area-collision', title: '📦 Area2D 触发器与 2D/3D 碰撞形状' },
+          { key: 'phys-programmatic', title: '🎯 纯程序化物理碰撞与直接空间查询' },
+          { key: 'phys-coord-transforms', title: '📐 GCoord 坐标系转换与大世界浮动原点' }
+        ]
+      }
+    ],
+    defaultKey: 'net-multiplayer'
   }
 };
 

@@ -42,6 +42,8 @@ window.findSectionByDocKey = function(docKey) {
   if (window.UTILS_ROUTER_CATALOG && window.UTILS_ROUTER_CATALOG[docKey]) return 'router';
   if (window.LIFECYCLE_CATALOG && window.LIFECYCLE_CATALOG[docKey]) return 'lifecycle';
   if (window.STUDIO_CATALOG && window.STUDIO_CATALOG[docKey]) return 'studio';
+  if (window.GODOT_GLOBALS_CATALOG && window.GODOT_GLOBALS_CATALOG[docKey]) return 'godot-globals';
+  if (window.NETWORKING_PHYSICS_CATALOG && window.NETWORKING_PHYSICS_CATALOG[docKey]) return 'networking';
   if (window.COMPONENT_CATALOG && window.COMPONENT_CATALOG[docKey]) return 'components';
 
   const sections = window.SECTION_KEYS || [];
@@ -100,6 +102,7 @@ window.showDoc = function(key) {
     window.UTILS_ROUTER_CATALOG || {},
     window.LIFECYCLE_CATALOG || {},
     window.GODOT_GLOBALS_CATALOG || {},
+    window.NETWORKING_PHYSICS_CATALOG || {},
     window.STUDIO_CATALOG || {}, 
     window.COMPONENT_CATALOG || {}
   );

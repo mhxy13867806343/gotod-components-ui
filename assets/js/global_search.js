@@ -37,6 +37,7 @@ window.getAllSearchIndex = function() {
   pushCategory(window.LIFECYCLE_CATALOG, '生命周期 (Lifecycle)', 'lifecycle', 'warning');
   pushCategory(window.STUDIO_CATALOG, '资源工坊 (Studio)', 'studio', 'info');
   pushCategory(window.GODOT_GLOBALS_CATALOG, '全局方法 (Godot Globals)', 'godot-globals', 'primary');
+  pushCategory(window.NETWORKING_PHYSICS_CATALOG, '网络与物理 (Networking & Physics)', 'networking', 'primary');
 
   return index;
 };

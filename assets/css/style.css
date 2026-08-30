@@ -1170,6 +1170,13 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
 .anim-slide-right-out { animation: slideRightOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .anim-slide-up-in { animation: slideUpIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .anim-slide-up-out { animation: slideUpOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-down-in { animation: slideDownIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-down-out { animation: slideDownOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-zoom-in { animation: zoomIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-zoom-out { animation: zoomOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-zoom-bounce { animation: zoomBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.anim-zoom-center-in { animation: zoomIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-zoom-center-out { animation: zoomCenterOut 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .anim-fade-in { animation: fadeIn 0.35s ease-out forwards; }
 .anim-fade-out { animation: fadeOut 0.35s ease-out forwards; }
 
@@ -1182,20 +1189,45 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   to { transform: translateX(-35%); opacity: 0.5; }
 }
 @keyframes slideRightIn {
-  from { transform: translateX(-35%); opacity: 0.5; }
-  to { transform: translateX(0); opacity: 1; }
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
 }
 @keyframes slideRightOut {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(35%); opacity: 0.5; }
 }
 @keyframes slideUpIn {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
 }
 @keyframes slideUpOut {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-35%); opacity: 0.5; }
+}
+@keyframes slideDownIn {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideDownOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(35%); opacity: 0.5; }
+}
+@keyframes zoomIn {
+  from { transform: scale(0.05); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes zoomOut {
+  from { transform: scale(2.2); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes zoomBounce {
+  0% { transform: scale(0.1); opacity: 0; }
+  70% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes zoomCenterOut {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(1.2); opacity: 0; }
 }
 @keyframes fadeOut {
   from { opacity: 1; }
