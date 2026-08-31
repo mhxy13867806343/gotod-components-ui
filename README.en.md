@@ -1,6 +1,13 @@
 # Gotod Components UI 🎨
 
 <p align="center">
+  <b><a href="README.md">🇨🇳 简体中文</a></b> |
+  <b><a href="README.en.md">🇺🇸 English</a></b> |
+  <b><a href="CHANGELOG.en.md">📋 Changelog & DevLog</a></b> |
+  <b><a href="https://mhxy13867806343.github.io/gotod-components-ui/">🌐 Live Online Demo</a></b>
+</p>
+
+<p align="center">
   <b>Modern Vue / UniApp-Style UI Component Library & Game Development Toolchain for Godot 4.x (4.6+)</b>
   <br>
   <i>Inspired by Naive UI, Element Plus, Ant Design Vue, and Vant UI</i>
