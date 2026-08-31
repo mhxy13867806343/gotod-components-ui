@@ -336,13 +336,16 @@ window.convertGDScriptToCSharp = function(gdCode) {
   cs = cs.replace(/extends\s+[a-zA-Z0-9_]+\s*\n?/g, '');
 
   // 5. Signals
+  const signalDeclarations = [];
   cs = cs.replace(/signal\s+([a-zA-Z0-9_]+)\s*\((.*?)\)/g, (m, sig, params) => {
     const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
-    return `[Signal]\npublic delegate void ${pascalSig}EventHandler(${params});`;
+    signalDeclarations.push(`    [Signal]\n    public delegate void ${pascalSig}EventHandler(${params});\n`);
+    return '';
   });
   cs = cs.replace(/signal\s+([a-zA-Z0-9_]+)/g, (m, sig) => {
     const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
-    return `[Signal]\npublic delegate void ${pascalSig}EventHandler();`;
+    signalDeclarations.push(`    [Signal]\n    public delegate void ${pascalSig}EventHandler();\n`);
+    return '';
   });
 
   // 6. Signal emits: sig_name.emit(...) -> EmitSignal(SignalName.SigName, ...)
@@ -352,16 +355,17 @@ window.convertGDScriptToCSharp = function(gdCode) {
   });
 
   // 7. If / Else
-  cs = cs.replace(/if\s+(.*?):/g, 'if ($1)\n    {');
-  cs = cs.replace(/elif\s+(.*?):/g, '} else if ($1)\n    {');
-  cs = cs.replace(/else:/g, '} else\n    {');
+  cs = cs.replace(/if\s+(.*?):/g, 'if ($1)\n        {');
+  cs = cs.replace(/elif\s+(.*?):/g, '} else if ($1)\n        {');
+  cs = cs.replace(/else:/g, '} else\n        {');
 
   // 8. Methods
-  cs = cs.replace(/func\s+_ready\(\)\s*(?:->\s*void)?:/g, 'public override void _Ready()\n    {');
-  cs = cs.replace(/func\s+_process\(delta(?::\s*float)?\)\s*(?:->\s*void)?:/g, 'public override void _Process(double delta)\n    {');
-  cs = cs.replace(/func\s+_physics_process\(delta(?::\s*float)?\)\s*(?:->\s*void)?:/g, 'public override void _PhysicsProcess(double delta)\n    {');
-  cs = cs.replace(/func\s+([a-zA-Z0-9_]+)\((.*?)\)\s*(?:->\s*void)?:/g, 'private void $1($2)\n    {');
-  cs = cs.replace(/func\s+([a-zA-Z0-9_]+)\((.*?)\)\s*->\s*([a-zA-Z0-9_]+):/g, 'private $3 $1($2)\n    {');
+  const hasFunctions = /func\s+/i.test(cs);
+  cs = cs.replace(/func\s+_ready\(\)\s*(?:->\s*void)?:/g, '    public override void _Ready()\n    {');
+  cs = cs.replace(/func\s+_process\(delta(?::\s*float)?\)\s*(?:->\s*void)?:/g, '    public override void _Process(double delta)\n    {');
+  cs = cs.replace(/func\s+_physics_process\(delta(?::\s*float)?\)\s*(?:->\s*void)?:/g, '    public override void _PhysicsProcess(double delta)\n    {');
+  cs = cs.replace(/func\s+([a-zA-Z0-9_]+)\((.*?)\)\s*(?:->\s*void)?:/g, '    private void $1($2)\n    {');
+  cs = cs.replace(/func\s+([a-zA-Z0-9_]+)\((.*?)\)\s*->\s*([a-zA-Z0-9_]+):/g, '    private $3 $1($2)\n    {');
 
   // 9. $Node syntax
   cs = cs.replace(/\$([a-zA-Z0-9_]+)\.text\b/g, 'GetNode<Label>("$1").Text');
@@ -458,18 +462,17 @@ window.convertGDScriptToCSharp = function(gdCode) {
     return line + ';';
   });
 
-  let bodyCode = formattedLines.join('\n');
-  const openBraces = (bodyCode.match(/\{/g) || []).length;
-  const closeBraces = (bodyCode.match(/\}/g) || []).length;
-  for (let i = 0; i < openBraces - closeBraces; i++) {
-    bodyCode += '\n    }';
-  }
-
   let result = '';
-  if (isFullScript) {
-    result = `// C# (Godot 4 .NET)\nusing Godot;\nusing System;\nusing GotodUI;\n\npublic partial class ${className} : ${baseClass}\n{\n${bodyCode.split('\n').map(l => '    ' + l).join('\n')}\n}`;
+  if (hasFunctions) {
+    const openBraces = (bodyCode.match(/\{/g) || []).length;
+    const closeBraces = (bodyCode.match(/\}/g) || []).length;
+    for (let i = 0; i < openBraces - closeBraces; i++) {
+      bodyCode += '\n    }';
+    }
+    result = `using Godot;\nusing System;\nusing GotodUI;\n\npublic partial class ${className} : ${baseClass}\n{\n${signalDeclarations.join('')}${bodyCode.split('\n').map(l => l.startsWith('    ') ? l : '    ' + l).join('\n')}\n}`;
   } else {
-    result = `// C# (Godot 4 .NET)\nusing Godot;\nusing GotodUI;\n\n` + bodyCode;
+    const indented = bodyCode.split('\n').map(l => '        ' + l).join('\n');
+    result = `using Godot;\nusing System;\nusing GotodUI;\n\npublic partial class ${className} : ${baseClass}\n{\n    public override void _Ready()\n    {\n${indented}\n    }\n}`;
   }
 
   return result;
