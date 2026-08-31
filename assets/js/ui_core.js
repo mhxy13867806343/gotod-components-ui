@@ -534,3 +534,83 @@ window.switchCodeLanguage = function(lang, btn) {
     window.showToast(`已切换并展开【${lang === 'csharp' ? 'C# (Godot .NET)' : 'GDScript'}】代码`, 'info');
   }
 };
+
+window.getComponentGitHubUrl = function(key) {
+  const baseRepo = 'https://github.com/mhxy13867806343/gotod-components-ui/blob/main';
+  const fileMap = {
+    // General
+    'button': 'addons/gotod_ui/components/general/g_button.gd',
+    'text': 'addons/gotod_ui/components/general/g_text.gd',
+    'icon': 'addons/gotod_ui/components/general/g_icon.gd',
+    'fab': 'addons/gotod_ui/components/general/g_fab.gd',
+    'divider': 'addons/gotod_ui/components/general/g_divider.gd',
+    // Layout
+    'container': 'addons/gotod_ui/components/layout/g_container.gd',
+    'space': 'addons/gotod_ui/components/layout/g_space.gd',
+    // Form
+    'input': 'addons/gotod_ui/components/form/g_input.gd',
+    'textarea': 'addons/gotod_ui/components/form/g_textarea.gd',
+    'input_number': 'addons/gotod_ui/components/form/g_input_number.gd',
+    'stepper': 'addons/gotod_ui/components/form/g_stepper.gd',
+    'switch': 'addons/gotod_ui/components/form/g_switch.gd',
+    'checkbox': 'addons/gotod_ui/components/form/g_checkbox.gd',
+    'radio': 'addons/gotod_ui/components/form/g_radio.gd',
+    'select': 'addons/gotod_ui/components/form/g_select.gd',
+    'picker': 'addons/gotod_ui/components/form/g_picker.gd',
+    'slider': 'addons/gotod_ui/components/form/g_slider.gd',
+    'form': 'addons/gotod_ui/components/form/g_form.gd',
+    // Feedback
+    'dialog': 'addons/gotod_ui/components/feedback/g_dialog.gd',
+    'dialogue': 'addons/gotod_ui/components/feedback/g_dialogue.gd',
+    'chat': 'addons/gotod_ui/components/feedback/g_chat.gd',
+    'popup': 'addons/gotod_ui/components/feedback/g_popup.gd',
+    'overlay': 'addons/gotod_ui/components/feedback/g_overlay.gd',
+    'action_sheet': 'addons/gotod_ui/components/feedback/g_action_sheet.gd',
+    'popover': 'addons/gotod_ui/components/feedback/g_popover.gd',
+    'notice_bar': 'addons/gotod_ui/components/feedback/g_notice_bar.gd',
+    'message': 'addons/gotod_ui/components/feedback/g_message.gd',
+    'toast': 'addons/gotod_ui/components/feedback/g_toast.gd',
+    'alert': 'addons/gotod_ui/components/feedback/g_alert.gd',
+    'drawer': 'addons/gotod_ui/components/feedback/g_drawer.gd',
+    'tooltip': 'addons/gotod_ui/components/feedback/g_tooltip.gd',
+    'loading': 'addons/gotod_ui/components/feedback/g_loading.gd',
+    'skeleton': 'addons/gotod_ui/components/feedback/g_skeleton.gd',
+    'tour': 'addons/gotod_ui/components/feedback/g_tour.gd',
+    // Data
+    'card': 'addons/gotod_ui/components/data/g_card.gd',
+    'tag': 'addons/gotod_ui/components/data/g_tag.gd',
+    'badge': 'addons/gotod_ui/components/data/g_badge.gd',
+    'avatar': 'addons/gotod_ui/components/data/g_avatar.gd',
+    'progress': 'addons/gotod_ui/components/data/g_progress.gd',
+    'tabs': 'addons/gotod_ui/components/data/g_tabs.gd',
+    'collapse': 'addons/gotod_ui/components/data/g_collapse.gd',
+    'steps': 'addons/gotod_ui/components/data/g_steps.gd',
+    // Advanced & Studios
+    'haptic': 'addons/gotod_ui/core/g_style.gd',
+    'ai_dialogue': 'addons/gotod_ui/components/feedback/g_dialogue.gd',
+    'table': 'addons/gotod_ui/components/data/g_card.gd',
+    'virtual_list': 'addons/gotod_ui/components/data/g_card.gd',
+    'i18n': 'addons/gotod_ui/utils/g_format.gd',
+    'particle_studio': 'addons/gotod_ui/components/feedback/g_loading.gd',
+    'skeleton_particle': 'addons/gotod_ui/components/feedback/g_loading.gd',
+    'shader_studio': 'addons/gotod_ui/theme/gotod_theme.gd',
+    'hud3d': 'addons/gotod_ui/utils/g_coord.gd',
+    // Router & Storage & Core
+    'router': 'addons/gotod_ui/router/g_router.gd',
+    'storage': 'addons/gotod_ui/storage/g_storage.gd',
+    'hooks': 'addons/gotod_ui/hooks/use_form.gd',
+    'signals': 'addons/gotod_ui/events/g_event_bus.gd',
+    'decorator': 'addons/gotod_ui/patterns/decorator/weapon_component.gd',
+    'theme': 'addons/gotod_ui/theme/gotod_theme.gd',
+    'lifecycle': 'addons/gotod_ui/core/g_node_lifecycle_demo.gd',
+    'networking': 'addons/gotod_ui/utils/g_multiplayer.gd',
+    'slots': 'addons/gotod_ui/core/g_slot_proxy.gd',
+    'tree_shaker': 'addons/gotod_ui/export/gotod_tree_shaker.gd'
+  };
+
+  const relPath = (key && fileMap[key]) ? fileMap[key] : (key ? `assets/js/components_${key}.js` : '');
+  if (relPath) {
+    return `${baseRepo}/${relPath}`;
+  }
+  return 'https://github.com/mhxy13867806343/gotod-components-ui';
+};
