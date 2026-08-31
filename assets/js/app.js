@@ -204,8 +204,8 @@ window.showDoc = function(key) {
         `;
       } else if (d.code) {
         const curLang = window.currentCodeLang || 'gdscript';
-        const gdCode = d.code;
-        const csCode = d.codeCSharp || d.csharpCode || (typeof window.convertGDScriptToCSharp === 'function' ? window.convertGDScriptToCSharp(d.code) : d.code);
+        const gdCode = (typeof window.cleanPureGodotCode === 'function') ? window.cleanPureGodotCode(d.code) : d.code;
+        const csCode = d.codeCSharp || d.csharpCode || (typeof window.convertGDScriptToCSharp === 'function' ? window.convertGDScriptToCSharp(d.code) : gdCode);
 
         codeSection = `
           <div class="code-panel-gdscript" style="${curLang === 'gdscript' ? 'display:block;' : 'display:none;'}">

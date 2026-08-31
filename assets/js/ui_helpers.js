@@ -3444,98 +3444,145 @@ window.copyDemoCodeFromCard = function(btn) {
   }
 };
 
-// =========================================================================
-// Godot 4 GDScript ⇄ C# (.NET) Dual Language Code Engine
-// =========================================================================
-window.currentCodeLang = localStorage.getItem('gotod_code_lang') || 'gdscript';
+window.cleanPureGodotCode = function(rawCode) {
+  if (!rawCode) return '';
+  let c = rawCode;
+  // Strip <!-- 方式 1: Vue 3 ... --> ... </G...Component> or any HTML block
+  c = c.replace(/<!--[\s\S]*?-->\s*<[a-zA-Z0-9_]+[\s\S]*?<\/[a-zA-Z0-9_]+>/g, '');
+  // Strip standalone <template ... </template>
+  c = c.replace(/<template[\s\S]*?<\/template>/gi, '');
+  // Strip any remaining standalone XML/HTML opening and closing tags
+  c = c.replace(/^<[a-zA-Z0-9_]+.*?>$/gm, '');
+  c = c.replace(/^<\/[a-zA-Z0-9_]+>$/gm, '');
+  // Strip "# 方式 2: Godot GDScript ..." prefix headers to standard clean header
+  c = c.replace(/#\s*方式\s*\d+\s*:\s*Godot\s*GDScript\s*/gi, '# GDScript: ');
+  c = c.replace(/#\s*方式\s*\d+\s*:\s*/gi, '# ');
+  return c.trim();
+};
 
 window.convertGDScriptToCSharp = function(gdCode) {
   if (!gdCode) return '';
-  let cs = gdCode;
+  let cs = window.cleanPureGodotCode(gdCode);
 
-  // Header comment replacement
-  cs = cs.replace(/#\s*GDScript:\s*(.*)/gi, '// C# (Godot .NET): $1\nusing Godot;\nusing GotodUI;\n');
+  const isFullScript = /class_name|extends\s+Control|func\s+_ready|func\s+_process|signal\s+/i.test(cs);
+
+  // Extract comments safely without breaking C# keywords
+  cs = cs.replace(/#\s*GDScript:\s*(.*)/gi, '// C# (Godot 4 .NET): $1');
   cs = cs.replace(/#\s*(.*)/g, '// $1');
 
-  // Node instantiation: var x = Foo.new() -> var x = new Foo();
-  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*=\s*([a-zA-Z0-9_]+)\.new\(\)/g, 'var $1 = new $2();');
+  // class_name and extends handling
+  let className = 'MyComponent';
+  let baseClass = 'Control';
+  const classMatch = cs.match(/class_name\s+([a-zA-Z0-9_]+)/);
+  if (classMatch) className = classMatch[1];
+  const extendsMatch = cs.match(/extends\s+([a-zA-Z0-9_]+)/);
+  if (extendsMatch) baseClass = extendsMatch[1];
+
+  cs = cs.replace(/class_name\s+[a-zA-Z0-9_]+\s*\n?/g, '');
+  cs = cs.replace(/extends\s+[a-zA-Z0-9_]+\s*\n?/g, '');
+
+  // Signals (Godot 4 [Signal] public delegate void NameEventHandler(...))
+  cs = cs.replace(/signal\s+([a-zA-Z0-9_]+)\s*\((.*?)\)/g, (m, sig, params) => {
+    const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+    return `[Signal]\npublic delegate void ${pascalSig}EventHandler(${params});`;
+  });
+  cs = cs.replace(/signal\s+([a-zA-Z0-9_]+)/g, (m, sig) => {
+    const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+    return `[Signal]\npublic delegate void ${pascalSig}EventHandler();`;
+  });
+
+  // Signal emits: sig_name.emit(...) -> EmitSignal(SignalName.SigName, ...)
+  cs = cs.replace(/([a-zA-Z0-9_]+)\.emit\((.*?)\)/g, (m, sig, args) => {
+    const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+    return `EmitSignal(SignalName.${pascalSig}${args ? ', ' + args : ''})`;
+  });
+
+  // String formatting: "foo %d / 3" % step -> $"foo {step} / 3"
+  cs = cs.replace(/"([^"]*?%[sdf][^"]*?)"\s*%\s*\[(.*?)\]/g, (m, str, vars) => {
+    const varArr = vars.split(',').map(v => v.trim());
+    let idx = 0;
+    const interpolated = str.replace(/%[sdf]/g, () => `{${varArr[idx++] || ''}}`);
+    return `$"${interpolated}"`;
+  });
+  cs = cs.replace(/"([^"]*?%[sdf][^"]*?)"\s*%\s*([a-zA-Z0-9_]+)/g, (m, str, v) => {
+    const interpolated = str.replace(/%[sdf]/, `{${v}}`);
+    return `$"${interpolated}"`;
+  });
+
+  // If / Else control flow statements
+  cs = cs.replace(/if\s+(.*?):/g, 'if ($1)\n    {');
+  cs = cs.replace(/elif\s+(.*?):/g, '} else if ($1)\n    {');
+  cs = cs.replace(/else:/g, '} else\n    {');
+
+  // Node Lifecycle & Methods
+  cs = cs.replace(/func\s+_ready\(\)\s*(?:->\s*void)?:/g, 'public override void _Ready()\n    {');
+  cs = cs.replace(/func\s+_process\(delta(?::\s*float)?\)\s*(?:->\s*void)?:/g, 'public override void _Process(double delta)\n    {');
+  cs = cs.replace(/func\s+_physics_process\(delta(?::\s*float)?\)\s*(?:->\s*void)?:/g, 'public override void _PhysicsProcess(double delta)\n    {');
+  cs = cs.replace(/func\s+([a-zA-Z0-9_]+)\((.*?)\)\s*(?:->\s*void)?:/g, 'private void $1($2)\n    {');
+  cs = cs.replace(/func\s+([a-zA-Z0-9_]+)\((.*?)\)\s*->\s*([a-zA-Z0-9_]+):/g, 'private $3 $1($2)\n    {');
+
+  // $Node and %UniqueName syntax -> GetNode<T>("...")
+  cs = cs.replace(/\$([a-zA-Z0-9_]+)\.text\b/g, 'GetNode<Label>("$1").Text');
+  cs = cs.replace(/\$([a-zA-Z0-9_]+)\.value\b/g, 'GetNode<ProgressBar>("$1").Value');
+  cs = cs.replace(/\$([a-zA-Z0-9_]+)/g, 'GetNode<Control>("$1")');
+
+  // Node instantiation & Variables
   cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*:=\s*([a-zA-Z0-9_]+)\.new\(\)/g, 'var $1 = new $2();');
+  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*=\s*([a-zA-Z0-9_]+)\.new\(\)/g, 'var $1 = new $2();');
+  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*:=\s*([0-9\.\-]+)/g, (m, v, val) => val.includes('.') ? `private double ${v} = ${val};` : `private int ${v} = ${val};`);
+  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*=\s*([0-9\.\-]+)/g, (m, v, val) => val.includes('.') ? `private double ${v} = ${val};` : `private int ${v} = ${val};`);
+  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*:=\s*(".*?")/g, 'private string $1 = $2;');
+  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*=\s*(".*?")/g, 'private string $1 = $2;');
 
-  // Method calls: add_child(x) -> AddChild(x);
-  cs = cs.replace(/add_child\((.*?)\)/g, 'AddChild($1);');
-  cs = cs.replace(/remove_child\((.*?)\)/g, 'RemoveChild($1);');
-  cs = cs.replace(/queue_free\(\)/g, 'QueueFree();');
+  // Method calls
+  cs = cs.replace(/add_child\((.*?)\)/g, 'AddChild($1)');
+  cs = cs.replace(/remove_child\((.*?)\)/g, 'RemoveChild($1)');
+  cs = cs.replace(/queue_free\(\)/g, 'QueueFree()');
+  cs = cs.replace(/\bprint\((.*?)\)/g, 'GD.Print($1)');
+  cs = cs.replace(/\bpush_error\((.*?)\)/g, 'GD.PushError($1)');
+  cs = cs.replace(/\bpush_warning\((.*?)\)/g, 'GD.PushWarning($1)');
+  cs = cs.replace(/\bload\((.*?)\)/g, 'GD.Load<PackedScene>($1)');
+  cs = cs.replace(/\bpreload\((.*?)\)/g, 'GD.Load<PackedScene>($1)');
 
-  // Signal connects: obj.signal_name.connect(func(...): ...) -> obj.SignalName += (...) => { ... };
+  // Signal connects
   cs = cs.replace(/([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\.connect\(func\((.*?)\):\s*([\s\S]*?)\)/g, (m, obj, sig, params, body) => {
-    // PascalCase signal
     const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
     return `${obj}.${pascalSig} += (${params}) => {\n    ${body.trim()};\n};`;
   });
-
-  // Simple Signal connect: obj.signal_name.connect(handler) -> obj.SignalName += handler;
   cs = cs.replace(/([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\.connect\((.*?)\)/g, (m, obj, sig, handler) => {
     const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
     return `${obj}.${pascalSig} += ${handler};`;
   });
 
-  // Vector / Color / Transform instantiation
+  // Vectors & Colors
   cs = cs.replace(/Vector3\((.*?)\)/g, 'new Vector3($1)');
   cs = cs.replace(/Vector2\((.*?)\)/g, 'new Vector2($1)');
   cs = cs.replace(/Color\((.*?)\)/g, 'new Color($1)');
 
-  // Static enum mappings
+  // Static enum & helpers
   cs = cs.replace(/GHaptic\.ImpactStyle\.([A-Z_]+)/g, (m, e) => 'GHaptic.ImpactStyle.' + e.charAt(0) + e.slice(1).toLowerCase());
   cs = cs.replace(/GHaptic\.NotificationType\.([A-Z_]+)/g, (m, e) => 'GHaptic.NotificationType.' + e.charAt(0) + e.slice(1).toLowerCase());
   cs = cs.replace(/GTable\.SelectionMode\.([A-Z_]+)/g, (m, e) => 'GTable.SelectionModeEnum.' + e.charAt(0) + e.slice(1).toLowerCase());
-
-  // Static calls
   cs = cs.replace(/GHaptic\.impact\((.*?)\)/g, 'GHaptic.Impact($1);');
   cs = cs.replace(/GHaptic\.notification\((.*?)\)/g, 'GHaptic.Notification($1);');
-  cs = cs.replace(/GMessage\.([a-z]+)\((.*?)\)/g, (m, fn, arg) => `GMessage.${fn.charAt(0).toUpperCase() + fn.slice(1)}(${arg});`);
+  cs = cs.replace(/GMessage\.([a-z]+)\((.*?)\)/g, (m, fn, arg) => `GMessage.${fn.charAt(0).toUpperCase() + fn.slice(1)}(${arg})`);
 
-  // Common Property assignments (converting snake_case property to PascalCase in C#)
+  // Properties mapping
   const propMap = [
-    ['stripe', 'Stripe'],
-    ['border', 'Border'],
-    ['selection_mode', 'SelectionMode'],
-    ['empty_text', 'EmptyText'],
-    ['columns', 'Columns'],
-    ['data', 'Data'],
-    ['target_node_path', 'TargetNodePath'],
-    ['offset', 'Offset'],
-    ['billboard_mode', 'BillboardMode'],
-    ['distance_fade', 'DistanceFade'],
-    ['distance_scaling', 'DistanceScaling'],
-    ['cull_behind_camera', 'CullBehindCamera'],
-    ['amount', 'Amount'],
-    ['lifetime', 'Lifetime'],
-    ['explosiveness', 'Explosiveness'],
-    ['initial_velocity_min', 'InitialVelocityMin'],
-    ['initial_velocity_max', 'InitialVelocityMax'],
-    ['gravity', 'Gravity'],
-    ['color', 'Color'],
-    ['process_material', 'ProcessMaterial'],
-    ['one_shot', 'OneShot'],
-    ['emitting', 'Emitting'],
-    ['skeleton_path', 'SkeletonPath'],
-    ['bone_name', 'BoneName'],
-    ['particle_emitter', 'ParticleEmitter'],
-    ['inherit_rotation', 'InheritRotation'],
-    ['local_offset', 'LocalOffset'],
-    ['system_prompt', 'SystemPrompt'],
-    ['npc_id', 'NpcId'],
-    ['text', 'Text'],
-    ['type', 'Type'],
-    ['size', 'Size'],
-    ['disabled', 'Disabled'],
-    ['loading', 'Loading'],
-    ['placeholder', 'Placeholder'],
-    ['value', 'Value'],
-    ['min_value', 'MinValue'],
-    ['max_value', 'MaxValue'],
-    ['step', 'Step'],
-    ['visible', 'Visible']
+    ['stripe', 'Stripe'], ['border', 'Border'], ['selection_mode', 'SelectionMode'],
+    ['empty_text', 'EmptyText'], ['columns', 'Columns'], ['data', 'Data'],
+    ['target_node_path', 'TargetNodePath'], ['offset', 'Offset'], ['billboard_mode', 'BillboardMode'],
+    ['distance_fade', 'DistanceFade'], ['distance_scaling', 'DistanceScaling'],
+    ['cull_behind_camera', 'CullBehindCamera'], ['amount', 'Amount'], ['lifetime', 'Lifetime'],
+    ['explosiveness', 'Explosiveness'], ['initial_velocity_min', 'InitialVelocityMin'],
+    ['initial_velocity_max', 'InitialVelocityMax'], ['gravity', 'Gravity'], ['color', 'Color'],
+    ['process_material', 'ProcessMaterial'], ['one_shot', 'OneShot'], ['emitting', 'Emitting'],
+    ['skeleton_path', 'SkeletonPath'], ['bone_name', 'BoneName'], ['particle_emitter', 'ParticleEmitter'],
+    ['inherit_rotation', 'InheritRotation'], ['local_offset', 'LocalOffset'],
+    ['system_prompt', 'SystemPrompt'], ['npc_id', 'NpcId'], ['text', 'Text'],
+    ['type', 'Type'], ['size', 'Size'], ['disabled', 'Disabled'], ['loading', 'Loading'],
+    ['placeholder', 'Placeholder'], ['value', 'Value'], ['min_value', 'MinValue'],
+    ['max_value', 'MaxValue'], ['step', 'Step'], ['visible', 'Visible']
   ];
 
   propMap.forEach(([pyProp, csProp]) => {
@@ -3543,17 +3590,34 @@ window.convertGDScriptToCSharp = function(gdCode) {
     cs = cs.replace(reg, `$1.${csProp} =`);
   });
 
-  // Ensure line ends with semicolon in C# if not empty and not comment/brace
+  // Format line endings with semicolons
   const lines = cs.split('\n');
   const formattedLines = lines.map(line => {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('//') || trimmed.endsWith(';') || trimmed.endsWith('{') || trimmed.endsWith('}') || trimmed.startsWith('public') || trimmed.startsWith('using')) {
+    if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('[') || trimmed.endsWith(';') || trimmed.endsWith('{') || trimmed.endsWith('}') || trimmed.startsWith('public') || trimmed.startsWith('private') || trimmed.startsWith('using') || trimmed.endsWith(':')) {
+      return line;
+    }
+    if (trimmed.startsWith('if ') || trimmed.startsWith('else if') || trimmed.startsWith('for ') || trimmed.startsWith('while ') || trimmed.startsWith('{') || trimmed.startsWith('}')) {
       return line;
     }
     return line + ';';
   });
 
-  return formattedLines.join('\n');
+  let bodyCode = formattedLines.join('\n');
+  const openBraces = (bodyCode.match(/\{/g) || []).length;
+  const closeBraces = (bodyCode.match(/\}/g) || []).length;
+  for (let i = 0; i < openBraces - closeBraces; i++) {
+    bodyCode += '\n    }';
+  }
+
+  let result = '';
+  if (isFullScript) {
+    result = `using Godot;\nusing System;\nusing GotodUI;\n\npublic partial class ${className} : ${baseClass}\n{\n${bodyCode.split('\n').map(l => '    ' + l).join('\n')}\n}`;
+  } else {
+    result = `// C# (Godot 4 .NET)\nusing Godot;\nusing GotodUI;\n\n` + bodyCode;
+  }
+
+  return result;
 };
 
 window.switchCodeLanguage = function(lang, btn) {
