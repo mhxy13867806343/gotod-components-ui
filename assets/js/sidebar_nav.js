@@ -248,6 +248,8 @@ window.SIDEBAR_CONFIG = {
           { key: 'tabs', title: 'GTabs 标签页' },
           { key: 'collapse', title: 'GCollapse 折叠面板' },
           { key: 'steps', title: 'GSteps 步骤条' },
+          { key: 'virtual-list', title: '⚡ GVirtualList 虚拟长列表 (v1.3)' },
+          { key: 'i18n', title: '🌐 GI18n 国际化引擎 (v1.3)' },
           { key: 'space', title: 'GSpace 间距布局' }
         ]
       },

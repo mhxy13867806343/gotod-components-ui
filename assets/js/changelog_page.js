@@ -1,40 +1,60 @@
 // =========================================================================
 // Gotod Components UI - Changelog & Release Updates (Using Steps Component)
-// 排序逻辑：未来规划在最前 -> 最新现行版本 -> 历史版本往后排列
+// 排序逻辑：未来规划在最前 -> 最新现行版本 (v1.3.0) -> 历史版本往后排列
 // =========================================================================
 
 window.CHANGELOG_DATA = [
   {
-    version: "v1.3.0 (规划中)",
-    date: "2026-09-15 预计",
+    version: "v1.4.0 (规划中)",
+    date: "2026-09-20 预计",
     status: "wait", // wait, process, finish
     icon: "fa-compass",
-    title: "v1.3.0 未来版本规划 (Roadmap)",
-    summary: "计划引入虚拟滚动长列表 (Virtual List)、移动端手势折叠手风琴增强及游戏多语言 i18n 实时热切换引擎。",
+    title: "v1.4.0 未来版本规划 (Roadmap)",
+    summary: "计划引入 3D 空间 HUD 投影组件、骨骼动画粒子特效绑定器与跨平台触感震动反馈 Haptic 模块。",
     highlights: [
       {
-        tag: "Virtual List 虚拟列表",
+        tag: "3D HUD 空间投影",
         type: "info",
-        desc: "支持百万级数据超高性能虚拟长列表平滑渲染，GPU 节点自动回收，内存零激增。"
+        desc: "支持 2D UI 控件一键透视映射至 3D 游戏世界坐标系，自动 Billboard 朝向摄像机。"
       },
       {
-        tag: "i18n 国际化引擎",
+        tag: "Haptic 触觉引擎",
         type: "info",
-        desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持全场景多语言动态热切换。"
+        desc: "对接 iOS / Android 移动端马达，提供多种轻快、刚性、柔和点击物理触感反馈。"
+      }
+    ]
+  },
+  {
+    version: "v1.3.0",
+    date: "2026-08-31",
+    status: "process",
+    icon: "fa-bolt-lightning",
+    title: "v1.3.0 性能与国际化重磅发布 (今日最新版)",
+    summary: "全新推出百万级数据 GVirtualList 虚拟列表、GI18n 全场景多语言动态热切换引擎，以及 GCollapse 触控手势滑动展开与弹簧过渡曲线。",
+    highlights: [
+      {
+        tag: "GVirtualList 虚拟长列表",
+        type: "success",
+        desc: "支持 <b>1,000,000+ 百万级数据</b> 超高性能平滑渲染，GPU 节点自动切片回收，内存零激增，支持动态高度预估与毫秒级瞬时定位。"
       },
       {
-        tag: "Collapse 手风琴手势",
-        type: "info",
-        desc: "增强移动端触控滑动展开与自定义折叠过渡曲线。"
+        tag: "GI18n 国际化引擎",
+        type: "primary",
+        desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持多语言全 UI 节点动态热切换、动态参数插值（<code>{name}</code>）与回退语言机制。"
+      },
+      {
+        tag: "GCollapse 手势与曲线",
+        type: "warning",
+        desc: "增强移动端触控滑动展开手势（<code>gesture_enabled</code>），支持三次贝塞尔与弹簧果冻回弹过渡曲线（<code>TRANS_BACK</code> / <code>TRANS_SPRING</code>）。"
       }
     ]
   },
   {
     version: "v1.2.0",
     date: "2026-08-31",
-    status: "process",
+    status: "finish",
     icon: "fa-rocket",
-    title: "v1.2.0 重磅功能发布 (今日全量升级)",
+    title: "v1.2.0 全交互与单文件架构升级",
     summary: "Tabs 滚动吸顶与全交互重构、FAB 二维自由拖拽与磁吸、数字输入范围极值拦截、密码显隐切换与 42 组件单文件解耦架构。",
     highlights: [
       {
@@ -111,7 +131,7 @@ window.CHANGELOG_DATA = [
   }
 ];
 
-window.currentStepIndex = 1; // Default highlight v1.2.0 (index 1)
+window.currentStepIndex = 1; // Default highlight v1.3.0 (index 1)
 
 window.renderChangelogPage = function(subKey = 'changelog-latest') {
   const container = document.getElementById('mainContent');
@@ -136,7 +156,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             版本更新日志与发布历程 (Changelog)
           </h1>
           <p style="font-size:13px; color:var(--text-secondary); margin:0;">
-            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本居中 ➔ 历史版本在后。
+            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本 (v1.3.0) 居中 ➔ 历史版本在后。
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -147,14 +167,14 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             后一版本 <i class="fa-solid fa-arrow-right"></i>
           </button>
           <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="window.setChangelogStep(1)">
-            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.2.0)
+            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.3.0)
           </button>
         </div>
       </div>
     </div>
   `;
 
-  // Horizontal Steps Bar (Roadmap -> Latest -> History)
+  // Horizontal Steps Bar
   let horizontalStepsHtml = `
     <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:10px; padding:18px 24px; margin-bottom:24px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
       <div style="display:flex; justify-content:space-between; align-items:center; position:relative;">
@@ -274,7 +294,7 @@ window.nextChangelogStep = function() {
 };
 
 window.CHANGELOG_CATALOG = {
-  'changelog-roadmap': { title: "v1.3.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
-  'changelog-latest': { title: "v1.2.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
-  'changelog-history': { title: "历史版本历程 (v1.1 / v1.0)", desc: "历史版本时间线。", demos: [] }
+  'changelog-roadmap': { title: "v1.4.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
+  'changelog-latest': { title: "v1.3.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
+  'changelog-history': { title: "历史版本历程 (v1.2 / v1.1 / v1.0)", desc: "历史版本时间线。", demos: [] }
 };
