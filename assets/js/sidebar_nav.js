@@ -244,6 +244,8 @@ window.SIDEBAR_CONFIG = {
         items: [
           { key: 'table', title: '📊 GTable & TableV2 表格', version: 'v1.4' },
           { key: 'particle-studio', title: '✨ GParticleStudio 粒子工坊', version: 'v1.5' },
+          { key: 'skeleton-particle', title: '🦴 GSkeletonParticle 骨骼粒子绑定', version: 'v1.6' },
+          { key: 'shader-studio', title: '🔮 GShaderStudio 着色器工坊', version: 'v1.6' },
           { key: 'virtual-list', title: '⚡ GVirtualList 虚拟长列表', version: 'v1.3' },
           { key: 'i18n', title: '🌐 GI18n 国际化引擎', version: 'v1.3' },
           { key: 'tabs', title: 'GTabs 标签页 (吸顶/动画/拖拽)', version: 'v1.2' },
@@ -286,37 +288,26 @@ window.SIDEBAR_CONFIG = {
     placeholder: 'Search networking & physics...',
     groups: [
       {
-        title: 'Networking 网络通信与多人联机',
+        title: '游戏网络与物理系统 (Networking & Physics)',
         items: [
-          { key: 'net-multiplayer', title: '🌐 高级多人联机与 RPC 架构' },
-          { key: 'net-axios', title: '🚀 GAxios: Axios 风格 HTTP 客户端' },
-          { key: 'net-http', title: '📡 GHttp 异步请求与 RESTful API' },
-          { key: 'net-websocket', title: '⚡ GWebSocket 实时长连接与心跳' },
-          { key: 'net-webrtc', title: '🤝 WebRTC 点对点 P2P 联机通信' }
-        ]
-      },
-      {
-        title: 'Physics 程序化物理与坐标计算',
-        items: [
-          { key: 'phys-character-rigidbody', title: '🏃 CharacterBody 运动学与 RigidBody 刚体' },
-          { key: 'phys-area-collision', title: '📦 Area2D 触发器与 2D/3D 碰撞形状' },
-          { key: 'phys-programmatic', title: '🎯 纯程序化物理碰撞与直接空间查询' },
-          { key: 'phys-coord-transforms', title: '📐 GCoord 坐标系转换与大世界浮动原点' }
+          { key: 'net-sync', title: '⚡ MultiplayerSynchronizer 多人网络同步' },
+          { key: 'net-rpc', title: '📡 RPC 远程过程调用架构' },
+          { key: 'physics-2d-rigidbody', title: '🎯 RigidBody2D 刚体物理与碰撞反馈' },
+          { key: 'physics-raycast', title: '📐 RayCast2D 射线检测与视线遮挡' }
         ]
       }
     ],
-    defaultKey: 'net-multiplayer'
+    defaultKey: 'net-sync'
   },
   'slots': {
-    placeholder: 'Search slots & syntax...',
+    placeholder: 'Search slots & proxy...',
     groups: [
       {
-        title: 'Vue-Style Slots 插槽系统专题',
+        title: 'Vue 风格插槽系统 (Slots Architecture)',
         items: [
-          { key: 'slot-concept', title: '🎰 插槽设计理念与点语法规范' },
-          { key: 'slot-anything', title: '✨ 万物皆可插槽 (Support ANYTHING)' },
-          { key: 'slot-default-named', title: '🏷️ 默认与具名插槽 (#header / #footer)' },
-          { key: 'slot-custom-dynamic', title: '⚡ 自定义具名与动态插槽 (.t1 / .t2)' },
+          { key: 'slot-concept', title: '💡 插槽核心设计理念' },
+          { key: 'slot-default', title: '📦 默认插槽 (Default Slot)' },
+          { key: 'slot-named', title: '🏷️ 具名插槽 (Named Slots)' },
           { key: 'slot-scoped', title: '🧬 作用域插槽 (Scoped Slot 数据透传)' },
           { key: 'slot-engine-impl', title: '⚙️ GSlotProxy 底层实现与引擎原理' }
         ]

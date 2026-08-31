@@ -3110,3 +3110,336 @@ window.resetAIDialogue = function() {
   }
   if (window.showToast) window.showToast('AI 对话树已重置为初始状态', 'info');
 };
+
+// =========================================================================
+// GSkeletonParticleBinder Global Demo Helpers
+// =========================================================================
+window.skeletonDemoState = {
+  socket: 'weapon',
+  followRotation: true,
+  animTime: 0,
+  isAttacking: false,
+  attackProgress: 0,
+  particles: []
+};
+
+window.initSkeletonDemo = function() {
+  const canvas = document.getElementById('skeletonCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const dt = 0.016;
+    window.skeletonDemoState.animTime += dt * 3;
+
+    if (window.skeletonDemoState.isAttacking) {
+      window.skeletonDemoState.attackProgress += dt * 3.5;
+      if (window.skeletonDemoState.attackProgress >= 1) {
+        window.skeletonDemoState.isAttacking = false;
+        window.skeletonDemoState.attackProgress = 0;
+      }
+    }
+
+    const t = window.skeletonDemoState.animTime;
+    const isAtk = window.skeletonDemoState.isAttacking;
+    const atkP = window.skeletonDemoState.attackProgress;
+
+    // Character Base Position
+    const rootX = canvas.width / 2;
+    const rootY = canvas.height / 2 + 50;
+
+    // Breathing / Idle movement
+    const breathY = Math.sin(t * 1.5) * 3;
+
+    // Bone joints
+    const hipX = rootX;
+    const hipY = rootY - 45 + breathY;
+    const chestX = hipX;
+    const chestY = hipY - 40;
+    const headX = chestX;
+    const headY = chestY - 22;
+
+    // Arms
+    let armAngleR = Math.sin(t * 2) * 0.2 + 0.8;
+    if (isAtk) {
+      armAngleR = -1.2 + Math.sin(atkP * Math.PI) * 3.0;
+    }
+    const handRX = chestX + Math.cos(armAngleR) * 35;
+    const handRY = chestY + Math.sin(armAngleR) * 35;
+
+    // Weapon Tip
+    const swordAngle = armAngleR + 0.4;
+    const swordTipX = handRX + Math.cos(swordAngle) * 45;
+    const swordTipY = handRY + Math.sin(swordAngle) * 45;
+
+    // Feet
+    const footLX = hipX - 18 + Math.sin(t * 2) * 4;
+    const footLY = rootY;
+    const footRX = hipX + 18 - Math.sin(t * 2) * 4;
+    const footRY = rootY;
+
+    // Draw Skeleton Bones
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#6366f1';
+
+    // Spine
+    ctx.beginPath(); ctx.moveTo(hipX, hipY); ctx.lineTo(chestX, chestY); ctx.stroke();
+    // Head
+    ctx.fillStyle = '#a5b4fc';
+    ctx.beginPath(); ctx.arc(headX, headY, 12, 0, Math.PI * 2); ctx.fill();
+    // Legs
+    ctx.beginPath(); ctx.moveTo(hipX, hipY); ctx.lineTo(footLX, footLY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(hipX, hipY); ctx.lineTo(footRX, footRY); ctx.stroke();
+    // Arms
+    ctx.beginPath(); ctx.moveTo(chestX, chestY); ctx.lineTo(handRX, handRY); ctx.stroke();
+
+    // Weapon Sword/Staff
+    if (window.skeletonDemoState.socket === 'staff') {
+      ctx.strokeStyle = '#c084fc';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(handRX - 10, handRY - 10); ctx.lineTo(swordTipX, swordTipY); ctx.stroke();
+      ctx.fillStyle = '#f472b6';
+      ctx.beginPath(); ctx.arc(swordTipX, swordTipY, 6, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(handRX, handRY); ctx.lineTo(swordTipX, swordTipY); ctx.stroke();
+    }
+
+    // Determine Active Socket Position & Rotation
+    let socketX = swordTipX;
+    let socketY = swordTipY;
+    let socketAngle = swordAngle;
+
+    if (window.skeletonDemoState.socket === 'feet') {
+      socketX = (footLX + footRX) / 2;
+      socketY = footLY;
+      socketAngle = Math.PI / 2;
+    }
+
+    // Update Label
+    const label = document.getElementById('curBoneLabel');
+    if (label) {
+      label.innerText = window.skeletonDemoState.socket + ` (X: ${Math.round(socketX)}, Y: ${Math.round(socketY)})`;
+    }
+
+    // Spawn Particles at Socket
+    if (isAtk || Math.random() < 0.6) {
+      const pColor = window.skeletonDemoState.socket === 'staff' ? '#ec4899' : (window.skeletonDemoState.socket === 'feet' ? '#94a3b8' : '#f59e0b');
+      const spreadAngle = window.skeletonDemoState.followRotation ? socketAngle + (Math.random() - 0.5) * 0.8 : -Math.PI / 2 + (Math.random() - 0.5) * 1.5;
+      const speed = isAtk ? 180 + Math.random() * 120 : 40 + Math.random() * 60;
+      
+      window.skeletonDemoState.particles.push({
+        x: socketX,
+        y: socketY,
+        vx: Math.cos(spreadAngle) * speed,
+        vy: Math.sin(spreadAngle) * speed,
+        life: 0.5,
+        maxLife: 0.5,
+        size: isAtk ? 3.5 : 2.0,
+        color: pColor
+      });
+    }
+
+    // Render & Update Particles
+    const active = [];
+    window.skeletonDemoState.particles.forEach(p => {
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.life -= dt;
+      const alpha = Math.max(0, p.life / p.maxLife);
+      if (p.life > 0) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        active.push(p);
+      }
+    });
+    window.skeletonDemoState.particles = active;
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+
+window.switchBoneSocket = function(socket) {
+  window.skeletonDemoState.socket = socket;
+  ['weapon', 'staff', 'feet'].forEach(s => {
+    const btn = document.getElementById('boneBtn_' + s);
+    if (btn) btn.className = (s === socket) ? 'g-btn g-btn-primary' : 'g-btn g-btn-default';
+  });
+  if (window.showToast) window.showToast(`已切换粒子挂点至骨骼关节: 【${socket}】`, 'info');
+};
+
+window.playSkeletonAttackAnim = function() {
+  window.skeletonDemoState.isAttacking = true;
+  window.skeletonDemoState.attackProgress = 0;
+  if (window.showToast) window.showToast('⚔️ 触发骨骼挥砍攻击！刀光粒子动态喷射', 'error');
+};
+
+window.toggleBoneFollowRotation = function(checked) {
+  window.skeletonDemoState.followRotation = checked;
+  if (window.showToast) window.showToast(`粒子发射角度继承骨骼旋转: ${checked ? '已开启' : '已关闭'}`, 'info');
+};
+
+// =========================================================================
+// GShaderStudio Global Demo Helpers
+// =========================================================================
+window.currentShaderMode = 'dissolve';
+window.shaderParams = {
+  dissolve: { amount: 0.35, edge: 0.08 },
+  hologram: { speed: 1.5, rim: 0.8 },
+  scanline: { density: 40, opacity: 0.6 },
+  frosted: { blur: 12, opacity: 0.15 }
+};
+
+window.switchShaderMode = function(mode) {
+  window.currentShaderMode = mode;
+  ['dissolve', 'hologram', 'scanline', 'frosted'].forEach(m => {
+    const btn = document.getElementById('shaderBtn_' + m);
+    if (btn) btn.className = (m === mode) ? 'g-btn g-btn-primary' : 'g-btn g-btn-default';
+  });
+
+  const target = document.getElementById('shaderPreviewTarget');
+  const overlay = document.getElementById('shaderEffectOverlay');
+  const badge = document.getElementById('shaderNameBadge');
+  const paramsBox = document.getElementById('shaderParamsContainer');
+
+  if (!target || !overlay || !badge || !paramsBox) return;
+
+  if (mode === 'dissolve') {
+    target.style.filter = 'none';
+    target.style.background = 'rgba(255,255,255,0.08)';
+    overlay.style.background = 'radial-gradient(circle, rgba(255,100,20,0.5) 0%, transparent 70%)';
+    badge.innerText = 'Shader: Dissolve (消融阈值: 0.35)';
+    paramsBox.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+          <span>消融阈值 (Dissolve Amount)</span>
+          <span id="shValAmount" style="font-weight:700; color:var(--primary);">0.35</span>
+        </div>
+        <input type="range" id="shCtrlAmount" min="0" max="1" step="0.02" value="0.35" style="width:100%; accent-color:var(--primary);" oninput="window.updateShaderParam('amount', this.value)">
+      </div>
+    `;
+  } else if (mode === 'hologram') {
+    target.style.filter = 'hue-rotate(180deg) drop-shadow(0 0 16px rgba(56,189,248,0.6))';
+    target.style.background = 'rgba(56,189,248,0.15)';
+    overlay.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%)';
+    badge.innerText = 'Shader: Hologram (彩虹全息流光)';
+    paramsBox.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+          <span>全息色相旋转速度 (Hue Speed)</span>
+          <span id="shValSpeed" style="font-weight:700; color:var(--primary);">1.5x</span>
+        </div>
+        <input type="range" id="shCtrlSpeed" min="0.5" max="4" step="0.1" value="1.5" style="width:100%; accent-color:var(--primary);" oninput="window.updateShaderParam('speed', this.value)">
+      </div>
+    `;
+  } else if (mode === 'scanline') {
+    target.style.filter = 'contrast(1.2) brightness(1.1)';
+    target.style.background = 'rgba(16,185,129,0.12)';
+    overlay.style.background = 'repeating-linear-gradient(0deg, rgba(0,255,100,0.15) 0px, rgba(0,255,100,0.15) 2px, transparent 2px, transparent 6px)';
+    badge.innerText = 'Shader: Scanline (CRT 扫描线)';
+    paramsBox.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+          <span>扫描线密度 (Density)</span>
+          <span id="shValDensity" style="font-weight:700; color:var(--primary);">40 lines</span>
+        </div>
+        <input type="range" id="shCtrlDensity" min="10" max="80" step="5" value="40" style="width:100%; accent-color:var(--primary);" oninput="window.updateShaderParam('density', this.value)">
+      </div>
+    `;
+  } else if (mode === 'frosted') {
+    target.style.filter = 'none';
+    target.style.background = 'rgba(255,255,255,0.12)';
+    target.style.backdropFilter = 'blur(16px)';
+    overlay.style.background = 'none';
+    badge.innerText = 'Shader: Frosted Glass (毛玻璃背景模糊)';
+    paramsBox.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+          <span>背景高斯模糊强度 (Blur Radius)</span>
+          <span id="shValBlur" style="font-weight:700; color:var(--primary);">16px</span>
+        </div>
+        <input type="range" id="shCtrlBlur" min="2" max="32" step="1" value="16" style="width:100%; accent-color:var(--primary);" oninput="window.updateShaderParam('blur', this.value)">
+      </div>
+    `;
+  }
+
+  if (window.showToast) window.showToast(`已加载【${mode.toUpperCase()}】着色器管线！`, 'success');
+};
+
+window.updateShaderParam = function(param, val) {
+  const target = document.getElementById('shaderPreviewTarget');
+  if (param === 'amount') {
+    const lbl = document.getElementById('shValAmount');
+    if (lbl) lbl.innerText = val;
+    if (target) target.style.opacity = Math.max(0.1, 1.0 - parseFloat(val) * 0.9);
+  } else if (param === 'blur') {
+    const lbl = document.getElementById('shValBlur');
+    if (lbl) lbl.innerText = val + 'px';
+    if (target) target.style.backdropFilter = `blur(${val}px)`;
+  }
+};
+
+window.copyGodotShaderCode = function() {
+  const code = `// Godot 4 官方 Shader 代码 (${window.currentShaderMode})\nshader_type canvas_item;\n\nuniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;\nuniform float intensity : hint_range(0.0, 1.0) = 0.5;\n\nvoid fragment() {\n    vec4 color = texture(TEXTURE, UV);\n    COLOR = color;\n}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(() => {
+      if (window.showToast) window.showToast('已复制 Godot 4 Shader 代码！', 'success');
+    });
+  } else {
+    if (window.showToast) window.showToast('Shader 代码生成完毕！', 'success');
+  }
+};
+
+// =========================================================================
+// Element Plus Style Demo Card Code Toolbar Helpers
+// =========================================================================
+window.toggleDemoSourceCode = function(btn) {
+  const card = btn.closest('.demo-card');
+  if (!card) return;
+  const wrapper = card.querySelector('.demo-source-wrapper');
+  if (!wrapper) return;
+
+  const isHidden = wrapper.style.display === 'none' || getComputedStyle(wrapper).display === 'none';
+  if (isHidden) {
+    wrapper.style.display = 'block';
+    btn.classList.add('active');
+    btn.title = '隐藏源代码';
+    if (window.showToast) window.showToast('已展开源代码', 'info');
+  } else {
+    wrapper.style.display = 'none';
+    btn.classList.remove('active');
+    btn.title = '查看源代码';
+  }
+};
+
+window.copyDemoCodeFromCard = function(btn) {
+  const card = btn.closest('.demo-card');
+  if (!card) return;
+  const codeEl = card.querySelector('.demo-source-wrapper code, pre code, code');
+  if (!codeEl) return;
+  const text = codeEl.innerText || codeEl.textContent;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const origHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-check" style="color:var(--primary);"></i>';
+      setTimeout(() => { btn.innerHTML = origHtml; }, 1500);
+      if (window.showToast) window.showToast('✅ 源代码已成功复制到剪贴板！', 'success');
+    });
+  } else {
+    if (window.showToast) window.showToast('源代码已复制！', 'success');
+  }
+};

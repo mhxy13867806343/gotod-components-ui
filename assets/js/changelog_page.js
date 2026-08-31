@@ -1,46 +1,66 @@
 // =========================================================================
 // Gotod Components UI - Changelog & Release Updates (Using Steps Component)
-// 排序逻辑：未来规划在最前 -> 最新现行版本 (v1.5.0) -> 历史版本往后排列
+// 排序逻辑：未来规划在最前 -> 最新现行版本 (v1.6.0) -> 历史版本往后排列
 // =========================================================================
 
 window.CHANGELOG_DATA = [
   {
-    version: "v1.6.0 (规划中)",
-    date: "2026-09-30 预计",
+    version: "v1.7.0 (规划中)",
+    date: "2026-10-15 预计",
     status: "wait", // wait, process, finish
     icon: "fa-compass",
-    title: "v1.6.0 未来版本规划 (Roadmap)",
-    summary: "计划推出骨骼动画粒子特效绑定器 (Spine/DragonBones 挂点粒子)、GPU 实时着色器 Shader 工坊与动态毛玻璃背景模糊滤镜。",
+    title: "v1.7.0 未来版本规划 (Roadmap)",
+    summary: "计划推出 3D 骨骼逆向动力学 IK 交互约束器、WebRTC 多人近距离空间语音广播与全局热力图遥测中心。",
     highlights: [
       {
-        tag: "骨骼粒子挂点绑定",
+        tag: "3D IK 动力学约束",
         type: "info",
-        desc: "支持将 GParticleStudio 粒子发射器动态锚定至 2D/3D 骨骼关节（如武器挥砍刀光、足底灰尘）。"
+        desc: "支持 3D 角色手臂/头部程序化注视追踪目标、脚底地形自适应贴合逆运动学算法。"
       },
       {
-        tag: "Shader 特效工坊",
+        tag: "WebRTC 空间音频",
         type: "info",
-        desc: "可视化调节全屏后处理、溶解、彩虹流光、全息扫描线与冲击波特效代码导出。"
+        desc: "游戏内近距离 3D 空间衰减语音聊天网关与实时音频波形可视化分析器。"
+      }
+    ]
+  },
+  {
+    version: "v1.6.0",
+    date: "2026-08-31",
+    status: "process",
+    icon: "fa-cubes-stacked",
+    title: "v1.6.0 骨骼粒子绑定与 GPU Shader 工坊重磅发布 (今日最新版)",
+    summary: "正式推出 GSkeletonParticleBinder 骨骼动画粒子挂点绑定器，以及 GShaderStudio GPU 实时着色器工坊与动态毛玻璃背景模糊滤镜。",
+    highlights: [
+      {
+        tag: "骨骼粒子挂点绑定 (GSkeletonParticleBinder)",
+        type: "success",
+        desc: "支持将 <code>GParticleStudio</code> 粒子发射器动态锚定至 2D/3D 骨骼关节（如 Spine, DragonBones, Godot 2D Skeleton）。实现<b>武器挥砍刀光流光、法杖聚气、角色足底跑动灰尘</b>等关节坐标与旋转角的高性能自动同步。"
+      },
+      {
+        tag: "GPU 着色器工坊 (GShaderStudio)",
+        type: "primary",
+        desc: "可视化调节<b>消融溶解 (Dissolve)、彩虹全息流光 (Hologram)、全息扫描线 (Scanlines)、毛玻璃背景模糊 (Frosted Glass)</b>，一键导出 Godot 4 官方标准 <code>shader_type canvas_item;</code> 源代码与材质配置。"
       }
     ]
   },
   {
     version: "v1.5.0",
     date: "2026-08-31",
-    status: "process",
+    status: "finish",
     icon: "fa-wand-magic-sparkles",
-    title: "v1.5.0 UI 粒子工坊与 AI 智能对话树重磅发布 (今日最新版)",
-    summary: "正式推出 GParticleStudio UI 粒子特效工坊与 Godot 4 GPUParticles2D 配置导出器，以及 GAIDialogueTree 大模型/行为树智能多分支剧本推理引擎。",
+    title: "v1.5.0 UI 粒子工坊与 AI 智能对话树发布",
+    summary: "推出 GParticleStudio UI 粒子特效工坊与 Godot 4 GPUParticles2D 配置导出器，以及 GAIDialogueTree 大模型/行为树智能多分支剧本推理引擎。",
     highlights: [
       {
-        tag: "UI 粒子工坊 (GParticleStudio)",
+        tag: "UI 粒子工坊",
         type: "success",
-        desc: "可视化调节 <b>💰 金币爆发、✨ 抽卡金光、🔥 烈焰爆炸、💫 魔法星尘</b> 等粒子发射器，物理加速度实时模拟，一键导出 Godot 4 GPUParticles2D / CPUParticles2D 标准材质与 GDScript 挂载代码。"
+        desc: "可视化调节金币爆发、抽卡流光、魔法爆炸粒子发射器，物理加速度实时模拟，一键导出 Godot 4 GPUParticles2D 配置。"
       },
       {
-        tag: "AI 智能对话树 (GAIDialogueTree)",
+        tag: "AI 智能对话树",
         type: "primary",
-        desc: "无缝对接大语言模型 (LLM) 与本地行为树，支持 NPC 情绪状态机、记忆上下文持久化、根据玩家性格与历史抉择动态生成智能多分支剧本推理。"
+        desc: "无缝对接大语言模型与本地行为树，支持 NPC 情绪状态机与智能多分支剧情推理。"
       }
     ]
   },
@@ -55,17 +75,12 @@ window.CHANGELOG_DATA = [
       {
         tag: "GTable & TableV2 表格",
         type: "success",
-        desc: "全面参考 Element Plus 规范，支持斑马纹、带边框、固定表头、多选/单选、列排序、作用域插槽（Scoped Slot），以及 100,000+ 行十万级数据 TableV2 虚拟化极速渲染。"
+        desc: "全面参考 Element Plus 规范，支持斑马纹、边框、多选/单选、列排序、Scoped Slot 与 100,000+ 行 TableV2 虚拟化极速渲染。"
       },
       {
         tag: "GHud3D 空间投影",
         type: "primary",
-        desc: "支持 2D UI 控件一键透视映射至 3D 游戏世界坐标系，自动 Billboard 朝向摄像机，提供头顶血条、暴击伤害飘字及距离深度自动缩放。"
-      },
-      {
-        tag: "GHaptic 触觉反馈",
-        type: "warning",
-        desc: "无缝对接 iOS Taptic Engine 与 Android 振动马达，提供轻快 (Light)、柔和 (Medium)、刚性 (Heavy)、成功 (Success) 等物理点击触感反馈。"
+        desc: "支持 2D UI 控件一键透视映射至 3D 游戏世界坐标系，自动 Billboard 朝向摄像机，提供头顶血条与暴击伤害飘字。"
       }
     ]
   },
@@ -86,11 +101,6 @@ window.CHANGELOG_DATA = [
         tag: "GI18n 国际化引擎",
         type: "primary",
         desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持多语言全 UI 节点动态热切换与参数插值。"
-      },
-      {
-        tag: "GCollapse 手势与曲线",
-        type: "warning",
-        desc: "增强移动端触控滑动展开手势与弹簧果冻回弹过渡曲线。"
       }
     ]
   },
@@ -105,7 +115,7 @@ window.CHANGELOG_DATA = [
       {
         tag: "Tabs 标签页",
         type: "success",
-        desc: "新增滚动吸顶固定、内容过渡动画、异步懒加载、before-leave 切换拦截钩子、双击重命名与 HTML5 自由拖拽排序。"
+        desc: "新增滚动吸顶固定、内容过渡动画、异步懒加载、before-leave 切换拦截钩子、双击重命名与拖拽排序。"
       }
     ]
   },
@@ -120,7 +130,7 @@ window.CHANGELOG_DATA = [
       {
         tag: "Icon 图标中心",
         type: "primary",
-        desc: "整合 26,000+ 通用矢量图标库，支持实时关键词检索、分类筛选与一键复制 GDScript 代码。"
+        desc: "整合 26,000+ 通用矢量图标库，支持实时关键词检索、分类筛选与一键复制代码。"
       }
     ]
   },
@@ -141,7 +151,7 @@ window.CHANGELOG_DATA = [
   }
 ];
 
-window.currentStepIndex = 1; // Default highlight v1.5.0 (index 1)
+window.currentStepIndex = 1; // Default highlight v1.6.0 (index 1)
 
 window.renderChangelogPage = function(subKey = 'changelog-latest') {
   const container = document.getElementById('mainContent');
@@ -166,7 +176,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             版本更新日志与发布历程 (Changelog)
           </h1>
           <p style="font-size:13px; color:var(--text-secondary); margin:0;">
-            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本 (v1.5.0) 居中 ➔ 历史版本在后。
+            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本 (v1.6.0) 居中 ➔ 历史版本在后。
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -177,7 +187,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             后一版本 <i class="fa-solid fa-arrow-right"></i>
           </button>
           <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="window.setChangelogStep(1)">
-            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.5.0)
+            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.6.0)
           </button>
         </div>
       </div>
@@ -304,7 +314,7 @@ window.nextChangelogStep = function() {
 };
 
 window.CHANGELOG_CATALOG = {
-  'changelog-roadmap': { title: "v1.6.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
-  'changelog-latest': { title: "v1.5.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
-  'changelog-history': { title: "历史版本历程 (v1.4 ~ v1.0)", desc: "历史版本时间线。", demos: [] }
+  'changelog-roadmap': { title: "v1.7.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
+  'changelog-latest': { title: "v1.6.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
+  'changelog-history': { title: "历史版本历程 (v1.5 ~ v1.0)", desc: "历史版本时间线。", demos: [] }
 };

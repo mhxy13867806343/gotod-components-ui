@@ -2310,3 +2310,44 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
 .icon-page-input:focus {
   border-color: var(--primary);
 }
+
+/* =========================================================================
+   Element Plus Style Demo Card Action Toolbar & Expandable Code Container
+   ========================================================================= */
+.demo-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--border-base);
+  background: var(--bg-card);
+  user-select: none;
+}
+.g-demo-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+.g-demo-icon-btn:hover {
+  background: var(--bg-hover) !important;
+  color: var(--primary) !important;
+}
+.g-demo-icon-btn.active {
+  color: var(--primary) !important;
+  background: rgba(24, 160, 88, 0.12) !important;
+}
+.demo-source-wrapper {
+  transition: max-height 0.35s ease;
+  overflow: hidden;
+}

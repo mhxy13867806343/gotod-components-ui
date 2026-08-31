@@ -217,16 +217,27 @@ window.showDoc = function(key) {
         <div class="demo-card">
           <div class="demo-card-header">
             <div class="demo-card-title">${d.title} ${vBadge}</div>
-            ${!d.codeTabs && !d.codeBefore && d.code ? `
-              <button class="g-btn g-btn-default" style="height:26px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
-                <i class="fa-regular fa-copy"></i> 复制代码
-              </button>
-            ` : ''}
           </div>
           <div class="demo-card-body">
             ${d.render}
           </div>
-          ${codeSection}
+          ${codeSection ? `
+            <div class="demo-toolbar">
+              <span class="g-tag g-tag-primary" style="font-size:10px; padding:1px 6px; font-weight:700; border-radius:4px; margin-right:auto; letter-spacing:0.5px;">GDScript</span>
+              <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="g-demo-icon-btn" title="在 GitHub 中查看组件源代码">
+                <i class="fa-brands fa-github"></i>
+              </a>
+              <button class="g-demo-icon-btn" title="复制代码" onclick="window.copyDemoCodeFromCard(this)">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+              <button class="g-demo-icon-btn toggle-code-btn" title="展开/折叠源代码" onclick="window.toggleDemoSourceCode(this)">
+                <i class="fa-solid fa-code"></i>
+              </button>
+            </div>
+            <div class="demo-source-wrapper" style="display:none; border-top:1px solid var(--border-base);">
+              ${codeSection}
+            </div>
+          ` : ''}
         </div>
       `;
     }).join('');
@@ -348,6 +359,8 @@ window.showDoc = function(key) {
     if (c && typeof window.onTableV2Scroll === 'function') setTimeout(() => window.onTableV2Scroll(c), 30);
   } else if (key === 'particle-studio') {
     if (typeof window.initParticleStudio === 'function') setTimeout(window.initParticleStudio, 30);
+  } else if (key === 'skeleton-particle') {
+    if (typeof window.initSkeletonDemo === 'function') setTimeout(window.initSkeletonDemo, 30);
   }
 };
 
