@@ -560,7 +560,7 @@ window.runLiveTreeShaker = function() {
 window.setTreeShakerPreset = function(preset) {
   const grid = document.getElementById('shakerCheckGrid');
   if (!grid) return;
-  const checkboxes = grid.querySelectorAll('input[type="checkbox"]');
+  const checkboxes = Array.from(grid.querySelectorAll('input[type="checkbox"]'));
   
   const coreSet = new Set(['GButton', 'GInput', 'GTabs', 'GDialog', 'GProgress', 'GCard']);
   const rpgSet = new Set([
@@ -569,18 +569,38 @@ window.setTreeShakerPreset = function(preset) {
     'GAIDialogueTree', 'GI18n'
   ]);
 
-  checkboxes.forEach(cb => {
-    const name = cb.parentElement.innerText.trim().split(' ')[0];
-    if (preset === 'all') cb.checked = true;
-    else if (preset === 'none') cb.checked = false;
-    else if (preset === 'core') cb.checked = coreSet.has(name);
-    else if (preset === 'rpg') cb.checked = rpgSet.has(name);
-  });
+  let msg = '预设已应用';
+  const allChecked = checkboxes.length > 0 && checkboxes.every(cb => cb.checked);
+
+  if (preset === 'all') {
+    // If all are already checked, toggle to uncheck all (取消全选)
+    const newChecked = !allChecked;
+    checkboxes.forEach(cb => { cb.checked = newChecked; });
+    msg = newChecked ? '已全选 52 个组件' : '已取消全选 (清空)';
+  } else if (preset === 'invert') {
+    // Invert selection (反选)
+    checkboxes.forEach(cb => { cb.checked = !cb.checked; });
+    msg = '已执行组件反选';
+  } else if (preset === 'none') {
+    checkboxes.forEach(cb => { cb.checked = false; });
+    msg = '已清空所有组件勾选';
+  } else if (preset === 'core') {
+    checkboxes.forEach(cb => {
+      const name = cb.parentElement.innerText.trim().split(' ')[0];
+      cb.checked = coreSet.has(name);
+    });
+    msg = '已应用【核心精简】预设 (6个)';
+  } else if (preset === 'rpg') {
+    checkboxes.forEach(cb => {
+      const name = cb.parentElement.innerText.trim().split(' ')[0];
+      cb.checked = rpgSet.has(name);
+    });
+    msg = '已应用【中重度 RPG】预设 (18个)';
+  }
 
   window.runLiveTreeShaker();
   if (window.showToast) {
-    const msgMap = { all: '已全选 52 个组件', none: '已清空所有组件', core: '已应用【核心精简】预设 (6个)', rpg: '已应用【中重度 RPG】预设 (18个)' };
-    window.showToast(msgMap[preset] || '预设已应用', 'info');
+    window.showToast(msg, 'info');
   }
 };
 

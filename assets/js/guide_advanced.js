@@ -222,7 +222,10 @@ GMessage.error("网络连接断开")`
                   <i class="fa-solid fa-gamepad"></i> RPG 实战 (18个)
                 </button>
                 <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('all')">
-                  <i class="fa-solid fa-check-double"></i> 全选 (52个)
+                  <i class="fa-solid fa-check-double"></i> 全选 / 取消
+                </button>
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('invert')">
+                  <i class="fa-solid fa-arrows-rotate"></i> 反选
                 </button>
                 <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('none')">
                   <i class="fa-solid fa-xmark"></i> 清空
