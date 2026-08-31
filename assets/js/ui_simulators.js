@@ -637,13 +637,14 @@ window.filterShakerComponents = function(query) {
   labels.forEach(l => {
     const text = l.innerText.trim();
     const isMatch = text.toLowerCase().includes(q);
+    const compName = text.split(' ')[0]; // e.g. "GIcon", "GButton"
     if (isMatch) {
       l.style.opacity = '1';
       l.style.background = 'rgba(24, 160, 88, 0.14)';
       l.style.borderRadius = '4px';
       l.style.padding = '3px 6px';
       l.style.display = 'flex';
-      matches.push({ label: l, text: text });
+      matches.push({ label: l, text: text, compName: compName });
     } else {
       l.style.opacity = '0.22';
       l.style.background = 'transparent';
@@ -659,15 +660,22 @@ window.filterShakerComponents = function(query) {
       dropdown.innerHTML = `
         <div style="font-size:11px; color:var(--text-secondary); padding:4px 8px 6px; font-weight:600; border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;">
           <span>匹配组件 (${matches.length} 个)</span>
-          <span style="font-size:10px; color:var(--primary); font-weight:normal;">点击快速定位高亮</span>
+          <span style="font-size:10px; color:var(--primary); font-weight:normal;">点击直接查阅组件文档</span>
         </div>
         ${matches.map(m => `
-          <div class="shaker-dropdown-item" onclick="window.selectShakerSearchItem('${m.text.replace(/'/g, "\\'")}')" style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; cursor:pointer; font-size:12px; border-radius:4px; transition:all 0.15s; margin-top:2px;">
+          <div class="shaker-dropdown-item" onclick="window.jumpToComponentDoc('${m.compName}', event)" style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; cursor:pointer; font-size:12px; border-radius:4px; transition:all 0.15s; margin-top:2px;" title="点击打开【${m.text}】组件文档">
             <div style="display:flex; align-items:center; gap:8px;">
               <i class="fa-solid fa-cube" style="color:var(--primary); font-size:11px;"></i>
               <span style="font-weight:600; color:var(--text-primary);">${m.text}</span>
             </div>
-            <span style="font-size:11px; color:var(--primary);"><i class="fa-solid fa-arrow-right"></i> 定位</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="g-btn g-btn-primary" style="height:22px; padding:0 8px; font-size:10px; border-radius:3px; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-book-open"></i> 文档
+              </span>
+              <span class="g-btn g-btn-default" style="height:22px; padding:0 6px; font-size:10px; border-radius:3px; display:inline-flex; align-items:center; gap:3px;" onclick="window.selectShakerSearchItem('${m.text.replace(/'/g, "\\'")}', event)" title="在当前网格中定位">
+                <i class="fa-solid fa-crosshairs"></i> 定位
+              </span>
+            </div>
           </div>
         `).join('')}
       `;
@@ -676,7 +684,38 @@ window.filterShakerComponents = function(query) {
   }
 };
 
-window.selectShakerSearchItem = function(targetText) {
+window.jumpToComponentDoc = function(compName, e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  const dropdown = document.getElementById('shakerSearchDropdown');
+  if (dropdown) dropdown.style.display = 'none';
+
+  const cleanName = (compName || '').trim().replace(/^G/, '');
+  const kebab = cleanName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+
+  let targetSection = 'components';
+  if (window.GAME_CATALOG && window.GAME_CATALOG[kebab]) targetSection = 'game';
+  else if (window.STUDIO_CATALOG && window.STUDIO_CATALOG[kebab]) targetSection = 'studio';
+  else if (window.GUIDE_CATALOG && window.GUIDE_CATALOG[kebab]) targetSection = 'guide';
+
+  if (typeof window.switchTopSection === 'function') {
+    window.switchTopSection(targetSection, kebab);
+  } else if (typeof window.showDoc === 'function') {
+    window.showDoc(kebab);
+  }
+
+  if (window.showToast) {
+    window.showToast(`已跳转到【${compName}】组件文档`, 'success');
+  }
+};
+
+window.selectShakerSearchItem = function(targetText, e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
   const input = document.getElementById('shakerSearchInput');
   const dropdown = document.getElementById('shakerSearchDropdown');
   const grid = document.getElementById('shakerCheckGrid');
@@ -696,7 +735,7 @@ window.selectShakerSearchItem = function(targetText) {
       }
     });
   }
-  if (window.showToast) window.showToast(`已精确定位组件: ${targetText}`, 'success');
+  if (window.showToast) window.showToast(`已精确定位组件: ${targetText}`, 'info');
 };
 
 window.clearShakerSearch = function() {
