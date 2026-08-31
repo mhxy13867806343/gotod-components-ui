@@ -40,5 +40,12 @@
     if (!button || !button.textContent) return;
     if (button.textContent.indexOf('旋转 Mesh') >= 0) global.Gotod3DLab.rotate();
     if (button.textContent.indexOf('重新发射粒子') >= 0) setStatus('GPUParticles3D emission restarted', '#86efac');
+    if (button.textContent.indexOf('启用 Glow') >= 0) global.Gotod3DLab.environment(true);
+    if (button.textContent.indexOf('低功耗') >= 0) global.Gotod3DLab.environment(false);
+  });
+  document.addEventListener('input', function (event) {
+    if (event.target.matches('input[type="range"]') && event.target.closest('.lab-preview')) {
+      global.Gotod3DLab.shader(event.target.value);
+    }
   });
 })(window);
