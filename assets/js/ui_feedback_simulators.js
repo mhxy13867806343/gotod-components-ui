@@ -290,26 +290,39 @@ window.closeSimToast = function() {
 // Fullscreen GLoading Simulator Helper
 // ==========================================
 let simLoadingTimer = null;
-window.openSimLoading = function(opts) {
-  if (typeof opts === 'string') opts = { text: opts };
-  opts = opts || {};
-  const text = opts.text || opts.message || '正在同步服务器数据...';
-  const duration = opts.duration !== undefined ? opts.duration : 2500;
-  
+window.openSimLoading = function(options_or_text, customDuration = 3000) {
+  let opts = {};
+  if (typeof options_or_text === 'string') {
+    opts = { text: options_or_text, duration: customDuration };
+  } else if (typeof options_or_text === 'object' && options_or_text !== null) {
+    opts = options_or_text;
+  }
+  const text = opts.text || opts.message || '数据加载中...';
+  const duration = opts.duration !== undefined ? opts.duration : customDuration;
+  const closeOnClickOverlay = !!(opts.closeOnClickOverlay || opts.close_on_click_overlay || opts.maskClosable || opts.mask_closable);
+  const maskColor = opts.overlayColor || opts.overlay_color || opts.maskColor || opts.mask_color || opts.background || 'rgba(0, 0, 0, 0.65)';
+
   let mask = document.getElementById('simLoadingMask');
   if (!mask) {
     mask = document.createElement('div');
     mask.id = 'simLoadingMask';
     mask.className = 'g-loading-fullscreen-mask';
-    mask.onclick = window.closeSimLoading;
     document.body.appendChild(mask);
   }
+
+  mask.style.background = maskColor;
+  mask.onclick = closeOnClickOverlay ? window.closeSimLoading : () => {
+    showToast('加载中已锁定背景防误触 (close_on_click_overlay: false)', 'info');
+  };
 
   mask.innerHTML = `
     <div class="g-loading-fullscreen-card" onclick="event.stopPropagation()">
       <div class="g-loading-ring"></div>
       <div class="g-loading-fullscreen-text">${text}</div>
-      <div style="font-size:11px; color:var(--text-disabled); margin-top:4px;">点击背景可手动关闭</div>
+      <div style="font-size:11px; color:var(--text-disabled); margin-top:4px;">
+        ${closeOnClickOverlay ? '已允许点击背景手动关闭' : '默认不可点击背景关闭 (防误触)'}
+      </div>
+      <button class="g-btn g-btn-default" style="font-size:10px; padding:1px 8px; margin-top:6px;" onclick="window.closeSimLoading()">手动结束</button>
     </div>
   `;
   mask.style.display = 'flex';
@@ -344,6 +357,8 @@ window.openSimModalDialog = function(opts, customTitle, onConfirm) {
   const confirmText = opts.confirmText || opts.confirm_text || '确认开启';
   const cancelText = opts.cancelText || opts.cancel_text || '取消';
   const showCancel = opts.showCancel !== false && opts.show_cancel !== false;
+  const closeOnClickOverlay = !!(opts.closeOnClickOverlay || opts.close_on_click_overlay || opts.maskClosable || opts.mask_closable);
+  const maskColor = opts.overlayColor || opts.overlay_color || opts.maskColor || opts.mask_color || 'rgba(0, 0, 0, 0.6)';
   simDialogCallback = opts.onConfirm || onConfirm || null;
 
   let mask = document.getElementById('simDialogModalMask');
@@ -351,9 +366,13 @@ window.openSimModalDialog = function(opts, customTitle, onConfirm) {
     mask = document.createElement('div');
     mask.id = 'simDialogModalMask';
     mask.className = 'g-dialog-modal-mask';
-    mask.onclick = window.closeSimModalDialog;
     document.body.appendChild(mask);
   }
+
+  mask.style.background = maskColor;
+  mask.onclick = closeOnClickOverlay ? window.closeSimModalDialog : () => {
+    showToast('默认不可点击背景关闭 (close_on_click_overlay: false)', 'info');
+  };
 
   mask.innerHTML = `
     <div class="g-dialog-modal-card" onclick="event.stopPropagation()">

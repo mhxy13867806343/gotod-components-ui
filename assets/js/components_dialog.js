@@ -30,6 +30,16 @@ window.COMPONENT_CATALOG['dialog'] = {
       "title": "5. 游戏抽卡十连抽奖励弹窗 (Game Gacha Reward Dialog)",
       "render": "<div style=\"max-width:360px; background:linear-gradient(135deg, #1e1b4b, #312e81); border:2px solid #ffd04b; border-radius:10px; padding:14px; text-align:center; color:#fff;\"><div style=\"font-size:16px; font-weight:800; color:#ffd04b; margin-bottom:8px;\">✨ 恭喜获得十连抽大奖 ✨</div><div style=\"font-size:32px; margin:10px 0;\">👑 🗡️ 🛡️ 🧪 💎</div><button class=\"g-btn g-btn-warning\" style=\"font-weight:700;\" onclick=\"showToast('全部放入背包！', 'success')\">收下全部奖励</button></div>",
       "code": "# GDScript: 抽卡奖励弹窗\nvar gacha_dlg = GDialog.new_gacha_reward(rewards)"
+    },
+    {
+      "title": "6. 背景点击与防误触控制 (close_on_click_overlay: false 默认不可点 / true 可点)",
+      "render": "<div style=\"display:flex; gap:12px; flex-wrap:wrap;\"><button class=\"g-btn g-btn-danger\" onclick=\"openSimModalDialog({ title: '⚠ 高危操作确认', message: '当前弹窗默认不可点击背景关闭 (close_on_click_overlay: false)，防止用户误触退出！', close_on_click_overlay: false })\">默认防误触 (不可点背景)</button><button class=\"g-btn g-btn-default\" onclick=\"openSimModalDialog({ title: '轻量提示', message: '已开启允许点击背景关闭 (close_on_click_overlay: true)。', close_on_click_overlay: true })\">允许点击背景关闭</button></div>",
+      "code": "# GDScript: 背景点击防误触配置\n# 1. 默认防误触 (默认不可点击背景关闭)\nvar dlg_safe = GDialog.create({\n    \"title\": \"高危分解确认\",\n    \"content\": \"分解后将永久销毁装备！\",\n    \"close_on_click_overlay\": false # 默认 false\n})\n\n# 2. 允许点击背景快速退出\nvar dlg_quick = GDialog.create({\n    \"title\": \"活动详情\",\n    \"content\": \"点击背景任意区域即可退出\",\n    \"close_on_click_overlay\": true\n})"
+    },
+    {
+      "title": "7. 自定义背景遮罩色彩 (Custom Overlay Mask Color)",
+      "render": "<div style=\"display:flex; gap:12px; flex-wrap:wrap;\"><button class=\"g-btn g-btn-danger\" onclick=\"openSimModalDialog({ title: '🔥 灭世灾厄降临', message: '暗红色半透明全屏遮罩，烘托危机战场氛围！', overlay_color: 'rgba(120, 0, 0, 0.75)' })\">暗红高危遮罩</button><button class=\"g-btn g-btn-primary\" onclick=\"openSimModalDialog({ title: '🌌 深渊星空秘境', message: '深蓝色半透明全屏遮罩，沉浸感夜空背景！', overlay_color: 'rgba(10, 25, 60, 0.8)' })\">深蓝秘境遮罩</button></div>",
+      "code": "# GDScript: 自定义遮罩背景色\nvar dlg_danger = GDialog.create({\n    \"title\": \"灭世灾厄\",\n    \"content\": \"红色危机警戒遮罩\",\n    \"overlay_color\": Color(0.47, 0.0, 0.0, 0.75) # 自定义暗红背景\n})"
     }
   ],
   "props": [

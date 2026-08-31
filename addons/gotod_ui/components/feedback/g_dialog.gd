@@ -19,7 +19,11 @@ signal closed
 @export var confirm_button_text: String = "Confirm"
 @export var cancel_button_text: String = "Cancel"
 @export var show_cancel_button: bool = true
-@export var mask_closable: bool = true
+@export var mask_closable: bool = false # 默认不可点击背景关闭，防止误触
+@export var mask_color: Color = Color(0, 0, 0, 0.6):
+	set(val):
+		mask_color = val
+		if _mask: _mask.color = mask_color
 @export var dialog_width: float = 460.0
 
 var _mask: ColorRect
@@ -126,7 +130,7 @@ func _setup_ui() -> void:
 	# Backdrop Mask
 	_mask = ColorRect.new()
 	_mask.anchors_preset = Control.PRESET_FULL_RECT
-	_mask.color = Color(0, 0, 0, 0.6)
+	_mask.color = mask_color
 	_mask.gui_input.connect(_on_mask_input)
 	add_child(_mask)
 	
@@ -249,6 +253,10 @@ static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = n
 		if opts.has("cancel_text"): dlg.cancel_button_text = str(opts["cancel_text"])
 		if opts.has("show_cancel"): dlg.show_cancel_button = bool(opts["show_cancel"])
 		if opts.has("width"): dlg.dialog_width = float(opts["width"])
+		if opts.has("mask_closable") or opts.has("close_on_click_overlay"):
+			dlg.mask_closable = bool(opts.get("mask_closable", opts.get("close_on_click_overlay", false)))
+		if opts.has("mask_color") or opts.has("overlay_color"):
+			dlg.mask_color = opts.get("mask_color", opts.get("overlay_color", Color(0, 0, 0, 0.6)))
 		if opts.has("on_confirm") and opts["on_confirm"] is Callable: dlg.confirmed.connect(opts["on_confirm"])
 		if opts.has("on_cancel") and opts["on_cancel"] is Callable: dlg.cancelled.connect(opts["on_cancel"])
 	elif arg1 != null:

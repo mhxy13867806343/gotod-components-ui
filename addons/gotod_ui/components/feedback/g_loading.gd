@@ -15,6 +15,11 @@ static func service(options_or_text: Variant = {}, context_node: Node = null) ->
 	var loading = GLoading.new()
 	loading.text = opts.get("text", opts.get("message", "加载中..."))
 	loading.spinner_size = opts.get("spinner_size", 36.0)
+	loading.mask_closable = bool(opts.get("mask_closable", opts.get("close_on_click_overlay", false)))
+	if opts.has("mask_color") or opts.has("overlay_color") or opts.has("background"):
+		var bg_val = opts.get("mask_color", opts.get("overlay_color", opts.get("background", null)))
+		if bg_val is Color: loading.mask_color = bg_val
+		elif bg_val is String: loading.mask_color = Color(str(bg_val))
 	if opts.has("icon_text"):
 		loading._custom_icon_text = str(opts["icon_text"])
 	elif opts.has("icon"):
@@ -99,6 +104,12 @@ var _custom_icon_text: String = ""
 		if _spinner:
 			_spinner.custom_minimum_size = Vector2(spinner_size, spinner_size)
 
+@export var mask_closable: bool = false # 默认加载中不可点击背景关闭
+@export var mask_color: Color = Color(0, 0, 0, 0.45):
+	set(val):
+		mask_color = val
+		if _mask: _mask.color = mask_color
+
 var _mask: ColorRect
 var _vbox: VBoxContainer
 var _spinner: Control
@@ -115,7 +126,8 @@ func _setup_ui() -> void:
 		
 	_mask = ColorRect.new()
 	_mask.anchors_preset = Control.PRESET_FULL_RECT
-	_mask.color = Color(0, 0, 0, 0.45)
+	_mask.color = mask_color
+	_mask.gui_input.connect(_on_mask_input)
 	add_child(_mask)
 	
 	_vbox = VBoxContainer.new()
@@ -153,3 +165,7 @@ func _on_spinner_draw() -> void:
 	
 	_spinner.draw_arc(center, radius, 0, TAU, 32, col * Color(1, 1, 1, 0.2), 3.0, true)
 	_spinner.draw_arc(center, radius, _angle, _angle + PI * 0.8, 24, col, 3.0, true)
+
+func _on_mask_input(event: InputEvent) -> void:
+	if mask_closable and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		close()

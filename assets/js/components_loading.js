@@ -30,6 +30,16 @@ window.COMPONENT_CATALOG['loading'] = {
       "title": "5. 游戏跨场景切换加载与一键关闭 (Scene Switch Loading & Close All)",
       "render": "<div style=\"display:flex; align-items:center; gap:12px;\"><div style=\"width:36px; height:36px; border-radius:50%; border:3px solid var(--border-base); border-top-color:#a855f7; animation:fa-spin 1s infinite linear;\"></div><span style=\"font-size:12px; color:#a855f7; font-weight:600;\">正在进入副本：【堕落神殿】</span></div>",
       "code": "# GDScript: 场景切换加载与一键关闭\nGLoading.fullscreen(\"正在进入副本：【堕落神殿】\")\n# 场景加载完毕后全局清除：\nGLoading.close_all()"
+    },
+    {
+      "title": "6. 背景点击与防误触控制 (close_on_click_overlay: false 默认锁定背景 / true 允许点击退出)",
+      "render": "<div style=\"display:flex; gap:10px; flex-wrap:wrap;\"><button class=\"g-btn g-btn-primary\" onclick=\"openSimLoading({ text: '核心资产打包中...', close_on_click_overlay: false, duration: 4000 })\">默认防误触 (不可点背景关闭)</button><button class=\"g-btn g-btn-default\" onclick=\"openSimLoading({ text: '非关键数据同步 (可点背景取消)', close_on_click_overlay: true, duration: 6000 })\">允许点击背景手动关闭</button></div>",
+      "code": "# GDScript: 背景点击防误触配置\n# 1. 默认防误触 (默认不可点击背景关闭，防止加载中打断任务)\nvar loading_safe = GLoading.service({\n    \"text\": \"核心数据写入中...\",\n    \"close_on_click_overlay\": false # 默认 false\n})\n\n# 2. 允许玩家点击背景手动取消/关闭\nvar loading_cancelable = GLoading.service({\n    \"text\": \"正在搜索附近房间...\",\n    \"close_on_click_overlay\": true\n})"
+    },
+    {
+      "title": "7. 自定义加载遮罩背景颜色 (Custom Overlay / Mask Color)",
+      "render": "<div style=\"display:flex; gap:10px; flex-wrap:wrap;\"><button class=\"g-btn g-btn-danger\" onclick=\"openSimLoading({ text: 'BOSS 狂暴蓄力中...', overlay_color: 'rgba(90, 0, 0, 0.85)', duration: 3000 })\">暗红危机加载</button><button class=\"g-btn g-btn-default\" onclick=\"openSimLoading({ text: '系统高斯亮色加载...', overlay_color: 'rgba(255, 255, 255, 0.75)', text_color: '#333', duration: 3000 })\">亮色遮罩加载</button></div>",
+      "code": "# GDScript: 自定义遮罩背景色与主题\nvar loading = GLoading.service({\n    \"text\": \"BOSS 狂暴蓄力中...\",\n    \"mask_color\": Color(0.35, 0.0, 0.0, 0.85) # 自定义暗红危机蒙层\n})"
     }
   ],
   "props": [
