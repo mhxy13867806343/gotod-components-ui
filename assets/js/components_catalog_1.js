@@ -479,7 +479,21 @@ Object.assign(window.COMPONENT_CATALOG, {
       },
       {
         "title": "4. 自由拖拽与边缘贴边吸附 (Draggable & Magnetic Docking: 试着在区域内拖动按钮)",
-        "render": "\n      <div id=\"fabDragContainer\" style=\"position:relative; height:120px; background:var(--bg-surface); border:2px dashed var(--primary); border-radius:8px; overflow:hidden; user-select:none;\">\n        <div style=\"position:absolute; top:8px; left:12px; font-size:11px; color:var(--text-secondary);\">\n          🖱️ 用鼠标按住下方蓝色 FAB 按钮自由拖拽，松手后自动平滑吸附到左侧或右侧边缘：\n        </div>\n        <!-- Draggable FAB Circle -->\n        <div id=\"draggableFab\" style=\"position:absolute; left:20px; bottom:14px; width:44px; height:44px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:grab; box-shadow:0 6px 16px rgba(0,0,0,0.3); transition:left 0.3s cubic-bezier(0.16, 1, 0.3, 1);\">\n          <i class=\"fa-solid fa-arrows-up-down-left-right\"></i>\n        </div>\n      </div>\n      <script>\n        (function(){\n          const container = document.getElementById('fabDragContainer');\n          const fab = document.getElementById('draggableFab');\n          if(!container || !fab) return;\n          let isDragging = false;\n          let startX, startLeft;\n          fab.onmousedown = function(e){\n            isDragging = true;\n            fab.style.cursor = 'grabbing';\n            fab.style.transition = 'none';\n            startX = e.clientX;\n            startLeft = fab.offsetLeft;\n            document.onmousemove = function(ev){\n              if(!isDragging) return;\n              let dx = ev.clientX - startX;\n              let newLeft = Math.max(10, Math.min(container.clientWidth - 54, startLeft + dx));\n              fab.style.left = newLeft + 'px';\n            };\n            document.onmouseup = function(){\n              if(!isDragging) return;\n              isDragging = false;\n              fab.style.cursor = 'grab';\n              fab.style.transition = 'left 0.3s cubic-bezier(0.16, 1, 0.3, 1)';\n              document.onmousemove = null;\n              document.onmouseup = null;\n              // Magnetic dock to left or right\n              const center = container.clientWidth / 2;\n              if (fab.offsetLeft < center) {\n                fab.style.left = '16px';\n              } else {\n                fab.style.left = (container.clientWidth - 60) + 'px';\n              }\n            };\n          };\n        })();\n      </script>\n    ",
+        "render": `
+      <div id="fabDragContainer" style="position:relative; height:120px; background:var(--bg-surface); border:2px dashed var(--primary); border-radius:8px; overflow:hidden; user-select:none; padding:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:11px; color:var(--text-secondary);"><i class="fa-solid fa-arrows-up-down-left-right" style="color:var(--primary);"></i> 🖱️ 用鼠标/手指按住下方 FAB 按钮自由拖拽，松手后自动平滑吸附到最近边缘：</span>
+          <div style="display:flex; gap:6px;">
+            <button class="g-btn g-btn-default" style="font-size:10px; padding:1px 6px;" onclick="const f=document.getElementById('draggableFab'); f.style.transition='left 0.35s cubic-bezier(0.16,1,0.3,1)'; f.style.left='16px'; showToast('FAB 已贴靠至左侧边缘', 'info');">⬅️ 贴左</button>
+            <button class="g-btn g-btn-default" style="font-size:10px; padding:1px 6px;" onclick="const f=document.getElementById('draggableFab'); const c=f.parentElement; f.style.transition='left 0.35s cubic-bezier(0.16,1,0.3,1)'; f.style.left=(c.clientWidth-60)+'px'; showToast('FAB 已贴靠至右侧边缘', 'info');">➡️ 贴右</button>
+          </div>
+        </div>
+        <!-- Draggable FAB Circle -->
+        <div id="draggableFab" style="position:absolute; left:20px; bottom:14px; width:44px; height:44px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:grab; box-shadow:0 6px 16px rgba(0,0,0,0.3); transition:left 0.35s cubic-bezier(0.16, 1, 0.3, 1);" onmousedown="window.startFabDrag(event, this)" ontouchstart="window.startFabDrag(event, this)">
+          <i class="fa-solid fa-arrows-up-down-left-right"></i>
+        </div>
+      </div>
+    `,
         "code": "# GDScript: 自由拖拽与自动吸附贴边\nfab.draggable = true\nfab.magnetic_dock = true # 松手后自动平滑吸附最近屏幕边缘"
       },
       {

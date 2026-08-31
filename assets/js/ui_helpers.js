@@ -89,7 +89,7 @@ window.renderApiTable = function(title, headers, rows, subtitle = '') {
 };
 
 // ==========================================
-// 4. Uni-UI Style FAB Toggle Function
+// 4. Uni-UI Style FAB Toggle & Drag Handlers
 // ==========================================
 window.toggleFabMenu = function() {
   const menu = document.getElementById('gFabMenu');
@@ -107,6 +107,44 @@ window.toggleFabMenu = function() {
     trigger.classList.add('collapsed');
     if (icon) icon.className = 'fa-solid fa-gear';
   }
+};
+
+window.startFabDrag = function(e, fab) {
+  if (!fab) return;
+  e.preventDefault();
+  const container = fab.parentElement;
+  if (!container) return;
+  const isTouch = e.type && e.type.startsWith('touch');
+  let startX = isTouch ? e.touches[0].clientX : e.clientX;
+  let startLeft = fab.offsetLeft;
+  fab.style.cursor = 'grabbing';
+  fab.style.transition = 'none';
+
+  function onMove(ev) {
+    let clientX = isTouch ? (ev.touches[0] ? ev.touches[0].clientX : startX) : ev.clientX;
+    let dx = clientX - startX;
+    let maxL = container.clientWidth - fab.offsetWidth - 12;
+    let newLeft = Math.max(12, Math.min(maxL, startLeft + dx));
+    fab.style.left = newLeft + 'px';
+  }
+
+  function onEnd() {
+    fab.style.cursor = 'grab';
+    fab.style.transition = 'left 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+    const center = container.clientWidth / 2;
+    if (fab.offsetLeft < center) {
+      fab.style.left = '16px';
+      if (window.showToast) window.showToast('FAB 已自动吸附贴靠至【左侧边缘】', 'info');
+    } else {
+      fab.style.left = (container.clientWidth - fab.offsetWidth - 16) + 'px';
+      if (window.showToast) window.showToast('FAB 已自动吸附贴靠至【右侧边缘】', 'info');
+    }
+    document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMove);
+    document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onEnd);
+  }
+
+  document.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMove);
+  document.addEventListener(isTouch ? 'touchend' : 'mouseup', onEnd);
 };
 
 // ==========================================
