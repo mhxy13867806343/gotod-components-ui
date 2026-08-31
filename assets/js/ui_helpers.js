@@ -2598,21 +2598,77 @@ window.onTableSelectAll = function(masterCb) {
 };
 
 window.onTableRowSelect = function() {
+  const body = document.getElementById('tableSelectBody');
   const cbs = document.querySelectorAll('.table-row-cb');
   const checked = Array.from(cbs).filter(cb => cb.checked).length;
   const tip = document.getElementById('tableSelTip');
   if (tip) tip.innerText = `已勾选: ${checked} / ${cbs.length} 项`;
   const master = document.getElementById('tableSelectAll');
   if (master) master.checked = checked === cbs.length && cbs.length > 0;
+
+  // Check if Table is Empty and show Empty State Placeholder
+  if (body) {
+    const rows = body.querySelectorAll('tr:not(#tableEmptyRow)');
+    let emptyRow = document.getElementById('tableEmptyRow');
+    if (rows.length === 0) {
+      if (!emptyRow) {
+        emptyRow = document.createElement('tr');
+        emptyRow.id = 'tableEmptyRow';
+        emptyRow.innerHTML = `
+          <td colspan="5" style="text-align:center; padding:36px 16px; color:var(--text-secondary); background:var(--bg-surface);">
+            <div style="font-size:38px; margin-bottom:8px; opacity:0.65;">📭</div>
+            <div style="font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">暂无数据 (No Data)</div>
+            <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:14px;">当前表格数据已全部清空或未查询到匹配项</div>
+            <button class="g-btn g-btn-primary" style="font-size:11.5px; padding:4px 14px; margin:0 auto;" onclick="window.resetDemoTableData()">
+              🔄 恢复默认测试数据
+            </button>
+          </td>
+        `;
+        body.appendChild(emptyRow);
+      }
+    } else if (emptyRow) {
+      emptyRow.remove();
+    }
+  }
 };
 
-window.batchRewardTable = function() {
-  const cbs = document.querySelectorAll('.table-row-cb:checked');
-  if (cbs.length === 0) {
-    if (window.showToast) window.showToast('请先勾选需要发放经验的英雄！', 'warning');
-    return;
-  }
-  if (window.showToast) window.showToast(`已成功为 ${cbs.length} 位选中英雄批量发放 50,000 EXP 经验药水！`, 'success');
+window.resetDemoTableData = function() {
+  const body = document.getElementById('tableSelectBody');
+  if (!body) return;
+  body.innerHTML = `
+    <tr style="border-bottom:1px solid var(--border-base);">
+      <td style="padding:10px 12px; text-align:center;"><input type="checkbox" class="table-row-cb" onchange="window.onTableRowSelect()"></td>
+      <td style="padding:10px 12px; font-weight:600;">💎 远古泰坦龙晶</td>
+      <td style="padding:10px 12px; font-weight:700; color:#e6a23c; font-family:var(--font-mono);">5,000</td>
+      <td style="padding:10px 12px;">99+</td>
+      <td style="padding:10px 12px; text-align:right;">
+        <button class="g-btn g-btn-default" style="font-size:10.5px; padding:2px 6px;" onclick="showToast('上架售卖: 远古泰坦龙晶', 'info')">上架</button>
+        <button class="g-btn g-btn-danger" style="font-size:10.5px; padding:2px 6px;" onclick="showToast('已销毁道具', 'warning')">销毁</button>
+      </td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border-base);">
+      <td style="padding:10px 12px; text-align:center;"><input type="checkbox" class="table-row-cb" onchange="window.onTableRowSelect()"></td>
+      <td style="padding:10px 12px; font-weight:600;">🧪 特效神圣生命药水</td>
+      <td style="padding:10px 12px; font-weight:700; color:#e6a23c; font-family:var(--font-mono);">120</td>
+      <td style="padding:10px 12px;">500</td>
+      <td style="padding:10px 12px; text-align:right;">
+        <button class="g-btn g-btn-default" style="font-size:10.5px; padding:2px 6px;" onclick="showToast('上架售卖: 特效神圣生命药水', 'info')">上架</button>
+        <button class="g-btn g-btn-danger" style="font-size:10.5px; padding:2px 6px;" onclick="showToast('已销毁道具', 'warning')">销毁</button>
+      </td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border-base);">
+      <td style="padding:10px 12px; text-align:center;"><input type="checkbox" class="table-row-cb" onchange="window.onTableRowSelect()"></td>
+      <td style="padding:10px 12px; font-weight:600;">📜 禁忌回城卷轴</td>
+      <td style="padding:10px 12px; font-weight:700; color:#e6a23c; font-family:var(--font-mono);">800</td>
+      <td style="padding:10px 12px;">32</td>
+      <td style="padding:10px 12px; text-align:right;">
+        <button class="g-btn g-btn-default" style="font-size:10.5px; padding:2px 6px;" onclick="showToast('上架售卖: 禁忌回城卷轴', 'info')">上架</button>
+        <button class="g-btn g-btn-danger" style="font-size:10.5px; padding:2px 6px;" onclick="showToast('已销毁道具', 'warning')">销毁</button>
+      </td>
+    </tr>
+  `;
+  window.onTableRowSelect();
+  if (window.showToast) window.showToast('已恢复默认道具测试数据！', 'success');
 };
 
 window.batchDeleteTable = function() {

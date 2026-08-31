@@ -91,6 +91,15 @@ window.showDoc = function(key) {
     history.replaceState(null, '', '#' + key);
   }
 
+  // Ensure scroll is immediately reset to the top of the page
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  const mainScrollContainer = document.getElementById('mainContent');
+  if (mainScrollContainer) {
+    mainScrollContainer.scrollTop = 0;
+  }
+
   // Handle Changelog Page Rendering (Using GSteps Component)
   if (key.startsWith('changelog-') || key === 'changelog') {
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -300,14 +309,21 @@ window.showDoc = function(key) {
 
   const docBadge = (doc.version || doc.since) ? `<span class="g-tag g-tag-primary" style="font-size:11px; padding:2px 8px; margin-left:10px; border-radius:10px; font-weight:600; vertical-align:middle;">${doc.version || doc.since}</span>` : `<span class="g-tag g-tag-primary" style="font-size:11px; padding:2px 8px; margin-left:10px; border-radius:10px; font-weight:600; vertical-align:middle;">v1.0.5</span>`;
 
-  document.getElementById('mainContent').innerHTML = `
-    <div class="doc-header">
-      <h1 class="doc-title">${doc.title} ${docBadge}</h1>
-      <p class="doc-desc">${doc.desc}</p>
-    </div>
-    ${demosHtml}
-    ${propsHtml}
-  `;
+  const mainContentEl = document.getElementById('mainContent');
+  if (mainContentEl) {
+    mainContentEl.innerHTML = `
+      <div class="doc-header">
+        <h1 class="doc-title">${doc.title} ${docBadge}</h1>
+        <p class="doc-desc">${doc.desc}</p>
+      </div>
+      ${demosHtml}
+      ${propsHtml}
+    `;
+    mainContentEl.scrollTop = 0;
+  }
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
 
   // Dynamic Workspace Post-Render Hooks
   if (key === 'studio-theme-editor') {

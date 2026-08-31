@@ -1,18 +1,18 @@
 // =========================================================================
 // Gotod Components UI - Component: table (GTable & GTableV2)
-// 深度参考 Element Plus Table & TableV2 规范
+// Modern Vue / Element Plus 风格数据表格与十万级超高性能虚拟化表格
 // =========================================================================
 window.COMPONENT_CATALOG = window.COMPONENT_CATALOG || {};
 window.COMPONENT_CATALOG['table'] = {
   "title": "Table 表格与 TableV2 虚拟化表格 (GTable)",
-  "desc": "基于 Element Plus Table 与 TableV2 规范设计。支持斑马纹、多选/单选、列排序与筛选、固定表头/固定列、展开行、自定义单元格作用域插槽 (Scoped Slots) 以及十万级数据 TableV2 虚拟化渲染。",
+  "desc": "全面参考 Element Plus 设计规范，用于展示多条结构化数据。支持斑马纹、带边框、多选勾选、列排序、自定义单元格与操作插槽 (Scoped Slot)、空数据状态 (Empty)，以及 100,000+ 行十万级数据 TableV2 超高性能虚拟化极速滚动。",
   "demos": [
     {
-      "title": "1. 基础表格与斑马纹 (Basic Table & Stripe)",
+      "title": "1. 基础表格与斑马纹/边框 (Basic Table & Stripe / Border)",
       "render": `
         <div style="max-width:680px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; overflow:hidden;">
-          <div style="padding:10px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:700; font-size:13px;">🛡️ 公会主力英雄出战名册</span>
+          <div style="padding:10px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <span style="font-size:12px; font-weight:700; color:var(--text-secondary);">🎮 英雄战力排行榜 (基础展示)</span>
             <div style="display:flex; gap:6px;">
               <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.toggleTableStripe()">切换斑马纹</button>
               <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.toggleTableBorder()">切换边框</button>
@@ -25,15 +25,15 @@ window.COMPONENT_CATALOG['table'] = {
                   <th style="padding:10px 14px;">英雄名</th>
                   <th style="padding:10px 14px;">职业</th>
                   <th style="padding:10px 14px;">等级</th>
-                  <th style="padding:10px 14px;">战力</th>
-                  <th style="padding:10px 14px;">状态</th>
+                  <th style="padding:10px 14px;">战斗力</th>
+                  <th style="padding:10px 14px;">出战状态</th>
                 </tr>
               </thead>
               <tbody>
                 <tr style="border-bottom:1px solid var(--border-base);">
-                  <td style="padding:10px 14px; font-weight:600;">👑 亚瑟 (Arthur)</td>
+                  <td style="padding:10px 14px; font-weight:600;">⚔️ 圣骑士 · 乌瑟尔</td>
                   <td style="padding:10px 14px;"><span class="g-tag g-tag-primary" style="font-size:10.5px;">圣骑士</span></td>
-                  <td style="padding:10px 14px; font-family:var(--font-mono);">Lv.95</td>
+                  <td style="padding:10px 14px; font-family:var(--font-mono);">Lv.99</td>
                   <td style="padding:10px 14px; font-weight:700; color:#e6a23c; font-family:var(--font-mono);">885,000</td>
                   <td style="padding:10px 14px;"><span class="g-tag g-tag-success" style="font-size:10.5px;">出战中</span></td>
                 </tr>
@@ -59,13 +59,14 @@ window.COMPONENT_CATALOG['table'] = {
       "code": "# GDScript: 基础表格与斑马纹\nvar table = GTable.new()\ntable.stripe = true\ntable.border = true\ntable.columns = [\n    { \"prop\": \"name\", \"label\": \"英雄名\", \"width\": 160 },\n    { \"prop\": \"role\", \"label\": \"职业\", \"width\": 100 },\n    { \"prop\": \"level\", \"label\": \"等级\", \"width\": 80 },\n    { \"prop\": \"power\", \"label\": \"战力\", \"width\": 120 }\n]\ntable.data = hero_list\nadd_child(table)"
     },
     {
-      "title": "2. 多选、排序与自定义操作插槽 (Selection, Sort & Scoped Slot)",
+      "title": "2. 多选、排序、操作插槽与空状态 (Selection, Sort, Actions & Empty State)",
       "render": `
         <div style="max-width:680px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; overflow:hidden;">
           <div style="padding:10px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:8px;">
-              <button class="g-btn g-btn-primary" style="font-size:11px; padding:3px 10px;" onclick="window.batchRewardTable()">🎁 批量发放经验</button>
+              <button class="g-btn g-btn-primary" style="font-size:11px; padding:3px 10px;" onclick="window.showToast('已为选中项发放经验！', 'success')">🎁 批量发放经验</button>
               <button class="g-btn g-btn-danger" style="font-size:11px; padding:3px 10px;" onclick="window.batchDeleteTable()">🗑️ 批量移出出战</button>
+              <button class="g-btn g-btn-default" style="font-size:11px; padding:3px 10px;" onclick="window.resetDemoTableData()">🔄 恢复数据</button>
             </div>
             <span id="tableSelTip" style="font-size:11px; color:var(--text-secondary);">已勾选: 0 / 3 项</span>
           </div>
@@ -120,160 +121,141 @@ window.COMPONENT_CATALOG['table'] = {
           </div>
         </div>
       `,
-      "code": "# GDScript: 多选与排序\ntable.selection_mode = GTable.SelectionMode.MULTI\ntable.sort_change.connect(func(prop, order):\n    print(\"排序改变: \", prop, order)\n)\ntable.selection_change.connect(func(rows):\n    print(\"已勾选: \", rows.size())\n)"
+      "code": "# GDScript: 多选与排序\ntable.selection_mode = GTable.SelectionMode.MULTI\ntable.sort_change.connect(func(prop, order):\n    print(\"排序字段: \", prop, \" 升降序: \", order)\n)\ntable.empty_text = \"暂无道具数据\""
     },
     {
-      "title": "3. TableV2 十万级虚拟化超高性能表格 (Virtualized TableV2 100,000+ Rows)",
+      "title": "3. TableV2 十万级超高性能虚拟化表格 (100,000+ Rows Virtualized Table)",
       "render": `
-        <div style="max-width:680px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border-base);">
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="g-tag g-tag-success" style="font-size:11px; padding:2px 8px; font-weight:700;">
-                📊 TableV2 数据量: 100,000 行
-              </span>
-              <span class="g-tag g-tag-primary" style="font-size:11px; padding:2px 8px; font-weight:700;">
-                ⚡ 视口虚拟渲染: 8 行
-              </span>
+        <div style="max-width:680px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; overflow:hidden;">
+          <div style="padding:10px 16px; background:var(--bg-card); border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="g-tag g-tag-danger" style="font-size:10.5px; padding:2px 6px;">⚡ 100,000 条</span>
+              <span style="font-size:12px; font-weight:700;">全服无尽之塔天梯榜 (TableV2 虚拟滚动)</span>
             </div>
             <div style="display:flex; gap:6px;">
-              <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.scrollTableV2To(0)">🔝 顶部</button>
-              <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.scrollTableV2To(50000)">🚀 跳至第 5万行</button>
-              <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.scrollTableV2To(99990)">🔚 底部</button>
+              <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.scrollTableV2To(0)">Top 1</button>
+              <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.scrollTableV2To(50000)">第 50,000 名</button>
+              <button class="g-btn g-btn-default" style="font-size:11px; padding:2px 8px;" onclick="window.scrollTableV2To(99990)">底部 10 万名</button>
             </div>
           </div>
 
           <!-- Fixed Table Header -->
-          <div style="background:var(--bg-card); border:1px solid var(--border-base); border-bottom:none; border-radius:6px 6px 0 0; padding:8px 12px; display:flex; font-size:12px; font-weight:700; color:var(--text-secondary);">
+          <div style="display:flex; background:var(--bg-card); border-bottom:2px solid var(--border-base); padding:8px 12px; font-size:12px; font-weight:700; color:var(--text-secondary);">
             <div style="width:70px;">排名</div>
-            <div style="width:140px;">角色名称</div>
+            <div style="width:140px;">玩家昵称</div>
             <div style="width:90px;">阵营</div>
             <div style="width:110px;">通关层数</div>
-            <div style="flex:1; text-align:right;">全服总积分</div>
+            <div style="flex:1; text-align:right;">赛季天梯积分</div>
           </div>
 
-          <!-- Virtual Scroll Body -->
-          <div id="tableV2Container" style="height:220px; overflow-y:auto; position:relative; background:var(--bg-card); border:1px solid var(--border-base); border-radius:0 0 6px 6px;" onscroll="window.onTableV2Scroll(this)">
-            <div id="tableV2Phantom" style="height:3600000px; position:absolute; left:0; top:0; right:0; z-index:-1;"></div>
-            <div id="tableV2Content" style="position:absolute; left:0; right:0; top:0; display:flex; flex-direction:column;">
-              <!-- Populated via onTableV2Scroll -->
-            </div>
+          <!-- Virtual Scroll Viewport -->
+          <div id="tableV2Container" style="height:288px; overflow-y:auto; position:relative; background:var(--bg-surface);" onscroll="window.onTableV2Scroll(this)">
+            <div id="tableV2Phantom" style="height:3600000px; width:1px; position:absolute; top:0; left:0; pointer-events:none;"></div>
+            <div id="tableV2Content" style="position:absolute; top:0; left:0; right:0;"></div>
           </div>
         </div>
       `,
-      "code": "# GDScript: TableV2 虚拟化表格\nvar table_v2 = GTableV2.new()\ntable_v2.row_height = 36\ntable_v2.total_rows = 100000\ntable_v2.fixed_header = true\ntable_v2.columns = [\n    { \"prop\": \"rank\", \"label\": \"排名\", \"width\": 70 },\n    { \"prop\": \"name\", \"label\": \"角色名称\", \"width\": 140 },\n    { \"prop\": \"score\", \"label\": \"总积分\", \"width\": 120 }\n]\nadd_child(table_v2)"
+      "code": "# GDScript: TableV2 虚拟表格使用\nvar table_v2 = GTableV2.new()\ntable_v2.row_height = 36\ntable_v2.total_count = 100000\ntable_v2.row_renderer = func(row_node, index, data):\n    row_node.get_node(\"RankLabel\").text = \"#\" + str(index + 1)\n    row_node.get_node(\"ScoreLabel\").text = str(data.score)\nadd_child(table_v2)"
     }
   ],
   "props": [
     {
       "name": "data",
-      "type": "Array",
+      "type": "Array[Dictionary]",
       "default": "[]",
-      "desc": "表格显示的数据源数组",
+      "desc": "表格绑定的结构化数据集",
       "version": "v1.4.0"
     },
     {
       "name": "columns",
-      "type": "Array",
+      "type": "Array[Dictionary]",
       "default": "[]",
-      "desc": "表格列配置列表（含 prop, label, width, fixed, sortable 等）",
+      "desc": "列配置数组（支持 prop, label, width, sortable, align 等）",
       "version": "v1.4.0"
     },
     {
       "name": "stripe",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示斑马纹隔行变色",
+      "desc": "是否显示隔行斑马纹背景",
       "version": "v1.4.0"
     },
     {
       "name": "border",
       "type": "boolean",
       "default": "false",
-      "desc": "是否带有纵向边框与单元格分界线",
+      "desc": "是否开启纵向与单元格边框分界线",
       "version": "v1.4.0"
     },
     {
       "name": "selection_mode",
       "type": "enum",
       "default": "NONE",
-      "desc": "选择模式：NONE (无), SINGLE (单选), MULTI (多选复选框)",
+      "desc": "行选择模式：NONE (无), SINGLE (单选), MULTI (多选勾选)",
       "version": "v1.4.0"
     },
     {
-      "name": "fixed_header",
-      "type": "boolean",
-      "default": "true",
-      "desc": "向下滚动时表头是否自动吸顶固定",
+      "name": "empty_text",
+      "type": "String",
+      "default": "\"暂无数据\"",
+      "desc": "当表格数据为空或被清空时显示的空状态占位提示文本",
+      "version": "v1.4.0"
+    }
+  ],
+  "slots": [
+    {
+      "name": "default",
+      "desc": "自定义表格列声明或子控件",
       "version": "v1.4.0"
     },
     {
-      "name": "virtualized",
-      "type": "boolean",
-      "default": "false",
-      "desc": "是否开启 TableV2 虚拟滚动引擎（支持 10万+ 行）",
+      "name": "empty",
+      "desc": "当 data 为空时显示的自定义空状态插槽视图（可自定义图文与恢复按钮）",
+      "version": "v1.4.0"
+    },
+    {
+      "name": "cell",
+      "desc": "作用域插槽：自定义特定单元格渲染（透传 row_data, column, index）",
       "version": "v1.4.0"
     }
   ],
   "events": [
     {
       "name": "selection_change",
-      "desc": "当选择项发生变化时触发",
-      "params": "(selected_rows: Array)",
+      "desc": "当用户勾选多选框或切换选中行时触发",
+      "params": "(selected_rows: Array[Dictionary])",
+      "version": "v1.4.0"
+    },
+    {
+      "name": "sort_change",
+      "desc": "当用户点击可排序表头触发列排序时广播",
+      "params": "(prop: String, order: String)",
       "version": "v1.4.0"
     },
     {
       "name": "row_click",
       "desc": "当某一行被点击时触发",
-      "params": "(row: Dictionary, index: int)",
-      "version": "v1.4.0"
-    },
-    {
-      "name": "sort_change",
-      "desc": "当表格的排序条件发生变化时触发",
-      "params": "(prop: String, order: String)",
+      "params": "(row_data: Dictionary, index: int)",
       "version": "v1.4.0"
     }
   ],
   "methods": [
     {
       "name": "clear_selection()",
-      "desc": "用于多选表格，清空用户的全部选择",
+      "desc": "清空当前已勾选的所有多选行",
       "params": "() -> void",
       "version": "v1.4.0"
     },
     {
-      "name": "toggle_row_selection(row: Dictionary, selected: bool)",
-      "desc": "用于多选表格，切换某一行的选中状态",
-      "params": "(row: Dictionary, selected: bool) -> void",
+      "name": "toggle_row_selection(index: int, selected: bool)",
+      "desc": "程序化切换指定行的勾选状态",
+      "params": "(index: int, selected: bool) -> void",
       "version": "v1.4.0"
     },
     {
-      "name": "scroll_to_row(index: int)",
-      "desc": "虚拟化表格 TableV2 滚动到指定行索引",
-      "params": "(index: int) -> void",
-      "version": "v1.4.0"
-    }
-  ],
-  "slots": [
-    {
-      "name": "cell",
-      "desc": "自定义单元格作用域插槽 (Scoped Slot 数据透传)",
-      "child": "Control",
-      "example": "<template #cell=\"{ row, column, value }\"><GTag>{{ value }}</GTag></template>",
-      "version": "v1.4.0"
-    },
-    {
-      "name": "header",
-      "desc": "自定义表头插槽",
-      "child": "Control",
-      "example": "<template #header=\"{ column }\"><span>{{ column.label }}</span></template>",
-      "version": "v1.4.0"
-    },
-    {
-      "name": "empty",
-      "desc": "空数据时显示的自定义占位插槽",
-      "child": "Control",
-      "example": "<template #empty><GEmpty text=\"暂无表格数据\" /></template>",
+      "name": "sort(prop: String, order: String = \"asc\")",
+      "desc": "按指定字段与排序方向对表格进行排布",
+      "params": "(prop: String, order: String) -> void",
       "version": "v1.4.0"
     }
   ]
