@@ -17,6 +17,17 @@
 
 ---
 
+## 📱 全平台兼容性支持说明 (Multi-Platform Compatibility)
+
+| <img src="https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white" height="20"> | <img src="https://img.shields.io/badge/macOS-000000?style=flat&logo=apple&logoColor=white" height="20"> | <img src="https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black" height="20"> | <img src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" height="20"> | <img src="https://img.shields.io/badge/iOS-000000?style=flat&logo=apple&logoColor=white" height="20"> | <img src="https://img.shields.io/badge/visionOS-9333EA?style=flat&logo=apple&logoColor=white" height="20"> | <img src="https://img.shields.io/badge/Web_HTML5-E34F26?style=flat&logo=html5&logoColor=white" height="20"> |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Windows Desktop** | **macOS** | **Linux** | **Android** | **iOS** | **visionOS** | **Web (Wasm)** |
+| ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+> Gotod Components UI 基于 Godot 4.x (4.6+) 纯原生渲染架构打造，全部 52+ 组件与工具链均实现 **100% 跨平台零修改原生编译**。
+
+---
+
 ## 🌐 在线实时交互预览站点
 
 本项目自带完整的单页文档与交互式演练系统，已部署上线：
@@ -25,107 +36,29 @@
 
 在在线演示中，您可以体验：
 - 4 大主流设计主题切换（**Naive 绿**、**Element 蓝**、**AntD 极客蓝**、**Vant 橙红**）与深浅色模式。
-- 35+ 基础、表单、反馈、数据展示及游戏专用控件的实时交互。
+- 52+ 基础、表单、反馈、数据展示及游戏专用控件的实时交互。
+- **GDScript 4.x** 与 **C# (.NET 8.0/9.0)** 双语言代码实时切换与一键复制。
 - 2D 游戏数学、物理运动学、网络请求、跨页面通信与场景转场沙盒。
-- 点击 **"Copy GDScript"** 一键复制组件与系统源码。
+- 生产环境 52 组件全量摇树依赖扫描器 (Tree-Shaking Live Analyzer)。
 
 ---
 
 ## 🌟 核心体系与特性
 
-### 1. 🧩 35+ 开箱即用 UI 组件与游戏专用控件
-- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 图标、Fab 悬浮按钮。
-- **表单输入**：Input 输入框、InputNumber 数字步进、Select 选择器、Switch 开关、Checkbox 复选框、Radio 单选框、Slider 滑块、Stepper 步进器、Picker 拾取器、Form 响应式表单容器。
-- **反馈交互**：Dialog 模态弹窗、Message 全局浮动吐司、NoticeBar 滚动通告栏、Toast 轻提示、Dialogue JRPG/剧情对话流、Chat 微信/即时通讯流、InteractPrompt 浮动交互按键、Alert 警告条、Drawer 抽屉、Tooltip 提示、Popconfirm 气泡确认、Skeleton 骨架屏、Loading 遮罩、Tour 漫游引导。
-- **数据展示**：Card 卡片、Tag 标签、Badge 徽标、Avatar 头像、Progress 进度条、Tabs 选项卡、Collapse 折叠面板、Steps 步骤条、Space 间距容器。
-
-### 2. 🎰 Vue 风格点语法插槽系统 (`GSlotProxy`)
-- **默认无名插槽**：组件默认指向 default 插槽，`btn.slotName.color = "red"` 或 `btn.slotName.text = "确认支付"` 直接赋值。
-- **具名插槽点语法**：`dlg.header.text = "🔥 获得神话宝箱"`，`dlg.footer.confirm_text = "立即开启"`。
-- **动态自定义插槽**：支持 `card.slotName = "t1"`，`card.t1.color = "cyan"`，`card.t1.text = 124` 动态透传与强转。
-- **保留字防冲突守卫**：全自动拦截 Godot 4 系统属性冲突，提供明确的运行时警告与调试建议。
-
-### 3. 🎯 2D 游戏数学与坐标系统 (`GCoord`)
-- **屏幕边缘视野外目标指示器** (`get_offscreen_indicator_2d`)：自动计算 Boss/精英怪在屏幕边缘的夹持坐标、指示箭头旋转角及世界距离。
-- **2.5D Isometric 等距投影转换** (`cartesian_to_isometric_2d` / `isometric_to_cartesian_2d`)：45° 斜视角与笛卡尔网格互转。
-- **宝箱爆金币抛物线轨迹** (`get_loot_arc_pos_2d`)：二阶贝塞尔抛物线动画。
-- **环形弹幕与护盾点集** (`get_orbit_points_2d`)：均匀分布圆周轨道坐标。
-- **2D 扇形攻击与视野检测** (`is_in_fov_cone_2d`)：圆锥扇形夹角判定。
-
-### 4. ⚙️ 2D 物理运动学与碰撞装配 (`GPhysics`)
-- **跳跃物理公式计算**：根据期望跳跃高度 $h$ 与到达顶点时间 $t$，精确求解起跳初速度 $v = \frac{2h}{t}$ 与重力加速度 $g = \frac{2h}{t^2}$。
-- **范围爆炸冲击力** (`apply_explosion_impulse_2d`)：根据距离衰减对周围 `RigidBody2D` 施加径向冲击力。
-- **动态碰撞体装配**：一行代码为节点添加 Box / Circle / Capsule 碰撞体。
-
-### 5. 🌐 网络与多人游戏通信 (`GAxios` / `GWebSocket` / `GMultiplayer`)
-- **Axios 风格 HTTP 客户端** (`GAxios`)：支持全局请求/响应拦截器、JWT Token 自动注入、超时控制与 RESTful 封装。
-- **WebSocket 实时客户端** (`GWebSocket`)：支持自动心跳保活、断线重连与全双工数据监听。
-- **高阶多人联机房间** (`GMultiplayer`)：基于 ENet 封装的一键开房、加入房间与 RPC 同步。
-
-### 6. ⚡ UniApp / Vue 风格全局跨页面通讯 (`GEvent`)
-- 还原 `uni.$emit`、`uni.$on`、`uni.$once`、`uni.$off` 语法。
-- **深度防内存泄漏**：支持传入 `self` 节点，节点离开场景树时全自动注销监听！
-- 提供与 Godot 官方推荐 **Autoload + 强类型信号 (Typed Signals)** 的架构对比与标准代码。
-
-### 7. 🚀 场景路由与 8 大转场动画 (`GRouter`)
-- 极简跳转：`GRouter.push("res://scenes/shop.tscn")`
-- 8 种平滑转场：4 方向滑动（左/右/上/下）+ 3 大中心缩放（中心放大展开、远景缩小汇聚、Q弹果冻回弹）+ 经典淡入淡出。
-- **20+ 批量参数自动装配**：`GRouter.apply_params_to(self)` 一键反射注入同名变量。
-
-### 8. 🎨 全能数据格式化 (`GFormat`)
-- HP 动态渐变色（健康绿/警告黄/濒死红）、时长转时分秒、万/亿/K/M/B 大数值缩写、词条属性增减 (+15%/-20)、装备品阶炫彩 BBCode、文件字节与网速。
-
-### 9. 🎵 5 大多媒体资产加载方案 (`GAsset`)
-- 多线程异步加载 (`await GAsset.load_async`)、外部 MOD/本地头像动态读取、16 路全局音效池、BGM 双通道交叉淡入淡出、SpriteSheet 图集网格切片。
+### 1. 🧩 52+ 开箱即用 UI 组件与游戏专用控件
+- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 图标、Fab 悬浮按钮、Space 间距容器。
+- **表单输入**：Input 输入框、Textarea 多行文本、InputNumber 数字步进、Select 选择器、Switch 开关、Checkbox 复选框、Radio 单选框、Slider 滑块、Stepper 步进器、Picker 拾取器、Form 响应式表单容器。
+- **反馈交互**：Dialog 模态弹窗、Dialogue JRPG剧情对话流、Chat 聊天气泡、Popup 弹出层、Overlay 遮罩层、ActionSheet 动作面板、Popover 气泡卡片、NoticeBar 滚动通告栏、Message 全局浮动吐司、Toast 轻提示、Alert 警告条、Drawer 抽屉、Tooltip 提示、Loading 加载、Skeleton 骨架屏、Tour 漫游引导。
+- **数据展示**：Card 卡片、Tag 标签、Badge 徽标、Avatar 头像、Progress 进度条、Tabs 选项卡、Collapse 折叠面板、Steps 步骤条、Table 表格、VirtualList 百万级虚拟列表。
+- **引擎工坊与生态**：GHud3D 3D空间透视HUD、GHaptic 跨平台触感马达、GAIDialogueTree AI对话树、GI18n 国际化引擎、GParticleStudio 粒子工坊、GSkeletonParticleBinder 骨骼挂点绑定、GShaderStudio GPU着色器工坊、GRouter 路由转场。
 
 ---
 
-## 📦 项目目录结构
+## 📚 快速代码范例 (GDScript & C# 双语支持)
 
-```
-your-project/
-├── addons/
-│   └── gotod_ui/
-│       ├── components/    # 35+ Vue/Uni 风格 UI 组件
-│       ├── core/          # 插槽代理 (GSlotProxy)、样式与生命周期守卫
-│       ├── theme/         # 主题 Token 与样式盒引擎 (Naive, Element, AntD, Vant)
-│       ├── events/        # 全局事件总线 (GEvent uni.$emit / uni.$on)
-│       ├── router/        # 场景转场路由管理器 (GRouter)
-│       ├── utils/         # 网络 (Axios/WS/联机)、2D坐标、物理公式、格式化、资产加载
-│       ├── lifecycle/     # 生命周期安全守卫 (GLifecycleGuard)
-│       ├── plugin.cfg     # 插件配置文件
-│       └── plugin.gd      # 节点自动注册插件脚本
-├── assets/                # 在线交互文档样式与脚本资源
-├── index.html             # 交互式文档预览系统单页
-└── project.godot
-```
+### 1. 创建 UI 按钮与提示 (GButton & GMessage)
 
----
-
-## 🚀 安装与快速上手
-
-### 方式 1: 直接下载发行版压缩包 (推荐)
-- 👉 **[GitHub Releases 发行版页面下载](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[一键直链下载 v1.0.4 压缩包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.4.zip)**
-
-下载并解压后，将 `addons/gotod_ui` 文件夹直接复制到您的 Godot 4 项目根目录下的 `res://addons/` 中即可。
-
-### 方式 2: 通过 Git 克隆仓库
-```bash
-git clone https://github.com/mhxy13867806343/gotod-components-ui.git
-```
-
-### 启用插件步骤
-1. 打开 Godot 4 编辑器。
-2. 点击顶部菜单 **项目 (Project) -> 项目设置 (Project Settings) -> 插件 (Plugins)**。
-3. 勾选启用 **Gotod Components UI**。
-4. 启用后即可直接在场景树中添加组件节点，或在 GDScript 脚本中直接调用全部工具类！
-
----
-
-## 📚 快速代码范例
-
-### 1. 创建 UI 按钮与提示
+**GDScript 4.x**:
 ```gdscript
 var btn = GButton.new()
 btn.text = "进入战斗"
@@ -137,7 +70,30 @@ btn.pressed.connect(func():
 add_child(btn)
 ```
 
+**C# (.NET 8.0/9.0)**:
+```csharp
+using Godot;
+using GotodUI;
+
+public partial class MyScene : Control
+{
+    public override void _Ready()
+    {
+        var btn = new GButton();
+        btn.Text = "进入战斗";
+        btn.ButtonType = GButton.ButtonTypeEnum.Primary;
+        btn.Pressed += () => {
+            GMessage.Success("正在前往副本战场！");
+            GRouter.Push("res://scenes/battle.tscn", new Godot.Collections.Dictionary { { "stage_id", 108 } }, GRouter.TransitionTypeEnum.ZoomIn);
+        };
+        AddChild(btn);
+    }
+}
+```
+
 ### 2. 跨页面全局通信 (GEvent / uni.$emit)
+
+**GDScript 4.x**:
 ```gdscript
 # 发送端:
 GEvent.emit("user_info_updated", { "nickname": "龙骑士", "gold": 99999 })
@@ -150,14 +106,46 @@ func _ready() -> void:
     , self)
 ```
 
-### 3. Axios 风格异步请求
+**C# (.NET 8.0/9.0)**:
+```csharp
+// 发送端:
+GEvent.Emit("user_info_updated", new Godot.Collections.Dictionary {
+    { "nickname", "龙骑士" },
+    { "gold", 99999 }
+});
+
+// 接收端:
+public override void _Ready()
+{
+    GEvent.On("user_info_updated", (data) => {
+        var dict = (Godot.Collections.Dictionary)data;
+        GetNode<Label>("Nickname").Text = dict["nickname"].AsString();
+        GetNode<Label>("Gold").Text = dict["gold"].ToString();
+    }, this);
+}
+```
+
+### 3. Axios 风格异步请求 (GAxios)
+
+**GDScript 4.x**:
 ```gdscript
 var res: Dictionary = await GAxios.get("https://api.game.com/player/profile", { "id": 1001 })
 if res.success:
     print("玩家数据获取成功:", res.data)
 ```
 
-### 4. 2D 视野外敌人边缘指示与跳跃物理
+**C# (.NET 8.0/9.0)**:
+```csharp
+var res = await GAxios.GetAsync("https://api.game.com/player/profile", new Godot.Collections.Dictionary { { "id", 1001 } });
+if (res.Success)
+{
+    GD.Print("玩家数据获取成功: ", res.Data);
+}
+```
+
+### 4. 2D 视野外敌人边缘指示与跳跃物理 (GCoord & GPhysics)
+
+**GDScript 4.x**:
 ```gdscript
 # 1. 计算视野外 Boss 屏幕边缘指示器坐标与旋转角
 var indicator = GCoord.get_offscreen_indicator_2d(self, boss.global_position, 40.0)
@@ -166,6 +154,17 @@ $ArrowIcon.rotation = indicator.angle
 
 # 2. 精确起跳速度计算
 var jump_velocity = GPhysics.calculate_jump_velocity(180.0, 0.4) # 高度 180px, 时间 0.4s
+```
+
+**C# (.NET 8.0/9.0)**:
+```csharp
+// 1. 计算视野外 Boss 屏幕边缘指示器坐标与旋转角
+var indicator = GCoord.GetOffscreenIndicator2D(this, boss.GlobalPosition, 40.0f);
+GetNode<Node2D>("ArrowIcon").Position = indicator.ScreenPos;
+GetNode<Node2D>("ArrowIcon").Rotation = indicator.Angle;
+
+// 2. 精确起跳速度计算
+float jumpVelocity = GPhysics.CalculateJumpVelocity(180.0f, 0.4f); // 高度 180px, 时间 0.4s
 ```
 
 ---

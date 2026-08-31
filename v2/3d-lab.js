@@ -1,11 +1,25 @@
 /* Shared v2 3D documentation interactions. The Godot snippets are intentionally kept next to each preview. */
 (function (global) {
   var csharpCodes = [
-    'var scene = new GScene3D();\nscene.Camera.Position = new Vector3(0, 2, 6);\nscene.Camera.LookAt(Vector3.Zero);\nscene.AddMesh(new BoxMesh());',
-    'var material = (ShaderMaterial)mesh.GetActiveMaterial(0);\nmaterial.SetShaderParameter("rim_power", 2.5f);\nmaterial.SetShaderParameter("edge_color", new Color(0.2f, 0.8f, 1.0f));',
-    'var env = new Environment {\n    BackgroundMode = Environment.BGMode.Sky,\n    GlowEnabled = true, FogEnabled = true,\n    TonemapMode = Environment.ToneMapper.Aces\n};\nGetNode<WorldEnvironment>("WorldEnvironment").Environment = env;',
-    'var particles = new GpuParticles3D {\n    Amount = 512, Lifetime = 2.0,\n    ProcessMaterial = particleMaterial\n};\nAddChild(particles);\n// 大量相同网格使用 MultiMeshInstance3D'
+    'using Godot;\nusing GotodUI;\n\npublic partial class Scene3DComponent : Node3D\n{\n    [Export] public Camera3D Camera { get; set; }\n\n    public override void _Ready()\n    {\n        var mesh = new MeshInstance3D { Mesh = new BoxMesh() };\n        AddChild(mesh);\n\n        var outline = new GButton\n        { Text = "Inspect Mesh", Variant = GButton.Variant.Outline };\n        AddChild(outline);\n        Camera?.LookAt(GlobalPosition);\n    }\n}',
+    'using Godot;\nusing GotodUI;\n\npublic partial class ShaderCard : MeshInstance3D\n{\n    public override void _Ready()\n    {\n        var material = GetActiveMaterial(0) as ShaderMaterial;\n        material?.SetShaderParameter("rim_power", 2.5f);\n        material?.SetShaderParameter("edge_color", new Color(0.2f, 0.8f, 1.0f));\n    }\n}',
+    'using Godot;\nusing GotodUI;\n\npublic partial class WorldLighting : Node3D\n{\n    public override void _Ready()\n    {\n        var env = new Environment\n        {\n            BackgroundMode = Environment.BGMode.Sky,\n            GlowEnabled = true, FogEnabled = true,\n            TonemapMode = Environment.ToneMapper.Aces\n        };\n        GetNode<WorldEnvironment>("WorldEnvironment").Environment = env;\n    }\n}',
+    'using Godot;\nusing GotodUI;\n\npublic partial class FXEmitter : Node3D\n{\n    [Export] public ParticleProcessMaterial ParticleMaterial { get; set; }\n\n    public override void _Ready()\n    {\n        var particles = new GpuParticles3D\n        { Amount = 512, Lifetime = 2.0, ProcessMaterial = ParticleMaterial };\n        AddChild(particles);\n        // 大量相同网格使用 MultiMeshInstance3D\n    }\n}'
   ];
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text);
+      return;
+    }
+    var area = document.createElement('textarea');
+    area.value = text;
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+  }
   function installCodeTools() {
     var grid = document.querySelector('.lab-grid');
     if (!grid || grid.querySelector('.lab-language-tabs')) return;
@@ -21,8 +35,13 @@
       copy.textContent = '复制';
       copy.addEventListener('click', function () {
         var text = pre.textContent;
-        if (navigator.clipboard) navigator.clipboard.writeText(text);
-        setStatus('代码已复制到剪贴板', '#86efac');
+        copyText(text);
+        var title = pre.closest('.lab-card').querySelector('h2');
+        var language = tabs.querySelector('[data-language="csharp"].active') ? 'C#' : 'GDScript';
+        var message = (title ? title.textContent.split('·')[0].trim() : '示例') + ' - ' + language + '代码复制成功';
+        setStatus(message, '#86efac');
+        copy.textContent = '已复制';
+        setTimeout(function () { copy.textContent = '复制'; }, 1200);
       });
       pre.parentElement.appendChild(copy);
     });
@@ -68,7 +87,7 @@
       setStatus(enabled ? 'WorldEnvironment glow enabled' : 'WorldEnvironment glow disabled');
     },
     copy: function (text) {
-      if (navigator.clipboard) navigator.clipboard.writeText(text);
+      copyText(text);
       setStatus('Shader code copied to clipboard', '#86efac');
     }
   };

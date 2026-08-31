@@ -360,9 +360,43 @@ window.showDoc = function(key) {
       '所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：'
     );
   } else if (!['guide-', 'game-', 'play-', 'studio-', 'imp-', 'godot-'].some(p => key.startsWith(p))) {
-    // Elegant tip on component pages
+    // 7. Multi-Platform Compatibility Table (uni-app / Cross-Platform Matrix)
     propsHtml += `
-      <div style="margin-top: 32px; padding: 14px 18px; background: var(--bg-surface); border: 1px solid var(--border-base); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <div class="api-table-wrapper" style="margin-top: 32px;">
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-cubes-stacked" style="color: var(--primary);"></i>
+            <span>${compName} 全平台兼容性支持说明 (Platform Compatibility Matrix)</span>
+          </div>
+          <span style="font-size: 11px; color: var(--text-secondary); font-weight: normal;">Godot 4.x 跨端编译全绿保障</span>
+        </div>
+        <table class="api-table" style="text-align: center;">
+          <thead>
+            <tr>
+              <th style="text-align: center; width: 14%;"><i class="fa-brands fa-windows" style="color:#00adef; margin-right:4px;"></i> Windows Desktop</th>
+              <th style="text-align: center; width: 14%;"><i class="fa-brands fa-apple" style="color:#a2aaad; margin-right:4px;"></i> macOS</th>
+              <th style="text-align: center; width: 14%;"><i class="fa-brands fa-linux" style="color:#fcc624; margin-right:4px;"></i> Linux</th>
+              <th style="text-align: center; width: 14%;"><i class="fa-brands fa-android" style="color:#3ddc84; margin-right:4px;"></i> Android</th>
+              <th style="text-align: center; width: 14%;"><i class="fa-brands fa-apple" style="color:#a2aaad; margin-right:4px;"></i> iOS</th>
+              <th style="text-align: center; width: 14%;"><i class="fa-solid fa-glasses" style="color:#a855f7; margin-right:4px;"></i> visionOS</th>
+              <th style="text-align: center; width: 16%;"><i class="fa-brands fa-html5" style="color:#e34f26; margin-right:4px;"></i> Web (HTML5/Wasm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color: var(--primary); font-weight: 800; font-size: 15px;">✓</td>
+              <td style="color: var(--primary); font-weight: 800; font-size: 15px;">✓</td>
+              <td style="color: var(--primary); font-weight: 800; font-size: 15px;">✓</td>
+              <td style="color: var(--primary); font-weight: 800; font-size: 15px;">✓</td>
+              <td style="color: var(--primary); font-weight: 800; font-size: 15px;">✓</td>
+              <td style="color: var(--primary); font-weight: 800; font-size: 15px;">✓</td>
+              <td style="color: var(--primary); font-weight: 800; font-size: 15px;">✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 24px; padding: 14px 18px; background: var(--bg-surface); border: 1px solid var(--border-base); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
         <div style="font-size: 13px; color: var(--text-regular);">
           💡 <b>基类通用方法提示</b>：本组件天然继承 Godot 4 官方 <code style="color:var(--primary); font-family:var(--font-mono);">Control</code> / <code style="color:var(--primary); font-family:var(--font-mono);">Node</code> 基类全部能力（包括 <code style="color:var(--primary); font-family:var(--font-mono);">add_child()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">queue_free()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">create_tween()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">show()</code> 等）。
         </div>

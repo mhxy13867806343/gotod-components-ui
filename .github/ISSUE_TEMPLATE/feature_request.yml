@@ -27,7 +27,19 @@ body:
         - 工具链 / 开发体验 | Toolchain / DX
         - 文档 / 示例 | Documentation / Examples
         - 性能优化 | Performance
+        - 3D IK 动力学约束与 WebRTC 空间音频 | 3D IK & WebRTC Audio
         - 其他 | Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: 目标编程语言支持 | Target Programming Language Support
+      options:
+        - "两者均支持 (Both GDScript and C# .NET)"
+        - "仅 GDScript 4.x"
+        - "仅 C# (.NET 8.0 / 9.0)"
     validations:
       required: true
 

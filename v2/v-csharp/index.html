@@ -18,7 +18,15 @@
     <div class="header-actions"><a href="../v-vue/" class="g-btn g-btn-default" style="text-decoration:none;font-size:12px;">Vue 版</a><a href="../v-jquery/" class="g-btn g-btn-default" style="text-decoration:none;font-size:12px;">jQuery 版</a><a href="../../" class="g-btn g-btn-primary" style="text-decoration:none;font-size:12px;">返回 V1</a></div>
   </header>
   <main class="lab-shell">
-    <section class="lab-hero"><div><div class="lab-kicker">GOTOD UI V2 / GODOT 4.4 / C# .NET</div><h1>Godot C# 3D 与 Shader 实验室</h1><p>为 Godot 4 C# 项目提供可复用的 3D 组件封装，覆盖 Node3D 场景、Camera3D、MeshInstance3D、WorldEnvironment、GPU 粒子和 ShaderMaterial。</p><div class="lab-links"><a class="g-btn g-btn-primary" href="https://docs.godotengine.org/zh-cn/4.4/tutorials/3d/index.html" target="_blank">Godot 4.4 3D 文档</a><a class="g-btn g-btn-default" href="https://docs.godotengine.org/zh-cn/4.4/tutorials/shaders/index.html" target="_blank">Shader 文档</a></div></div><div class="lab-hero-card"><div class="lab-kicker">C# NODE API</div><pre>public partial class OrbitRig : Node3D
+    <section class="lab-hero"><div><div class="lab-kicker">GOTOD UI V2 / GODOT 4.4 / C# .NET</div><h1>Godot C# 3D 与 Shader 实验室</h1><p>为 Godot 4 C# 项目提供可复用的 3D 组件封装，覆盖 Node3D 场景、Camera3D、MeshInstance3D、WorldEnvironment、GPU 粒子和 ShaderMaterial。</p><div class="lab-links"><a class="g-btn g-btn-primary" href="https://docs.godotengine.org/zh-cn/4.4/tutorials/3d/index.html" target="_blank">Godot 4.4 3D 文档</a><a class="g-btn g-btn-default" href="https://docs.godotengine.org/zh-cn/4.4/tutorials/shaders/index.html" target="_blank">Shader 文档</a></div></div><div class="lab-hero-card"><div class="lab-kicker">C# NODE API</div><pre>using Godot;
+using GotodUI;
+
+public partial class OrbitRig : Node3D
+{
+    [Export] public Camera3D Camera { get; set; }
+    public override void _Process(double delta) =&gt;
+        RotateY((float)delta * 0.4f);
+}</pre><span id="labStatus" style="font:11px var(--font-mono);color:#67e8f9;">Ready · C# preview</span></div></section>
     <section class="lab-grid">
       <article class="lab-card"><div class="lab-card-head"><div><h2>GScene3D · Node3D 场景树</h2><p>使用 C# 节点生命周期组装 Mesh 与 Camera。</p></div><span class="g-tag g-tag-primary">基础</span></div><div class="lab-card-body"><div id="labScene" class="lab-preview"><div class="lab-scene"><div id="labCube" class="lab-cube"></div><div class="lab-orb"></div></div><button class="g-btn g-btn-primary" onclick="Gotod3DLab.rotate()">旋转 Mesh</button></div><div class="lab-code"><pre>public partial class Scene3D : Node3D
 {

@@ -38,7 +38,19 @@ body:
     id: os
     attributes:
       label: 操作系统 | Operating System
-      placeholder: "例如 / e.g. Windows 11, macOS 14, Ubuntu 22.04"
+      placeholder: "例如 / e.g. Windows 11, macOS 14, Ubuntu 22.04, Android, iOS, visionOS, Web"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: 编程语言环境 | Programming Language Environment
+      description: 请选择您复现此问题所使用的编程语言 | Select the language environment used
+      options:
+        - "GDScript 4.x"
+        - "C# (.NET 8.0 / 9.0)"
+        - "两者均有 (Both GDScript and C#)"
     validations:
       required: true
 
