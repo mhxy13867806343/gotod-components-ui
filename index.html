@@ -9,8 +9,10 @@
   <!-- Local Offline Vector Icons -->
   <link rel="stylesheet" href="assets/icons/icons.css?v=20260831_56">
   <!-- Local Theme Tokens & Stylesheet -->
-  <link rel="stylesheet" href="assets/css/theme.css?v=20260831_56">
-  <link rel="stylesheet" href="assets/css/style.css?v=20260831_56">
+  <link rel="stylesheet" href="assets/css/theme.css?v=20260831_62">
+  <link rel="stylesheet" href="assets/css/style.css?v=20260831_62">
+  <!-- Overtrue Share.js Stylesheet (社交分享组件) -->
+  <link rel="stylesheet" href="assets/css/share.min.css?v=20260831_62">
 </head>
 <body>
   <!-- Top Dual-Mode Progress Bar (顶部双模进度条: 路由加载 + 上下滚动阅读) -->
@@ -30,10 +32,10 @@
         <span style="font-size:12px; font-weight:600; color:var(--text-secondary); white-space:nowrap;">板块:</span>
         <select id="topSectionSelect" class="select-theme" onchange="switchTopSection(this.value)" style="font-weight:600; font-size:13px; height:32px; padding:0 12px; min-width:240px; border-color:var(--primary); cursor:pointer;">
           <option value="guide">1. 指南与快速上手 (Guide)</option>
-          <option value="components" selected>2. 组件库全量文档 (Components)</option>
-          <option value="game">3. 游戏实战案例 (Game UI)</option>
-          <option value="playground">4. 属性与方法演练 (API Playground)</option>
-          <option value="imperative">5. 编程式/命令式调用 (Imperative API)</option>
+          <option value="components">2. 基础与通用组件 (Components)</option>
+          <option value="game">3. 游戏专属重度组件 (Game UI)</option>
+          <option value="play">4. 极客演练场 (Playground)</option>
+          <option value="godot4">5. Godot 4 核心引擎基座 (Godot Engine API)</option>
           <option value="hooks">6. Hooks 响应式钩子 (Vue Hooks)</option>
           <option value="signals">7. 自定义信号与事件总线 (Signals & Events)</option>
           <option value="decorator">8. 装饰器设计模式工坊 (Decorator Pattern)</option>
@@ -51,7 +53,6 @@
     </div>
 
     <div class="header-actions">
-      <a class="g-btn g-btn-default" href="library/" style="height:32px; padding:0 12px; font-size:12px; gap:6px; border-radius:var(--radius); cursor:pointer; text-decoration:none; color:var(--primary);"><i class="fa-solid fa-book-open"></i><span>Godot Library</span></a>
       <!-- Global Search Trigger Button using UI Component Style -->
       <button class="g-btn g-btn-default" style="height:32px; padding:0 12px; font-size:12px; gap:8px; border-radius:var(--radius); cursor:pointer;" onclick="openGlobalSearch()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -61,17 +62,41 @@
 
       <!-- Repository Links Dropdown -->
       <select class="select-theme" style="font-weight:600; font-size:12px; height:32px; padding:0 10px; cursor:pointer;" onchange="if(this.value){window.open(this.value, '_blank'); this.selectedIndex=0;}">
-        <option value="" disabled selected>📦 源码仓库 (Repos)</option>
-        <option value="https://github.com/mhxy13867806343/gotod-components-ui">🐙 GitHub 仓库</option>
-        <option value="https://gitee.com/fangjiayu/gotod-components-ui">🚩 Gitee (国内镜像)</option>
+        <option value="">开源仓库与文档</option>
+        <option value="https://github.com/mhxy13867806343/gotod-components-ui">GitHub 源码仓库</option>
+        <option value="https://github.com/mhxy13867806343/gotod-components-ui/issues">提交 Issue / 需求</option>
+        <option value="https://docs.godotengine.org/en/stable/">Godot 官方引擎文档</option>
       </select>
+
+      <button class="g-btn g-btn-default" onclick="openShareModal()" title="一键分享当前页面至社交平台 (Overtrue Share.js)" style="height:32px; padding:0 10px; font-size:12px; gap:6px;">
+        <i class="fa-solid fa-share-nodes" style="color:var(--primary);"></i>
+        <span>分享</span>
+      </button>
+
+      <!-- Clean Theme Selector Dropdown (No Overlapping Text, Fits all screens) -->
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="font-size:12px; font-weight:600; color:var(--text-secondary);"><i class="fa-solid fa-palette" style="color:var(--primary);"></i></span>
+        <select class="select-theme" id="themeSelect" onchange="setTheme(this.value)" style="font-weight:600; font-size:12px; height:32px; padding:0 8px; cursor:pointer;">
+          <option value="naive">Naive UI Style</option>
+          <option value="element">Element Plus Style</option>
+          <option value="ant">Ant Design Style</option>
+          <option value="arco">Arco Design Style</option>
+          <option value="godot">Godot Classic Style</option>
+          <option value="cyberpunk">Cyberpunk Neon Style</option>
+          <option value="nordic">Nordic Frost Style</option>
+          <option value="dracula">Dracula Dark Style</option>
+        </select>
+      </div>
+
+      <button class="g-btn g-btn-default" id="themeModeBtn" onclick="toggleDark()" title="切换明暗色彩模式" style="height:32px; width:32px; padding:0; display:inline-flex; align-items:center; justify-content:center;">
+        <i class="fa-solid fa-moon"></i>
+      </button>
     </div>
   </header>
 
-  <!-- JD.com Style Right-Side Fixed Toolbar Dock (京东右侧悬浮固定侧边栏) -->
-  <div class="jd-sidebar-dock" aria-label="快捷侧边栏">
-    <a href="library/" class="jd-dock-item" title="Godot 开源库与插件索引"><i class="fa-solid fa-book-open" style="color:#38bdf8;"></i><span>Library</span></a>
-    <!-- 1. 更新日志 (Changelog) -->
+  <!-- Right Floating JD-Style Fixed Sidebar Navigation Dock (仿京东右侧固定浮动悬浮挂件栏) -->
+  <div class="jd-sidebar-dock" id="jdSidebarDock">
+    <!-- 1. 版本更新日志 (GSteps) -->
     <button class="jd-dock-item" onclick="switchTopSection('changelog')" title="查看基于 Steps 步骤条构建的版本更新日志">
       <span class="jd-dock-badge">v1.6</span>
       <i class="fa-solid fa-clock-rotate-left" style="color:#eab308;"></i>
@@ -90,13 +115,19 @@
       <span>JQ版</span>
     </a>
 
-    <!-- 4. 版本更新检测 / 触发更新弹窗 -->
+    <!-- 4. 社交分享组件 (Overtrue Share.js) -->
+    <button class="jd-dock-item" onclick="window.openShareModal()" title="一键分享当前页面至微信/QQ/微博/Twitter">
+      <i class="fa-solid fa-share-nodes" style="color:#38bdf8;"></i>
+      <span>分享</span>
+    </button>
+
+    <!-- 5. 版本更新检测 / 触发更新弹窗 -->
     <button class="jd-dock-item" onclick="if (typeof window.testVersionPollingUpdate === 'function') window.testVersionPollingUpdate(); else if (typeof window.showVersionUpdateModal === 'function') window.showVersionUpdateModal(window.forceHardReload); else window.forceHardReload();" title="检测并触发版本更新弹窗 (Version Polling)">
       <i class="fa-solid fa-rotate" style="color:var(--primary);"></i>
       <span>更新</span>
     </button>
 
-    <!-- 5. 源码仓库 (GitHub) -->
+    <!-- 6. 源码仓库 (GitHub) -->
     <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="jd-dock-item" title="访问 GitHub 开源仓库">
       <i class="fa-brands fa-github"></i>
       <span>源码</span>
@@ -407,11 +438,14 @@
   <script src="assets/js/nav_dropdown.js?v=20260831_60"></script>
   <script src="assets/js/changelog_page.js?v=20260831_60"></script>
   <!-- Top Dual-Mode Progress Bar (顶部双模进度条: 路由加载与上下滚动阅读) -->
-  <script src="assets/js/top_progress_bar.js?v=20260831_61"></script>
+  <script src="assets/js/top_progress_bar.js?v=20260831_62"></script>
   <!-- Naive UI Style Right Anchor Navigation (右侧页面大纲目录) -->
-  <script src="assets/js/doc_anchor_nav.js?v=20260831_61"></script>
+  <script src="assets/js/doc_anchor_nav.js?v=20260831_62"></script>
+  <!-- Overtrue Share.js (全站社交分享组件系统) -->
+  <script src="assets/js/social-share.min.js?v=20260831_62"></script>
+  <script src="assets/js/share_manager.js?v=20260831_62"></script>
   <!-- Local Standalone Version Polling (实时版本检测与弹窗提醒) -->
-  <script src="assets/js/version-polling.min.js?v=20260831_61"></script>
-  <script src="assets/js/app.js?v=20260831_61"></script>
+  <script src="assets/js/version-polling.min.js?v=20260831_62"></script>
+  <script src="assets/js/app.js?v=20260831_62"></script>
 </body>
 </html>
