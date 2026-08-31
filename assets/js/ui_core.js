@@ -500,7 +500,25 @@ window.switchCodeLanguage = function(lang, btn) {
     p.style.display = (lang === 'csharp') ? 'block' : 'none';
   });
 
+  // Automatically expand the current demo card's source code area
+  if (btn) {
+    const card = btn.closest('.demo-card');
+    if (card) {
+      const wrapper = card.querySelector('.demo-source-wrapper');
+      const toggleBtn = card.querySelector('.toggle-code-btn');
+      if (wrapper) {
+        wrapper.style.display = 'block';
+        if (toggleBtn) {
+          toggleBtn.classList.add('active');
+          toggleBtn.style.color = 'var(--primary)';
+          toggleBtn.style.background = 'rgba(34, 197, 94, 0.12)';
+          toggleBtn.title = '隐藏源代码';
+        }
+      }
+    }
+  }
+
   if (window.showToast) {
-    window.showToast(`已切换至【${lang === 'csharp' ? 'C# (Godot .NET)' : 'GDScript'}】代码模式`, 'info');
+    window.showToast(`已切换并展开【${lang === 'csharp' ? 'C# (Godot .NET)' : 'GDScript'}】源代码`, 'info');
   }
 };

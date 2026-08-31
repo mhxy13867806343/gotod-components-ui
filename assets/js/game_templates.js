@@ -1572,6 +1572,110 @@ func _on_connection_lost() -> void:
     GNotification.warning("连接中断", "正在恢复对局状态...")`
     }]
   },
+  'game-memory-speedrun': {
+    title: '🏁 竞速：极速记忆挑战 (Speedrun)',
+    desc: '限时翻牌、分段计时与最佳成绩展示，适合竞速型记忆玩法。',
+    demos: [{ title: '极速计时面板', render: `<div class="sim-card" style="width:100%;"><div class="sim-card-header"><b>极速挑战 · 12 对</b><span id="speedTimer" class="g-tag g-tag-danger">00:42.8</span></div><div class="g-progress-bar" style="margin:16px 0;"><div class="g-progress-fill" style="width:68%; background:var(--danger);"></div></div><button class="g-btn g-btn-danger" onclick="showToast('计时已暂停，当前成绩 00:42.8', 'warning')">暂停计时</button> <button class="g-btn g-btn-primary" onclick="showToast('新纪录！比最佳成绩快 1.2 秒', 'success')">完成本段</button></div>`, code: `# GDScript: 分段计时
+var elapsed := 0.0
+var best_time := INF
+func _process(delta: float) -> void:
+    if state == MatchState.PLAYING:
+        elapsed += delta
+func finish_run() -> void:
+    best_time = minf(best_time, elapsed)
+    GMessage.success("成绩：%.1f 秒" % elapsed)` }]
+  },
+  'game-memory-boss': {
+    title: '🐉 Boss：巨龙记忆战 (Boss Memory Battle)',
+    desc: '把配对正确率、连击和 Boss 血条结合起来，形成有阶段变化的战斗关卡。',
+    demos: [{ title: 'Boss 血条与阶段技能', render: `<div class="sim-card" style="width:100%; max-width:640px;"><div class="sim-card-header"><b>🐉 远古记忆龙 · 阶段 2</b><span class="g-tag g-tag-danger">HP 62%</span></div><div class="g-progress-bar" style="margin:14px 0;"><div class="g-progress-fill" style="width:62%; background:var(--danger);"></div></div><div style="display:flex; gap:8px; flex-wrap:wrap;"><button class="g-btn g-btn-primary" onclick="showToast('配对成功，Boss 受到 180 点伤害', 'success')">配对攻击</button><button class="g-btn g-btn-warning" onclick="showToast('Boss 释放记忆迷雾：卡片暂时重排', 'warning')">触发迷雾</button></div></div>`, code: `# GDScript: Boss 阶段切换
+func on_match_success(combo: int) -> void:
+    boss.hp -= 60 + combo * 20
+    if boss.hp_ratio < 0.5 and boss.phase == 1:
+        boss.phase = 2
+        board.shuffle_hidden_cards()` }]
+  },
+  'game-memory-story': {
+    title: '📖 剧情：记忆王国冒险 (Story Adventure)',
+    desc: '将对局结果接入剧情节点、对话和分支选择，让每次配对都推动故事发展。',
+    demos: [{ title: '剧情节点选择', render: `<div style="padding:16px; background:linear-gradient(135deg,#312e81,#172554); border-radius:10px; color:#fff;"><div style="font-size:12px; color:#c4b5fd;">第 3 章 · 被遗忘的钟楼</div><p style="line-height:1.6;">“你记起了门上的星纹，但钟楼里还有两条路……”</p><button class="g-btn g-btn-primary" onclick="showToast('选择左侧道路：获得月光卡组', 'success')">探索左侧</button> <button class="g-btn g-btn-default" onclick="showToast('选择右侧道路：触发隐藏关卡', 'info')">探索右侧</button></div>`, code: `# GDScript: 剧情节点
+func resolve_story_choice(choice: String) -> void:
+    story_flags[choice] = true
+    DialogueService.play("chapter_3_" + choice)
+    SaveManager.checkpoint({"chapter": 3, "choice": choice})` }]
+  },
+  'game-memory-puzzle': {
+    title: '🧩 解谜：机关卡牌迷阵 (Puzzle Grid)',
+    desc: '加入锁定格、旋转机关和顺序条件，展示传统翻牌之外的解谜组合。',
+    demos: [{ title: '机关网格', render: `<div style="display:grid; grid-template-columns:repeat(4,54px); gap:7px; padding:15px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:10px; width:max-content;">${['↗','🔒','↘','✦','✦','↘','🔒','↗'].map((v, i) => `<button class="g-btn g-btn-default" style="width:54px;height:54px;font-size:20px;" onclick="this.innerText=this.innerText==='?'?'${v}':'?'; showToast('机关格 ${i + 1} 已切换', 'info');">?</button>`).join('')}</div>`, code: `# GDScript: 机关解锁
+func can_open_gate(sequence: Array[int]) -> bool:
+    return sequence == [2, 4, 1, 3] and not gate_locked
+func rotate_tile(index: int) -> void:
+    tiles[index].rotation = fmod(tiles[index].rotation + 90.0, 360.0)` }]
+  },
+  'game-memory-collection': {
+    title: '🎁 收集：卡牌图鉴与成就 (Collection Book)',
+    desc: '为记忆卡片增加稀有度、图鉴收集进度和成就奖励，适合长期养成。',
+    demos: [{ title: '卡牌图鉴进度', render: `<div class="sim-card" style="width:100%; max-width:620px;"><div class="sim-card-header"><span>🌌 星界图鉴</span><span class="g-tag g-tag-warning">28 / 60</span></div><div class="g-progress-bar" style="margin:14px 0;"><div class="g-progress-fill" style="width:46%; background:var(--warning);"></div></div><div style="display:flex; gap:10px; flex-wrap:wrap;"><span class="g-tag g-tag-success">✅ 森林 12/12</span><span class="g-tag g-tag-primary">进行中：星界 8/20</span><span class="g-tag">🔒 深渊 0/16</span></div><button class="g-btn g-btn-warning" style="margin-top:14px;" onclick="showToast('成就解锁：收集家 · 奖励 500 金币', 'success')">查看可领取成就</button></div>`, code: `# GDScript: 图鉴与成就
+func register_card(card_id: String) -> void:
+    collection[card_id] = true
+    var count := collection.values().count(true)
+    if count in [10, 25, 50]:
+        Achievement.unlock("collector_" + str(count))` }]
+  },
+  'game-memory-daily': {
+    title: '📅 日常：每日随机挑战 (Daily Challenge)',
+    desc: '按日期生成固定牌组，提供连续签到、每日词缀和过期倒计时。',
+    demos: [{ title: '每日挑战卡', render: `<div class="sim-card" style="width:100%;"><div class="sim-card-header"><b>📅 8 月 31 日挑战</b><span class="g-tag g-tag-warning">剩余 08:42:15</span></div><div style="margin:14px 0; font-size:12px;">今日词缀：<span class="g-tag g-tag-primary">卡片会旋转</span> <span class="g-tag g-tag-danger">错误 -100 分</span></div><button class="g-btn g-btn-primary" onclick="showToast('已生成今日固定牌组 Seed: 831204', 'success')">生成今日牌组</button></div>`, code: `# GDScript: 日期种子
+func daily_seed() -> int:
+    var date := Time.get_date_dict_from_system()
+    return date.year * 10000 + date.month * 100 + date.day
+func build_daily_deck() -> void:
+    deck.shuffle_with_seed(daily_seed())` }]
+  },
+  'game-memory-tournament': {
+    title: '🏆 赛事：淘汰赛记忆杯 (Tournament Bracket)',
+    desc: '展示报名、晋级树、轮次锁定和赛事结算，适合线上或线下记忆比赛。',
+    demos: [{ title: '淘汰赛晋级树', render: `<div class="sim-card" style="width:100%;"><div class="sim-card-header"><b>记忆杯 · 八强赛</b><span class="g-tag g-tag-success">Round 3</span></div><div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px;"><div style="padding:10px; background:var(--bg-surface); border-left:3px solid var(--success);">神经元战队 <b>2 : 1</b><br><small>晋级半决赛</small></div><div style="padding:10px; background:var(--bg-surface);">星尘旅团 <b>1 : 2</b><br><small>等待下一场</small></div></div><button class="g-btn g-btn-warning" style="margin-top:14px;" onclick="showToast('比赛房间将在 10 秒后锁定', 'warning')">锁定比赛房间</button></div>`, code: `# GDScript: 赛事轮次
+func advance_match(winner_id: String) -> void:
+    bracket[current_round].winner = winner_id
+    if bracket[current_round].is_complete():
+        current_round += 1
+        Matchmaking.open_round(current_round)` }]
+  },
+  'game-memory-accessibility': {
+    title: '♿ 无障碍：辅助记忆模式 (Accessible Mode)',
+    desc: '提供高对比度、读屏提示、减少动画和键盘操作，展示更包容的游戏 UI。',
+    demos: [{ title: '辅助选项预览', render: `<div class="sim-card" style="width:100%; max-width:620px;"><div class="sim-card-header"><b>辅助记忆设置</b><span class="g-tag g-tag-success">已优化</span></div><div style="display:flex; flex-direction:column; gap:12px; margin-top:14px;"><label style="display:flex;justify-content:space-between;">高对比度模式 <input type="checkbox" checked onchange="showToast('高对比度：'+(this.checked?'开启':'关闭'))"></label><label style="display:flex;justify-content:space-between;">读屏提示 <input type="checkbox" checked onchange="showToast('读屏提示：'+(this.checked?'开启':'关闭'))"></label><label style="display:flex;justify-content:space-between;">减少翻牌动画 <input type="checkbox" onchange="showToast('动画设置已更新')"></label></div></div>`, code: `# GDScript: 无障碍设置
+func apply_accessibility(settings: Dictionary) -> void:
+    ThemeManager.high_contrast = settings.get("high_contrast", false)
+    board.reduced_motion = settings.get("reduced_motion", false)
+    Accessibility.announce("辅助记忆模式已启用")` }]
+  },
+  'game-memory-replay': {
+    title: '🎬 回放：对局录像分析 (Replay Viewer)',
+    desc: '记录每次翻牌操作、时间线和失误位置，帮助玩家复盘并分享精彩对局。',
+    demos: [{ title: '对局时间线', render: `<div class="sim-card" style="width:100%;"><div class="sim-card-header"><b>对局回放 · 03:18</b><span class="g-tag g-tag-primary">第 18 / 24 对</span></div><input type="range" min="0" max="100" value="64" style="width:100%; margin:18px 0;" oninput="showToast('回放进度：'+this.value+'%')"><div style="display:flex; gap:8px;"><button class="g-btn g-btn-primary" onclick="showToast('正在播放回放', 'info')">▶ 播放</button><button class="g-btn g-btn-default" onclick="showToast('已复制回放分享链接', 'success')">分享链接</button></div></div>`, code: `# GDScript: 回放事件流
+var replay_events: Array[Dictionary] = []
+func record_flip(card_id: int, timestamp: float) -> void:
+    replay_events.append({"card": card_id, "time": timestamp})
+func seek_replay(progress: float) -> void:
+    board.reset()
+    for event in replay_events:
+        if event.time <= progress: board.replay_flip(event.card)` }]
+  },
+  'game-memory-analytics': {
+    title: '📊 数据：玩家行为分析 (Game Analytics)',
+    desc: '把平均反应时间、错误热区和关卡流失率可视化，为难度调优提供依据。',
+    demos: [{ title: '关卡数据看板', render: `<div class="sim-card" style="width:100%;"><div class="sim-card-header"><b>Level 06 数据看板</b><span class="g-tag g-tag-success">数据已更新</span></div><div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-top:15px;"><div style="padding:12px;background:var(--bg-surface);border-radius:8px;"><small>通关率</small><h3 style="color:var(--success);margin:6px 0;">72.4%</h3></div><div style="padding:12px;background:var(--bg-surface);border-radius:8px;"><small>平均用时</small><h3 style="color:var(--primary);margin:6px 0;">84.2s</h3></div><div style="padding:12px;background:var(--bg-surface);border-radius:8px;"><small>错误热区</small><h3 style="color:var(--danger);margin:6px 0;">C3 / D4</h3></div></div><button class="g-btn g-btn-primary" style="margin-top:14px;" onclick="showToast('已导出 CSV 分析报告', 'success')">导出分析报告</button></div>`, code: `# GDScript: 事件埋点
+func track_match(result: Dictionary) -> void:
+    Analytics.track("memory_pair", {
+        "level": level_id,
+        "matched": result.matched,
+        "reaction_ms": result.reaction_time * 1000.0,
+        "position": result.position
+    })` }]
+  },
 
   // ========================================================
   // 0.2 常见问题排查与代码对比全景
