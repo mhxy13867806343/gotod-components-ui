@@ -268,19 +268,80 @@ window.toggleDemoSourceCode = function(btn) {
 window.copyDemoCodeFromCard = function(btn) {
   const card = btn.closest('.demo-card');
   if (!card) return;
-  const codeEl = card.querySelector('.demo-source-wrapper code, pre code, code');
-  if (!codeEl) return;
-  const text = codeEl.innerText || codeEl.textContent;
 
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      const origHtml = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check" style="color:var(--primary);"></i>';
-      setTimeout(() => { btn.innerHTML = origHtml; }, 1500);
-      if (window.showToast) window.showToast('✅ 源代码已成功复制到剪贴板！', 'success');
+  // 1. Identify which code panel is currently active in this card
+  let codeEl = null;
+  const csharpPanel = card.querySelector('.code-panel-csharp');
+  const gdscriptPanel = card.querySelector('.code-panel-gdscript');
+
+  if (csharpPanel && (csharpPanel.style.display === 'block' || window.getComputedStyle(csharpPanel).display !== 'none')) {
+    codeEl = csharpPanel.querySelector('code');
+  } else if (gdscriptPanel && (gdscriptPanel.style.display === 'block' || window.getComputedStyle(gdscriptPanel).display !== 'none')) {
+    codeEl = gdscriptPanel.querySelector('code');
+  }
+
+  // 2. Fallback check: check active language button in toolbar
+  if (!codeEl) {
+    const csharpBtn = card.querySelector('.g-lang-btn[data-lang="csharp"]');
+    const isCSharp = csharpBtn && (csharpBtn.style.color === '#ffffff' || csharpBtn.style.color === 'rgb(255, 255, 255)');
+    if (isCSharp && csharpPanel) {
+      codeEl = csharpPanel.querySelector('code');
+    } else if (gdscriptPanel) {
+      codeEl = gdscriptPanel.querySelector('code');
+    }
+  }
+
+  // 3. Ultimate fallback: any code element inside card
+  if (!codeEl) {
+    codeEl = card.querySelector('.demo-source-wrapper code, pre code, code');
+  }
+  if (!codeEl) {
+    if (window.showToast) window.showToast('未找到可复制的代码', 'warning');
+    return;
+  }
+
+  const text = (codeEl.innerText || codeEl.textContent || '').trim();
+  if (!text) {
+    if (window.showToast) window.showToast('代码内容为空', 'warning');
+    return;
+  }
+
+  const isCSharp = (codeEl.closest('.code-panel-csharp') !== null);
+  const langLabel = isCSharp ? 'C# (.NET)' : 'GDScript';
+
+  const onCopySuccess = () => {
+    const origHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check" style="color:var(--primary);"></i>';
+    setTimeout(() => { btn.innerHTML = origHtml; }, 1500);
+    if (window.showToast) window.showToast(`✅ 【${langLabel}】源代码已成功复制到剪贴板！`, 'success');
+  };
+
+  // Robust clipboard execution with document.execCommand fallback
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    navigator.clipboard.writeText(text).then(onCopySuccess).catch(() => {
+      fallbackCopy(text, onCopySuccess);
     });
   } else {
-    if (window.showToast) window.showToast('源代码已复制！', 'success');
+    fallbackCopy(text, onCopySuccess);
+  }
+
+  function fallbackCopy(str, cb) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = str;
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      ta.style.left = '-9999px';
+      ta.setAttribute('readonly', '');
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok && cb) cb();
+      else if (window.showToast) window.showToast('复制完成', 'success');
+    } catch (e) {
+      if (window.showToast) window.showToast('复制失败，请手动选择复制', 'error');
+    }
   }
 };
 
