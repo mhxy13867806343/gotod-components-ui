@@ -114,19 +114,14 @@ window.showToast = function(msg, type = 'info') {
   const toast = document.createElement('div');
   toast.className = 'toast-item';
   
-  let icon = 'fa-info-circle';
-  let col = 'var(--info)';
-  if (type === 'info') {
-    iconHtml = '<div class="g-toast-icon" style="color:var(--primary);"><i class="fa-solid fa-circle-info"></i></div>';
-    isWithIcon = true;
-  } else if (type === 'warning') {
-    iconHtml = '<div class="g-toast-icon" style="color:var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i></div>';
-    isWithIcon = true;
-  } else if (type === 'success') { icon = 'fa-check-circle'; col = 'var(--success)'; }
-  if (type === 'warning') { icon = 'fa-exclamation-triangle'; col = 'var(--warning)'; }
-  if (type === 'danger' || type === 'error') { icon = 'fa-times-circle'; col = 'var(--danger)'; }
+  let icon = 'fa-circle-info';
+  let col = 'var(--primary)';
+  if (type === 'success') { icon = 'fa-circle-check'; col = 'var(--success)'; }
+  else if (type === 'warning') { icon = 'fa-triangle-exclamation'; col = 'var(--warning)'; }
+  else if (type === 'danger' || type === 'error') { icon = 'fa-circle-xmark'; col = 'var(--danger)'; }
+  else if (type === 'info') { icon = 'fa-circle-info'; col = 'var(--primary)'; }
 
-  toast.innerHTML = `<i class="fa-solid ${icon}" style="color: ${col};"></i> <span>${msg}</span>`;
+  toast.innerHTML = `<i class="fa-solid ${icon}" style="color: ${col}; font-size:16px;"></i> <span>${msg}</span>`;
   container.appendChild(toast);
 
   setTimeout(() => {
@@ -1802,16 +1797,103 @@ window.initSelectDemos = function() {
   });
 };
 
+
 // ==========================================================================
-// 7,300+ Complete Universal Vector Icon Super Center & Pagination Engine
+// Icon Actions & Enhanced Multi-Format Copy & Download
 // ==========================================================================
-window.currentIconLib = 'all';
-window.currentIconCategory = 'all';
-window.currentIconSearch = '';
-window.currentIconSize = 16;
-window.currentIconColor = '#409eff';
-window.iconPageSize = 400;
-window.iconCurrentPage = 1;
+window.currentCopyFormat = 'gdscript'; // 'gdscript' | 'annotation' | 'bbcode' | 'svg' | 'datauri'
+window.iconFavorites = JSON.parse(localStorage.getItem('gotod_icon_favorites') || '[]');
+
+window.setCopyFormat = function(fmt, btnEl) {
+  window.currentCopyFormat = fmt;
+  if (btnEl && btnEl.parentElement) {
+    btnEl.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  window.showToast('已切换复制格式为: ' + fmt.toUpperCase(), 'info');
+};
+
+window.toggleIconFavorite = function(iconName, event) {
+  if (event) event.stopPropagation();
+  const idx = window.iconFavorites.indexOf(iconName);
+  if (idx >= 0) {
+    window.iconFavorites.splice(idx, 1);
+    window.showToast('已从收藏夹移除: ' + iconName, 'info');
+  } else {
+    window.iconFavorites.push(iconName);
+    window.showToast('已收藏图标: ' + iconName, 'success');
+  }
+  localStorage.setItem('gotod_icon_favorites', JSON.stringify(window.iconFavorites));
+  window.renderIconGalleryGrid();
+};
+
+window.downloadIconSvg = function(iconName, resPath, event) {
+  if (event) event.stopPropagation();
+  const list = window.AT_ICONS_LIST || [];
+  const icon = list.find(i => i.name === iconName);
+  if (!icon || !icon.svg) {
+    window.showToast('未找到 SVG 源码', 'warning');
+    return;
+  }
+  const blob = new Blob([icon.svg], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${iconName}.svg`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  window.showToast(`已下载: ${iconName}.svg`, 'success');
+};
+
+window.copyIconSnippet = function(iconName, resPath, cardEl) {
+  const list = window.AT_ICONS_LIST || [];
+  const icon = list.find(i => i.name === iconName) || {};
+  const svg = icon.svg || '';
+  const fmt = window.currentCopyFormat || 'gdscript';
+  let textToCopy = '';
+  let toastMsg = '';
+
+  const snippet = `var icon = GIcon.new("${iconName}", ${window.currentIconSize}.0, Color("${window.currentIconColor}"))`;
+  const annotation = `@icon("${resPath || 'res://addons/gotod_ui/assets/icons/node/' + iconName + '.svg'}")`;
+  const bbcode = `[img=${window.currentIconSize}]${resPath}[/img]`;
+
+  if (fmt === 'gdscript') {
+    textToCopy = `# GDScript 实例化:
+${snippet}
+add_child(icon)`;
+    toastMsg = `已复制 GDScript: ${snippet}`;
+  } else if (fmt === 'annotation') {
+    textToCopy = annotation;
+    toastMsg = `已复制 @icon 注解: ${annotation}`;
+  } else if (fmt === 'bbcode') {
+    textToCopy = bbcode;
+    toastMsg = `已复制富文本 BBCode: ${bbcode}`;
+  } else if (fmt === 'svg') {
+    textToCopy = svg;
+    toastMsg = `已复制 SVG 源码 (${iconName}.svg)`;
+  } else if (fmt === 'datauri') {
+    const b64 = btoa(unescape(encodeURIComponent(svg)));
+    textToCopy = `data:image/svg+xml;base64,${b64}`;
+    toastMsg = `已复制 Base64 DataURI`;
+  }
+
+  if (cardEl) {
+    cardEl.classList.add('copied-pulse');
+    setTimeout(() => cardEl.classList.remove('copied-pulse'), 400);
+  }
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      window.showToast(toastMsg, 'success');
+    }).catch(() => {
+      window.showToast(`已选图标: ${iconName}`, 'success');
+    });
+  } else {
+    window.showToast(`已选图标: ${iconName}`, 'success');
+  }
+};
 
 window.initIconGallery = function() {
   const container = document.getElementById('iconGalleryContainer');
@@ -1829,12 +1911,19 @@ window.renderIconGalleryGrid = function() {
   if (!grid) return;
 
   const list = window.AT_ICONS_LIST || [];
-  const q = window.currentIconSearch.toLowerCase().trim();
-  const lib = window.currentIconLib;
-  const cat = window.currentIconCategory;
+  const q = (window.currentIconSearch || '').toLowerCase().trim();
+  const lib = window.currentIconLib || 'all';
+  const cat = window.currentIconCategory || 'all';
+  const favs = window.iconFavorites || [];
 
   const filtered = list.filter(item => {
-    const matchLib = (lib === 'all' || item.lib === lib);
+    let matchLib = true;
+    if (lib === 'favorites') {
+      matchLib = favs.includes(item.name);
+    } else if (lib !== 'all') {
+      matchLib = (item.lib === lib);
+    }
+
     const matchCat = (cat === 'all' || item.category === cat);
     const matchQ = (!q || item.name.toLowerCase().includes(q) || (item.description && item.description.toLowerCase().includes(q)));
     return matchLib && matchCat && matchQ;
@@ -1867,8 +1956,17 @@ window.renderIconGalleryGrid = function() {
   const displayList = filtered.slice(startIndex, endIndex);
 
   grid.innerHTML = displayList.map(icon => {
+    const isFav = favs.includes(icon.name);
     return `
-      <div class="icon-gallery-card" onclick="window.copyIconSnippet('${icon.name}', '${icon.resPath}', this)" title="[${icon.libName}] 点击复制 GIcon 代码与 @icon 路径">
+      <div class="icon-gallery-card" onclick="window.copyIconSnippet('${icon.name}', '${icon.resPath}', this)" title="[${icon.libName}] 点击复制当前格式代码">
+        <div style="position:absolute; top:6px; right:6px; display:flex; gap:4px; z-index:2;">
+          <button class="icon-card-action-btn" onclick="window.toggleIconFavorite('${icon.name}', event)" title="${isFav ? '取消收藏' : '加入收藏夹'}" style="background:none; border:none; cursor:pointer; font-size:11px; color:${isFav ? '#f59e0b' : 'var(--text-secondary)'}; opacity:${isFav ? '1' : '0.4'};">
+            <i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i>
+          </button>
+          <button class="icon-card-action-btn" onclick="window.downloadIconSvg('${icon.name}', '${icon.resPath}', event)" title="下载 SVG 文件" style="background:none; border:none; cursor:pointer; font-size:11px; color:var(--text-secondary); opacity:0.4;">
+            <i class="fa-solid fa-download"></i>
+          </button>
+        </div>
         <div class="icon-preview-box">
           <span class="icon-svg-host" style="width:var(--gallery-icon-size, ${window.currentIconSize}px); height:var(--gallery-icon-size, ${window.currentIconSize}px); display:inline-flex; align-items:center; justify-content:center; color:var(--gallery-icon-color, ${window.currentIconColor});">
             ${icon.svg}
