@@ -276,7 +276,7 @@
 
       <div class="g-fab-divider"></div>
 
-      <button class="g-fab-btn" onclick="window.forceHardReload()" title="强制清除缓存更新代码">
+      <button class="g-fab-btn" onclick="if (typeof window.testVersionPollingUpdate === 'function') window.testVersionPollingUpdate(); else window.forceHardReload();" title="检测并预览新版本更新弹窗 (Version Polling)">
         <i class="fa-solid fa-rotate" style="color:var(--primary);"></i>
         <span style="font-size:11px; font-weight:600; color:var(--primary);">更新</span>
       </button>

@@ -473,7 +473,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Initialize Local VersionPolling (Auto update check using native Gotod UI Dialog)
   if (window.VersionPolling && typeof window.VersionPolling.createVersionPolling === 'function') {
-    window.VersionPolling.createVersionPolling({
+    // 允许在开发/测试环境下直接测试更新提示效果（通过控制 silent 参数）
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    // 当前测试阶段设为 false（开发环境也开启检测与弹窗演示）；后续如需生成时静默，只需改为 silent: isDev
+    const isSilent = false; 
+
+    window.__versionPollingInstance = window.VersionPolling.createVersionPolling({
+      silent: isSilent,
       pollingInterval: 10 * 1000,
       onUpdate: (self) => {
         if (typeof window.showVersionUpdateModal === 'function') {
@@ -483,5 +490,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+
+    // 开发者便捷测试方法：控制台随时执行 window.testVersionPollingUpdate() 查看真实更新弹窗
+    window.testVersionPollingUpdate = function() {
+      if (typeof window.showVersionUpdateModal === 'function') {
+        window.showVersionUpdateModal(() => {
+          if (window.showToast) window.showToast('✅ 正在执行页面更新重载...', 'success');
+          setTimeout(() => window.location.reload(), 600);
+        }, () => {
+          if (window.showToast) window.showToast('已暂缓版本更新', 'info');
+        });
+      }
+    };
   }
 });
