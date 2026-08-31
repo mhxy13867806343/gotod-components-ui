@@ -222,17 +222,21 @@ window.showDoc = function(key) {
             ${d.render}
           </div>
           ${codeSection ? `
-            <div class="demo-toolbar">
-              <span class="g-tag g-tag-primary" style="font-size:10px; padding:1px 6px; font-weight:700; border-radius:4px; margin-right:auto; letter-spacing:0.5px;">GDScript</span>
-              <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="g-demo-icon-btn" title="在 GitHub 中查看组件源代码">
-                <i class="fa-brands fa-github"></i>
-              </a>
-              <button class="g-demo-icon-btn" title="复制代码" onclick="window.copyDemoCodeFromCard(this)">
-                <i class="fa-regular fa-copy"></i>
-              </button>
-              <button class="g-demo-icon-btn toggle-code-btn" title="展开/折叠源代码" onclick="window.toggleDemoSourceCode(this)">
-                <i class="fa-solid fa-code"></i>
-              </button>
+            <div class="demo-toolbar" style="display:flex; justify-content:space-between; align-items:center; width:100%; padding:8px 16px; border-top:1px solid var(--border-base); background:var(--bg-card); box-sizing:border-box;">
+              <div>
+                <span class="g-tag g-tag-primary" style="font-size:10px; padding:1px 6px; font-weight:700; border-radius:4px; letter-spacing:0.5px;">GDScript</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; margin-left:auto;">
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="g-demo-icon-btn" title="在 GitHub 中查看组件源代码" style="color:var(--text-secondary); text-decoration:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--radius); font-size:14px; cursor:pointer;">
+                  <i class="fa-brands fa-github"></i>
+                </a>
+                <button class="g-demo-icon-btn" title="复制代码" onclick="window.copyDemoCodeFromCard(this)" style="color:var(--text-secondary); background:transparent; border:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--radius); font-size:13px; cursor:pointer;">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+                <button class="g-demo-icon-btn toggle-code-btn" title="展开/折叠源代码" onclick="window.toggleDemoSourceCode(this)" style="color:var(--text-secondary); background:transparent; border:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--radius); font-size:13px; cursor:pointer;">
+                  <i class="fa-solid fa-code"></i>
+                </button>
+              </div>
             </div>
             <div class="demo-source-wrapper" style="display:none; border-top:1px solid var(--border-base);">
               ${codeSection}
