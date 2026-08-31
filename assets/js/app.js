@@ -278,7 +278,7 @@ window.showDoc = function(key) {
                 </button>
               </div>
               <div style="display:flex; align-items:center; gap:8px; margin-left:auto;">
-                <a href="${(typeof window.getComponentGitHubUrl === 'function') ? window.getComponentGitHubUrl(key) : 'https://github.com/mhxy13867806343/gotod-components-ui'}" target="_blank" class="g-demo-icon-btn" title="在 GitHub 中查看【${data.title || key}】组件源码" style="color:var(--text-secondary); text-decoration:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--radius); font-size:14px; cursor:pointer;">
+                <a href="${(typeof window.getComponentGitHubUrl === 'function') ? window.getComponentGitHubUrl(key) : 'https://github.com/mhxy13867806343/gotod-components-ui'}" target="_blank" class="g-demo-icon-btn" title="在 GitHub 中查看【${(typeof item !== 'undefined' && item && item.title) ? item.title : key}】组件源码" style="color:var(--text-secondary); text-decoration:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--radius); font-size:14px; cursor:pointer;">
                   <i class="fa-brands fa-github"></i>
                 </a>
                 <button class="g-demo-icon-btn" title="复制代码" onclick="window.copyDemoCodeFromCard(this)" style="color:var(--text-secondary); background:transparent; border:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--radius); font-size:13px; cursor:pointer;">
