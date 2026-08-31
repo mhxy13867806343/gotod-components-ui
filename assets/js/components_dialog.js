@@ -37,83 +37,97 @@ window.COMPONENT_CATALOG['dialog'] = {
       "name": "title",
       "type": "String",
       "default": "\"Dialog Title\"",
-      "desc": "弹窗标题"
+      "desc": "弹窗标题",
+      "version": "v1.0"
     },
     {
       "name": "content_text",
       "type": "String",
       "default": "\"\"",
-      "desc": "弹窗正文文本"
+      "desc": "弹窗正文文本",
+      "version": "v1.0"
     },
     {
       "name": "confirm_button_text",
       "type": "String",
       "default": "\"Confirm\"",
-      "desc": "确认按钮文本"
+      "desc": "确认按钮文本",
+      "version": "v1.0"
     },
     {
       "name": "cancel_button_text",
       "type": "String",
       "default": "\"Cancel\"",
-      "desc": "取消按钮文本"
+      "desc": "取消按钮文本",
+      "version": "v1.0"
     },
     {
       "name": "show_cancel_button",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示取消按钮"
+      "desc": "是否显示取消按钮",
+      "version": "v1.0"
     },
     {
       "name": "mask_closable",
       "type": "boolean",
       "default": "true",
-      "desc": "点击背景遮罩是否允许关闭"
+      "desc": "点击背景遮罩是否允许关闭",
+      "version": "v1.0"
     },
     {
       "name": "dialog_width",
       "type": "float",
       "default": "460.0",
-      "desc": "对话框宽度 (像素)"
+      "desc": "对话框宽度 (像素)",
+      "version": "v1.0"
     },
     {
       "name": "fullscreen",
       "type": "boolean",
       "default": "false",
-      "desc": "是否以全屏铺满形式展示"
+      "desc": "是否以全屏铺满形式展示",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "confirmed()",
       "desc": "点击确认按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "cancelled()",
       "desc": "点击取消按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "opened()",
       "desc": "弹窗打开动画结束时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "closed()",
       "desc": "弹窗关闭动画结束时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "open()",
       "desc": "播放弹性入场动画打开弹窗",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "关闭弹窗并播放淡出动画",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -121,25 +135,29 @@ window.COMPONENT_CATALOG['dialog'] = {
       "name": "default",
       "desc": "对话框主体内容插槽",
       "child": "Control / VBoxContainer",
-      "example": "<template #default><p>确认要丢弃这件神话装备？</p></template>"
+      "example": "<template #default><p>确认要丢弃这件神话装备？</p></template>",
+      "version": "v1.0"
     },
     {
       "name": "header",
       "desc": "对话框顶部标题栏插槽",
       "child": "HBoxContainer / GText",
-      "example": "<template #header><h3>⚠️ 高危操作警告</h3></template>"
+      "example": "<template #header><h3>⚠️ 高危操作警告</h3></template>",
+      "version": "v1.0"
     },
     {
       "name": "close",
       "desc": "自定义右上角关闭按钮插槽",
       "child": "GButton / GIcon",
-      "example": "<template #close><GIcon name=\"xmark\" /></template>"
+      "example": "<template #close><GIcon name=\"xmark\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "footer",
       "desc": "对话框底部操作按钮栏插槽（默认确认/取消）",
       "child": "HBoxContainer / GSpace / GButton",
-      "example": "<template #footer><GButton type=\"danger\">确认丢弃</GButton></template>"
+      "example": "<template #footer><GButton type=\"danger\">确认丢弃</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

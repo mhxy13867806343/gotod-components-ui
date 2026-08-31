@@ -4,6 +4,20 @@
 // =========================================================================
 
 window.SIDEBAR_CONFIG = {
+  'changelog': {
+    placeholder: '搜索更新日志...',
+    groups: [
+      {
+        title: 'Changelog 版本时间线',
+        items: [
+          { key: 'changelog-latest', title: '✨ v1.2.0 今日重磅升级 (Steps)' },
+          { key: 'changelog-history', title: '📜 历史版本历程 (v1.0 ~ v1.2)' },
+          { key: 'changelog-roadmap', title: '🗺️ 未来版本路线图 (Roadmap)' }
+        ]
+      }
+    ],
+    defaultKey: 'changelog-latest'
+  },
   'guide': {
     placeholder: 'Search guide...',
     groups: [

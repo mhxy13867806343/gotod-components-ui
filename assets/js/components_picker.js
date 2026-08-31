@@ -37,81 +37,95 @@ window.COMPONENT_CATALOG['picker'] = {
       "name": "title",
       "type": "String",
       "default": "\"请选择\"",
-      "desc": "顶部工具栏标题"
+      "desc": "顶部工具栏标题",
+      "version": "v1.0"
     },
     {
       "name": "columns",
       "type": "Array",
       "default": "[]",
-      "desc": "选项列表（单列为字符串数组，多列为对象数组）"
+      "desc": "选项列表（单列为字符串数组，多列为对象数组）",
+      "version": "v1.0"
     },
     {
       "name": "default_index",
       "type": "int",
       "default": "0",
-      "desc": "单列选择器的默认选中项索引"
+      "desc": "单列选择器的默认选中项索引",
+      "version": "v1.0"
     },
     {
       "name": "confirm_button_text",
       "type": "String",
       "default": "\"确认\"",
-      "desc": "确认按钮文字"
+      "desc": "确认按钮文字",
+      "version": "v1.0"
     },
     {
       "name": "cancel_button_text",
       "type": "String",
       "default": "\"取消\"",
-      "desc": "取消按钮文字"
+      "desc": "取消按钮文字",
+      "version": "v1.0"
     },
     {
       "name": "show_toolbar",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示顶部工具栏"
+      "desc": "是否显示顶部工具栏",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "confirm(values, indexes)",
       "desc": "点击完成按钮时触发",
-      "params": "(values: Array, indexes: Array)"
+      "params": "(values: Array, indexes: Array)",
+      "version": "v1.0"
     },
     {
       "name": "cancel()",
       "desc": "点击取消按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "change(values, index)",
       "desc": "选项改变时触发",
-      "params": "(values: Array, index: int)"
+      "params": "(values: Array, index: int)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "set_columns(cols: Array)",
       "desc": "批量设置多列或单列选项数据",
-      "params": "(cols: Array) -> void"
+      "params": "(cols: Array) -> void",
+      "version": "v1.0"
     },
     {
       "name": "add_column(items: Array)",
       "desc": "动态追加一列备选数据",
-      "params": "(items: Array) -> void"
+      "params": "(items: Array) -> void",
+      "version": "v1.0"
     },
     {
       "name": "open()",
       "desc": "呼出选择器面板",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "关闭选择器面板",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "get_selected_value()",
       "desc": "获取当前选中的值",
-      "params": "() -> Variant"
+      "params": "() -> Variant",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -119,13 +133,15 @@ window.COMPONENT_CATALOG['picker'] = {
       "name": "option",
       "desc": "轮盘每一行选项自定义渲染插槽（透传 { item, index }）",
       "child": "Control / GText",
-      "example": "<template #option=\"{ item }\"><b>{{ item.text }}</b></template>"
+      "example": "<template #option=\"{ item }\"><b>{{ item.text }}</b></template>",
+      "version": "v1.0"
     },
     {
       "name": "top-toolbar",
       "desc": "选择器顶部自定义工具栏插槽（取消/确认按钮区）",
       "child": "HBoxContainer / GButton",
-      "example": "<template #top-toolbar><GButton>取消</GButton><GButton type=\"primary\">完成</GButton></template>"
+      "example": "<template #top-toolbar><GButton>取消</GButton><GButton type=\"primary\">完成</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

@@ -43,11 +43,19 @@
           <option value="networking">14. 网络通信与程序化物理 (Networking & Physics)</option>
           <option value="slots">15. Slots 插槽系统专题 (Vue-Style Slot System)</option>
           <option value="icons-gallery">16. 矢量图标超级中心 (26,000+ Universal Icon Super Center)</option>
+          <option value="changelog">17. 版本更新日志与步骤时间线 (Changelog - GSteps)</option>
         </select>
       </div>
     </div>
 
     <div class="header-actions">
+      <!-- Changelog Fast Jump Button -->
+      <button class="g-btn g-btn-primary" style="height:32px; padding:0 12px; font-size:12px; gap:6px; border-radius:var(--radius); cursor:pointer;" onclick="switchTopSection('changelog')" title="查看基于 Steps 步骤条构建的版本更新日志">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>更新日志</span>
+        <span style="background:rgba(255,255,255,0.25); color:#fff; font-size:10px; padding:1px 6px; border-radius:10px; font-weight:800;">v1.2</span>
+      </button>
+
       <!-- Global Search Trigger Button using UI Component Style -->
       <button class="g-btn g-btn-default" style="height:32px; padding:0 12px; font-size:12px; gap:8px; border-radius:var(--radius); cursor:pointer;" onclick="openGlobalSearch()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -320,9 +328,10 @@
   <script src="assets/js/lifecycle_catalog.js?v=20260831_32"></script>
   <script src="assets/js/godot_globals_catalog.js?v=20260831_32"></script>
   <script src="assets/js/resource_studio.js?v=20260831_32"></script>
-  <script src="assets/js/networking_physics_catalog.js?v=20260831_32"></script>
-  <script src="assets/js/global_search.js?v=20260831_32"></script>
-  <script src="assets/js/nav_dropdown.js?v=20260831_32"></script>
-  <script src="assets/js/app.js?v=20260831_32"></script>
+  <script src="assets/js/networking_physics_catalog.js?v=20260831_33"></script>
+  <script src="assets/js/global_search.js?v=20260831_33"></script>
+  <script src="assets/js/nav_dropdown.js?v=20260831_33"></script>
+  <script src="assets/js/changelog_page.js?v=20260831_33"></script>
+  <script src="assets/js/app.js?v=20260831_33"></script>
 </body>
 </html>

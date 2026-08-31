@@ -42,32 +42,37 @@ window.COMPONENT_CATALOG['card'] = {
       "name": "title",
       "type": "String",
       "default": "\"Card Title\"",
-      "desc": "卡片标题"
+      "desc": "卡片标题",
+      "version": "v1.0"
     },
     {
       "name": "extra_text",
       "type": "String",
       "default": "\"\"",
-      "desc": "右上角额外操作文本"
+      "desc": "右上角额外操作文本",
+      "version": "v1.0"
     },
     {
       "name": "bordered",
       "type": "boolean",
       "default": "true",
-      "desc": "是否带有边框"
+      "desc": "是否带有边框",
+      "version": "v1.0"
     },
     {
       "name": "shadow",
       "type": "enum",
       "default": "ALWAYS",
-      "desc": "阴影展示时机：ALWAYS, HOVER, NEVER"
+      "desc": "阴影展示时机：ALWAYS, HOVER, NEVER",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "extra_clicked()",
       "desc": "点击右上角 Extra 文本时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [],
@@ -76,31 +81,36 @@ window.COMPONENT_CATALOG['card'] = {
       "name": "default",
       "desc": "卡片主体内容插槽",
       "child": "Control / VBoxContainer",
-      "example": "<template #default><p>跨服巅峰赛小组赛第一轮战报</p></template>"
+      "example": "<template #default><p>跨服巅峰赛小组赛第一轮战报</p></template>",
+      "version": "v1.0"
     },
     {
       "name": "header",
       "desc": "卡片标题区插槽",
       "child": "GText / Label / HBoxContainer",
-      "example": "<template #header><span>战术小队战报</span></template>"
+      "example": "<template #header><span>战术小队战报</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "extra",
       "desc": "卡片右上角操作区插槽（如“更多”、“编辑”等按钮）",
       "child": "GButton / GSpace",
-      "example": "<template #extra><a href=\"javascript:void(0)\">查看全部 →</a></template>"
+      "example": "<template #extra><a href=\"javascript:void(0)\">查看全部 →</a></template>",
+      "version": "v1.0"
     },
     {
       "name": "cover",
       "desc": "卡片顶部封面图片/媒体插槽",
       "child": "TextureRect / SubViewportContainer",
-      "example": "<template #cover><img src=\"res://cover_s4.png\" /></template>"
+      "example": "<template #cover><img src=\"res://cover_s4.png\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "footer",
       "desc": "卡片底部操作栏插槽",
       "child": "HBoxContainer / GSpace",
-      "example": "<template #footer><GButton icon=\"share\">分享战报</GButton></template>"
+      "example": "<template #footer><GButton icon=\"share\">分享战报</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

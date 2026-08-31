@@ -33,54 +33,7 @@ window.COMPONENT_CATALOG['input'] = {
     },
     {
       "title": "5. 密码显隐与强弱程度检测 (Password Toggle & Strength Indicator)",
-      "render": `
-      <div style="max-width:380px; display:flex; flex-direction:column; gap:8px;">
-        <div style="position:relative; width:100%; display:flex; align-items:center;">
-          <input type="password" class="g-input" id="pwdInputVal" value="Godot4UI@" style="width:100%; padding-right:36px;" oninput="
-            const v = this.value;
-            const bar = document.getElementById('pwdBar');
-            const scoreText = document.getElementById('pwdStrengthText');
-            let score = 0;
-            if (v.length >= 6) score += 33;
-            if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score += 33;
-            if (/[^a-zA-Z0-9]/.test(v)) score += 34;
-            bar.style.width = score + '%';
-            if (score > 70) {
-              bar.style.background = 'var(--success)';
-              scoreText.innerText = '密码强度：强 (包含大写字母、数字及特殊符号)';
-              scoreText.style.color = 'var(--success)';
-            } else if (score > 35) {
-              bar.style.background = 'var(--warning)';
-              scoreText.innerText = '密码强度：中等 (建议增加特殊符号或大写字母)';
-              scoreText.style.color = 'var(--warning)';
-            } else {
-              bar.style.background = 'var(--danger)';
-              scoreText.innerText = '密码强度：弱 (长度过短或字符单一)';
-              scoreText.style.color = 'var(--danger)';
-            }
-          ">
-          <span style="position:absolute; right:10px; cursor:pointer; color:var(--text-secondary); display:flex; align-items:center; z-index:2;" title="切换密码显隐" onclick="
-            const p = document.getElementById('pwdInputVal');
-            const ic = document.getElementById('pwdEyeIcon');
-            if (p.type === 'password') {
-              p.type = 'text';
-              ic.className = 'fa-solid fa-eye-slash';
-              showToast('已显示密码明文', 'info');
-            } else {
-              p.type = 'password';
-              ic.className = 'fa-solid fa-eye';
-              showToast('已隐藏为密码密文', 'info');
-            }
-          ">
-            <i id="pwdEyeIcon" class="fa-solid fa-eye" style="font-size:15px;"></i>
-          </span>
-        </div>
-        <div style="background:var(--bg-surface); height:4px; border-radius:2px; overflow:hidden; border:1px solid var(--border-base);">
-          <div id="pwdBar" style="background:var(--success); width:100%; height:100%; transition:all 0.3s;"></div>
-        </div>
-        <span id="pwdStrengthText" style="font-size:11px; color:var(--success); font-weight:600;">密码强度：强 (包含大写字母、数字及特殊符号)</span>
-      </div>
-    `,
+      "render": "\n      <div style=\"max-width:380px; display:flex; flex-direction:column; gap:8px;\">\n        <div style=\"position:relative; width:100%; display:flex; align-items:center;\">\n          <input type=\"password\" class=\"g-input\" id=\"pwdInputVal\" value=\"Godot4UI@\" style=\"width:100%; padding-right:36px;\" oninput=\"\n            const v = this.value;\n            const bar = document.getElementById('pwdBar');\n            const scoreText = document.getElementById('pwdStrengthText');\n            let score = 0;\n            if (v.length >= 6) score += 33;\n            if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score += 33;\n            if (/[^a-zA-Z0-9]/.test(v)) score += 34;\n            bar.style.width = score + '%';\n            if (score > 70) {\n              bar.style.background = 'var(--success)';\n              scoreText.innerText = '密码强度：强 (包含大写字母、数字及特殊符号)';\n              scoreText.style.color = 'var(--success)';\n            } else if (score > 35) {\n              bar.style.background = 'var(--warning)';\n              scoreText.innerText = '密码强度：中等 (建议增加特殊符号或大写字母)';\n              scoreText.style.color = 'var(--warning)';\n            } else {\n              bar.style.background = 'var(--danger)';\n              scoreText.innerText = '密码强度：弱 (长度过短或字符单一)';\n              scoreText.style.color = 'var(--danger)';\n            }\n          \">\n          <span style=\"position:absolute; right:10px; cursor:pointer; color:var(--text-secondary); display:flex; align-items:center; z-index:2;\" title=\"切换密码显隐\" onclick=\"\n            const p = document.getElementById('pwdInputVal');\n            const ic = document.getElementById('pwdEyeIcon');\n            if (p.type === 'password') {\n              p.type = 'text';\n              ic.className = 'fa-solid fa-eye-slash';\n              showToast('已显示密码明文', 'info');\n            } else {\n              p.type = 'password';\n              ic.className = 'fa-solid fa-eye';\n              showToast('已隐藏为密码密文', 'info');\n            }\n          \">\n            <i id=\"pwdEyeIcon\" class=\"fa-solid fa-eye\" style=\"font-size:15px;\"></i>\n          </span>\n        </div>\n        <div style=\"background:var(--bg-surface); height:4px; border-radius:2px; overflow:hidden; border:1px solid var(--border-base);\">\n          <div id=\"pwdBar\" style=\"background:var(--success); width:100%; height:100%; transition:all 0.3s;\"></div>\n        </div>\n        <span id=\"pwdStrengthText\" style=\"font-size:11px; color:var(--success); font-weight:600;\">密码强度：强 (包含大写字母、数字及特殊符号)</span>\n      </div>\n    ",
       "code": "# GDScript: 密码强度校验与显隐切换\ninput.show_password = true\ninput.enable_strength_meter = true\ninput.show_password_toggle = true"
     },
     {
@@ -99,129 +52,151 @@ window.COMPONENT_CATALOG['input'] = {
       "name": "text / v-model",
       "type": "String",
       "default": "\"\"",
-      "desc": "输入框绑定的文本内容"
+      "desc": "输入框绑定的文本内容",
+      "version": "v1.0"
     },
     {
       "name": "placeholder_text",
       "type": "String",
       "default": "\"Please input...\"",
-      "desc": "输入框占位文本"
+      "desc": "输入框占位文本",
+      "version": "v1.0"
     },
     {
       "name": "clearable",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示一键清空按钮"
+      "desc": "是否显示一键清空按钮",
+      "version": "v1.2"
     },
     {
       "name": "secret / show-password",
       "type": "boolean",
       "default": "false",
-      "desc": "是否为密码密文模式"
+      "desc": "是否为密码密文模式",
+      "version": "v1.0"
     },
     {
       "name": "show_password_toggle",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示密码切换眼睛图标"
+      "desc": "是否显示密码切换眼睛图标",
+      "version": "v1.2"
     },
     {
       "name": "prefix_text",
       "type": "String",
       "default": "\"\"",
-      "desc": "前缀文本"
+      "desc": "前缀文本",
+      "version": "v1.0"
     },
     {
       "name": "suffix_text",
       "type": "String",
       "default": "\"\"",
-      "desc": "后缀文本"
+      "desc": "后缀文本",
+      "version": "v1.0"
     },
     {
       "name": "status",
       "type": "enum",
       "default": "DEFAULT",
-      "desc": "校验边框状态：DEFAULT, ERROR, WARNING, SUCCESS"
+      "desc": "校验边框状态：DEFAULT, ERROR, WARNING, SUCCESS",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否禁用输入"
+      "desc": "是否禁用输入",
+      "version": "v1.0"
     },
     {
       "name": "max_length",
       "type": "int",
       "default": "0",
-      "desc": "最大字符输入长度限制 (0 为不限制)"
+      "desc": "最大字符输入长度限制 (0 为不限制)",
+      "version": "v1.0"
     },
     {
       "name": "status",
       "type": "GInput.Status",
       "default": "NORMAL",
-      "desc": "校验状态 (NORMAL / SUCCESS / WARNING / ERROR)"
+      "desc": "校验状态 (NORMAL / SUCCESS / WARNING / ERROR)",
+      "version": "v1.0"
     },
     {
       "name": "status_message",
       "type": "String",
       "default": "\"\"",
-      "desc": "校验失败提示文案"
+      "desc": "校验失败提示文案",
+      "version": "v1.0"
     },
     {
       "name": "validation_pattern",
       "type": "String",
       "default": "\"\"",
-      "desc": "正则表达式校验规则"
+      "desc": "正则表达式校验规则",
+      "version": "v1.0"
     },
     {
       "name": "validate_on_input",
       "type": "bool",
       "default": "false",
-      "desc": "输入时是否实时触发校验"
+      "desc": "输入时是否实时触发校验",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "text_changed(new_text)",
       "desc": "输入文本改变时触发",
-      "params": "(new_text: String)"
+      "params": "(new_text: String)",
+      "version": "v1.0"
     },
     {
       "name": "text_submitted(new_text)",
       "desc": "按回车提交时触发",
-      "params": "(new_text: String)"
+      "params": "(new_text: String)",
+      "version": "v1.0"
     },
     {
       "name": "cleared()",
       "desc": "点击清除按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "focus_entered()",
       "desc": "输入框获取焦点时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "focus_exited()",
       "desc": "输入框失去焦点时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "clear()",
       "desc": "清空当前输入框内容并发出 cleared 信号",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "grab_focus()",
       "desc": "使输入框获取焦点并调出光标",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "select_all()",
       "desc": "全选输入框内的所有文本",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -229,31 +204,36 @@ window.COMPONENT_CATALOG['input'] = {
       "name": "default",
       "desc": "输入框主体控件插槽",
       "child": "LineEdit / Control",
-      "example": "<template #default><LineEdit placeholder=\"请输入...\" /></template>"
+      "example": "<template #default><LineEdit placeholder=\"请输入...\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "prefix",
       "desc": "输入框内嵌前置图标/文字插槽 (Prefix Slot)",
       "child": "GIcon / GText / TextureRect",
-      "example": "<template #prefix><GIcon name=\"magnifying-glass\" /></template>"
+      "example": "<template #prefix><GIcon name=\"magnifying-glass\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "suffix",
       "desc": "输入框内嵌后置图标/操作按钮/单位插槽 (Suffix Slot)",
       "child": "GIcon / GButton / GText",
-      "example": "<template #suffix><GText>🪙 金币</GText></template>"
+      "example": "<template #suffix><GText>🪙 金币</GText></template>",
+      "version": "v1.0"
     },
     {
       "name": "prepend",
       "desc": "输入框外置前置复合控件插槽 (如下拉选择协议头、大区选择) (Prepend Slot)",
       "child": "GSelect / GButton / Control",
-      "example": "<template #prepend><GSelect options=\"https://,http://\" /></template>"
+      "example": "<template #prepend><GSelect options=\"https://,http://\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "append",
       "desc": "输入框外置后置复合按钮插槽 (如一键搜索按钮、发送验证码按钮) (Append Slot)",
       "child": "GButton / Control",
-      "example": "<template #append><GButton type=\"primary\">搜索</GButton></template>"
+      "example": "<template #append><GButton type=\"primary\">搜索</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

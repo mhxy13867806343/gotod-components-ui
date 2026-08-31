@@ -42,38 +42,44 @@ window.COMPONENT_CATALOG['textarea'] = {
       "name": "text",
       "type": "String",
       "default": "\"\"",
-      "desc": "文本域绑定内容"
+      "desc": "文本域绑定内容",
+      "version": "v1.0"
     },
     {
       "name": "rows",
       "type": "int",
       "default": "3",
-      "desc": "默认行数"
+      "desc": "默认行数",
+      "version": "v1.0"
     },
     {
       "name": "autosize",
       "type": "bool",
       "default": "false",
-      "desc": "是否自适应高度"
+      "desc": "是否自适应高度",
+      "version": "v1.0"
     },
     {
       "name": "max_length",
       "type": "int",
       "default": "-1",
-      "desc": "最大输入字符数"
+      "desc": "最大输入字符数",
+      "version": "v1.0"
     },
     {
       "name": "show_word_limit",
       "type": "bool",
       "default": "false",
-      "desc": "是否展示字数统计"
+      "desc": "是否展示字数统计",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "text_changed",
       "params": "(new_text: String)",
-      "desc": "文本内容改变时触发"
+      "desc": "文本内容改变时触发",
+      "version": "v1.0"
     }
   ],
   "methods": [],
@@ -82,31 +88,36 @@ window.COMPONENT_CATALOG['textarea'] = {
       "name": "default",
       "desc": "文本域主体 TextEdit 内容插槽",
       "child": "TextEdit / Control",
-      "example": "<template #default><TextEdit placeholder=\"请输入...\" /></template>"
+      "example": "<template #default><TextEdit placeholder=\"请输入...\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "header",
       "desc": "文本域顶部工具栏插槽（如富文本加粗、表情选择器、快捷模板短语）",
       "child": "Control / HBoxContainer",
-      "example": "<template #header><div class=\"toolbar\">...</div></template>"
+      "example": "<template #header><div class=\"toolbar\">...</div></template>",
+      "version": "v1.0"
     },
     {
       "name": "footer",
       "desc": "文本域底部操作栏插槽（如实时字数统计、发布按钮、一键清空）",
       "child": "Control / HBoxContainer",
-      "example": "<template #footer><GButton type=\"primary\">发布留言</GButton></template>"
+      "example": "<template #footer><GButton type=\"primary\">发布留言</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "prefix",
       "desc": "文本域左上角/前置指示图标或标签插槽",
       "child": "GIcon / GTag / TextureRect",
-      "example": "<template #prefix><GIcon name=\"feather\" /></template>"
+      "example": "<template #prefix><GIcon name=\"feather\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "suffix",
       "desc": "文本域右下角快捷动作插槽",
       "child": "GButton / GIcon",
-      "example": "<template #suffix><GButton size=\"small\">清空</GButton></template>"
+      "example": "<template #suffix><GButton size=\"small\">清空</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

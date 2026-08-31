@@ -32,25 +32,29 @@ window.COMPONENT_CATALOG['icon'] = {
       "name": "icon_name",
       "type": "String",
       "default": "\"gamepad\"",
-      "desc": "图标名称（支持 26,000+ 离线矢量图标 & 300,000+ 全网图库）"
+      "desc": "图标名称（支持 26,000+ 离线矢量图标 & 300,000+ 全网图库）",
+      "version": "v1.0"
     },
     {
       "name": "icon_size",
       "type": "float",
       "default": "16.0",
-      "desc": "图标渲染尺寸（像素宽高）"
+      "desc": "图标渲染尺寸（像素宽高）",
+      "version": "v1.0"
     },
     {
       "name": "icon_color",
       "type": "Color",
       "default": "Color.WHITE",
-      "desc": "图标调制着色"
+      "desc": "图标调制着色",
+      "version": "v1.0"
     },
     {
       "name": "spin",
       "type": "boolean",
       "default": "false",
-      "desc": "是否开启持续顺时针旋转动画"
+      "desc": "是否开启持续顺时针旋转动画",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -58,7 +62,8 @@ window.COMPONENT_CATALOG['icon'] = {
     {
       "name": "_init(name=\"gamepad\", size=16.0, color=Color.WHITE)",
       "desc": "便捷构造函数",
-      "params": "(name: String, size: float, color: Color) -> void"
+      "params": "(name: String, size: float, color: Color) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -66,13 +71,15 @@ window.COMPONENT_CATALOG['icon'] = {
       "name": "default",
       "desc": "自定义矢量图形或纹理节点插槽",
       "child": "TextureRect / Control",
-      "example": "<template #default><TextureRect texture=\"res://icon.png\" /></template>"
+      "example": "<template #default><TextureRect texture=\"res://icon.png\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "badge",
       "desc": "图标右上角徽标插槽",
       "child": "GBadge / Control",
-      "example": "<template #badge><GBadge value=\"99+\" /></template>"
+      "example": "<template #badge><GBadge value=\"99+\" /></template>",
+      "version": "v1.2"
     }
   ]
 };

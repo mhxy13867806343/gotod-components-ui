@@ -42,68 +42,79 @@ window.COMPONENT_CATALOG['button'] = {
       "name": "button_type / type",
       "type": "enum",
       "default": "DEFAULT",
-      "desc": "色彩类型：DEFAULT, PRIMARY, SUCCESS, WARNING, DANGER, INFO"
+      "desc": "色彩类型：DEFAULT, PRIMARY, SUCCESS, WARNING, DANGER, INFO",
+      "version": "v1.0"
     },
     {
       "name": "variant",
       "type": "enum",
       "default": "SOLID",
-      "desc": "形态样式：SOLID (实心), OUTLINE (描边), DASHED (虚线), TEXT (文字), LINK (链接)"
+      "desc": "形态样式：SOLID (实心), OUTLINE (描边), DASHED (虚线), TEXT (文字), LINK (链接)",
+      "version": "v1.0"
     },
     {
       "name": "button_size / size",
       "type": "enum",
       "default": "MEDIUM",
-      "desc": "尺寸规格：SMALL, MEDIUM, LARGE"
+      "desc": "尺寸规格：SMALL, MEDIUM, LARGE",
+      "version": "v1.0"
     },
     {
       "name": "shape",
       "type": "enum",
       "default": "DEFAULT",
-      "desc": "形状：DEFAULT, ROUND (胶囊), CIRCLE (圆), SQUARE (方)"
+      "desc": "形状：DEFAULT, ROUND (胶囊), CIRCLE (圆), SQUARE (方)",
+      "version": "v1.2"
     },
     {
       "name": "loading",
       "type": "boolean",
       "default": "false",
-      "desc": "是否进入加载动画状态并禁用点击"
+      "desc": "是否进入加载动画状态并禁用点击",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否禁用按钮交互"
+      "desc": "是否禁用按钮交互",
+      "version": "v1.0"
     },
     {
       "name": "block",
       "type": "boolean",
       "default": "false",
-      "desc": "是否充满父级容器全宽"
+      "desc": "是否充满父级容器全宽",
+      "version": "v1.0"
     },
     {
       "name": "icon_texture / icon",
       "type": "Texture2D",
       "default": "null",
-      "desc": "按钮图标纹理"
+      "desc": "按钮图标纹理",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "pressed()",
       "desc": "按钮被点击时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "set_loading(is_loading: bool)",
       "desc": "动态开启或关闭按钮加载动画",
-      "params": "(is_loading: bool) -> void"
+      "params": "(is_loading: bool) -> void",
+      "version": "v1.0"
     },
     {
       "name": "set_disabled(is_disabled: bool)",
       "desc": "动态禁用或启用按钮",
-      "params": "(is_disabled: bool) -> void"
+      "params": "(is_disabled: bool) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -111,19 +122,22 @@ window.COMPONENT_CATALOG['button'] = {
       "name": "default",
       "desc": "按钮内部文字或自定义节点插槽",
       "child": "GText / Label / Control",
-      "example": "<template #default>确认支付 ¥99</template>"
+      "example": "<template #default>确认支付 ¥99</template>",
+      "version": "v1.0"
     },
     {
       "name": "icon",
       "desc": "按钮前置自定义图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #icon><GIcon name=\"bag-shopping\" /></template>"
+      "example": "<template #icon><GIcon name=\"bag-shopping\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "loading",
       "desc": "自定义加载中动画或占位插槽",
       "child": "GLoading / TextureProgressBar",
-      "example": "<template #loading><GLoading size=\"14\" /></template>"
+      "example": "<template #loading><GLoading size=\"14\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

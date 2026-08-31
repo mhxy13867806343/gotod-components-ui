@@ -37,55 +37,64 @@ window.COMPONENT_CATALOG['drawer'] = {
       "name": "title",
       "type": "String",
       "default": "\"Drawer Title\"",
-      "desc": "抽屉标题"
+      "desc": "抽屉标题",
+      "version": "v1.0"
     },
     {
       "name": "placement",
       "type": "enum",
       "default": "RIGHT",
-      "desc": "展开方向：RIGHT, LEFT, TOP, BOTTOM"
+      "desc": "展开方向：RIGHT, LEFT, TOP, BOTTOM",
+      "version": "v1.0"
     },
     {
       "name": "drawer_size",
       "type": "float",
       "default": "360.0",
-      "desc": "抽屉宽度或高度 (像素)"
+      "desc": "抽屉宽度或高度 (像素)",
+      "version": "v1.0"
     },
     {
       "name": "mask_closable",
       "type": "boolean",
       "default": "true",
-      "desc": "点击背景遮罩是否允许关闭"
+      "desc": "点击背景遮罩是否允许关闭",
+      "version": "v1.0"
     },
     {
       "name": "show_close",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示右上角关闭叉号"
+      "desc": "是否显示右上角关闭叉号",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "opened()",
       "desc": "抽屉滑出动画结束时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "closed()",
       "desc": "抽屉滑回关闭时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "open()",
       "desc": "展开滑出抽屉面板",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "收起并关闭抽屉面板",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -93,19 +102,22 @@ window.COMPONENT_CATALOG['drawer'] = {
       "name": "default",
       "desc": "抽屉主体内容插槽",
       "child": "Control / ScrollContainer",
-      "example": "<template #default><ScrollContainer><VBoxContainer>...</VBoxContainer></ScrollContainer></template>"
+      "example": "<template #default><ScrollContainer><VBoxContainer>...</VBoxContainer></ScrollContainer></template>",
+      "version": "v1.0"
     },
     {
       "name": "header",
       "desc": "抽屉顶部标题区插槽",
       "child": "HBoxContainer / GText",
-      "example": "<template #header><h3>全局游戏设置</h3></template>"
+      "example": "<template #header><h3>全局游戏设置</h3></template>",
+      "version": "v1.0"
     },
     {
       "name": "footer",
       "desc": "抽屉底部操作栏插槽",
       "child": "HBoxContainer / GSpace",
-      "example": "<template #footer><GButton type=\"primary\">保存配置</GButton></template>"
+      "example": "<template #footer><GButton type=\"primary\">保存配置</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

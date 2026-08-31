@@ -47,42 +47,49 @@ window.COMPONENT_CATALOG['dialogue'] = {
       "name": "typing_speed",
       "type": "float",
       "default": "0.03",
-      "desc": "打字机单字输出时间间隔 (秒)"
+      "desc": "打字机单字输出时间间隔 (秒)",
+      "version": "v1.2"
     },
     {
       "name": "position",
       "type": "enum",
       "default": "BOTTOM",
-      "desc": "对话框位置：BOTTOM (底部居中), TOP (顶部), CENTER (居中)"
+      "desc": "对话框位置：BOTTOM (底部居中), TOP (顶部), CENTER (居中)",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "text_completed()",
       "desc": "当前句打字机输出完毕时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "dialogue_finished()",
       "desc": "整段对话队列全部播放完毕并关闭时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "option_selected(index, text)",
       "desc": "玩家点击分支选项时触发",
-      "params": "(index: int, text: String)"
+      "params": "(index: int, text: String)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "say(lines, speaker=\"\", avatar=null)",
       "desc": "播放单句或多句对话队列",
-      "params": "(lines: Variant, speaker: String, avatar: Texture2D) -> GDialogue"
+      "params": "(lines: Variant, speaker: String, avatar: Texture2D) -> GDialogue",
+      "version": "v1.0"
     },
     {
       "name": "ask(question, options, speaker=\"\", avatar=null)",
       "desc": "播放带分支选择支的剧情对话",
-      "params": "(question: String, options: Array, speaker: String, avatar: Texture2D) -> GDialogue"
+      "params": "(question: String, options: Array, speaker: String, avatar: Texture2D) -> GDialogue",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -90,31 +97,36 @@ window.COMPONENT_CATALOG['dialogue'] = {
       "name": "default",
       "desc": "剧情对话正文打字机富文本区域",
       "child": "RichTextLabel / Control",
-      "example": "<template #default>勇士，燃烧军团的阴影已笼罩艾泽拉斯！</template>"
+      "example": "<template #default>勇士，燃烧军团的阴影已笼罩艾泽拉斯！</template>",
+      "version": "v1.0"
     },
     {
       "name": "name",
       "desc": "说话者姓名牌印章区域",
       "child": "GText / PanelContainer",
-      "example": "<template #name><span>大魔导师·卡德加 (Lv.99)</span></template>"
+      "example": "<template #name><span>大魔导师·卡德加 (Lv.99)</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "avatar",
       "desc": "说话者半身立绘/动态插画插槽",
       "child": "TextureRect / AnimatedSprite2D",
-      "example": "<template #avatar><TextureRect texture=\"res://npc_khadgar.png\" /></template>"
+      "example": "<template #avatar><TextureRect texture=\"res://npc_khadgar.png\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "options",
       "desc": "分支选择支列表插槽（透传 { option_list }）",
       "child": "VBoxContainer / GButton",
-      "example": "<template #options><GButton>接受拯救世界任务</GButton></template>"
+      "example": "<template #options><GButton>接受拯救世界任务</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "next-icon",
       "desc": "右下角打字机完毕后的翻页闪烁指示图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #next-icon><GIcon name=\"angles-down\" /></template>"
+      "example": "<template #next-icon><GIcon name=\"angles-down\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

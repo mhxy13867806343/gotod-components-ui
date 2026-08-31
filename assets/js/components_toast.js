@@ -37,31 +37,36 @@ window.COMPONENT_CATALOG['toast'] = {
       "name": "type",
       "type": "enum",
       "default": "TEXT",
-      "desc": "提示类型：TEXT (纯文字), INFO (信息), WARNING (警告), SUCCESS (成功), FAIL (失败), LOADING (加载转圈), CUSTOM (自定义)"
+      "desc": "提示类型：TEXT (纯文字), INFO (信息), WARNING (警告), SUCCESS (成功), FAIL (失败), LOADING (加载转圈), CUSTOM (自定义)",
+      "version": "v1.0"
     },
     {
       "name": "message",
       "type": "String",
       "default": "\"\"",
-      "desc": "提示文本内容"
+      "desc": "提示文本内容",
+      "version": "v1.0"
     },
     {
       "name": "position",
       "type": "enum",
       "default": "MIDDLE",
-      "desc": "提示显示位置：TOP, MIDDLE, BOTTOM"
+      "desc": "提示显示位置：TOP, MIDDLE, BOTTOM",
+      "version": "v1.0"
     },
     {
       "name": "duration",
       "type": "float",
       "default": "2.0",
-      "desc": "展示时长 (秒)，设置为 0 时不自动关闭"
+      "desc": "展示时长 (秒)，设置为 0 时不自动关闭",
+      "version": "v1.0"
     },
     {
       "name": "forbid_click",
       "type": "boolean",
       "default": "false",
-      "desc": "是否启用透明遮罩禁止背景点击穿透"
+      "desc": "是否启用透明遮罩禁止背景点击穿透",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -69,37 +74,44 @@ window.COMPONENT_CATALOG['toast'] = {
     {
       "name": "show(message, duration=2.0, position=MIDDLE)",
       "desc": "弹出文字提示",
-      "params": "(message: String, duration: float, position: int) -> GToast"
+      "params": "(message: String, duration: float, position: int) -> GToast",
+      "version": "v1.0"
     },
     {
       "name": "success(message, duration=2.0)",
       "desc": "弹出成功状态提示 (带对勾图标)",
-      "params": "(message: String, duration: float) -> GToast"
+      "params": "(message: String, duration: float) -> GToast",
+      "version": "v1.0"
     },
     {
       "name": "fail(message, duration=2.0)",
       "desc": "弹出失败状态提示 (带叉号图标)",
-      "params": "(message: String, duration: float) -> GToast"
+      "params": "(message: String, duration: float) -> GToast",
+      "version": "v1.0"
     },
     {
       "name": "loading(message=\"加载中...\", forbid_click=true, duration=0.0)",
       "desc": "弹出加载中转圈提示",
-      "params": "(message: String, forbid_click: bool, duration: float) -> GToast"
+      "params": "(message: String, forbid_click: bool, duration: float) -> GToast",
+      "version": "v1.0"
     },
     {
       "name": "custom(options: Dictionary)",
       "desc": "使用完整配置字典弹出轻提示",
-      "params": "(options: Dictionary) -> GToast"
+      "params": "(options: Dictionary) -> GToast",
+      "version": "v1.0"
     },
     {
       "name": "set_message(new_msg: String)",
       "desc": "动态更新当前正在展示的轻提示文本 (如倒计时)",
-      "params": "(new_msg: String) -> GToast"
+      "params": "(new_msg: String) -> GToast",
+      "version": "v1.0"
     },
     {
       "name": "clear()",
       "desc": "一键清除并关闭当前所有正在展示的轻提示",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -107,13 +119,15 @@ window.COMPONENT_CATALOG['toast'] = {
       "name": "default",
       "desc": "Toast 提示正文内容插槽",
       "child": "Label / RichTextLabel",
-      "example": "<template #default><span>获得成就：初出茅庐 🎖️</span></template>"
+      "example": "<template #default><span>获得成就：初出茅庐 🎖️</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "icon",
       "desc": "自定义 Toast 图标或 Loading 动画插槽",
       "child": "GIcon / TextureRect / GLoading",
-      "example": "<template #icon><GIcon name=\"medal\" /></template>"
+      "example": "<template #icon><GIcon name=\"medal\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

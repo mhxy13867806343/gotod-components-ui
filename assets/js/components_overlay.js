@@ -37,58 +37,68 @@ window.COMPONENT_CATALOG['overlay'] = {
       "name": "mask_color",
       "type": "Color",
       "default": "Color(0, 0, 0, 0.7)",
-      "desc": "遮罩背景颜色与透明度"
+      "desc": "遮罩背景颜色与透明度",
+      "version": "v1.0"
     },
     {
       "name": "duration",
       "type": "float",
       "default": "0.3",
-      "desc": "淡入淡出动画时长 (秒)"
+      "desc": "淡入淡出动画时长 (秒)",
+      "version": "v1.0"
     },
     {
       "name": "lock_scroll",
       "type": "boolean",
       "default": "true",
-      "desc": "是否锁定底层滚动或输入阻断"
+      "desc": "是否锁定底层滚动或输入阻断",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "click()",
       "desc": "点击遮罩层时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "opened()",
       "desc": "遮罩层淡入打开结束时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "closed()",
       "desc": "遮罩层淡出关闭结束时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "open()",
       "desc": "打开遮罩层并播放淡入动效",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "关闭遮罩层并播放淡出动效",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "toggle()",
       "desc": "切换遮罩层的开启与关闭状态",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "set_content(node)",
       "desc": "向遮罩层中央插槽挂载自定义控件节点",
-      "params": "(node: Control) -> void"
+      "params": "(node: Control) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -96,7 +106,8 @@ window.COMPONENT_CATALOG['overlay'] = {
       "name": "default",
       "desc": "遮罩层内部居中/挂载的子节点插槽",
       "child": "Control",
-      "example": "<template #default><div class=\"center-loading-card\">数据同步中...</div></template>"
+      "example": "<template #default><div class=\"center-loading-card\">数据同步中...</div></template>",
+      "version": "v1.0"
     }
   ]
 };

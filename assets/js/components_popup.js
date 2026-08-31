@@ -37,87 +37,102 @@ window.COMPONENT_CATALOG['popup'] = {
       "name": "position_type",
       "type": "enum",
       "default": "CENTER",
-      "desc": "弹出位置：CENTER (居中), TOP (顶部), BOTTOM (底部), LEFT (左侧), RIGHT (右侧)"
+      "desc": "弹出位置：CENTER (居中), TOP (顶部), BOTTOM (底部), LEFT (左侧), RIGHT (右侧)",
+      "version": "v1.0"
     },
     {
       "name": "round_corner",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示圆角 (顶部/底部弹出时自动为上方或下方大圆角)"
+      "desc": "是否显示圆角 (顶部/底部弹出时自动为上方或下方大圆角)",
+      "version": "v1.0"
     },
     {
       "name": "closeable",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示右上角/左上角关闭图标"
+      "desc": "是否显示右上角/左上角关闭图标",
+      "version": "v1.0"
     },
     {
       "name": "close_icon_position",
       "type": "enum",
       "default": "TOP_RIGHT",
-      "desc": "关闭图标位置：TOP_RIGHT, TOP_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT"
+      "desc": "关闭图标位置：TOP_RIGHT, TOP_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT",
+      "version": "v1.0"
     },
     {
       "name": "overlay",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示背景遮罩层"
+      "desc": "是否显示背景遮罩层",
+      "version": "v1.0"
     },
     {
       "name": "close_on_click_overlay",
       "type": "boolean",
       "default": "true",
-      "desc": "是否在点击背景遮罩层后自动关闭"
+      "desc": "是否在点击背景遮罩层后自动关闭",
+      "version": "v1.2"
     },
     {
       "name": "duration",
       "type": "float",
       "default": "0.3",
-      "desc": "过渡动画时长 (秒)"
+      "desc": "过渡动画时长 (秒)",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "opened()",
       "desc": "弹出层打开动画结束时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "closed()",
       "desc": "弹出层关闭动画结束时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "click_overlay()",
       "desc": "点击背景遮罩层时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "click_close_icon()",
       "desc": "点击关闭图标时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "open()",
       "desc": "打开弹出层并执行对应方位的 Tween 滑入/缩放动效",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "关闭弹出层并执行滑出/淡出动效",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "toggle()",
       "desc": "切换弹出层的开启/关闭状态",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "set_content(node)",
       "desc": "动态设置弹出层内部承载的子节点内容",
-      "params": "(node: Control) -> void"
+      "params": "(node: Control) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -125,19 +140,22 @@ window.COMPONENT_CATALOG['popup'] = {
       "name": "default",
       "desc": "弹层主体内容插槽",
       "child": "Control / VBoxContainer",
-      "example": "<template #default><div class=\"goods-sku-panel\">...</div></template>"
+      "example": "<template #default><div class=\"goods-sku-panel\">...</div></template>",
+      "version": "v1.0"
     },
     {
       "name": "header",
       "desc": "顶部标题/导航栏插槽",
       "child": "HBoxContainer",
-      "example": "<template #header><h4>选择武器精炼规格</h4></template>"
+      "example": "<template #header><h4>选择武器精炼规格</h4></template>",
+      "version": "v1.0"
     },
     {
       "name": "close",
       "desc": "自定义关闭按钮插槽",
       "child": "GButton / GIcon",
-      "example": "<template #close><GIcon name=\"xmark\" /></template>"
+      "example": "<template #close><GIcon name=\"xmark\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

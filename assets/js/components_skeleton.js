@@ -37,74 +37,86 @@ window.COMPONENT_CATALOG['skeleton'] = {
       "name": "loading",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示骨架屏，为 false 时自动展示子内容插槽"
+      "desc": "是否显示骨架屏，为 false 时自动展示子内容插槽",
+      "version": "v1.0"
     },
     {
       "name": "avatar",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示左侧头像占位图"
+      "desc": "是否显示左侧头像占位图",
+      "version": "v1.0"
     },
     {
       "name": "avatar_shape",
       "type": "enum",
       "default": "ROUND",
-      "desc": "头像占位图形状：ROUND (圆形), SQUARE (方形)"
+      "desc": "头像占位图形状：ROUND (圆形), SQUARE (方形)",
+      "version": "v1.2"
     },
     {
       "name": "avatar_size",
       "type": "float",
       "default": "40.0",
-      "desc": "头像占位图大小 (像素)"
+      "desc": "头像占位图大小 (像素)",
+      "version": "v1.0"
     },
     {
       "name": "show_title",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示标题占位条"
+      "desc": "是否显示标题占位条",
+      "version": "v1.0"
     },
     {
       "name": "title_width",
       "type": "float",
       "default": "40.0",
-      "desc": "标题占位宽度 (百分比 %)"
+      "desc": "标题占位宽度 (百分比 %)",
+      "version": "v1.0"
     },
     {
       "name": "rows",
       "type": "int",
       "default": "3",
-      "desc": "段落占位行数"
+      "desc": "段落占位行数",
+      "version": "v1.0"
     },
     {
       "name": "row_width",
       "type": "Array[float]",
       "default": "[100.0, 100.0, 60.0]",
-      "desc": "各行段落占位宽度数组 (百分比 %)"
+      "desc": "各行段落占位宽度数组 (百分比 %)",
+      "version": "v1.0"
     },
     {
       "name": "animate",
       "type": "boolean",
       "default": "true",
-      "desc": "是否开启波浪扫光流动动画效果"
+      "desc": "是否开启波浪扫光流动动画效果",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "loading_changed(is_loading)",
       "desc": "加载状态发生改变时触发",
-      "params": "(is_loading: bool)"
+      "params": "(is_loading: bool)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "set_loading(val: bool)",
       "desc": "程序化设置骨架屏加载状态",
-      "params": "(val: bool) -> void"
+      "params": "(val: bool) -> void",
+      "version": "v1.0"
     },
     {
       "name": "set_content(node: Control)",
       "desc": "绑定数据加载完成后显示的真实内容控件",
-      "params": "(node: Control) -> void"
+      "params": "(node: Control) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -112,13 +124,15 @@ window.COMPONENT_CATALOG['skeleton'] = {
       "name": "default",
       "desc": "加载完成（loading = false）后展示的真实业务组件插槽",
       "child": "Control",
-      "example": "<template #default><HeroCard :hero=\"heroData\" /></template>"
+      "example": "<template #default><HeroCard :hero=\"heroData\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "template",
       "desc": "自定义骨架占位模版结构插槽",
       "child": "VBoxContainer / Array[Control]",
-      "example": "<template #template><div class=\"my-custom-skeleton\"></div></template>"
+      "example": "<template #template><div class=\"my-custom-skeleton\"></div></template>",
+      "version": "v1.0"
     }
   ]
 };

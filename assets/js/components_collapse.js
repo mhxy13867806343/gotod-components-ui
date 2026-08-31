@@ -42,38 +42,44 @@ window.COMPONENT_CATALOG['collapse'] = {
       "name": "title",
       "type": "String",
       "default": "\"Collapse Title\"",
-      "desc": "标题"
+      "desc": "标题",
+      "version": "v1.0"
     },
     {
       "name": "is_open",
       "type": "boolean",
       "default": "false",
-      "desc": "是否展开"
+      "desc": "是否展开",
+      "version": "v1.0"
     },
     {
       "name": "accordion",
       "type": "boolean",
       "default": "false",
-      "desc": "是否手风琴互斥模式"
+      "desc": "是否手风琴互斥模式",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "toggled(is_open)",
       "desc": "展开/收起状态改变时触发",
-      "params": "(is_open: bool)"
+      "params": "(is_open: bool)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "toggle()",
       "desc": "切换展开与收起状态",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "set_open(open_state: bool)",
       "desc": "显式设置面板展开或收起",
-      "params": "(open_state: bool) -> void"
+      "params": "(open_state: bool) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -81,25 +87,29 @@ window.COMPONENT_CATALOG['collapse'] = {
       "name": "default",
       "desc": "折叠面板展开后的主体内容插槽",
       "child": "Control / VBoxContainer",
-      "example": "<template #default><div>画质等级: 超高 / 60FPS / 动态光影</div></template>"
+      "example": "<template #default><div>画质等级: 超高 / 60FPS / 动态光影</div></template>",
+      "version": "v1.0"
     },
     {
       "name": "title",
       "desc": "自定义折叠面板标题栏插槽（透传 { is_expanded }）",
       "child": "HBoxContainer / GText",
-      "example": "<template #title=\"{ is_expanded }\"><span>高级图形渲染设置</span></template>"
+      "example": "<template #title=\"{ is_expanded }\"><span>高级图形渲染设置</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "extra",
       "desc": "折叠面板标题栏右侧操作项插槽",
       "child": "GButton / GTag",
-      "example": "<template #extra><GTag type=\"success\">推荐配置</GTag></template>"
+      "example": "<template #extra><GTag type=\"success\">推荐配置</GTag></template>",
+      "version": "v1.0"
     },
     {
       "name": "arrow",
       "desc": "自定义展开/折叠箭头指示图标插槽（透传 { is_expanded }）",
       "child": "GIcon / TextureRect",
-      "example": "<template #arrow=\"{ is_expanded }\"><GIcon :name=\"is_expanded ? 'angle-up' : 'angle-down'\" /></template>"
+      "example": "<template #arrow=\"{ is_expanded }\"><GIcon :name=\"is_expanded ? 'angle-up' : 'angle-down'\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

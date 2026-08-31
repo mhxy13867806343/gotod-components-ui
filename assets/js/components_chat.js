@@ -37,48 +37,56 @@ window.COMPONENT_CATALOG['chat'] = {
       "name": "self_bubble_color",
       "type": "Color",
       "default": "Color.hex(0x07c160)",
-      "desc": "我方发送气泡底色 (默认微信绿)"
+      "desc": "我方发送气泡底色 (默认微信绿)",
+      "version": "v1.0"
     },
     {
       "name": "other_bubble_color",
       "type": "Color",
       "default": "Color.hex(0x242426)",
-      "desc": "对方接收气泡底色"
+      "desc": "对方接收气泡底色",
+      "version": "v1.0"
     },
     {
       "name": "auto_scroll",
       "type": "boolean",
       "default": "true",
-      "desc": "新消息到达时是否自动平滑滚动到底部"
+      "desc": "新消息到达时是否自动平滑滚动到底部",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "message_sent(text: String)",
       "desc": "玩家在底部输入框输入并点击发送或回车时触发",
-      "params": "(text: String)"
+      "params": "(text: String)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "send_self_message(text, avatar=null)",
       "desc": "添加一条我方右侧气泡消息",
-      "params": "(text: String, avatar: Texture2D) -> GChat"
+      "params": "(text: String, avatar: Texture2D) -> GChat",
+      "version": "v1.0"
     },
     {
       "name": "receive_message(text, sender=\"队友\", avatar=null)",
       "desc": "添加一条对方左侧气泡消息",
-      "params": "(text: String, sender: String, avatar: Texture2D) -> GChat"
+      "params": "(text: String, sender: String, avatar: Texture2D) -> GChat",
+      "version": "v1.0"
     },
     {
       "name": "add_system_notice(text)",
       "desc": "添加一条居中系统时间戳或事件胶囊",
-      "params": "(text: String) -> GChat"
+      "params": "(text: String) -> GChat",
+      "version": "v1.0"
     },
     {
       "name": "clear()",
       "desc": "清空当前聊天记录列表",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -86,19 +94,22 @@ window.COMPONENT_CATALOG['chat'] = {
       "name": "message",
       "desc": "单条消息气泡自定义渲染插槽（透传 { message_data, is_self }）",
       "child": "Control / HBoxContainer",
-      "example": "<template #message=\"{ msg, is_self }\"><div :class=\"is_self ? 'my-msg' : 'peer-msg'\">{{ msg.text }}</div></template>"
+      "example": "<template #message=\"{ msg, is_self }\"><div :class=\"is_self ? 'my-msg' : 'peer-msg'\">{{ msg.text }}</div></template>",
+      "version": "v1.0"
     },
     {
       "name": "avatar",
       "desc": "发言玩家头像插槽（透传 { user_info }）",
       "child": "GAvatar",
-      "example": "<template #avatar=\"{ user }\"><GAvatar :src=\"user.avatar_url\" /></template>"
+      "example": "<template #avatar=\"{ user }\"><GAvatar :src=\"user.avatar_url\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "input",
       "desc": "底部自定义输入与表情选择工具栏插槽",
       "child": "GInput / GButton",
-      "example": "<template #input><GInput placeholder=\"输入消息...\" /><GButton>发送</GButton></template>"
+      "example": "<template #input><GInput placeholder=\"输入消息...\" /><GButton>发送</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

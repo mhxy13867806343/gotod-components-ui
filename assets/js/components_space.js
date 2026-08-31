@@ -42,19 +42,22 @@ window.COMPONENT_CATALOG['space'] = {
       "name": "gap",
       "type": "float",
       "default": "12.0",
-      "desc": "子节点间距 (像素)"
+      "desc": "子节点间距 (像素)",
+      "version": "v1.0"
     },
     {
       "name": "wrap",
       "type": "boolean",
       "default": "true",
-      "desc": "超出容器宽度时是否自动换行"
+      "desc": "超出容器宽度时是否自动换行",
+      "version": "v1.0"
     },
     {
       "name": "direction",
       "type": "enum",
       "default": "HORIZONTAL",
-      "desc": "排列方向：HORIZONTAL, VERTICAL"
+      "desc": "排列方向：HORIZONTAL, VERTICAL",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -64,13 +67,15 @@ window.COMPONENT_CATALOG['space'] = {
       "name": "default",
       "desc": "间距容器内所有自动排列的子节点插槽",
       "child": "Array[Control]",
-      "example": "<template #default><GButton>选项A</GButton><GButton>选项B</GButton></template>"
+      "example": "<template #default><GButton>选项A</GButton><GButton>选项B</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "split",
       "desc": "子元素之间的自定义分隔符插槽",
       "child": "GDivider / Control",
-      "example": "<template #split><GDivider vertical /></template>"
+      "example": "<template #split><GDivider vertical /></template>",
+      "version": "v1.0"
     }
   ]
 };

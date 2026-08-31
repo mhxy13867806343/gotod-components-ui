@@ -31,6 +31,7 @@ window.switchTopSection = function(section, targetDocKey) {
 // ==========================================
 window.findSectionByDocKey = function(docKey) {
   if (!docKey) return 'components';
+  if (docKey.startsWith('changelog-') || docKey === 'changelog') return 'changelog';
   if (window.GUIDE_CATALOG && window.GUIDE_CATALOG[docKey]) return 'guide';
   if (docKey === 'icon') return 'icons-gallery';
   if (window.SLOTS_CATALOG && window.SLOTS_CATALOG[docKey]) return 'slots';
@@ -88,6 +89,17 @@ window.showDoc = function(key) {
   // Sync URL hash to browser address bar without jarring scrolling
   if (window.location.hash !== '#' + key) {
     history.replaceState(null, '', '#' + key);
+  }
+
+  // Handle Changelog Page Rendering (Using GSteps Component)
+  if (key.startsWith('changelog-') || key === 'changelog') {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('data-key') === key);
+    });
+    if (typeof window.renderChangelogPage === 'function') {
+      window.renderChangelogPage(key);
+    }
+    return;
   }
   
   // Combine all catalog sources

@@ -48,7 +48,7 @@ window.COMPONENT_CATALOG['tabs'] = {
       "type": "string / number",
       "default": "0",
       "desc": "绑定值，选中选项卡的 name 或索引，默认是第一个 tab",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "sticky",
@@ -69,7 +69,7 @@ window.COMPONENT_CATALOG['tabs'] = {
       "type": "enum",
       "default": "'' (LINE)",
       "desc": "风格类型：LINE (划线式), CARD (卡片式), BORDER_CARD (边框卡片), SEGMENT (分段器)",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "transition_type",
@@ -90,14 +90,14 @@ window.COMPONENT_CATALOG['tabs'] = {
       "type": "boolean",
       "default": "false",
       "desc": "标签是否可关闭",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "addable",
       "type": "boolean",
       "default": "false",
       "desc": "标签是否可增加",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "editable",
@@ -118,7 +118,7 @@ window.COMPONENT_CATALOG['tabs'] = {
       "type": "enum",
       "default": "top",
       "desc": "选项卡所在位置：top (顶部), bottom (底部), left (左侧竖向), right (右侧竖向)",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "before-leave",
@@ -133,13 +133,13 @@ window.COMPONENT_CATALOG['tabs'] = {
       "name": "tab_clicked",
       "desc": "点击选中某个选项卡时触发",
       "params": "(index: int, name: String)",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "tab_changed",
       "desc": "当前激活选项卡发生改变时触发",
       "params": "(index: int, name: String)",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "tab_sticky_state_changed",
@@ -177,13 +177,13 @@ window.COMPONENT_CATALOG['tabs'] = {
       "name": "add_tab(name, panel, closable=false, icon=null)",
       "desc": "动态追加一个选项卡及关联内容面板",
       "params": "(name: String, panel: Control) -> void",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "remove_tab(index)",
       "desc": "移除指定索引处的选项卡",
       "params": "(index: int) -> void",
-      "version": "v1.0.0"
+      "version": "v1.2"
     },
     {
       "name": "set_sticky(enabled, offset_top=0)",
@@ -213,7 +213,7 @@ window.COMPONENT_CATALOG['tabs'] = {
       "name": "set_current_tab(index)",
       "desc": "程序化切换当前激活的选项卡",
       "params": "(index: int) -> void",
-      "version": "v1.0.0"
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -222,7 +222,7 @@ window.COMPONENT_CATALOG['tabs'] = {
       "desc": "默认插槽，放置子标签页内容面板 (GTabPane 节点集合)",
       "child": "GTabPane / Control",
       "example": "<GTabs><GTabPane label=\"Tab 1\">Content 1</GTabPane></GTabs>",
-      "version": "v1.0.0"
+      "version": "v1.0"
     },
     {
       "name": "prefix",

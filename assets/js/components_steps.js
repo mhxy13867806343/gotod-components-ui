@@ -42,59 +42,69 @@ window.COMPONENT_CATALOG['steps'] = {
       "name": "steps",
       "type": "Array[String]",
       "default": "[]",
-      "desc": "步骤名称列表"
+      "desc": "步骤名称列表",
+      "version": "v1.0"
     },
     {
       "name": "current_step / active",
       "type": "int",
       "default": "0",
-      "desc": "当前激活步骤索引 (从 0 开始)"
+      "desc": "当前激活步骤索引 (从 0 开始)",
+      "version": "v1.0"
     },
     {
       "name": "direction",
       "type": "enum",
       "default": "HORIZONTAL",
-      "desc": "显示方向：HORIZONTAL, VERTICAL"
+      "desc": "显示方向：HORIZONTAL, VERTICAL",
+      "version": "v1.0"
     },
     {
       "name": "finish_status",
       "type": "enum",
       "default": "SUCCESS",
-      "desc": "已完成步骤的状态类型"
+      "desc": "已完成步骤的状态类型",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "step_changed(current_step)",
       "desc": "当前步骤改变时触发",
-      "params": "(current_step: int)"
+      "params": "(current_step: int)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "add_step(title: String)",
       "desc": "动态追加单个步骤",
-      "params": "(title: String) -> void"
+      "params": "(title: String) -> void",
+      "version": "v1.0"
     },
     {
       "name": "add_steps(step_list: Array)",
       "desc": "批量设置/追加步骤列表 [\"步骤1\", \"步骤2\"]",
-      "params": "(step_list: Array) -> void"
+      "params": "(step_list: Array) -> void",
+      "version": "v1.0"
     },
     {
       "name": "next()",
       "desc": "前进至下一步",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "prev()",
       "desc": "返回上一步",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "set_step(index: int)",
       "desc": "直接跳转到指定步骤",
-      "params": "(index: int) -> void"
+      "params": "(index: int) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -102,19 +112,22 @@ window.COMPONENT_CATALOG['steps'] = {
       "name": "icon",
       "desc": "自定义步骤节点图标插槽（透传 { index, status }）",
       "child": "GIcon / TextureRect",
-      "example": "<template #icon=\"{ index }\"><GIcon name=\"circle-check\" /></template>"
+      "example": "<template #icon=\"{ index }\"><GIcon name=\"circle-check\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "title",
       "desc": "自定义步骤标题插槽（透传 { index, title }）",
       "child": "GText / Label",
-      "example": "<template #title=\"{ index, title }\"><span>步骤 {{ index + 1 }}: {{ title }}</span></template>"
+      "example": "<template #title=\"{ index, title }\"><span>步骤 {{ index + 1 }}: {{ title }}</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "description",
       "desc": "自定义步骤详细描述插槽（透传 { index, desc }）",
       "child": "Label / Control",
-      "example": "<template #description=\"{ desc }\"><small>{{ desc }}</small></template>"
+      "example": "<template #description=\"{ desc }\"><small>{{ desc }}</small></template>",
+      "version": "v1.0"
     }
   ]
 };

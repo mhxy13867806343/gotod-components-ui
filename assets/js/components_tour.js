@@ -37,74 +37,87 @@ window.COMPONENT_CATALOG['tour'] = {
       "name": "steps",
       "type": "Array[Dictionary]",
       "default": "[]",
-      "desc": "引导步骤数组 [{\"target\": NodePath, \"title\": \"\", \"description\": \"\", \"placement\": \"BOTTOM\"}]"
+      "desc": "引导步骤数组 [{\"target\": NodePath, \"title\": \"\", \"description\": \"\", \"placement\": \"BOTTOM\"}]",
+      "version": "v1.0"
     },
     {
       "name": "current_step",
       "type": "int",
       "default": "0",
-      "desc": "当前激活步骤索引 (从 0 开始)"
+      "desc": "当前激活步骤索引 (从 0 开始)",
+      "version": "v1.0"
     },
     {
       "name": "mask",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示全屏半透明遮罩层"
+      "desc": "是否显示全屏半透明遮罩层",
+      "version": "v1.0"
     },
     {
       "name": "show_arrow",
       "type": "boolean",
       "default": "true",
-      "desc": "是否展示气泡定位小箭头"
+      "desc": "是否展示气泡定位小箭头",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "step_change(current_step)",
       "desc": "步骤发生切换时触发",
-      "params": "(current_step: int)"
+      "params": "(current_step: int)",
+      "version": "v1.0"
     },
     {
       "name": "finish()",
       "desc": "完成所有引导步骤时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "用户中途关闭引导时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "add_step(step_dict: Dictionary)",
       "desc": "动态追加单个漫游步骤",
-      "params": "(step_dict: Dictionary) -> void"
+      "params": "(step_dict: Dictionary) -> void",
+      "version": "v1.0"
     },
     {
       "name": "add_steps(step_list: Array[Dictionary])",
       "desc": "批量追加一组漫游步骤",
-      "params": "(step_list: Array[Dictionary]) -> void"
+      "params": "(step_list: Array[Dictionary]) -> void",
+      "version": "v1.0"
     },
     {
       "name": "start()",
       "desc": "从第一步开始启动漫游引导",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "next()",
       "desc": "前进至下一步",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "prev()",
       "desc": "后退至上一步",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "close_tour()",
       "desc": "关闭并退出漫游引导",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -112,31 +125,36 @@ window.COMPONENT_CATALOG['tour'] = {
       "name": "default",
       "desc": "自定义引导气泡内容区插槽（透传 { step, current, total }）",
       "child": "Control / VBoxContainer",
-      "example": "<template #default=\"{ step }\"><h4>{{ step.title }}</h4><p>{{ step.desc }}</p></template>"
+      "example": "<template #default=\"{ step }\"><h4>{{ step.title }}</h4><p>{{ step.desc }}</p></template>",
+      "version": "v1.0"
     },
     {
       "name": "indicators",
       "desc": "自定义步骤指示器圆点插槽（透传 { current, total }）",
       "child": "HBoxContainer",
-      "example": "<template #indicators=\"{ current, total }\"><span>第 {{ current + 1 }} / {{ total }} 步</span></template>"
+      "example": "<template #indicators=\"{ current, total }\"><span>第 {{ current + 1 }} / {{ total }} 步</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "prev",
       "desc": "自定义上一步按钮插槽",
       "child": "GButton",
-      "example": "<template #prev><GButton>上一步</GButton></template>"
+      "example": "<template #prev><GButton>上一步</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "next",
       "desc": "自定义下一步按钮插槽",
       "child": "GButton",
-      "example": "<template #next><GButton type=\"primary\">下一步</GButton></template>"
+      "example": "<template #next><GButton type=\"primary\">下一步</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "finish",
       "desc": "自定义完成按钮插槽",
       "child": "GButton",
-      "example": "<template #finish><GButton type=\"success\">开始冒险</GButton></template>"
+      "example": "<template #finish><GButton type=\"success\">开始冒险</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

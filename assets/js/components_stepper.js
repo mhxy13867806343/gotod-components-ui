@@ -37,67 +37,78 @@ window.COMPONENT_CATALOG['stepper'] = {
       "name": "value",
       "type": "float",
       "default": "1.0",
-      "desc": "当前输入值"
+      "desc": "当前输入值",
+      "version": "v1.0"
     },
     {
       "name": "min_value",
       "type": "float",
       "default": "1.0",
-      "desc": "最小值限制"
+      "desc": "最小值限制",
+      "version": "v1.0"
     },
     {
       "name": "max_value",
       "type": "float",
       "default": "100.0",
-      "desc": "最大值限制"
+      "desc": "最大值限制",
+      "version": "v1.2"
     },
     {
       "name": "step",
       "type": "float",
       "default": "1.0",
-      "desc": "点击加减按钮每次变化的步长"
+      "desc": "点击加减按钮每次变化的步长",
+      "version": "v1.0"
     },
     {
       "name": "integer",
       "type": "boolean",
       "default": "true",
-      "desc": "是否只允许输入整数"
+      "desc": "是否只允许输入整数",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否禁用步进器"
+      "desc": "是否禁用步进器",
+      "version": "v1.0"
     },
     {
       "name": "round_theme",
       "type": "boolean",
       "default": "false",
-      "desc": "是否启用圆角/圆圈极简主题风格"
+      "desc": "是否启用圆角/圆圈极简主题风格",
+      "version": "v1.2"
     }
   ],
   "events": [
     {
       "name": "value_changed(val)",
       "desc": "当数值发生改变时触发",
-      "params": "(val: float)"
+      "params": "(val: float)",
+      "version": "v1.0"
     },
     {
       "name": "overlimit(limit_type)",
       "desc": "当点击加减超出限制范围时触发 (\"min\" / \"max\")",
-      "params": "(limit_type: String)"
+      "params": "(limit_type: String)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "set_value(val)",
       "desc": "设置当前步进器数值",
-      "params": "(val: float) -> void"
+      "params": "(val: float) -> void",
+      "version": "v1.0"
     },
     {
       "name": "get_value()",
       "desc": "获取当前步进器数值",
-      "params": "() -> float"
+      "params": "() -> float",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -105,19 +116,22 @@ window.COMPONENT_CATALOG['stepper'] = {
       "name": "minus",
       "desc": "步进器减少按钮插槽",
       "child": "GIcon / GButton",
-      "example": "<template #minus><GIcon name=\"angle-left\" /></template>"
+      "example": "<template #minus><GIcon name=\"angle-left\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "plus",
       "desc": "步进器增加按钮插槽",
       "child": "GIcon / GButton",
-      "example": "<template #plus><GIcon name=\"angle-right\" /></template>"
+      "example": "<template #plus><GIcon name=\"angle-right\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "default",
       "desc": "步进器中间数值输入/显示区域插槽",
       "child": "GInput / Label",
-      "example": "<template #default><span>Lv. {{ level }}</span></template>"
+      "example": "<template #default><span>Lv. {{ level }}</span></template>",
+      "version": "v1.0"
     }
   ]
 };

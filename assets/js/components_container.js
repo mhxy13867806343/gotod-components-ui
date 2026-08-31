@@ -62,7 +62,8 @@ window.COMPONENT_CATALOG['container'] = {
       "name": "direction",
       "type": "enum",
       "default": "AUTO",
-      "desc": "子元素排列方向：AUTO (包含 Header/Footer 时自动垂直，否则水平), HORIZONTAL, VERTICAL"
+      "desc": "子元素排列方向：AUTO (包含 Header/Footer 时自动垂直，否则水平), HORIZONTAL, VERTICAL",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -70,7 +71,8 @@ window.COMPONENT_CATALOG['container'] = {
     {
       "name": "css(rules_or_func: Variant)",
       "desc": "链式设定当前容器的样式规则",
-      "params": "(rules_or_func: Variant) -> GContainer"
+      "params": "(rules_or_func: Variant) -> GContainer",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -78,7 +80,8 @@ window.COMPONENT_CATALOG['container'] = {
       "name": "default",
       "desc": "容器内部承载的子节点插槽",
       "child": "Control / VBoxContainer / HBoxContainer",
-      "example": "<template #default><GButton>内部控件</GButton></template>"
+      "example": "<template #default><GButton>内部控件</GButton></template>",
+      "version": "v1.0"
     }
   ],
   "paneProps": [

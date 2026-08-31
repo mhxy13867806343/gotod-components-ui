@@ -42,43 +42,50 @@ window.COMPONENT_CATALOG['tag'] = {
       "name": "text",
       "type": "String",
       "default": "\"Tag\"",
-      "desc": "标签文本"
+      "desc": "标签文本",
+      "version": "v1.0"
     },
     {
       "name": "type",
       "type": "enum",
       "default": "DEFAULT",
-      "desc": "色彩类型：DEFAULT, PRIMARY, SUCCESS, WARNING, DANGER, INFO"
+      "desc": "色彩类型：DEFAULT, PRIMARY, SUCCESS, WARNING, DANGER, INFO",
+      "version": "v1.0"
     },
     {
       "name": "variant",
       "type": "enum",
       "default": "LIGHT",
-      "desc": "质感风格：LIGHT, OUTLINE, SOLID"
+      "desc": "质感风格：LIGHT, OUTLINE, SOLID",
+      "version": "v1.0"
     },
     {
       "name": "closable",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示关闭按钮"
+      "desc": "是否显示关闭按钮",
+      "version": "v1.0"
     },
     {
       "name": "round",
       "type": "boolean",
       "default": "false",
-      "desc": "是否圆角胶囊形态"
+      "desc": "是否圆角胶囊形态",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "closed()",
       "desc": "点击关闭按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "clicked()",
       "desc": "点击标签本身时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [],
@@ -87,19 +94,22 @@ window.COMPONENT_CATALOG['tag'] = {
       "name": "default",
       "desc": "标签内部文字或内容插槽",
       "child": "Label / Control",
-      "example": "<template #default>Godot 4.3 渲染引擎</template>"
+      "example": "<template #default>Godot 4.3 渲染引擎</template>",
+      "version": "v1.0"
     },
     {
       "name": "icon",
       "desc": "标签前置图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #icon><GIcon name=\"fire\" /></template>"
+      "example": "<template #icon><GIcon name=\"fire\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "close-icon",
       "desc": "自定义可关闭标签的关闭按钮插槽",
       "child": "GIcon / GButton",
-      "example": "<template #close-icon><GIcon name=\"xmark\" /></template>"
+      "example": "<template #close-icon><GIcon name=\"xmark\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

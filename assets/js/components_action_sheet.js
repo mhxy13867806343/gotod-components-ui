@@ -37,65 +37,76 @@ window.COMPONENT_CATALOG['action-sheet'] = {
       "name": "title",
       "type": "String",
       "default": "\"\"",
-      "desc": "面板顶部标题"
+      "desc": "面板顶部标题",
+      "version": "v1.0"
     },
     {
       "name": "description",
       "type": "String",
       "default": "\"\"",
-      "desc": "面板标题下方的描述信息"
+      "desc": "面板标题下方的描述信息",
+      "version": "v1.0"
     },
     {
       "name": "actions",
       "type": "Array[Dictionary]",
       "default": "[]",
-      "desc": "面板选项列表 [{\"name\": \"\", \"subname\": \"\", \"danger\": false, \"disabled\": false}]"
+      "desc": "面板选项列表 [{\"name\": \"\", \"subname\": \"\", \"danger\": false, \"disabled\": false}]",
+      "version": "v1.0"
     },
     {
       "name": "cancel_text",
       "type": "String",
       "default": "\"取消\"",
-      "desc": "底部取消按钮文字"
+      "desc": "底部取消按钮文字",
+      "version": "v1.0"
     },
     {
       "name": "round_corner",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示圆角"
+      "desc": "是否显示圆角",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "select(item, index)",
       "desc": "点击选项时触发",
-      "params": "(item: Dictionary, index: int)"
+      "params": "(item: Dictionary, index: int)",
+      "version": "v1.0"
     },
     {
       "name": "cancel()",
       "desc": "点击取消按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "add_action(name, subname=\"\", danger=false, disabled=false)",
       "desc": "动态添加单个动作项",
-      "params": "(name: String, subname: String, danger: bool, disabled: bool) -> void"
+      "params": "(name: String, subname: String, danger: bool, disabled: bool) -> void",
+      "version": "v1.0"
     },
     {
       "name": "add_actions(action_list: Array[Dictionary])",
       "desc": "批量追加一组动作面板选项",
-      "params": "(action_list: Array[Dictionary]) -> void"
+      "params": "(action_list: Array[Dictionary]) -> void",
+      "version": "v1.0"
     },
     {
       "name": "open()",
       "desc": "呼出底部动作面板",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "关闭动作面板",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -103,19 +114,22 @@ window.COMPONENT_CATALOG['action-sheet'] = {
       "name": "title",
       "desc": "面板顶部标题或说明插槽",
       "child": "GText / Label",
-      "example": "<template #title><h4>请选择快捷分享方式</h4></template>"
+      "example": "<template #title><h4>请选择快捷分享方式</h4></template>",
+      "version": "v1.0"
     },
     {
       "name": "action",
       "desc": "自定义每个操作条目渲染插槽（透传 { item, index }）",
       "child": "Control / GButton",
-      "example": "<template #action=\"{ item }\"><GButton icon=\"share\">{{ item.name }}</GButton></template>"
+      "example": "<template #action=\"{ item }\"><GButton icon=\"share\">{{ item.name }}</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "cancel",
       "desc": "底部取消按钮插槽",
       "child": "GButton",
-      "example": "<template #cancel><GButton>关闭面板</GButton></template>"
+      "example": "<template #cancel><GButton>关闭面板</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

@@ -37,32 +37,37 @@ window.COMPONENT_CATALOG['radio'] = {
       "name": "checked / v-model",
       "type": "boolean",
       "default": "false",
-      "desc": "是否被选中"
+      "desc": "是否被选中",
+      "version": "v1.0"
     },
     {
       "name": "value",
       "type": "String",
       "default": "\"\"",
-      "desc": "选项标识绑定值"
+      "desc": "选项标识绑定值",
+      "version": "v1.0"
     },
     {
       "name": "button_style",
       "type": "boolean",
       "default": "false",
-      "desc": "是否开启按钮式外观形态"
+      "desc": "是否开启按钮式外观形态",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否禁用"
+      "desc": "是否禁用",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "selected()",
       "desc": "被选中时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [],
@@ -71,13 +76,15 @@ window.COMPONENT_CATALOG['radio'] = {
       "name": "default",
       "desc": "单选框右侧描述文本插槽",
       "child": "Label / RichTextLabel / Control",
-      "example": "<template #default>顺丰次日达 (+ ¥12)</template>"
+      "example": "<template #default>顺丰次日达 (+ ¥12)</template>",
+      "version": "v1.0"
     },
     {
       "name": "icon",
       "desc": "自定义单选圆点选中状态图标插槽（透传 { checked }）",
       "child": "GIcon / TextureRect",
-      "example": "<template #icon=\"{ checked }\"><GIcon :name=\"checked ? 'circle-dot' : 'circle'\" /></template>"
+      "example": "<template #icon=\"{ checked }\"><GIcon :name=\"checked ? 'circle-dot' : 'circle'\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

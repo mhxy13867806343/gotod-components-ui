@@ -37,19 +37,22 @@ window.COMPONENT_CATALOG['loading'] = {
       "name": "text",
       "type": "String",
       "default": "\"Loading...\"",
-      "desc": "加载提示文字"
+      "desc": "加载提示文字",
+      "version": "v1.0"
     },
     {
       "name": "spinner_size",
       "type": "float",
       "default": "36.0",
-      "desc": "旋转圈尺寸 (像素)"
+      "desc": "旋转圈尺寸 (像素)",
+      "version": "v1.0"
     },
     {
       "name": "fullscreen",
       "type": "boolean",
       "default": "false",
-      "desc": "是否覆盖全屏遮罩加载"
+      "desc": "是否覆盖全屏遮罩加载",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -57,12 +60,14 @@ window.COMPONENT_CATALOG['loading'] = {
     {
       "name": "show()",
       "desc": "显示加载指示器",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "hide()",
       "desc": "隐藏加载指示器",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -70,19 +75,22 @@ window.COMPONENT_CATALOG['loading'] = {
       "name": "default",
       "desc": "被加载遮罩包裹的主体业务节点插槽",
       "child": "Control",
-      "example": "<template #default><div class=\"game-data-table\">...</div></template>"
+      "example": "<template #default><div class=\"game-data-table\">...</div></template>",
+      "version": "v1.0"
     },
     {
       "name": "spinner",
       "desc": "自定义 Loading 旋转图标或序列帧动画插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #spinner><GIcon name=\"spinner\" class=\"fa-spin\" /></template>"
+      "example": "<template #spinner><GIcon name=\"spinner\" class=\"fa-spin\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "description",
       "desc": "加载提示文本插槽",
       "child": "Label / GText",
-      "example": "<template #description>正在连接游戏服务器，请稍候...</template>"
+      "example": "<template #description>正在连接游戏服务器，请稍候...</template>",
+      "version": "v1.0"
     }
   ]
 };

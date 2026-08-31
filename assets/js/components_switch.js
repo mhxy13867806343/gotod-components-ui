@@ -37,39 +37,45 @@ window.COMPONENT_CATALOG['switch'] = {
       "name": "checked / v-model",
       "type": "boolean",
       "default": "false",
-      "desc": "开关开启状态"
+      "desc": "开关开启状态",
+      "version": "v1.0"
     },
     {
       "name": "switch_size",
       "type": "enum",
       "default": "MEDIUM",
-      "desc": "尺寸规格：SMALL, MEDIUM, LARGE"
+      "desc": "尺寸规格：SMALL, MEDIUM, LARGE",
+      "version": "v1.0"
     },
     {
       "name": "checked_color",
       "type": "Color",
       "default": "TRANSPARENT",
-      "desc": "激活状态自定义色彩"
+      "desc": "激活状态自定义色彩",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否禁用"
+      "desc": "是否禁用",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "toggled(checked)",
       "desc": "开关状态改变时触发",
-      "params": "(checked: bool)"
+      "params": "(checked: bool)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "toggle()",
       "desc": "翻转当前开关状态",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -77,19 +83,22 @@ window.COMPONENT_CATALOG['switch'] = {
       "name": "checked-icon",
       "desc": "开启状态滑块内部图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #checked-icon><GIcon name=\"check\" /></template>"
+      "example": "<template #checked-icon><GIcon name=\"check\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "unchecked-icon",
       "desc": "关闭状态滑块内部图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #unchecked-icon><GIcon name=\"xmark\" /></template>"
+      "example": "<template #unchecked-icon><GIcon name=\"xmark\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "default",
       "desc": "开关右侧伴随文本标签插槽",
       "child": "GText / Label",
-      "example": "<template #default><span>开启音效 (SFX)</span></template>"
+      "example": "<template #default><span>开启音效 (SFX)</span></template>",
+      "version": "v1.0"
     }
   ]
 };

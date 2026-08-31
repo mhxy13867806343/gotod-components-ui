@@ -37,45 +37,52 @@ window.COMPONENT_CATALOG['slider'] = {
       "name": "value / v-model",
       "type": "float",
       "default": "0.0",
-      "desc": "当前滑块数值"
+      "desc": "当前滑块数值",
+      "version": "v1.0"
     },
     {
       "name": "min_value / min",
       "type": "float",
       "default": "0.0",
-      "desc": "最小值"
+      "desc": "最小值",
+      "version": "v1.0"
     },
     {
       "name": "max_value / max",
       "type": "float",
       "default": "100.0",
-      "desc": "最大值"
+      "desc": "最大值",
+      "version": "v1.2"
     },
     {
       "name": "step",
       "type": "float",
       "default": "1.0",
-      "desc": "步长"
+      "desc": "步长",
+      "version": "v1.0"
     },
     {
       "name": "status",
       "type": "enum",
       "default": "PRIMARY",
-      "desc": "状态色彩"
+      "desc": "状态色彩",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "value_changed(new_value)",
       "desc": "滑块值改变时触发",
-      "params": "(new_value: float)"
+      "params": "(new_value: float)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "set_value(v: float)",
       "desc": "程序化设置滑块值",
-      "params": "(v: float) -> void"
+      "params": "(v: float) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -83,13 +90,15 @@ window.COMPONENT_CATALOG['slider'] = {
       "name": "thumb",
       "desc": "自定义滑块抓手把手插槽",
       "child": "Control / GIcon / TextureRect",
-      "example": "<template #thumb><GIcon name=\"volume-high\" /></template>"
+      "example": "<template #thumb><GIcon name=\"volume-high\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "mark",
       "desc": "自定义刻度标记渲染插槽（透传 { value, label }）",
       "child": "Control / GText",
-      "example": "<template #mark=\"{ value }\"><span>{{ value }}%</span></template>"
+      "example": "<template #mark=\"{ value }\"><span>{{ value }}%</span></template>",
+      "version": "v1.0"
     }
   ]
 };

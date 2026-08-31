@@ -42,116 +42,136 @@ window.COMPONENT_CATALOG['select'] = {
       "name": "options",
       "type": "Array[Dictionary]",
       "default": "[]",
-      "desc": "选项数据源 [{\"label\": \"\", \"value\": \"\", \"disabled\": false, \"group\": \"\"}]"
+      "desc": "选项数据源 [{\"label\": \"\", \"value\": \"\", \"disabled\": false, \"group\": \"\"}]",
+      "version": "v1.0"
     },
     {
       "name": "selected_index",
       "type": "int",
       "default": "-1",
-      "desc": "单选模式下当前选中项的索引"
+      "desc": "单选模式下当前选中项的索引",
+      "version": "v1.0"
     },
     {
       "name": "selected_value",
       "type": "Variant",
       "default": "null",
-      "desc": "当前选中的具体值 (单选模式)"
+      "desc": "当前选中的具体值 (单选模式)",
+      "version": "v1.0"
     },
     {
       "name": "selected_values",
       "type": "Array",
       "default": "[]",
-      "desc": "多选模式下已选中的值列表 Array[Variant]"
+      "desc": "多选模式下已选中的值列表 Array[Variant]",
+      "version": "v1.0"
     },
     {
       "name": "clearable",
       "type": "boolean",
       "default": "true",
-      "desc": "是否支持一键清空选中值 (鼠标悬浮显示 × 图标)"
+      "desc": "是否支持一键清空选中值 (鼠标悬浮显示 × 图标)",
+      "version": "v1.2"
     },
     {
       "name": "filterable",
       "type": "boolean",
       "default": "true",
-      "desc": "是否开启下拉列表实时模糊搜索过滤输入框"
+      "desc": "是否开启下拉列表实时模糊搜索过滤输入框",
+      "version": "v1.2"
     },
     {
       "name": "multiple",
       "type": "boolean",
       "default": "false",
-      "desc": "是否开启多选 Tags 模式"
+      "desc": "是否开启多选 Tags 模式",
+      "version": "v1.2"
     },
     {
       "name": "collapse_tags",
       "type": "boolean",
       "default": "false",
-      "desc": "多选模式下是否折叠超长标签"
+      "desc": "多选模式下是否折叠超长标签",
+      "version": "v1.0"
     },
     {
       "name": "max_collapse_tags",
       "type": "int",
       "default": "1",
-      "desc": "折叠标签模式下最多展示的 Tag 数量"
+      "desc": "折叠标签模式下最多展示的 Tag 数量",
+      "version": "v1.2"
     },
     {
       "name": "placeholder_text",
       "type": "String",
       "default": "\"请选择...\"",
-      "desc": "选择框未选值时的占位提示文本"
+      "desc": "选择框未选值时的占位提示文本",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否禁用整个选择器组件（不可点击交互）"
+      "desc": "是否禁用整个选择器组件（不可点击交互）",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "item_selected(index, value, label)",
       "desc": "单选模式下选中新选项时触发",
-      "params": "(index: int, value: Variant, label: String)"
+      "params": "(index: int, value: Variant, label: String)",
+      "version": "v1.0"
     },
     {
       "name": "selection_changed(values)",
       "desc": "选中值集合改变时触发（单选返回单元素数组，多选返回全量数组）",
-      "params": "(values: Array)"
+      "params": "(values: Array)",
+      "version": "v1.0"
     },
     {
       "name": "cleared()",
       "desc": "点击一键清空按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "popup_visibility_changed(is_visible)",
       "desc": "下拉弹窗展开或收起状态改变时触发",
-      "params": "(is_visible: bool)"
+      "params": "(is_visible: bool)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "add_option(label, value=null, disabled=false, group=\"\")",
       "desc": "动态追加单个下拉选项，支持指定分组与禁用状态",
-      "params": "(label: String, value: Variant, disabled: bool, group: String) -> void"
+      "params": "(label: String, value: Variant, disabled: bool, group: String) -> void",
+      "version": "v1.0"
     },
     {
       "name": "add_options(opt_list: Array)",
       "desc": "批量追加一组下拉选项 Array[Dictionary | String]",
-      "params": "(opt_list: Array) -> void"
+      "params": "(opt_list: Array) -> void",
+      "version": "v1.0"
     },
     {
       "name": "clear_options()",
       "desc": "清空全部选项数据与当前选中状态",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "show_popup()",
       "desc": "显式弹出下拉菜单并自动聚焦搜索框",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "toggle_popup()",
       "desc": "切换下拉菜单展开或收起状态",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -159,31 +179,36 @@ window.COMPONENT_CATALOG['select'] = {
       "name": "default",
       "desc": "下拉选择框主体触发器展示内容插槽",
       "child": "Control / GText",
-      "example": "<template #default><span>请选择法术流派</span></template>"
+      "example": "<template #default><span>请选择法术流派</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "prefix",
       "desc": "选择框左侧前置图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #prefix><GIcon name=\"wand-magic\" /></template>"
+      "example": "<template #prefix><GIcon name=\"wand-magic\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "arrow",
       "desc": "自定义下拉展开箭头指示器插槽（旋转动画）",
       "child": "GIcon / TextureRect",
-      "example": "<template #arrow><GIcon name=\"chevron-down\" /></template>"
+      "example": "<template #arrow><GIcon name=\"chevron-down\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "option",
       "desc": "自定义下拉菜单列表每一项渲染插槽（透传 { item, index }）",
       "child": "Control / HBoxContainer",
-      "example": "<template #option=\"{ item }\"><GIcon :name=\"item.icon\" /> {{ item.label }}</template>"
+      "example": "<template #option=\"{ item }\"><GIcon :name=\"item.icon\" /> {{ item.label }}</template>",
+      "version": "v1.0"
     },
     {
       "name": "empty",
       "desc": "无匹配搜索结果时的空状态插槽",
       "child": "Control / GText",
-      "example": "<template #empty><span>未找到相关角色</span></template>"
+      "example": "<template #empty><span>未找到相关角色</span></template>",
+      "version": "v1.0"
     }
   ]
 };

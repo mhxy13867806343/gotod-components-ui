@@ -37,19 +37,22 @@ window.COMPONENT_CATALOG['tooltip'] = {
       "name": "content",
       "type": "String",
       "default": "\"\"",
-      "desc": "提示文本"
+      "desc": "提示文本",
+      "version": "v1.0"
     },
     {
       "name": "placement",
       "type": "enum",
       "default": "TOP",
-      "desc": "提示位置：TOP, BOTTOM, LEFT, RIGHT"
+      "desc": "提示位置：TOP, BOTTOM, LEFT, RIGHT",
+      "version": "v1.0"
     },
     {
       "name": "dark_theme",
       "type": "boolean",
       "default": "true",
-      "desc": "深色/浅色气泡背景"
+      "desc": "深色/浅色气泡背景",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -57,12 +60,14 @@ window.COMPONENT_CATALOG['tooltip'] = {
     {
       "name": "show_tooltip()",
       "desc": "手动显示气泡",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "hide_tooltip()",
       "desc": "手动隐藏气泡",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -70,13 +75,15 @@ window.COMPONENT_CATALOG['tooltip'] = {
       "name": "default",
       "desc": "触发提示的宿主目标节点插槽",
       "child": "GButton / Control",
-      "example": "<template #default><GButton icon=\"circle-question\">帮助</GButton></template>"
+      "example": "<template #default><GButton icon=\"circle-question\">帮助</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "content",
       "desc": "提示内部自定义内容/富文本插槽",
       "child": "Control / Label",
-      "example": "<template #content><RichTextLabel text=\"[b]神话属性[/b]: 全体攻击力 +20%\" /></template>"
+      "example": "<template #content><RichTextLabel text=\"[b]神话属性[/b]: 全体攻击力 +20%\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

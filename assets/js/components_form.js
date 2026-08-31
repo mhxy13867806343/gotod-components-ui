@@ -37,54 +37,63 @@ window.COMPONENT_CATALOG['form'] = {
       "name": "label_position",
       "type": "enum",
       "default": "LEFT",
-      "desc": "标签对齐：LEFT (居左), TOP (居顶), RIGHT (居右)"
+      "desc": "标签对齐：LEFT (居左), TOP (居顶), RIGHT (居右)",
+      "version": "v1.0"
     },
     {
       "name": "label_width",
       "type": "float",
       "default": "120.0",
-      "desc": "统一标签宽度 (像素)"
+      "desc": "统一标签宽度 (像素)",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否统一禁用表单下的所有子输入控件"
+      "desc": "是否统一禁用表单下的所有子输入控件",
+      "version": "v1.0"
     },
     {
       "name": "show_message",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示错误校验提示信息"
+      "desc": "是否显示错误校验提示信息",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "validate_success()",
       "desc": "表单校验通过时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "validate_failed(errors)",
       "desc": "表单校验失败时触发",
-      "params": "(errors: Dictionary)"
+      "params": "(errors: Dictionary)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "validate()",
       "desc": "对整个表单进行校验，返回 bool 校验结果",
-      "params": "() -> bool"
+      "params": "() -> bool",
+      "version": "v1.0"
     },
     {
       "name": "reset_fields()",
       "desc": "重置表单中所有字段至初始默认值并清除错误",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "clear_validate()",
       "desc": "清除所有表单项的错误提示状态",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -92,25 +101,29 @@ window.COMPONENT_CATALOG['form'] = {
       "name": "default",
       "desc": "表单主体内容插槽，放置各类表单控件与 GFormItem",
       "child": "Control / VBoxContainer",
-      "example": "<template #default><GFormItem label=\"账号\"><GInput /></GFormItem></template>"
+      "example": "<template #default><GFormItem label=\"账号\"><GInput /></GFormItem></template>",
+      "version": "v1.0"
     },
     {
       "name": "label",
       "desc": "自定义表单项左侧标签栏插槽（透传 { label, required }）",
       "child": "HBoxContainer / GText",
-      "example": "<template #label><span>用户名 <i style=\"color:red;\">*</i></span></template>"
+      "example": "<template #label><span>用户名 <i style=\"color:red;\">*</i></span></template>",
+      "version": "v1.0"
     },
     {
       "name": "error",
       "desc": "自定义表单校验失败错误提示插槽（透传 { error_message }）",
       "child": "Control / GText",
-      "example": "<template #error=\"{ error_message }\"><span class=\"err\">{{ error_message }}</span></template>"
+      "example": "<template #error=\"{ error_message }\"><span class=\"err\">{{ error_message }}</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "extra",
       "desc": "表单项底部额外辅助说明插槽",
       "child": "Control / GText",
-      "example": "<template #extra><small>密码长度建议在 8-16 位之间</small></template>"
+      "example": "<template #extra><small>密码长度建议在 8-16 位之间</small></template>",
+      "version": "v1.0"
     }
   ],
   "paneProps": [

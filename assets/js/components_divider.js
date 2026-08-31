@@ -37,19 +37,22 @@ window.COMPONENT_CATALOG['divider'] = {
       "name": "direction",
       "type": "GDivider.Direction",
       "default": "HORIZONTAL",
-      "desc": "分割线方向 (HORIZONTAL / VERTICAL)"
+      "desc": "分割线方向 (HORIZONTAL / VERTICAL)",
+      "version": "v1.0"
     },
     {
       "name": "content_position",
       "type": "GDivider.Position",
       "default": "CENTER",
-      "desc": "文案位置 (LEFT / CENTER / RIGHT)"
+      "desc": "文案位置 (LEFT / CENTER / RIGHT)",
+      "version": "v1.0"
     },
     {
       "name": "dashed",
       "type": "bool",
       "default": "false",
-      "desc": "是否为虚线模式"
+      "desc": "是否为虚线模式",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -57,7 +60,8 @@ window.COMPONENT_CATALOG['divider'] = {
   "slots": [
     {
       "name": "default",
-      "desc": "分割线内部自定义文案插槽"
+      "desc": "分割线内部自定义文案插槽",
+      "version": "v1.0"
     }
   ]
 };

@@ -42,25 +42,29 @@ window.COMPONENT_CATALOG['avatar'] = {
       "name": "avatar_size",
       "type": "float",
       "default": "40.0",
-      "desc": "头像尺寸 (像素)"
+      "desc": "头像尺寸 (像素)",
+      "version": "v1.0"
     },
     {
       "name": "shape",
       "type": "enum",
       "default": "CIRCLE",
-      "desc": "形状：CIRCLE (圆形), SQUARE (圆角矩形)"
+      "desc": "形状：CIRCLE (圆形), SQUARE (圆角矩形)",
+      "version": "v1.2"
     },
     {
       "name": "text",
       "type": "String",
       "default": "\"U\"",
-      "desc": "无图片时的文字首字母"
+      "desc": "无图片时的文字首字母",
+      "version": "v1.0"
     },
     {
       "name": "texture",
       "type": "Texture2D",
       "default": "null",
-      "desc": "头像图片纹理"
+      "desc": "头像图片纹理",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -70,13 +74,15 @@ window.COMPONENT_CATALOG['avatar'] = {
       "name": "default",
       "desc": "自定义头像内部文字或自定义图像节点插槽",
       "child": "Label / TextureRect",
-      "example": "<template #default><span>K</span></template>"
+      "example": "<template #default><span>K</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "badge",
       "desc": "头像角标（如在线状态小绿点、等级徽章）插槽",
       "child": "GBadge / Control",
-      "example": "<template #badge><span class=\"online-status-dot\"></span></template>"
+      "example": "<template #badge><span class=\"online-status-dot\"></span></template>",
+      "version": "v1.2"
     }
   ]
 };

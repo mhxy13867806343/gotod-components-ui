@@ -42,25 +42,29 @@ window.COMPONENT_CATALOG['text'] = {
       "name": "text",
       "type": "String",
       "default": "\"\"",
-      "desc": "展示的文本内容"
+      "desc": "展示的文本内容",
+      "version": "v1.0"
     },
     {
       "name": "text_type",
       "type": "enum",
       "default": "DEFAULT",
-      "desc": "色彩类型：DEFAULT, PRIMARY, SUCCESS, WARNING, DANGER, INFO, SECONDARY"
+      "desc": "色彩类型：DEFAULT, PRIMARY, SUCCESS, WARNING, DANGER, INFO, SECONDARY",
+      "version": "v1.0"
     },
     {
       "name": "hierarchy",
       "type": "enum",
       "default": "BODY",
-      "desc": "层级：BODY, H1, H2, H3, H4, H5, H6, CAPTION, CODE"
+      "desc": "层级：BODY, H1, H2, H3, H4, H5, H6, CAPTION, CODE",
+      "version": "v1.0"
     },
     {
       "name": "ellipsis",
       "type": "boolean",
       "default": "false",
-      "desc": "文本超出是否自动显示省略号"
+      "desc": "文本超出是否自动显示省略号",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -68,7 +72,8 @@ window.COMPONENT_CATALOG['text'] = {
     {
       "name": "set_text(new_text: String)",
       "desc": "更新文本内容",
-      "params": "(new_text: String) -> void"
+      "params": "(new_text: String) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -76,19 +81,22 @@ window.COMPONENT_CATALOG['text'] = {
       "name": "default",
       "desc": "文本主体内容插槽",
       "child": "Label / RichTextLabel",
-      "example": "<template #default>这是一段带渐变高亮的正文</template>"
+      "example": "<template #default>这是一段带渐变高亮的正文</template>",
+      "version": "v1.0"
     },
     {
       "name": "prefix",
       "desc": "文本前置修饰插槽（如标签或图标）",
       "child": "GIcon / GTag / Control",
-      "example": "<template #prefix><GTag type=\"primary\">HOT</GTag></template>"
+      "example": "<template #prefix><GTag type=\"primary\">HOT</GTag></template>",
+      "version": "v1.0"
     },
     {
       "name": "suffix",
       "desc": "文本后置修饰插槽（如角标或单位）",
       "child": "GIcon / GBadge / Control",
-      "example": "<template #suffix><GBadge is_dot /></template>"
+      "example": "<template #suffix><GBadge is_dot /></template>",
+      "version": "v1.0"
     }
   ]
 };

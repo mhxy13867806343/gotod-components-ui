@@ -42,50 +42,58 @@ window.COMPONENT_CATALOG['input-number'] = {
       "name": "value / v-model",
       "type": "float",
       "default": "0.0",
-      "desc": "当前数值"
+      "desc": "当前数值",
+      "version": "v1.0"
     },
     {
       "name": "min_value / min",
       "type": "float",
       "default": "0.0",
-      "desc": "最小值"
+      "desc": "最小值",
+      "version": "v1.2"
     },
     {
       "name": "max_value / max",
       "type": "float",
       "default": "100.0",
-      "desc": "最大值"
+      "desc": "最大值",
+      "version": "v1.2"
     },
     {
       "name": "step",
       "type": "float",
       "default": "1.0",
-      "desc": "步进值"
+      "desc": "步进值",
+      "version": "v1.0"
     },
     {
       "name": "precision",
       "type": "int",
       "default": "0",
-      "desc": "小数数值精度"
+      "desc": "小数数值精度",
+      "version": "v1.2"
     }
   ],
   "events": [
     {
       "name": "value_changed(new_value)",
       "desc": "数值改变时触发",
-      "params": "(new_value: float)"
+      "params": "(new_value: float)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "increase()",
       "desc": "数值按 step 增加",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "decrease()",
       "desc": "数值按 step 减少",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -93,25 +101,29 @@ window.COMPONENT_CATALOG['input-number'] = {
       "name": "decrease-icon",
       "desc": "自定义递减按钮图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #decrease-icon><GIcon name=\"minus\" /></template>"
+      "example": "<template #decrease-icon><GIcon name=\"minus\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "increase-icon",
       "desc": "自定义递增按钮图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #increase-icon><GIcon name=\"plus\" /></template>"
+      "example": "<template #increase-icon><GIcon name=\"plus\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "prefix",
       "desc": "输入框前置单位插槽（如货币符号 ¥）",
       "child": "GText / Label",
-      "example": "<template #prefix>¥</template>"
+      "example": "<template #prefix>¥</template>",
+      "version": "v1.0"
     },
     {
       "name": "suffix",
       "desc": "输入框后置单位插槽（如计量单位“件/个”）",
       "child": "GText / Label",
-      "example": "<template #suffix>件</template>"
+      "example": "<template #suffix>件</template>",
+      "version": "v1.0"
     }
   ]
 };

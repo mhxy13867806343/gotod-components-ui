@@ -37,69 +37,81 @@ window.COMPONENT_CATALOG['popover'] = {
       "name": "placement",
       "type": "enum",
       "default": "BOTTOM",
-      "desc": "弹出定位：TOP, BOTTOM, LEFT, RIGHT"
+      "desc": "弹出定位：TOP, BOTTOM, LEFT, RIGHT",
+      "version": "v1.0"
     },
     {
       "name": "theme",
       "type": "enum",
       "default": "DARK",
-      "desc": "主题风格：DARK (深色), LIGHT (浅色)"
+      "desc": "主题风格：DARK (深色), LIGHT (浅色)",
+      "version": "v1.0"
     },
     {
       "name": "actions",
       "type": "Array[Dictionary]",
       "default": "[]",
-      "desc": "菜单选项列表 [{\"text\": \"\", \"icon\": Texture2D, \"disabled\": false}]"
+      "desc": "菜单选项列表 [{\"text\": \"\", \"icon\": Texture2D, \"disabled\": false}]",
+      "version": "v1.0"
     },
     {
       "name": "show_arrow",
       "type": "boolean",
       "default": "true",
-      "desc": "是否显示小三角箭头"
+      "desc": "是否显示小三角箭头",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "item_selected(index, action)",
       "desc": "点击菜单项时触发",
-      "params": "(index: int, action: Dictionary)"
+      "params": "(index: int, action: Dictionary)",
+      "version": "v1.0"
     },
     {
       "name": "opened()",
       "desc": "气泡打开时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "closed()",
       "desc": "气泡关闭时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "add_action(text, icon=null, disabled=false)",
       "desc": "动态添加单个气泡菜单项",
-      "params": "(text: String, icon: Texture2D, disabled: bool) -> void"
+      "params": "(text: String, icon: Texture2D, disabled: bool) -> void",
+      "version": "v1.0"
     },
     {
       "name": "add_actions(action_list: Array[Dictionary])",
       "desc": "批量追加一组气泡菜单项",
-      "params": "(action_list: Array[Dictionary]) -> void"
+      "params": "(action_list: Array[Dictionary]) -> void",
+      "version": "v1.0"
     },
     {
       "name": "open_for_node(target: Control)",
       "desc": "针对指定控件节点弹出气泡",
-      "params": "(target: Control) -> void"
+      "params": "(target: Control) -> void",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "关闭气泡框",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     },
     {
       "name": "toggle_for_node(target: Control)",
       "desc": "切换气泡开启/关闭",
-      "params": "(target: Control) -> void"
+      "params": "(target: Control) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -107,13 +119,15 @@ window.COMPONENT_CATALOG['popover'] = {
       "name": "default",
       "desc": "触发气泡的宿主目标节点插槽",
       "child": "GButton / Control",
-      "example": "<template #default><GButton icon=\"ellipsis\">更多</GButton></template>"
+      "example": "<template #default><GButton icon=\"ellipsis\">更多</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "content",
       "desc": "气泡弹出卡片内部自定义内容插槽",
       "child": "Control / VBoxContainer",
-      "example": "<template #content><VBoxContainer><GButton icon=\"qrcode\">扫一扫</GButton></VBoxContainer></template>"
+      "example": "<template #content><VBoxContainer><GButton icon=\"qrcode\">扫一扫</GButton></VBoxContainer></template>",
+      "version": "v1.0"
     }
   ]
 };

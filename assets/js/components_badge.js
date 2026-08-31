@@ -42,25 +42,29 @@ window.COMPONENT_CATALOG['badge'] = {
       "name": "value",
       "type": "int",
       "default": "0",
-      "desc": "徽标显示数字"
+      "desc": "徽标显示数字",
+      "version": "v1.0"
     },
     {
       "name": "max_value",
       "type": "int",
       "default": "99",
-      "desc": "最大值，超出显示 max_value+"
+      "desc": "最大值，超出显示 max_value+",
+      "version": "v1.2"
     },
     {
       "name": "is_dot",
       "type": "boolean",
       "default": "false",
-      "desc": "是否仅显示小红圆点"
+      "desc": "是否仅显示小红圆点",
+      "version": "v1.2"
     },
     {
       "name": "hidden",
       "type": "boolean",
       "default": "false",
-      "desc": "是否隐藏徽标"
+      "desc": "是否隐藏徽标",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -70,13 +74,15 @@ window.COMPONENT_CATALOG['badge'] = {
       "name": "default",
       "desc": "徽标所依附的主体节点插槽",
       "child": "GButton / GAvatar / GIcon / Control",
-      "example": "<template #default><GButton icon=\"bell\">通知中心</GButton></template>"
+      "example": "<template #default><GButton icon=\"bell\">通知中心</GButton></template>",
+      "version": "v1.0"
     },
     {
       "name": "content",
       "desc": "自定义角标内部内容插槽（替代纯数字）",
       "child": "GIcon / Label",
-      "example": "<template #content><GIcon name=\"fire\" style=\"color:yellow;\" /></template>"
+      "example": "<template #content><GIcon name=\"fire\" style=\"color:yellow;\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

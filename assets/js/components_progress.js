@@ -42,25 +42,29 @@ window.COMPONENT_CATALOG['progress'] = {
       "name": "percentage",
       "type": "float",
       "default": "0.0",
-      "desc": "进度百分比 (0~100)"
+      "desc": "进度百分比 (0~100)",
+      "version": "v1.0"
     },
     {
       "name": "type",
       "type": "enum",
       "default": "LINE",
-      "desc": "类型：LINE (线性), CIRCLE (环形)"
+      "desc": "类型：LINE (线性), CIRCLE (环形)",
+      "version": "v1.0"
     },
     {
       "name": "status",
       "type": "enum",
       "default": "PRIMARY",
-      "desc": "状态色彩"
+      "desc": "状态色彩",
+      "version": "v1.0"
     },
     {
       "name": "stroke_width",
       "type": "float",
       "default": "6.0",
-      "desc": "进度条线条粗细"
+      "desc": "进度条线条粗细",
+      "version": "v1.0"
     }
   ],
   "events": [],
@@ -68,7 +72,8 @@ window.COMPONENT_CATALOG['progress'] = {
     {
       "name": "set_percentage(val: float)",
       "desc": "平滑更新进度条数值",
-      "params": "(val: float) -> void"
+      "params": "(val: float) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -76,7 +81,8 @@ window.COMPONENT_CATALOG['progress'] = {
       "name": "default",
       "desc": "自定义进度条内部/右侧进度文字渲染插槽（透传 { percentage }）",
       "child": "Label / GText",
-      "example": "<template #default=\"{ percentage }\"><span>{{ percentage }}% 已下载</span></template>"
+      "example": "<template #default=\"{ percentage }\"><span>{{ percentage }}% 已下载</span></template>",
+      "version": "v1.0"
     }
   ]
 };

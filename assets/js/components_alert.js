@@ -37,45 +37,52 @@ window.COMPONENT_CATALOG['alert'] = {
       "name": "type",
       "type": "enum",
       "default": "INFO",
-      "desc": "类型：INFO, SUCCESS, WARNING, DANGER"
+      "desc": "类型：INFO, SUCCESS, WARNING, DANGER",
+      "version": "v1.0"
     },
     {
       "name": "title",
       "type": "String",
       "default": "\"Alert Title\"",
-      "desc": "标题文本"
+      "desc": "标题文本",
+      "version": "v1.0"
     },
     {
       "name": "description",
       "type": "String",
       "default": "\"\"",
-      "desc": "辅助描述详细说明"
+      "desc": "辅助描述详细说明",
+      "version": "v1.0"
     },
     {
       "name": "closable",
       "type": "boolean",
       "default": "false",
-      "desc": "是否显示关闭按钮"
+      "desc": "是否显示关闭按钮",
+      "version": "v1.0"
     },
     {
       "name": "center",
       "type": "boolean",
       "default": "false",
-      "desc": "文字是否居中"
+      "desc": "文字是否居中",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "closed()",
       "desc": "点击关闭按钮时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "close()",
       "desc": "关闭并移除该 Alert",
-      "params": "() -> void"
+      "params": "() -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -83,31 +90,36 @@ window.COMPONENT_CATALOG['alert'] = {
       "name": "default",
       "desc": "提示内容正文插槽",
       "child": "Label / RichTextLabel",
-      "example": "<template #default><span>核心渲染节点已就绪，耗时 12ms。</span></template>"
+      "example": "<template #default><span>核心渲染节点已就绪，耗时 12ms。</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "title",
       "desc": "提示标题插槽",
       "child": "GText / Label",
-      "example": "<template #title><b>初始化成功</b></template>"
+      "example": "<template #title><b>初始化成功</b></template>",
+      "version": "v1.0"
     },
     {
       "name": "icon",
       "desc": "自定义前置状态图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #icon><GIcon name=\"circle-info\" /></template>"
+      "example": "<template #icon><GIcon name=\"circle-info\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "close",
       "desc": "自定义右上角关闭按钮插槽",
       "child": "GButton / GIcon",
-      "example": "<template #close><GIcon name=\"xmark\" /></template>"
+      "example": "<template #close><GIcon name=\"xmark\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "action",
       "desc": "提示右侧/底部快捷操作项插槽",
       "child": "GButton / HBoxContainer",
-      "example": "<template #action><GButton size=\"small\">查看详情</GButton></template>"
+      "example": "<template #action><GButton size=\"small\">查看详情</GButton></template>",
+      "version": "v1.0"
     }
   ]
 };

@@ -37,37 +37,43 @@ window.COMPONENT_CATALOG['notice-bar'] = {
       "name": "text",
       "type": "String",
       "default": "\"\"",
-      "desc": "通告栏文本内容"
+      "desc": "通告栏文本内容",
+      "version": "v1.0"
     },
     {
       "name": "scrollable",
       "type": "boolean",
       "default": "true",
-      "desc": "是否开启水平无缝循环滚动跑马灯"
+      "desc": "是否开启水平无缝循环滚动跑马灯",
+      "version": "v1.2"
     },
     {
       "name": "scroll_speed",
       "type": "float",
       "default": "50.0",
-      "desc": "滚动速度 (像素/秒)"
+      "desc": "滚动速度 (像素/秒)",
+      "version": "v1.2"
     },
     {
       "name": "notice_type",
       "type": "enum",
       "default": "WARNING",
-      "desc": "通知色彩风格：WARNING (警示橙), INFO (信息蓝), SUCCESS (成功绿), DANGER (紧急红)"
+      "desc": "通知色彩风格：WARNING (警示橙), INFO (信息蓝), SUCCESS (成功绿), DANGER (紧急红)",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "click()",
       "desc": "点击通告栏主体时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     },
     {
       "name": "close()",
       "desc": "点击右侧关闭图标时触发",
-      "params": "()"
+      "params": "()",
+      "version": "v1.0"
     }
   ],
   "methods": [],
@@ -76,19 +82,22 @@ window.COMPONENT_CATALOG['notice-bar'] = {
       "name": "default",
       "desc": "滚动播报文本主体插槽",
       "child": "Label / RichTextLabel",
-      "example": "<template #default><span>🔥 [重要通告] 全服限时掉落双倍神话强化石！</span></template>"
+      "example": "<template #default><span>🔥 [重要通告] 全服限时掉落双倍神话强化石！</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "left-icon",
       "desc": "左侧通知喇叭图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #left-icon><GIcon name=\"bullhorn\" /></template>"
+      "example": "<template #left-icon><GIcon name=\"bullhorn\" /></template>",
+      "version": "v1.0"
     },
     {
       "name": "right-icon",
       "desc": "右侧更多/关闭操作区插槽",
       "child": "GIcon / GButton",
-      "example": "<template #right-icon><GIcon name=\"chevron-right\" /></template>"
+      "example": "<template #right-icon><GIcon name=\"chevron-right\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

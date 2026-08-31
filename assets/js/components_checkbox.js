@@ -37,45 +37,52 @@ window.COMPONENT_CATALOG['checkbox'] = {
       "name": "checked / v-model",
       "type": "boolean",
       "default": "false",
-      "desc": "是否勾选"
+      "desc": "是否勾选",
+      "version": "v1.0"
     },
     {
       "name": "text / label",
       "type": "String",
       "default": "\"Checkbox\"",
-      "desc": "说明文字"
+      "desc": "说明文字",
+      "version": "v1.0"
     },
     {
       "name": "button_style",
       "type": "boolean",
       "default": "false",
-      "desc": "是否启用类似分段按钮的样式外观"
+      "desc": "是否启用类似分段按钮的样式外观",
+      "version": "v1.0"
     },
     {
       "name": "indeterminate",
       "type": "boolean",
       "default": "false",
-      "desc": "半选/不确定状态"
+      "desc": "半选/不确定状态",
+      "version": "v1.0"
     },
     {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
-      "desc": "是否禁用"
+      "desc": "是否禁用",
+      "version": "v1.0"
     }
   ],
   "events": [
     {
       "name": "toggled(checked)",
       "desc": "勾选状态改变时触发",
-      "params": "(checked: bool)"
+      "params": "(checked: bool)",
+      "version": "v1.0"
     }
   ],
   "methods": [
     {
       "name": "set_checked(val: bool)",
       "desc": "设置勾选状态",
-      "params": "(val: bool) -> void"
+      "params": "(val: bool) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -83,13 +90,15 @@ window.COMPONENT_CATALOG['checkbox'] = {
       "name": "default",
       "desc": "复选框右侧描述文本或富文本标签插槽",
       "child": "Label / RichTextLabel / Control",
-      "example": "<template #default>我已阅读并同意《服务协议》</template>"
+      "example": "<template #default>我已阅读并同意《服务协议》</template>",
+      "version": "v1.0"
     },
     {
       "name": "icon",
       "desc": "自定义复选勾选状态图标插槽（透传 { checked }）",
       "child": "GIcon / TextureRect",
-      "example": "<template #icon=\"{ checked }\"><GIcon :name=\"checked ? 'square-check' : 'square'\" /></template>"
+      "example": "<template #icon=\"{ checked }\"><GIcon :name=\"checked ? 'square-check' : 'square'\" /></template>",
+      "version": "v1.0"
     }
   ]
 };

@@ -38,22 +38,26 @@ window.COMPONENT_CATALOG['message'] = {
     {
       "name": "success(content: String, duration: float = 3.0)",
       "desc": "弹出成功提示",
-      "params": "(content: String, duration: float) -> void"
+      "params": "(content: String, duration: float) -> void",
+      "version": "v1.0"
     },
     {
       "name": "warning(content: String, duration: float = 3.0)",
       "desc": "弹出警告提示",
-      "params": "(content: String, duration: float) -> void"
+      "params": "(content: String, duration: float) -> void",
+      "version": "v1.0"
     },
     {
       "name": "error(content: String, duration: float = 3.0)",
       "desc": "弹出错误提示",
-      "params": "(content: String, duration: float) -> void"
+      "params": "(content: String, duration: float) -> void",
+      "version": "v1.0"
     },
     {
       "name": "info(content: String, duration: float = 3.0)",
       "desc": "弹出普通信息提示",
-      "params": "(content: String, duration: float) -> void"
+      "params": "(content: String, duration: float) -> void",
+      "version": "v1.0"
     }
   ],
   "slots": [
@@ -61,13 +65,15 @@ window.COMPONENT_CATALOG['message'] = {
       "name": "default",
       "desc": "全局轻量消息正文插槽",
       "child": "Label / RichTextLabel",
-      "example": "<template #default><span>系统配置已成功保存！</span></template>"
+      "example": "<template #default><span>系统配置已成功保存！</span></template>",
+      "version": "v1.0"
     },
     {
       "name": "icon",
       "desc": "自定义前置状态图标插槽",
       "child": "GIcon / TextureRect",
-      "example": "<template #icon><GIcon name=\"circle-check\" style=\"color:green;\" /></template>"
+      "example": "<template #icon><GIcon name=\"circle-check\" style=\"color:green;\" /></template>",
+      "version": "v1.0"
     }
   ]
 };
