@@ -62,6 +62,12 @@ window.SIDEBAR_CONFIG = {
         title: 'Game Templates 游戏实战案例',
         items: [
           { key: 'game-memory-match', title: '🎴 记忆大师实战与问题修复复盘' },
+          { key: 'game-memory-campaign', title: '🗺️ 基础：记忆冒险关卡地图' },
+          { key: 'game-memory-duel', title: '⚔️ 基础：双人翻牌对战' },
+          { key: 'game-memory-combo-lab', title: '⚡ 中级：连击规则实验室' },
+          { key: 'game-memory-quest', title: '📜 中级：任务链与奖励路线' },
+          { key: 'game-memory-roguelike', title: '🌀 高级：随机肉鸽记忆迷宫' },
+          { key: 'game-memory-online', title: '🌐 复杂：实时联机记忆竞技场' },
           { key: 'game-troubleshooting-diff', title: '🛠️ Demo 常见问题与代码前后对比' },
           { key: 'game-character', title: '👤 角色状态与装备面板' },
           { key: 'game-inventory', title: '🎒 游戏背包与物品栏' },

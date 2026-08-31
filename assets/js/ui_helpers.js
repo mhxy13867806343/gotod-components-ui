@@ -3443,3 +3443,140 @@ window.copyDemoCodeFromCard = function(btn) {
     if (window.showToast) window.showToast('源代码已复制！', 'success');
   }
 };
+
+// =========================================================================
+// Godot 4 GDScript ⇄ C# (.NET) Dual Language Code Engine
+// =========================================================================
+window.currentCodeLang = localStorage.getItem('gotod_code_lang') || 'gdscript';
+
+window.convertGDScriptToCSharp = function(gdCode) {
+  if (!gdCode) return '';
+  let cs = gdCode;
+
+  // Header comment replacement
+  cs = cs.replace(/#\s*GDScript:\s*(.*)/gi, '// C# (Godot .NET): $1\nusing Godot;\nusing GotodUI;\n');
+  cs = cs.replace(/#\s*(.*)/g, '// $1');
+
+  // Node instantiation: var x = Foo.new() -> var x = new Foo();
+  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*=\s*([a-zA-Z0-9_]+)\.new\(\)/g, 'var $1 = new $2();');
+  cs = cs.replace(/var\s+([a-zA-Z0-9_]+)\s*:=\s*([a-zA-Z0-9_]+)\.new\(\)/g, 'var $1 = new $2();');
+
+  // Method calls: add_child(x) -> AddChild(x);
+  cs = cs.replace(/add_child\((.*?)\)/g, 'AddChild($1);');
+  cs = cs.replace(/remove_child\((.*?)\)/g, 'RemoveChild($1);');
+  cs = cs.replace(/queue_free\(\)/g, 'QueueFree();');
+
+  // Signal connects: obj.signal_name.connect(func(...): ...) -> obj.SignalName += (...) => { ... };
+  cs = cs.replace(/([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\.connect\(func\((.*?)\):\s*([\s\S]*?)\)/g, (m, obj, sig, params, body) => {
+    // PascalCase signal
+    const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+    return `${obj}.${pascalSig} += (${params}) => {\n    ${body.trim()};\n};`;
+  });
+
+  // Simple Signal connect: obj.signal_name.connect(handler) -> obj.SignalName += handler;
+  cs = cs.replace(/([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\.connect\((.*?)\)/g, (m, obj, sig, handler) => {
+    const pascalSig = sig.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+    return `${obj}.${pascalSig} += ${handler};`;
+  });
+
+  // Vector / Color / Transform instantiation
+  cs = cs.replace(/Vector3\((.*?)\)/g, 'new Vector3($1)');
+  cs = cs.replace(/Vector2\((.*?)\)/g, 'new Vector2($1)');
+  cs = cs.replace(/Color\((.*?)\)/g, 'new Color($1)');
+
+  // Static enum mappings
+  cs = cs.replace(/GHaptic\.ImpactStyle\.([A-Z_]+)/g, (m, e) => 'GHaptic.ImpactStyle.' + e.charAt(0) + e.slice(1).toLowerCase());
+  cs = cs.replace(/GHaptic\.NotificationType\.([A-Z_]+)/g, (m, e) => 'GHaptic.NotificationType.' + e.charAt(0) + e.slice(1).toLowerCase());
+  cs = cs.replace(/GTable\.SelectionMode\.([A-Z_]+)/g, (m, e) => 'GTable.SelectionModeEnum.' + e.charAt(0) + e.slice(1).toLowerCase());
+
+  // Static calls
+  cs = cs.replace(/GHaptic\.impact\((.*?)\)/g, 'GHaptic.Impact($1);');
+  cs = cs.replace(/GHaptic\.notification\((.*?)\)/g, 'GHaptic.Notification($1);');
+  cs = cs.replace(/GMessage\.([a-z]+)\((.*?)\)/g, (m, fn, arg) => `GMessage.${fn.charAt(0).toUpperCase() + fn.slice(1)}(${arg});`);
+
+  // Common Property assignments (converting snake_case property to PascalCase in C#)
+  const propMap = [
+    ['stripe', 'Stripe'],
+    ['border', 'Border'],
+    ['selection_mode', 'SelectionMode'],
+    ['empty_text', 'EmptyText'],
+    ['columns', 'Columns'],
+    ['data', 'Data'],
+    ['target_node_path', 'TargetNodePath'],
+    ['offset', 'Offset'],
+    ['billboard_mode', 'BillboardMode'],
+    ['distance_fade', 'DistanceFade'],
+    ['distance_scaling', 'DistanceScaling'],
+    ['cull_behind_camera', 'CullBehindCamera'],
+    ['amount', 'Amount'],
+    ['lifetime', 'Lifetime'],
+    ['explosiveness', 'Explosiveness'],
+    ['initial_velocity_min', 'InitialVelocityMin'],
+    ['initial_velocity_max', 'InitialVelocityMax'],
+    ['gravity', 'Gravity'],
+    ['color', 'Color'],
+    ['process_material', 'ProcessMaterial'],
+    ['one_shot', 'OneShot'],
+    ['emitting', 'Emitting'],
+    ['skeleton_path', 'SkeletonPath'],
+    ['bone_name', 'BoneName'],
+    ['particle_emitter', 'ParticleEmitter'],
+    ['inherit_rotation', 'InheritRotation'],
+    ['local_offset', 'LocalOffset'],
+    ['system_prompt', 'SystemPrompt'],
+    ['npc_id', 'NpcId'],
+    ['text', 'Text'],
+    ['type', 'Type'],
+    ['size', 'Size'],
+    ['disabled', 'Disabled'],
+    ['loading', 'Loading'],
+    ['placeholder', 'Placeholder'],
+    ['value', 'Value'],
+    ['min_value', 'MinValue'],
+    ['max_value', 'MaxValue'],
+    ['step', 'Step'],
+    ['visible', 'Visible']
+  ];
+
+  propMap.forEach(([pyProp, csProp]) => {
+    const reg = new RegExp(`([a-zA-Z0-9_]+)\\.${pyProp}\\s*=`, 'g');
+    cs = cs.replace(reg, `$1.${csProp} =`);
+  });
+
+  // Ensure line ends with semicolon in C# if not empty and not comment/brace
+  const lines = cs.split('\n');
+  const formattedLines = lines.map(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('//') || trimmed.endsWith(';') || trimmed.endsWith('{') || trimmed.endsWith('}') || trimmed.startsWith('public') || trimmed.startsWith('using')) {
+      return line;
+    }
+    return line + ';';
+  });
+
+  return formattedLines.join('\n');
+};
+
+window.switchCodeLanguage = function(lang, btn) {
+  window.currentCodeLang = lang;
+  localStorage.setItem('gotod_code_lang', lang);
+
+  // Update all language button styles across all demo cards
+  document.querySelectorAll('.g-lang-btn').forEach(b => {
+    const isThisLang = b.getAttribute('data-lang') === lang;
+    b.style.background = isThisLang ? 'var(--primary)' : 'transparent';
+    b.style.borderColor = isThisLang ? 'var(--primary)' : 'var(--border-base)';
+    b.style.color = isThisLang ? '#ffffff' : 'var(--text-secondary)';
+  });
+
+  // Toggle code display panels
+  document.querySelectorAll('.code-panel-gdscript').forEach(p => {
+    p.style.display = (lang === 'gdscript') ? 'block' : 'none';
+  });
+  document.querySelectorAll('.code-panel-csharp').forEach(p => {
+    p.style.display = (lang === 'csharp') ? 'block' : 'none';
+  });
+
+  if (window.showToast) {
+    window.showToast(`已切换至【${lang === 'csharp' ? 'C# (Godot .NET)' : 'GDScript'}】代码模式`, 'info');
+  }
+};

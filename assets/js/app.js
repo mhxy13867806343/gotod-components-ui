@@ -203,9 +203,20 @@ window.showDoc = function(key) {
           </div>
         `;
       } else if (d.code) {
+        const curLang = window.currentCodeLang || 'gdscript';
+        const gdCode = d.code;
+        const csCode = d.codeCSharp || d.csharpCode || (typeof window.convertGDScriptToCSharp === 'function' ? window.convertGDScriptToCSharp(d.code) : d.code);
+
         codeSection = `
-          <div class="code-box">
-            <pre><code>${escapeHtml(d.code)}</code></pre>
+          <div class="code-panel-gdscript" style="${curLang === 'gdscript' ? 'display:block;' : 'display:none;'}">
+            <div class="code-box">
+              <pre><code class="language-gdscript">${escapeHtml(gdCode)}</code></pre>
+            </div>
+          </div>
+          <div class="code-panel-csharp" style="${curLang === 'csharp' ? 'display:block;' : 'display:none;'}">
+            <div class="code-box" style="background:#0f172a;">
+              <pre><code class="language-csharp" style="color:#93c5fd;">${escapeHtml(csCode)}</code></pre>
+            </div>
           </div>
         `;
       }
@@ -213,6 +224,8 @@ window.showDoc = function(key) {
       const vStr = d.version || d.since || (idx >= 2 ? 'v1.0.5' : 'v1.0.0');
       const isNew = String(vStr).includes('1.0.5');
       const vBadge = `<span class="g-tag ${isNew ? 'g-tag-success' : 'g-tag-primary'}" style="font-size:10px; padding:2px 7px; margin-left:8px; border-radius:10px; font-weight:700; vertical-align:middle;">${vStr}</span>`;
+      const curLang = window.currentCodeLang || 'gdscript';
+
       return `
         <div class="demo-card">
           <div class="demo-card-header">
@@ -223,8 +236,14 @@ window.showDoc = function(key) {
           </div>
           ${codeSection ? `
             <div class="demo-toolbar" style="display:flex; justify-content:space-between; align-items:center; width:100%; padding:8px 16px; border-top:1px solid var(--border-base); background:var(--bg-card); box-sizing:border-box;">
-              <div>
-                <span class="g-tag g-tag-primary" style="font-size:10px; padding:1px 6px; font-weight:700; border-radius:4px; letter-spacing:0.5px;">GDScript</span>
+              <!-- Element Plus Style Language Switcher Tabs -->
+              <div class="code-lang-tabs" style="display:flex; align-items:center; gap:6px;">
+                <button class="g-lang-btn" data-lang="gdscript" onclick="window.switchCodeLanguage('gdscript', this)" style="padding:2px 8px; font-size:11px; font-weight:700; border-radius:4px; border:1px solid ${curLang === 'gdscript' ? 'var(--primary)' : 'var(--border-base)'}; background:${curLang === 'gdscript' ? 'var(--primary)' : 'transparent'}; color:${curLang === 'gdscript' ? '#fff' : 'var(--text-secondary)'}; cursor:pointer; transition:all 0.2s;">
+                  GDScript
+                </button>
+                <button class="g-lang-btn" data-lang="csharp" onclick="window.switchCodeLanguage('csharp', this)" style="padding:2px 8px; font-size:11px; font-weight:700; border-radius:4px; border:1px solid ${curLang === 'csharp' ? 'var(--primary)' : 'var(--border-base)'}; background:${curLang === 'csharp' ? 'var(--primary)' : 'transparent'}; color:${curLang === 'csharp' ? '#fff' : 'var(--text-secondary)'}; cursor:pointer; transition:all 0.2s;">
+                  C# (.NET)
+                </button>
               </div>
               <div style="display:flex; align-items:center; gap:8px; margin-left:auto;">
                 <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="g-demo-icon-btn" title="在 GitHub 中查看组件源代码" style="color:var(--text-secondary); text-decoration:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:var(--radius); font-size:14px; cursor:pointer;">

@@ -1465,7 +1465,116 @@ func sync_result() -> void:
   },
 
   // ========================================================
-  // 0.1 常见问题排查与代码对比全景
+  // 0.1 独立玩法分类：从基础关卡到联机竞技
+  // ========================================================
+  'game-memory-campaign': {
+    title: '🗺️ 基础：记忆冒险关卡地图 (Memory Campaign)',
+    desc: '用 GCard、GProgress 与 GButton 组合出可解锁的章节地图，适合制作新手到正式关卡的渐进式流程。',
+    demos: [{
+      title: '章节地图与关卡解锁',
+      render: `<div class="sim-card" style="width:100%;"><div class="sim-card-header"><span>🌲 晨雾森林</span><span class="g-tag g-tag-success">3 / 5 已完成</span></div><div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;"><button class="g-btn g-btn-primary" onclick="showToast('进入第一关：森林初识', 'success')">⭐ 1 初识</button><button class="g-btn g-btn-primary" onclick="showToast('进入第二关：溪谷回声', 'success')">⭐ 2 溪谷</button><button class="g-btn g-btn-success" onclick="showToast('第三关已完成，奖励已领取', 'success')">✅ 3 古树</button><button class="g-btn g-btn-default" onclick="showToast('完成前置关卡后解锁', 'warning')">🔒 4 遗迹</button><button class="g-btn g-btn-default" onclick="showToast('完成本章后解锁', 'warning')">🔒 5 Boss</button></div><div style="margin-top:14px;" class="g-progress-bar"><div class="g-progress-fill" style="width:60%;"></div></div></div>`,
+      code: `# GDScript: 章节关卡解锁
+func complete_level(level_id: int) -> void:
+    campaign[level_id].completed = true
+    if level_id + 1 < campaign.size():
+        campaign[level_id + 1].locked = false
+    _save_campaign()
+    GMessage.success("关卡完成，下一关已解锁！")`
+    }]
+  },
+  'game-memory-duel': {
+    title: '⚔️ 基础：双人翻牌对战 (Local Memory Duel)',
+    desc: '展示本地双人轮流翻牌、回合提示与得分同步，适合快速搭建派对游戏或课堂小游戏。',
+    demos: [{
+      title: 'P1 vs P2 回合对战',
+      render: `<div style="padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius-lg);"><div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;"><span class="g-tag g-tag-primary">🔵 P1  3 分</span><b style="color:var(--warning);">当前回合：P2</b><span class="g-tag g-tag-danger">🔴 P2  2 分</span></div><div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; max-width:420px; margin-top:14px;">${['🐳','🌙','🐳','🌙'].map((icon, i) => `<button class="g-btn g-btn-default" style="height:52px; font-size:20px;" onclick="this.innerText='${icon}'; showToast('P2 翻开第 ${i + 1} 张卡片', 'info');">?</button>`).join('')}</div></div>`,
+      code: `# GDScript: 双人回合控制
+var active_player := 0
+var scores := [0, 0]
+
+func _on_pair_resolved(matched: bool) -> void:
+    if matched:
+        scores[active_player] += 1
+    else:
+        active_player = 1 - active_player
+    $TurnLabel.text = "P%d 的回合" % (active_player + 1)`
+    }]
+  },
+  'game-memory-combo-lab': {
+    title: '⚡ 中级：连击规则实验室 (Combo Rules Lab)',
+    desc: '将计分规则拆成可配置策略，演示连击倍率、限时加成和失误惩罚的组合。',
+    demos: [{
+      title: '规则开关与实时评分预览',
+      render: `<div class="sim-card" style="width:100%; max-width:620px;"><div class="sim-card-header"><b>连击规则配置</b><span id="labScore" class="g-tag g-tag-warning">当前分数：1,450</span></div><div style="display:flex; flex-direction:column; gap:10px; margin-top:14px;"><label style="display:flex; justify-content:space-between; align-items:center;">连续配对倍率 <input id="labCombo" type="range" min="1" max="5" value="3" oninput="document.getElementById('labComboValue').innerText=this.value+'x'; document.getElementById('labScore').innerText='当前分数：'+(1000+this.value*150).toLocaleString()" style="width:55%;"><b id="labComboValue">3x</b></label><label style="display:flex; justify-content:space-between; align-items:center;">错误扣分 <input type="checkbox" checked onchange="showToast(this.checked?'已启用错误扣分':'已关闭错误扣分')"></label><button class="g-btn g-btn-primary" onclick="showToast('规则已应用到当前对局', 'success')">应用规则</button></div></div>`,
+      code: `# GDScript: 可配置计分策略
+class_name ScoreRules
+var combo_multiplier := 3
+var mismatch_penalty := 50
+
+func calculate_pair_score(combo: int, elapsed: float) -> int:
+    var speed_bonus := maxi(0, 100 - int(elapsed * 2.0))
+    return (100 + speed_bonus) * mini(combo, combo_multiplier)
+
+func on_mismatch(score: int) -> int:
+    return maxi(0, score - mismatch_penalty)`
+    }]
+  },
+  'game-memory-quest': {
+    title: '📜 中级：任务链与奖励路线 (Quest & Rewards)',
+    desc: '把记忆对局接入任务系统，支持阶段目标、奖励领取和任务链推进。',
+    demos: [{
+      title: '每日任务进度卡',
+      render: `<div class="sim-card" style="width:100%; max-width:650px;"><div class="sim-card-header"><span>📜 今日记忆委托</span><span class="g-tag g-tag-success">奖励可领取</span></div><div style="display:flex; flex-direction:column; gap:12px; margin-top:15px;"><div><div style="display:flex; justify-content:space-between; font-size:12px;"><span>完成 3 次配对</span><b style="color:var(--success);">3 / 3</b></div><div class="g-progress-bar" style="margin-top:6px;"><div class="g-progress-fill" style="width:100%; background:var(--success);"></div></div></div><div><div style="display:flex; justify-content:space-between; font-size:12px;"><span>达成一次 5x 连击</span><b>4 / 5</b></div><div class="g-progress-bar" style="margin-top:6px;"><div class="g-progress-fill" style="width:80%; background:var(--warning);"></div></div></div><button class="g-btn g-btn-success" onclick="this.disabled=true; this.innerText='已领取 · +300 EXP'; showToast('任务奖励已加入背包', 'success')">领取阶段奖励 · 300 EXP</button></div></div>`,
+      code: `# GDScript: 任务条件聚合
+func update_memory_task(event: Dictionary) -> void:
+    for task in active_tasks:
+        if task.matches(event):
+            task.progress = mini(task.progress + 1, task.target)
+            if task.progress == task.target:
+                task.state = QuestState.READY_TO_CLAIM
+                GNotification.success("任务完成", task.title, self)`
+    }]
+  },
+  'game-memory-roguelike': {
+    title: '🌀 高级：随机肉鸽记忆迷宫 (Roguelike Memory Maze)',
+    desc: '展示随机种子、房间分支、遗物效果与失败重开，适合构建高重复游玩价值的记忆玩法。',
+    demos: [{
+      title: '分支房间与遗物选择',
+      render: `<div style="padding:16px; background:linear-gradient(135deg,var(--bg-surface),rgba(245,158,11,.08)); border:1px solid var(--warning); border-radius:var(--radius-lg);"><div style="display:flex; justify-content:space-between;"><b>第 4 层 · 迷雾回廊</b><span class="g-tag g-tag-warning">生命 2 / 3</span></div><div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:15px;"><button class="g-btn g-btn-default" onclick="showToast('进入精英战：卡组扩大 2 对', 'warning')">👁 精英战</button><button class="g-btn g-btn-primary" onclick="showToast('获得遗物：时间沙漏', 'success')">💎 宝藏房</button><button class="g-btn g-btn-default" onclick="showToast('恢复 1 点生命值', 'success')">🌿 休息室</button></div></div>`,
+      code: `# GDScript: 随机房间生成与遗物修正
+func generate_floor(seed: int, floor: int) -> Array:
+    var rng := RandomNumberGenerator.new()
+    rng.seed = seed + floor
+    return [Room.random(rng), Room.random(rng), Room.random(rng)]
+
+func apply_relic(relic_id: String) -> void:
+    if relic_id == "hourglass":
+        rules.mismatch_grace += 1
+        timer.add_time(10.0)`
+    }]
+  },
+  'game-memory-online': {
+    title: '🌐 复杂：实时联机记忆竞技场 (Online Arena)',
+    desc: '组合房间匹配、权威服务器、断线重连与排行榜提交，作为多人记忆游戏的完整架构起点。',
+    demos: [{
+      title: '房间状态与同步监控',
+      render: `<div class="sim-card" style="width:100%;"><div class="sim-card-header"><span>🌐 房间 ARENA-2048</span><span id="arenaState" class="g-tag g-tag-success">● 连接稳定 · 42ms</span></div><div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:14px;"><div style="padding:12px; background:var(--bg-surface); border-radius:8px;"><div style="font-size:11px; color:var(--text-secondary);">玩家</div><b>6 / 8</b></div><div style="padding:12px; background:var(--bg-surface); border-radius:8px;"><div style="font-size:11px; color:var(--text-secondary);">服务器 Tick</div><b>20 Hz</b></div><div style="padding:12px; background:var(--bg-surface); border-radius:8px;"><div style="font-size:11px; color:var(--text-secondary);">当前回合</div><b>Round 12</b></div></div><button class="g-btn g-btn-warning" style="margin-top:14px;" onclick="let s=document.getElementById('arenaState'); s.className='g-tag g-tag-warning'; s.innerText='◌ 重连中'; setTimeout(()=>{s.className='g-tag g-tag-success';s.innerText='● 已恢复 · 45ms';showToast('已恢复房间状态，进度未丢失', 'success')},1000);">模拟断线重连</button></div>`,
+      code: `# GDScript: 联机房间同步与断线恢复
+@rpc("authority", "call_local", "reliable")
+func submit_pair(card_a: int, card_b: int) -> void:
+    if not multiplayer.is_server(): return
+    var result := board.resolve_pair(card_a, card_b)
+    broadcast_pair_result.rpc(result)
+
+func _on_connection_lost() -> void:
+    reconnect_timer.start()
+    local_snapshot = board.create_snapshot()
+    GNotification.warning("连接中断", "正在恢复对局状态...")`
+    }]
+  },
+
+  // ========================================================
+  // 0.2 常见问题排查与代码对比全景
   // ========================================================
   'game-troubleshooting-diff': {
     title: '🛠️ Demo 常见问题排查与修复对比 (Troubleshooting & Code Diff)',
