@@ -22,9 +22,33 @@ window.COMPONENT_CATALOG['fab'] = {
       "code": "# GDScript: 游戏药剂快捷轮盘\nvar potion_fab = GFab.new_quick_item(\"potion_red\")\npotion_fab.clicked.connect(func(): Player.heal(500))"
     },
     {
-      "title": "4. 自由拖拽与边缘贴边吸附 (Draggable & Magnetic Docking: 试着在区域内拖动按钮)",
-      "render": "\n      <div id=\"fabDragContainer\" style=\"position:relative; height:120px; background:var(--bg-surface); border:2px dashed var(--primary); border-radius:8px; overflow:hidden; user-select:none; padding:10px;\">\n        <div style=\"display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;\">\n          <span style=\"font-size:11px; color:var(--text-secondary);\"><i class=\"fa-solid fa-arrows-up-down-left-right\" style=\"color:var(--primary);\"></i> 🖱️ 用鼠标/手指按住下方 FAB 按钮自由拖拽，松手后自动平滑吸附到最近边缘：</span>\n          <div style=\"display:flex; gap:6px;\">\n            <button class=\"g-btn g-btn-default\" style=\"font-size:10px; padding:1px 6px;\" onclick=\"const f=document.getElementById('draggableFab'); f.style.transition='left 0.35s cubic-bezier(0.16,1,0.3,1)'; f.style.left='16px'; showToast('FAB 已贴靠至左侧边缘', 'info');\">⬅️ 贴左</button>\n            <button class=\"g-btn g-btn-default\" style=\"font-size:10px; padding:1px 6px;\" onclick=\"const f=document.getElementById('draggableFab'); const c=f.parentElement; f.style.transition='left 0.35s cubic-bezier(0.16,1,0.3,1)'; f.style.left=(c.clientWidth-60)+'px'; showToast('FAB 已贴靠至右侧边缘', 'info');\">➡️ 贴右</button>\n          </div>\n        </div>\n        <!-- Draggable FAB Circle -->\n        <div id=\"draggableFab\" style=\"position:absolute; left:20px; bottom:14px; width:44px; height:44px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:grab; box-shadow:0 6px 16px rgba(0,0,0,0.3); transition:left 0.35s cubic-bezier(0.16, 1, 0.3, 1);\" onmousedown=\"window.startFabDrag(event, this)\" ontouchstart=\"window.startFabDrag(event, this)\">\n          <i class=\"fa-solid fa-arrows-up-down-left-right\"></i>\n        </div>\n      </div>\n    ",
-      "code": "# GDScript: 自由拖拽与自动吸附贴边\nfab.draggable = true\nfab.magnetic_dock = true # 松手后自动平滑吸附最近屏幕边缘"
+      "title": "4. 自由拖拽与任意位置放置 (Draggable to Any Position & 磁性贴边模式)",
+      "render": `
+      <div id="fabDragContainer" style="position:relative; height:160px; background:var(--bg-surface); border:2px dashed var(--primary); border-radius:8px; overflow:hidden; user-select:none; padding:12px;">
+        <!-- Header Controls -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; color:var(--text-primary); font-weight:600;"><i class="fa-solid fa-arrows-up-down-left-right" style="color:var(--primary);"></i> 🖱️ 鼠标/手指按住 FAB 自由拖拽至任意位置：</span>
+            <span id="fabPosBadge" class="g-tag g-tag-primary" style="font-size:10px; padding:1px 6px; border-radius:6px; font-family:monospace;">坐标: (20, 60)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="display:inline-flex; align-items:center; gap:4px; font-size:11px; color:var(--text-secondary); cursor:pointer;">
+              <input type="checkbox" id="fabAutoDock"> 松手时自动贴边
+            </label>
+            <div style="display:flex; gap:4px;">
+              <button class="g-btn g-btn-default" style="font-size:10px; padding:1px 5px;" onclick="const f=document.getElementById('draggableFab'); f.style.transition='all 0.3s'; f.style.left='14px'; f.style.top='14px'; document.getElementById('fabPosBadge').innerText='坐标: (14, 14)'; showToast('已移动至左上角', 'info');">↖ 左上</button>
+              <button class="g-btn g-btn-default" style="font-size:10px; padding:1px 5px;" onclick="const f=document.getElementById('draggableFab'); const c=f.parentElement; f.style.transition='all 0.3s'; f.style.left=(c.clientWidth-58)+'px'; f.style.top='14px'; document.getElementById('fabPosBadge').innerText='坐标: ('+Math.round(c.clientWidth-58)+', 14)'; showToast('已移动至右上角', 'info');">↗ 右上</button>
+              <button class="g-btn g-btn-default" style="font-size:10px; padding:1px 5px;" onclick="const f=document.getElementById('draggableFab'); const c=f.parentElement; f.style.transition='all 0.3s'; f.style.left=((c.clientWidth-44)/2)+'px'; f.style.top='60px'; document.getElementById('fabPosBadge').innerText='坐标: ('+Math.round((c.clientWidth-44)/2)+', 60)'; showToast('已居中放置', 'info');">🎯 居中</button>
+            </div>
+          </div>
+        </div>
+        <!-- 2D Draggable FAB Circle Button -->
+        <div id="draggableFab" style="position:absolute; left:20px; top:60px; width:44px; height:44px; border-radius:50%; background:var(--primary); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:grab; box-shadow:0 6px 16px rgba(0,0,0,0.35); z-index:10;" onmousedown="window.startFabDrag(event, this)" ontouchstart="window.startFabDrag(event, this)">
+          <i class="fa-solid fa-arrows-up-down-left-right" style="color:#ffffff !important; pointer-events:none;"></i>
+        </div>
+      </div>
+    `,
+      "code": "# GDScript: 自由拖拽放置到任意位置 (支持 XY 二维自由拖拽与可选吸附)\nfab.draggable = true\nfab.free_position = true # 允许拖拽放置在屏幕任意位置\nfab.magnetic_dock = false # 可选: 松手是否吸附最近边缘"
     },
     {
       "title": "5. 带未读徽标与一键已读 (Badge & Notification Integration)",

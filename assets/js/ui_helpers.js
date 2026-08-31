@@ -116,29 +116,54 @@ window.startFabDrag = function(e, fab) {
   if (!container) return;
   const isTouch = e.type && e.type.startsWith('touch');
   let startX = isTouch ? e.touches[0].clientX : e.clientX;
+  let startY = isTouch ? e.touches[0].clientY : e.clientY;
   let startLeft = fab.offsetLeft;
+  let startTop = fab.offsetTop;
   fab.style.cursor = 'grabbing';
   fab.style.transition = 'none';
 
+  const posBadge = document.getElementById('fabPosBadge');
+
   function onMove(ev) {
     let clientX = isTouch ? (ev.touches[0] ? ev.touches[0].clientX : startX) : ev.clientX;
+    let clientY = isTouch ? (ev.touches[0] ? ev.touches[0].clientY : startY) : ev.clientY;
     let dx = clientX - startX;
-    let maxL = container.clientWidth - fab.offsetWidth - 12;
-    let newLeft = Math.max(12, Math.min(maxL, startLeft + dx));
+    let dy = clientY - startY;
+
+    let maxL = container.clientWidth - fab.offsetWidth - 10;
+    let maxT = container.clientHeight - fab.offsetHeight - 10;
+    let newLeft = Math.max(10, Math.min(maxL, startLeft + dx));
+    let newTop = Math.max(10, Math.min(maxT, startTop + dy));
+
     fab.style.left = newLeft + 'px';
+    fab.style.top = newTop + 'px';
+    fab.style.bottom = 'auto';
+    fab.style.right = 'auto';
+
+    if (posBadge) {
+      posBadge.innerText = `坐标: (${Math.round(newLeft)}, ${Math.round(newTop)})`;
+    }
   }
 
   function onEnd() {
     fab.style.cursor = 'grab';
-    fab.style.transition = 'left 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
-    const center = container.clientWidth / 2;
-    if (fab.offsetLeft < center) {
-      fab.style.left = '16px';
-      if (window.showToast) window.showToast('FAB 已自动吸附贴靠至【左侧边缘】', 'info');
+    const autoDockCheck = document.getElementById('fabAutoDock');
+    const shouldDock = autoDockCheck ? autoDockCheck.checked : false;
+
+    if (shouldDock) {
+      fab.style.transition = 'left 0.35s cubic-bezier(0.16, 1, 0.3, 1), top 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+      const center = container.clientWidth / 2;
+      if (fab.offsetLeft < center) {
+        fab.style.left = '14px';
+        if (window.showToast) window.showToast('FAB 已自动吸附贴靠至【左侧】', 'info');
+      } else {
+        fab.style.left = (container.clientWidth - fab.offsetWidth - 14) + 'px';
+        if (window.showToast) window.showToast('FAB 已自动吸附贴靠至【右侧】', 'info');
+      }
     } else {
-      fab.style.left = (container.clientWidth - fab.offsetWidth - 16) + 'px';
-      if (window.showToast) window.showToast('FAB 已自动吸附贴靠至【右侧边缘】', 'info');
+      if (window.showToast) window.showToast(`已自由放置在位置 (${Math.round(fab.offsetLeft)}, ${Math.round(fab.offsetTop)})`, 'success');
     }
+
     document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMove);
     document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onEnd);
   }
