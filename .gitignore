@@ -21,3 +21,6 @@ Thumbs.db
 dist/
 build/
 *.uid
+.cursor/
+temp/
+图片*/

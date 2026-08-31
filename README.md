@@ -54,6 +54,27 @@
 
 ---
 
+## 🚀 安装与快速上手 (Installation)
+
+### 方式 1: 下载发布包 (.zip) (推荐)
+- 👉 **[GitHub Releases 发行页](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
+- 📦 **[直接下载最新 v1.6.0 发布包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.0.zip)**
+
+解压并将 `addons/gotod_ui` 文件夹直接复制到您的 Godot 4 项目根目录下的 `res://addons/` 即可。
+
+### 方式 2: Git 仓库克隆
+```bash
+git clone https://github.com/mhxy13867806343/gotod-components-ui.git
+```
+
+### 启用插件
+1. 打开 Godot 4 编辑器。
+2. 进入 **项目 (Project) -> 项目设置 (Project Settings) -> 插件 (Plugins)**。
+3. 勾选 **Gotod Components UI** 后的 **启用 (Enable)** 复选框。
+4. 即可在场景中自由添加组件节点，或在 GDScript / C# 中直接调用！
+
+---
+
 ## 📚 快速代码范例 (GDScript & C# 双语支持)
 
 ### 1. 创建 UI 按钮与提示 (GButton & GMessage)
@@ -91,7 +112,42 @@ public partial class MyScene : Control
 }
 ```
 
-### 2. 跨页面全局通信 (GEvent / uni.$emit)
+### 2. 创建多态悬浮操作按钮 (GFab)
+
+**GDScript 4.x**:
+```gdscript
+# 方式 1: 批量动作数组快捷构建 / add_actions
+var fab = GFab.create([
+    { "name": "plus", "label": "新建副本" },
+    { "name": "qrcode", "label": "扫码加入" }
+])
+fab.add_actions([
+    { "name": "chat", "label": "公会聊天" },
+    { "name": "setting", "label": "快捷设置" }
+])
+fab.item_clicked.connect(func(idx, name): GMessage.info("点击了: " + name))
+add_child(fab)
+
+# 方式 2: 完整配置对象 (支持自由拖拽与磁性贴边)
+var fab2 = GFab.create({
+    "direction": "vertical",
+    "draggable": true,
+    "magnetic_dock": true,
+    "items": [{ "name": "potion", "label": "补血药水" }],
+    "on_click": func(idx, name): GMessage.success("已使用: " + name)
+})
+```
+
+**C# (.NET 8.0/9.0)**:
+```csharp
+var fab = new GFab();
+fab.AddAction("plus", "新建副本");
+fab.AddAction("qrcode", "扫码加入");
+fab.ItemClicked += (idx, name) => GMessage.Info($"点击了: {name}");
+AddChild(fab);
+```
+
+### 3. 跨页面全局通信 (GEvent / uni.$emit)
 
 **GDScript 4.x**:
 ```gdscript
@@ -125,7 +181,7 @@ public override void _Ready()
 }
 ```
 
-### 3. Axios 风格异步请求 (GAxios)
+### 4. Axios 风格异步请求 (GAxios)
 
 **GDScript 4.x**:
 ```gdscript
@@ -143,7 +199,7 @@ if (res.Success)
 }
 ```
 
-### 4. 2D 视野外敌人边缘指示与跳跃物理 (GCoord & GPhysics)
+### 5. 2D 视野外敌人边缘指示与跳跃物理 (GCoord & GPhysics)
 
 **GDScript 4.x**:
 ```gdscript

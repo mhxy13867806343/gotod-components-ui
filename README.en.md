@@ -106,7 +106,7 @@ your-project/
 
 ### Method 1: Download Release Archive (.zip) (Recommended)
 - 👉 **[GitHub Releases Page](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[Direct Download v1.0.4 Archive (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.0.4.zip)**
+- 📦 **[Direct Download v1.6.0 Archive (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.0.zip)**
 
 Extract the archive and copy the `addons/gotod_ui` folder directly into your Godot 4 project root at `res://addons/`.
 
@@ -137,7 +137,31 @@ btn.pressed.connect(func():
 add_child(btn)
 ```
 
-### 2. Cross-Page Global Event (GEvent / uni.$emit)
+### 2. Floating Action Button (GFab)
+```gdscript
+# Method 1: Quick polymorphic action list & add_actions
+var fab = GFab.create([
+    { "name": "plus", "label": "New Instance" },
+    { "name": "qrcode", "label": "Scan QR" }
+])
+fab.add_actions([
+    { "name": "chat", "label": "Guild Chat" },
+    { "name": "setting", "label": "Settings" }
+])
+fab.item_clicked.connect(func(idx, name): GMessage.info("Clicked: " + name))
+add_child(fab)
+
+# Method 2: Full options dictionary (draggable & magnetic dock)
+var fab2 = GFab.create({
+    "direction": "vertical",
+    "draggable": true,
+    "magnetic_dock": true,
+    "items": [{ "name": "potion", "label": "Healing Potion" }],
+    "on_click": func(idx, name): GMessage.success("Used: " + name)
+})
+```
+
+### 3. Cross-Page Global Event (GEvent / uni.$emit)
 ```gdscript
 # Sender Scene:
 GEvent.emit("user_info_updated", { "nickname": "Dragon Knight", "gold": 99999 })
@@ -150,14 +174,14 @@ func _ready() -> void:
     , self)
 ```
 
-### 3. Axios-Style Async HTTP Request
+### 4. Axios-Style Async HTTP Request
 ```gdscript
 var res: Dictionary = await GAxios.get("https://api.game.com/player/profile", { "id": 1001 })
 if res.success:
     print("Player profile fetched:", res.data)
 ```
 
-### 4. 2D Off-Screen Enemy Indicator & Jump Physics
+### 5. 2D Off-Screen Enemy Indicator & Jump Physics
 ```gdscript
 # 1. Compute off-screen boss screen boundary indicator
 var indicator = GCoord.get_offscreen_indicator_2d(self, boss.global_position, 40.0)
