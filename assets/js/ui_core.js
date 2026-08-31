@@ -537,7 +537,49 @@ window.switchCodeLanguage = function(lang, btn) {
 
 window.getComponentGitHubUrl = function(key) {
   const baseRepo = 'https://github.com/mhxy13867806343/gotod-components-ui/blob/main';
-  const fileMap = {
+  if (!key) return 'https://github.com/mhxy13867806343/gotod-components-ui';
+
+  // 1. Guide sections -> components_catalog.js
+  if (key.startsWith('guide-') || key === 'guide') {
+    return `${baseRepo}/assets/js/components_catalog.js`;
+  }
+
+  // 2. Changelog -> changelog_page.js
+  if (key.startsWith('changelog-') || key === 'changelog') {
+    return `${baseRepo}/assets/js/changelog_page.js`;
+  }
+
+  // 3. Game templates -> game_templates.js
+  if (key.startsWith('game-') || key === 'game') {
+    return `${baseRepo}/assets/js/game_templates.js`;
+  }
+
+  // 4. Special catalog sections
+  const sectionCatalogMap = {
+    'playground': 'assets/js/api_playground.js',
+    'imperative': 'assets/js/imperative_api.js',
+    'hooks': 'assets/js/hooks_catalog.js',
+    'signals': 'assets/js/signals_catalog.js',
+    'decorator': 'assets/js/decorator_catalog.js',
+    'storage': 'assets/js/storage_catalog.js',
+    'router': 'assets/js/utils_router_catalog.js',
+    'lifecycle': 'assets/js/lifecycle_catalog.js',
+    'godot-globals': 'assets/js/godot_globals_catalog.js',
+    'globals': 'assets/js/godot_globals_catalog.js',
+    'studio': 'assets/js/resource_studio.js',
+    'resource': 'assets/js/resource_studio.js',
+    'networking': 'assets/js/networking_physics_catalog.js',
+    'physics': 'assets/js/networking_physics_catalog.js',
+    'slots': 'assets/js/slots_catalog.js',
+    'icons-gallery': 'assets/js/icons_catalog.js'
+  };
+
+  if (sectionCatalogMap[key]) {
+    return `${baseRepo}/${sectionCatalogMap[key]}`;
+  }
+
+  // 5. Godot .gd Engine Component Source Map
+  const gdFileMap = {
     // General
     'button': 'addons/gotod_ui/components/general/g_button.gd',
     'text': 'addons/gotod_ui/components/general/g_text.gd',
@@ -594,23 +636,26 @@ window.getComponentGitHubUrl = function(key) {
     'particle_studio': 'addons/gotod_ui/components/feedback/g_loading.gd',
     'skeleton_particle': 'addons/gotod_ui/components/feedback/g_loading.gd',
     'shader_studio': 'addons/gotod_ui/theme/gotod_theme.gd',
-    'hud3d': 'addons/gotod_ui/utils/g_coord.gd',
-    // Router & Storage & Core
-    'router': 'addons/gotod_ui/router/g_router.gd',
-    'storage': 'addons/gotod_ui/storage/g_storage.gd',
-    'hooks': 'addons/gotod_ui/hooks/use_form.gd',
-    'signals': 'addons/gotod_ui/events/g_event_bus.gd',
-    'decorator': 'addons/gotod_ui/patterns/decorator/weapon_component.gd',
-    'theme': 'addons/gotod_ui/theme/gotod_theme.gd',
-    'lifecycle': 'addons/gotod_ui/core/g_node_lifecycle_demo.gd',
-    'networking': 'addons/gotod_ui/utils/g_multiplayer.gd',
-    'slots': 'addons/gotod_ui/core/g_slot_proxy.gd',
-    'tree_shaker': 'addons/gotod_ui/export/gotod_tree_shaker.gd'
+    'hud3d': 'addons/gotod_ui/utils/g_coord.gd'
   };
 
-  const relPath = (key && fileMap[key]) ? fileMap[key] : (key ? `assets/js/components_${key}.js` : '');
-  if (relPath) {
-    return `${baseRepo}/${relPath}`;
+  if (gdFileMap[key]) {
+    return `${baseRepo}/${gdFileMap[key]}`;
   }
+
+  // 6. Safe Known Component JS Fallback
+  const knownComponentKeys = [
+    'action_sheet', 'ai_dialogue', 'alert', 'avatar', 'badge', 'button', 'card', 'chat', 'checkbox',
+    'collapse', 'container', 'dialog', 'dialogue', 'divider', 'drawer', 'fab', 'form', 'haptic',
+    'hud3d', 'i18n', 'icon', 'input', 'input_number', 'loading', 'message', 'notice_bar', 'overlay',
+    'particle_studio', 'picker', 'popover', 'popup', 'progress', 'radio', 'select', 'shader_studio',
+    'skeleton', 'skeleton_particle', 'slider', 'space', 'stepper', 'steps', 'switch', 'table', 'tabs',
+    'tag', 'text', 'textarea', 'toast', 'tooltip', 'tour', 'virtual_list'
+  ];
+
+  if (knownComponentKeys.includes(key)) {
+    return `${baseRepo}/assets/js/components_${key}.js`;
+  }
+
   return 'https://github.com/mhxy13867806343/gotod-components-ui';
 };
