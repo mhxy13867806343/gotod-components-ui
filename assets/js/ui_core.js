@@ -732,3 +732,85 @@ window.getComponentGitHubUrl = function(key) {
 
   return 'https://github.com/mhxy13867806343/gotod-components-ui';
 };
+
+// =========================================================================
+// Gotod UI Native Component Version Update Modal (基于组件库原生弹窗规范)
+// =========================================================================
+window.showVersionUpdateModal = function(onRefresh, onCancel) {
+  const existing = document.getElementById('gotodVersionUpdateModal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'gotodVersionUpdateModal';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+
+  overlay.innerHTML = `
+    <div class="g-dialog" style="background:var(--bg-card); border:1px solid var(--border-base); border-radius:14px; width:100%; max-width:460px; box-shadow:0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05); overflow:hidden; display:flex; flex-direction:column;">
+      <!-- Header -->
+      <div style="padding:16px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border-base); background:var(--bg-surface);">
+        <div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:15px; color:var(--text-primary);">
+          <span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:6px; background:rgba(34,197,94,0.15); color:var(--primary);">
+            <i class="fa-solid fa-cloud-arrow-down"></i>
+          </span>
+          <span>发现新版本发布 (Version Update)</span>
+          <span class="g-tag g-tag-success" style="font-size:10px; padding:2px 6px; border-radius:10px; font-weight:700;">NEW</span>
+        </div>
+        <button id="gotodUpdateCloseBtn" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:16px; width:28px; height:28px; border-radius:4px; display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div style="padding:20px; font-size:13px; color:var(--text-regular); line-height:1.6;">
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <div style="font-size:32px; color:var(--primary); margin-top:-2px;">
+            <i class="fa-solid fa-rocket"></i>
+          </div>
+          <div>
+            <div style="font-weight:700; font-size:14px; color:var(--text-primary); margin-bottom:6px;">
+              Gotod UI 最新组件库代码已部署就绪！
+            </div>
+            <div style="color:var(--text-secondary); font-size:12px;">
+              系统检测到服务端代码已更新。为了确保您使用的是最新的组件库 API、C# 范例以及全平台兼容性支持，建议立即刷新。
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; padding:10px 12px; background:var(--bg-surface); border:1px dashed var(--border-base); border-radius:8px; font-size:11px; color:var(--text-secondary); display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-circle-info" style="color:var(--primary);"></i>
+          <span>点击确认将自动清除浏览器本地旧缓存并加载最新代码</span>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="padding:12px 20px; display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border-base); background:var(--bg-surface);">
+        <button id="gotodUpdateCancelBtn" class="g-btn g-btn-default" style="padding:6px 16px; font-size:12px; border-radius:var(--radius); cursor:pointer;">
+          稍后提醒
+        </button>
+        <button id="gotodUpdateConfirmBtn" class="g-btn g-btn-primary" style="padding:6px 18px; font-size:12px; border-radius:var(--radius); font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-rotate"></i>
+          <span>立即刷新更新</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const close = () => {
+    overlay.remove();
+  };
+
+  document.getElementById('gotodUpdateCloseBtn').onclick = () => {
+    close();
+    if (onCancel) onCancel();
+  };
+  document.getElementById('gotodUpdateCancelBtn').onclick = () => {
+    close();
+    if (onCancel) onCancel();
+  };
+  document.getElementById('gotodUpdateConfirmBtn').onclick = () => {
+    close();
+    if (onRefresh) onRefresh();
+  };
+};

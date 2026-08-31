@@ -470,4 +470,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Route from URL Hash (or LocalStorage fallback)
   window.routeFromHash();
+
+  // 3. Initialize Local VersionPolling (Auto update check using native Gotod UI Dialog)
+  if (window.VersionPolling && typeof window.VersionPolling.createVersionPolling === 'function') {
+    window.VersionPolling.createVersionPolling({
+      pollingInterval: 10 * 1000,
+      onUpdate: (self) => {
+        if (typeof window.showVersionUpdateModal === 'function') {
+          window.showVersionUpdateModal(self.onRefresh, self.onCancel);
+        } else {
+          self.onRefresh();
+        }
+      }
+    });
+  }
 });

@@ -39,6 +39,7 @@
         var title = pre.closest('.lab-card').querySelector('h2');
         var language = tabs.querySelector('[data-language="csharp"].active') ? 'C#' : 'GDScript';
         var message = (title ? title.textContent.split('·')[0].trim() : '示例') + ' - ' + language + '代码复制成功';
+        global.showToast(message, 'success');
         setStatus(message, '#86efac');
         copy.textContent = '已复制';
         setTimeout(function () { copy.textContent = '复制'; }, 1200);
@@ -58,8 +59,18 @@
   }
   if (!global.showToast) {
     global.showToast = function (message) {
-      var status = document.getElementById('labStatus');
-      if (status) { status.textContent = message; status.style.color = '#86efac'; }
+      var container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.style.cssText = 'position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;';
+        document.body.appendChild(container);
+      }
+      var toast = document.createElement('div');
+      toast.textContent = message;
+      toast.style.cssText = 'padding:10px 16px;border:1px solid #22c55e;border-radius:8px;background:#10251b;color:#bbf7d0;box-shadow:0 8px 24px rgba(0,0,0,.35);font:600 13px Inter, sans-serif;white-space:nowrap;';
+      container.appendChild(toast);
+      setTimeout(function () { toast.remove(); }, 3000);
     };
   }
   function setStatus(text, color) {
