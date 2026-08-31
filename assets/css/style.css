@@ -258,7 +258,7 @@ aside {
 /* Main Content */
 main {
   flex: 1;
-  padding: 32px 40px;
+  padding: 28px 36px;
   max-width: 1060px;
   overflow-y: auto;
   min-width: 0;
@@ -266,9 +266,9 @@ main {
 
 /* Naive UI / Element Plus Style Right-Side Anchor Table of Contents (大纲导航栏) */
 .doc-anchor-nav {
-  width: 190px;
+  width: 185px;
   flex-shrink: 0;
-  padding: 32px 12px 32px 8px;
+  padding: 28px 10px 32px 6px;
   height: calc(100vh - var(--header-h));
   position: sticky;
   top: var(--header-h);
@@ -279,9 +279,9 @@ main {
   user-select: none;
 }
 
-@media (max-width: 1320px) {
+@media (max-width: 1024px) {
   .doc-anchor-nav {
-    display: none;
+    display: none !important;
   }
 }
 

@@ -40,19 +40,23 @@
       `;
     }
 
-    // B. Demo Cards Anchors (e.g. 基础类型, 朴素与变体, 胶囊圆角, etc.)
+    // B. Demo & Step Cards Anchors (e.g. 基础类型, 朴素与变体, 胶囊圆角, Step 1, etc.)
     doc.demos.forEach((d, idx) => {
       const rawTitle = d.title || `示例 ${idx + 1}`;
-      // Clean up title (remove "1. ", parenthesized English subtitles for clean TOC)
-      const cleanTitle = rawTitle
-        .replace(/^\d+\.\s*/, '')
-        .replace(/\(.*?\)/g, '')
-        .trim() || rawTitle;
+      
+      // Clean up title for elegant Naive UI style outline
+      let cleanTitle = rawTitle
+        .replace(/^Step\s*\d+[:：]\s*/i, (m) => m.trim() + ' ') // Retain "Step 1: " cleanly
+        .replace(/^\d+[\.、]\s*/, '') // Strips "1. ", "2、"
+        .replace(/\(.*?\)/g, '') // Strips "(...)"
+        .replace(/（.*?）/g, '') // Strips "（...）"
+        .trim();
+      if (!cleanTitle) cleanTitle = rawTitle;
 
       html += `
         <a href="#demoCard_${idx}" class="anchor-nav-item" data-target="demoCard_${idx}" onclick="window.scrollToAnchor('demoCard_${idx}', event)" title="${rawTitle}">
-          <span class="anchor-dot"></span>
-          <span class="anchor-text">${cleanTitle}</span>
+          <span class="anchor-dot" style="display:inline-block; width:4px; height:4px; border-radius:50%; background:currentColor; opacity:0.6; flex-shrink:0;"></span>
+          <span class="anchor-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${cleanTitle}</span>
         </a>
       `;
     });
