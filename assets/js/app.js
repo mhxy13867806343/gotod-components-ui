@@ -360,10 +360,25 @@ window.showDoc = function(key) {
       '所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：'
     );
   } else if (!['guide-', 'game-', 'play-', 'studio-', 'imp-', 'godot-'].some(p => key.startsWith(p))) {
-    // 7. Multi-Platform Compatibility Table (uni-app / Cross-Platform Matrix)
+    // Elegant tip on component pages at the bottom of the API table
     propsHtml += `
-      <div class="api-table-wrapper" style="margin-top: 32px;">
-        <div style="font-weight: 700; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+      <div style="margin-top: 28px; padding: 14px 18px; background: var(--bg-surface); border: 1px solid var(--border-base); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="font-size: 13px; color: var(--text-regular);">
+          💡 <b>基类通用方法提示</b>：本组件天然继承 Godot 4 官方 <code style="color:var(--primary); font-family:var(--font-mono);">Control</code> / <code style="color:var(--primary); font-family:var(--font-mono);">Node</code> 基类全部能力（包括 <code style="color:var(--primary); font-family:var(--font-mono);">add_child()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">queue_free()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">create_tween()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">show()</code> 等）。
+        </div>
+        <button class="g-btn g-btn-default" style="height: 28px; padding: 0 12px; font-size: 12px; white-space: nowrap;" onclick="showDoc('godot-globals')">
+          查阅全局与基类方法速查 →
+        </button>
+      </div>
+    `;
+  }
+
+  // 7. Top-Positioned Multi-Platform Compatibility Table (uni-app style, placed right under header before demos)
+  let platformMatrixHtml = '';
+  if (!['guide-', 'game-', 'play-', 'studio-', 'imp-', 'godot-'].some(p => key.startsWith(p))) {
+    platformMatrixHtml = `
+      <div class="api-table-wrapper" style="margin: 16px 0 24px 0;">
+        <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <i class="fa-solid fa-cubes-stacked" style="color: var(--primary);"></i>
             <span>${compName} 全平台兼容性支持说明 (Platform Compatibility Matrix)</span>
@@ -395,15 +410,6 @@ window.showDoc = function(key) {
           </tbody>
         </table>
       </div>
-
-      <div style="margin-top: 24px; padding: 14px 18px; background: var(--bg-surface); border: 1px solid var(--border-base); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-        <div style="font-size: 13px; color: var(--text-regular);">
-          💡 <b>基类通用方法提示</b>：本组件天然继承 Godot 4 官方 <code style="color:var(--primary); font-family:var(--font-mono);">Control</code> / <code style="color:var(--primary); font-family:var(--font-mono);">Node</code> 基类全部能力（包括 <code style="color:var(--primary); font-family:var(--font-mono);">add_child()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">queue_free()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">create_tween()</code>, <code style="color:var(--primary); font-family:var(--font-mono);">show()</code> 等）。
-        </div>
-        <button class="g-btn g-btn-default" style="height: 28px; padding: 0 12px; font-size: 12px; white-space: nowrap;" onclick="showDoc('godot-globals')">
-          查阅全局与基类方法速查 →
-        </button>
-      </div>
     `;
   }
 
@@ -416,6 +422,7 @@ window.showDoc = function(key) {
         <h1 class="doc-title">${doc.title} ${docBadge}</h1>
         <p class="doc-desc">${doc.desc}</p>
       </div>
+      ${platformMatrixHtml}
       ${demosHtml}
       ${propsHtml}
     `;
