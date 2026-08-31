@@ -189,10 +189,13 @@ window.showDoc = function(key) {
         `;
       }
 
+      const vStr = d.version || d.since || (idx >= 2 ? 'v1.0.5' : 'v1.0.0');
+      const isNew = String(vStr).includes('1.0.5');
+      const vBadge = `<span class="g-tag ${isNew ? 'g-tag-success' : 'g-tag-primary'}" style="font-size:10px; padding:2px 7px; margin-left:8px; border-radius:10px; font-weight:700; vertical-align:middle;">${vStr}</span>`;
       return `
         <div class="demo-card">
           <div class="demo-card-header">
-            <div class="demo-card-title">${d.title}</div>
+            <div class="demo-card-title">${d.title} ${vBadge}</div>
             ${!d.codeTabs && !d.codeBefore && d.code ? `
               <button class="g-btn g-btn-default" style="height:26px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
                 <i class="fa-regular fa-copy"></i> 复制代码
@@ -208,31 +211,35 @@ window.showDoc = function(key) {
     }).join('');
   }
 
-  // Common Header Definitions for Tables
+  // Common Header Definitions for Tables with Dedicated Version Column
   const propHeaders = [
-    { title: '属性名 / Attribute', width: '25%', key: 'name', className: 'api-prop' },
-    { title: '说明 / Description', width: '40%', key: 'desc' },
-    { title: '类型 / Type', width: '20%', key: 'type', className: 'api-type' },
-    { title: '默认值 / Default', width: '15%', key: 'default', isCode: true }
+    { title: '属性名 / Attribute', width: '22%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '36%', key: 'desc' },
+    { title: '类型 / Type', width: '18%', key: 'type', className: 'api-type' },
+    { title: '默认值 / Default', width: '12%', key: 'default', isCode: true },
+    { title: '版本 / Version', width: '12%', key: 'version', className: 'api-type' }
   ];
 
   const methodHeaders = [
-    { title: '方法名 / Method', width: '30%', key: 'name', className: 'api-prop' },
-    { title: '说明 / Description', width: '45%', key: 'desc' },
-    { title: '参数 / Parameters', width: '25%', key: 'params', className: 'api-type' }
+    { title: '方法名 / Method', width: '28%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '38%', key: 'desc' },
+    { title: '参数 / Parameters', width: '22%', key: 'params', className: 'api-type' },
+    { title: '版本 / Version', width: '12%', key: 'version', className: 'api-type' }
   ];
 
   const eventHeaders = [
-    { title: '信号名 / Event Name', width: '30%', key: 'name', className: 'api-prop' },
-    { title: '说明 / Description', width: '45%', key: 'desc' },
-    { title: '参数 / Parameters', width: '25%', key: 'params', className: 'api-type' }
+    { title: '信号名 / Event Name', width: '28%', key: 'name', className: 'api-prop' },
+    { title: '说明 / Description', width: '38%', key: 'desc' },
+    { title: '参数 / Parameters', width: '22%', key: 'params', className: 'api-type' },
+    { title: '版本 / Version', width: '12%', key: 'version', className: 'api-type' }
   ];
 
   const slotHeaders = [
     { title: '插槽名 / Slot Name', width: '16%', key: 'name', className: 'api-prop' },
-    { title: '说明 / Description', width: '30%', key: 'desc' },
-    { title: '子标签 / Child Node', width: '18%', key: 'child', className: 'api-type' },
-    { title: '用法示例 / Example (Vue 模板 & GDScript)', width: '36%', key: 'example', isCode: true }
+    { title: '说明 / Description', width: '28%', key: 'desc' },
+    { title: '子标签 / Child Node', width: '16%', key: 'child', className: 'api-type' },
+    { title: '用法示例 / Example (Vue 模板 & GDScript)', width: '28%', key: 'example', isCode: true },
+    { title: '版本 / Version', width: '12%', key: 'version', className: 'api-type' }
   ];
 
   const compName = (doc.title || '').split(' ')[0];
@@ -279,9 +286,11 @@ window.showDoc = function(key) {
     `;
   }
 
+  const docBadge = (doc.version || doc.since) ? `<span class="g-tag g-tag-primary" style="font-size:11px; padding:2px 8px; margin-left:10px; border-radius:10px; font-weight:600; vertical-align:middle;">${doc.version || doc.since}</span>` : `<span class="g-tag g-tag-primary" style="font-size:11px; padding:2px 8px; margin-left:10px; border-radius:10px; font-weight:600; vertical-align:middle;">v1.0.5</span>`;
+
   document.getElementById('mainContent').innerHTML = `
     <div class="doc-header">
-      <h1 class="doc-title">${doc.title}</h1>
+      <h1 class="doc-title">${doc.title} ${docBadge}</h1>
       <p class="doc-desc">${doc.desc}</p>
     </div>
     ${demosHtml}

@@ -62,7 +62,12 @@ window.renderApiTable = function(title, headers, rows, subtitle = '') {
   const tbodyHtml = rows.map(r => `
     <tr>
       ${headers.map(h => {
-        const val = r[h.key] !== undefined ? r[h.key] : '';
+        let val = r[h.key] !== undefined ? r[h.key] : '';
+        if (h.key === 'version') {
+          const vStr = val || r.version || r.since || 'v1.0.0';
+          const isNew = String(vStr).includes('1.0.5');
+          return `<td class="api-type" style="text-align:center;"><span class="g-tag ${isNew ? 'g-tag-success' : 'g-tag-primary'}" style="font-size:10px; padding:2px 7px; border-radius:10px; font-weight:700;">${vStr}</span></td>`;
+        }
         if (h.isCode) {
           const esc = (window.escapeHtml ? window.escapeHtml(val) : String(val).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
           return `<td><code style="word-break:break-all;">${esc}</code></td>`;
