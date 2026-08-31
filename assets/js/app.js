@@ -327,6 +327,9 @@ window.showDoc = function(key) {
   } else if (key === 'virtual-list') {
     const c = document.getElementById('vListContainer');
     if (c && typeof window.onVListScroll === 'function') setTimeout(() => window.onVListScroll(c), 30);
+  } else if (key === 'table') {
+    const c = document.getElementById('tableV2Container');
+    if (c && typeof window.onTableV2Scroll === 'function') setTimeout(() => window.onTableV2Scroll(c), 30);
   }
 };
 

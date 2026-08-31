@@ -2571,3 +2571,199 @@ window.switchDemoLang = function(locale) {
   if (window.showToast) window.showToast('语言已动态热切换至: ' + locale.toUpperCase(), 'success');
 };
 
+
+// =========================================================================
+// GTable & GTableV2 Global Demo Helpers
+// =========================================================================
+window.toggleTableStripe = function() {
+  const t = document.getElementById('demoTable1');
+  if (t) {
+    t.classList.toggle('g-table-stripe');
+    if (window.showToast) window.showToast('斑马纹已切换', 'info');
+  }
+};
+
+window.toggleTableBorder = function() {
+  const t = document.getElementById('demoTable1');
+  if (t) {
+    t.style.border = t.style.border ? '' : '1px solid var(--border-base)';
+    if (window.showToast) window.showToast('边框已切换', 'info');
+  }
+};
+
+window.onTableSelectAll = function(masterCb) {
+  const cbs = document.querySelectorAll('.table-row-cb');
+  cbs.forEach(cb => cb.checked = masterCb.checked);
+  window.onTableRowSelect();
+};
+
+window.onTableRowSelect = function() {
+  const cbs = document.querySelectorAll('.table-row-cb');
+  const checked = Array.from(cbs).filter(cb => cb.checked).length;
+  const tip = document.getElementById('tableSelTip');
+  if (tip) tip.innerText = `已勾选: ${checked} / ${cbs.length} 项`;
+  const master = document.getElementById('tableSelectAll');
+  if (master) master.checked = checked === cbs.length && cbs.length > 0;
+};
+
+window.batchRewardTable = function() {
+  const cbs = document.querySelectorAll('.table-row-cb:checked');
+  if (cbs.length === 0) {
+    if (window.showToast) window.showToast('请先勾选需要发放经验的英雄！', 'warning');
+    return;
+  }
+  if (window.showToast) window.showToast(`已成功为 ${cbs.length} 位选中英雄批量发放 50,000 EXP 经验药水！`, 'success');
+};
+
+window.batchDeleteTable = function() {
+  const cbs = document.querySelectorAll('.table-row-cb:checked');
+  if (cbs.length === 0) {
+    if (window.showToast) window.showToast('请先勾选需要移出的项！', 'warning');
+    return;
+  }
+  cbs.forEach(cb => {
+    const row = cb.closest('tr');
+    if (row) row.remove();
+  });
+  window.onTableRowSelect();
+  if (window.showToast) window.showToast(`已批量移出 ${cbs.length} 项！`, 'info');
+};
+
+window.isTablePriceAsc = false;
+window.sortTableByPrice = function() {
+  window.isTablePriceAsc = !window.isTablePriceAsc;
+  const body = document.getElementById('tableSelectBody');
+  if (!body) return;
+  const rows = Array.from(body.querySelectorAll('tr'));
+  rows.sort((a, b) => {
+    const pA = parseInt(a.children[2].innerText.replace(/,/g, ''), 10) || 0;
+    const pB = parseInt(b.children[2].innerText.replace(/,/g, ''), 10) || 0;
+    return window.isTablePriceAsc ? pA - pB : pB - pA;
+  });
+  rows.forEach(r => body.appendChild(r));
+  if (window.showToast) window.showToast(`已按单价【${window.isTablePriceAsc ? '升序 ↑' : '降序 ↓'}】排序`, 'info');
+};
+
+window.onTableV2Scroll = function(container) {
+  if (!container) return;
+  const ROW_HEIGHT = 36;
+  const TOTAL_ROWS = 100000;
+  const VISIBLE_COUNT = 8;
+  const BUFFER = 2;
+
+  const scrollTop = container.scrollTop;
+  const startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - BUFFER);
+  const endIndex = Math.min(TOTAL_ROWS, startIndex + VISIBLE_COUNT + BUFFER * 2);
+
+  const content = document.getElementById('tableV2Content');
+  if (!content) return;
+
+  content.style.transform = 'translateY(' + (startIndex * ROW_HEIGHT) + 'px)';
+
+  const factions = ['联盟', '部落', '中立', '虚空', '龙族'];
+  let html = '';
+  for (let i = startIndex; i < endIndex; i++) {
+    const rank = i + 1;
+    const score = (5000000 - i * 42.5).toFixed(0);
+    const faction = factions[i % factions.length];
+    const floor = 1000 - Math.floor(i / 100);
+    let bg = rank <= 3 ? 'background:rgba(24,160,88,0.08);' : (i % 2 === 1 ? 'background:rgba(0,0,0,0.02);' : 'background:var(--bg-surface);');
+
+    html += '<div style=\"height:' + ROW_HEIGHT + 'px; ' + bg + ' border-bottom:1px solid var(--border-base); padding:0 12px; display:flex; align-items:center; font-size:12px;\">';
+    html += '  <div style=\"width:70px; font-weight:700;\">' + (rank <= 3 ? '🏆 #' + rank : '#' + rank) + '</div>';
+    html += '  <div style=\"width:140px; font-weight:600;\">冒险者_' + (i % 8999 + 1000) + '</div>';
+    html += '  <div style=\"width:90px;\"><span class=\"g-tag g-tag-primary\" style=\"font-size:10px; padding:1px 5px;\">' + faction + '</span></div>';
+    html += '  <div style=\"width:110px; font-family:var(--font-mono);\">第 ' + floor + ' 层</div>';
+    html += '  <div style=\"flex:1; text-align:right; font-weight:700; color:#e6a23c; font-family:var(--font-mono);\">' + score + ' pts</div>';
+    html += '</div>';
+  }
+
+  content.innerHTML = html;
+};
+
+window.scrollTableV2To = function(rowIdx) {
+  const container = document.getElementById('tableV2Container');
+  if (container) {
+    const ROW_HEIGHT = 36;
+    container.scrollTop = rowIdx * ROW_HEIGHT;
+    window.onTableV2Scroll(container);
+    if (window.showToast) window.showToast(`TableV2 已极速定位至第 ${rowIdx + 1} 行`, 'info');
+  }
+};
+
+// =========================================================================
+// GHud3D Global Demo Helpers
+// =========================================================================
+window.bossCurrentHp = 750000;
+window.trigger3DHit = function() {
+  window.bossCurrentHp = Math.max(0, window.bossCurrentHp - 3450);
+  const hpPercent = (window.bossCurrentHp / 1000000) * 100;
+  const bar = document.getElementById('hud3dBossHp');
+  const text = document.getElementById('hud3dHpText');
+  const dmg = document.getElementById('hud3dDamageText');
+
+  if (bar) bar.style.width = hpPercent + '%';
+  if (text) text.innerText = window.bossCurrentHp.toLocaleString() + ' / 1,000,000';
+
+  if (dmg) {
+    dmg.style.opacity = '1';
+    dmg.style.transform = 'translateY(-24px) scale(1.15)';
+    setTimeout(() => {
+      dmg.style.opacity = '0';
+      dmg.style.transform = 'translateY(0) scale(1)';
+    }, 550);
+  }
+
+  if (window.triggerHaptic) window.triggerHaptic('heavy');
+  if (window.showToast) window.showToast('💥 暴击命中 3D 空间 BOSS -3450 伤害！', 'error');
+};
+
+window.trigger3DHeal = function() {
+  window.bossCurrentHp = Math.min(1000000, window.bossCurrentHp + 1200);
+  const hpPercent = (window.bossCurrentHp / 1000000) * 100;
+  const bar = document.getElementById('hud3dBossHp');
+  const text = document.getElementById('hud3dHpText');
+
+  if (bar) bar.style.width = hpPercent + '%';
+  if (text) text.innerText = window.bossCurrentHp.toLocaleString() + ' / 1,000,000';
+
+  if (window.triggerHaptic) window.triggerHaptic('light');
+  if (window.showToast) window.showToast('💚 为 3D BOSS 恢复 +1200 生命值！', 'success');
+};
+
+// =========================================================================
+// GHaptic Global Demo Helpers
+// =========================================================================
+window.triggerHaptic = function(type) {
+  const patterns = {
+    light: 15,
+    medium: 35,
+    heavy: 70,
+    success: [20, 40, 20],
+    warning: [40, 60, 40],
+    error: [60, 40, 60, 40, 100]
+  };
+
+  const ms = patterns[type] || 30;
+  if (navigator.vibrate) {
+    try {
+      navigator.vibrate(ms);
+    } catch (e) {}
+  }
+
+  const statusText = document.getElementById('hapticStatusText');
+  const box = document.getElementById('hapticFeedbackBox');
+  if (statusText) {
+    statusText.innerText = `已触发【${type.toUpperCase()}】触觉马达振动 (${Array.isArray(ms) ? ms.join('+') + 'ms' : ms + 'ms'})`;
+  }
+  if (box) {
+    box.style.borderColor = 'var(--primary)';
+    box.style.background = 'rgba(24,160,88,0.08)';
+    setTimeout(() => {
+      box.style.borderColor = 'var(--border-base)';
+      box.style.background = 'var(--bg-card)';
+    }, 300);
+  }
+
+  if (window.showToast) window.showToast(`马达触觉反馈: ${type.toUpperCase()}`, 'info');
+};

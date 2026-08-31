@@ -1,51 +1,76 @@
 // =========================================================================
 // Gotod Components UI - Changelog & Release Updates (Using Steps Component)
-// 排序逻辑：未来规划在最前 -> 最新现行版本 (v1.3.0) -> 历史版本往后排列
+// 排序逻辑：未来规划在最前 -> 最新现行版本 (v1.4.0) -> 历史版本往后排列
 // =========================================================================
 
 window.CHANGELOG_DATA = [
   {
-    version: "v1.4.0 (规划中)",
-    date: "2026-09-20 预计",
+    version: "v1.5.0 (规划中)",
+    date: "2026-09-25 预计",
     status: "wait", // wait, process, finish
     icon: "fa-compass",
-    title: "v1.4.0 未来版本规划 (Roadmap)",
-    summary: "计划引入 3D 空间 HUD 投影组件、骨骼动画粒子特效绑定器与跨平台触感震动反馈 Haptic 模块。",
+    title: "v1.5.0 未来版本规划 (Roadmap)",
+    summary: "计划推出 Particle Studio UI 粒子特效工坊、智能 AI NPC 动态分支对话树引擎与 GPU 深度模糊毛玻璃滤镜。",
     highlights: [
       {
-        tag: "3D HUD 空间投影",
+        tag: "UI 粒子工坊",
         type: "info",
-        desc: "支持 2D UI 控件一键透视映射至 3D 游戏世界坐标系，自动 Billboard 朝向摄像机。"
+        desc: "可视化调节金币爆发、抽卡流光粒子发射器，一键生成 Godot 4 GPUParticles2D 配置。"
       },
       {
-        tag: "Haptic 触觉引擎",
+        tag: "AI 对话树",
         type: "info",
-        desc: "对接 iOS / Android 移动端马达，提供多种轻快、刚性、柔和点击物理触感反馈。"
+        desc: "无缝对接大语言模型与本地行为树，支持游戏 NPC 动态智能分支剧本推理。"
+      }
+    ]
+  },
+  {
+    version: "v1.4.0",
+    date: "2026-08-31",
+    status: "process",
+    icon: "fa-table-cells",
+    title: "v1.4.0 表格体系、3D 空间 HUD 与触觉引擎发布 (今日最新版)",
+    summary: "正式推出 Element Plus 规范 GTable 与十万级 TableV2 虚拟化表格、GHud3D 3D空间透视投影组件，以及 GHaptic 移动端跨平台触感振动反馈引擎。",
+    highlights: [
+      {
+        tag: "GTable & TableV2 表格",
+        type: "success",
+        desc: "全面参考 Element Plus 规范，支持斑马纹、带边框、固定表头、多选/单选、列排序、作用域插槽（Scoped Slot），以及 <b>100,000+ 行十万级数据 TableV2 虚拟化极速渲染</b>。"
+      },
+      {
+        tag: "GHud3D 空间投影",
+        type: "primary",
+        desc: "支持 2D UI 控件一键透视映射至 3D 游戏世界坐标系，自动 Billboard 朝向摄像机，提供头顶血条、暴击伤害飘字及距离深度自动缩放。"
+      },
+      {
+        tag: "GHaptic 触觉反馈",
+        type: "warning",
+        desc: "无缝对接 iOS Taptic Engine 与 Android 振动马达，提供轻快 (Light)、柔和 (Medium)、刚性 (Heavy)、成功 (Success) 与警告/错误等丰富物理点击触感反馈。"
       }
     ]
   },
   {
     version: "v1.3.0",
     date: "2026-08-31",
-    status: "process",
+    status: "finish",
     icon: "fa-bolt-lightning",
-    title: "v1.3.0 性能与国际化重磅发布 (今日最新版)",
-    summary: "全新推出百万级数据 GVirtualList 虚拟列表、GI18n 全场景多语言动态热切换引擎，以及 GCollapse 触控手势滑动展开与弹簧过渡曲线。",
+    title: "v1.3.0 性能与国际化重磅发布",
+    summary: "推出百万级数据 GVirtualList 虚拟列表、GI18n 全场景多语言动态热切换引擎，以及 GCollapse 触控手势滑动展开与弹簧过渡曲线。",
     highlights: [
       {
         tag: "GVirtualList 虚拟长列表",
         type: "success",
-        desc: "支持 <b>1,000,000+ 百万级数据</b> 超高性能平滑渲染，GPU 节点自动切片回收，内存零激增，支持动态高度预估与毫秒级瞬时定位。"
+        desc: "支持 1,000,000+ 百万级数据超高性能平滑渲染，GPU 节点自动切片回收，内存零激增，支持动态高度预估与毫秒级瞬时定位。"
       },
       {
         tag: "GI18n 国际化引擎",
         type: "primary",
-        desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持多语言全 UI 节点动态热切换、动态参数插值（<code>{name}</code>）与回退语言机制。"
+        desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持多语言全 UI 节点动态热切换与动态参数插值（<code>{name}</code>）。"
       },
       {
         tag: "GCollapse 手势与曲线",
         type: "warning",
-        desc: "增强移动端触控滑动展开手势（<code>gesture_enabled</code>），支持三次贝塞尔与弹簧果冻回弹过渡曲线（<code>TRANS_BACK</code> / <code>TRANS_SPRING</code>）。"
+        desc: "增强移动端触控滑动展开手势（<code>gesture_enabled</code>），支持三次贝塞尔与弹簧果冻回弹过渡曲线。"
       }
     ]
   },
@@ -60,27 +85,12 @@ window.CHANGELOG_DATA = [
       {
         tag: "Tabs 标签页",
         type: "success",
-        desc: "新增 <b>滚动吸顶固定 (sticky + offset_top)</b>、<b>内容过渡动画 (Fade/Slide/Zoom)</b>、<b>异步懒加载 (Async Loading)</b>、<b>before-leave 切换拦截钩子</b>、<b>双击重命名/增删</b> 与 <b>HTML5 自由拖拽排序</b>。"
-      },
-      {
-        tag: "FAB 悬浮按钮",
-        type: "primary",
-        desc: "全面重构二维（XY 轴）自由拖拽放置算法、实时坐标追踪徽标 <code>(X, Y)</code>、松手可选自动磁性贴边及横向扩展菜单。"
-      },
-      {
-        tag: "InputNumber & Stepper",
-        type: "warning",
-        desc: "达到 <code>min_value</code> 或 <code>max_value</code> 极值时，对应的加减步进按钮自动进入 <code>disabled</code> 变灰禁用状态，防止非法越界。"
-      },
-      {
-        tag: "Input 输入框",
-        type: "primary",
-        desc: "修复全局 FontAwesome 遮罩冲突方块问题，引入官方 FontAwesome 6 WebFont，密码框支持点击眼睛图标（<code>fa-eye</code> / <code>fa-eye-slash</code>）实时切换明暗文。"
+        desc: "新增滚动吸顶固定、内容过渡动画、异步懒加载、before-leave 切换拦截钩子、双击重命名与 HTML5 自由拖拽排序。"
       },
       {
         tag: "组件单文件架构",
         type: "info",
-        desc: "将原本 4500+ 行庞大文件彻底拆分为 42 个独立轻量组件文件（<code>components_<name>.js</code>），所有今日增强属性方法全量标注 <code>v1.2</code> 绿色胶囊版本徽标。"
+        desc: "将原本 4500+ 行庞大文件彻底拆分为 42 个独立轻量组件文件，API 表格全量标注 v1.2 绿色胶囊版本徽标。"
       }
     ]
   },
@@ -89,18 +99,13 @@ window.CHANGELOG_DATA = [
     date: "2026-08-25",
     status: "finish",
     icon: "fa-cubes",
-    title: "v1.1.0 架构重构与性能升级",
+    title: "v1.1.0 架构重构与矢量图标中心",
     summary: "模块化解耦重构、引入 26,000+ 矢量图标超级中心与 FontAwesome 6 官方 WebFont 矢量字形渲染体系。",
     highlights: [
       {
         tag: "Icon 图标中心",
         type: "primary",
         desc: "整合 26,000+ 通用矢量图标库，支持实时关键词检索、分类筛选与一键复制 GDScript 代码。"
-      },
-      {
-        tag: "Slots 插槽体系",
-        type: "success",
-        desc: "统一全量组件 Vue 风格插槽定义（<code>#default</code>、<code>#prefix</code>、<code>#suffix</code>、<code>#header</code>、<code>#footer</code>）。"
       }
     ]
   },
@@ -110,28 +115,18 @@ window.CHANGELOG_DATA = [
     status: "finish",
     icon: "fa-star",
     title: "v1.0.0 正式版首发上线",
-    summary: "发布全套 42 个 Modern Vue-Style UI 组件库（Button, Input, Select, Dialog, Chat, Tabs, Table 等），全面支持 Godot 4.x 渲染管线。",
+    summary: "发布全套 42 个 Modern Vue-Style UI 组件库，全面支持 Godot 4.x 渲染管线。",
     highlights: [
       {
-        tag: "基础组件",
+        tag: "核心组件",
         type: "primary",
-        desc: "GButton, GText, GContainer, GDivider, GIcon, GCard, GTag, GBadge, GAvatar, GProgress。"
-      },
-      {
-        tag: "表单与数据录入",
-        type: "warning",
-        desc: "GInput, GTextarea, GInputNumber, GStepper, GSwitch, GCheckbox, GRadio, GSelect, GPicker, GSlider, GForm。"
-      },
-      {
-        tag: "反馈与弹窗系统",
-        type: "danger",
-        desc: "GDialog, GDialogue, GChat, GPopup, GOverlay, GActionSheet, GPopover, GNoticeBar, GMessage, GToast, GAlert, GDrawer, GTooltip, GLoading, GSkeleton, GTour。"
+        desc: "GButton, GInput, GSelect, GDialog, GChat, GTabs, GProgress, GCard 等 42+ 核心控件首发。"
       }
     ]
   }
 ];
 
-window.currentStepIndex = 1; // Default highlight v1.3.0 (index 1)
+window.currentStepIndex = 1; // Default highlight v1.4.0 (index 1)
 
 window.renderChangelogPage = function(subKey = 'changelog-latest') {
   const container = document.getElementById('mainContent');
@@ -156,7 +151,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             版本更新日志与发布历程 (Changelog)
           </h1>
           <p style="font-size:13px; color:var(--text-secondary); margin:0;">
-            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本 (v1.3.0) 居中 ➔ 历史版本在后。
+            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本 (v1.4.0) 居中 ➔ 历史版本在后。
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -167,7 +162,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             后一版本 <i class="fa-solid fa-arrow-right"></i>
           </button>
           <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="window.setChangelogStep(1)">
-            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.3.0)
+            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.4.0)
           </button>
         </div>
       </div>
@@ -214,7 +209,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
     </div>
   `;
 
-  // Vertical Detailed Steps Timeline (From Top: Future -> Latest -> History)
+  // Vertical Detailed Steps Timeline
   let verticalStepsHtml = `
     <div style="display:flex; flex-direction:column; gap:20px;">
       ${window.CHANGELOG_DATA.map((item, idx) => {
@@ -294,7 +289,7 @@ window.nextChangelogStep = function() {
 };
 
 window.CHANGELOG_CATALOG = {
-  'changelog-roadmap': { title: "v1.4.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
-  'changelog-latest': { title: "v1.3.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
-  'changelog-history': { title: "历史版本历程 (v1.2 / v1.1 / v1.0)", desc: "历史版本时间线。", demos: [] }
+  'changelog-roadmap': { title: "v1.5.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
+  'changelog-latest': { title: "v1.4.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
+  'changelog-history': { title: "历史版本历程 (v1.3 / v1.2 / v1.1 / v1.0)", desc: "历史版本时间线。", demos: [] }
 };

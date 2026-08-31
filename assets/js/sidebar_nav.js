@@ -234,12 +234,14 @@ window.SIDEBAR_CONFIG = {
           { key: 'tooltip', title: 'GTooltip 悬浮提示' },
           { key: 'loading', title: 'GLoading 加载指示器' },
           { key: 'skeleton', title: 'GSkeleton 骨架屏' },
-          { key: 'tour', title: 'GTour 漫游式引导' }
+          { key: 'tour', title: 'GTour 漫游式引导' },
+          { key: 'haptic', title: '📳 GHaptic 触觉反馈 (v1.4)' }
         ]
       },
       {
         title: 'Data Display 数据',
         items: [
+          { key: 'table', title: '📊 GTable & TableV2 表格 (v1.4)' },
           { key: 'card', title: 'GCard 卡片' },
           { key: 'tag', title: 'GTag 标签' },
           { key: 'badge', title: 'GBadge 徽标' },
@@ -248,14 +250,15 @@ window.SIDEBAR_CONFIG = {
           { key: 'tabs', title: 'GTabs 标签页' },
           { key: 'collapse', title: 'GCollapse 折叠面板' },
           { key: 'steps', title: 'GSteps 步骤条' },
-          { key: 'virtual-list', title: '⚡ GVirtualList 虚拟长列表 (v1.3)' },
-          { key: 'i18n', title: '🌐 GI18n 国际化引擎 (v1.3)' },
+          { key: 'virtual-list', title: '⚡ GVirtualList 虚拟长列表' },
+          { key: 'i18n', title: '🌐 GI18n 国际化引擎' },
           { key: 'space', title: 'GSpace 间距布局' }
         ]
       },
       {
-        title: 'Godot 核心与全局 API (Engine Core)',
+        title: 'Godot 3D & 核心全局 (3D Space & Engine Core)',
         items: [
+          { key: 'hud3d', title: '🎮 GHud3D 3D空间HUD投影 (v1.4)' },
           { key: 'godot-globals', title: '🌐 Godot 全局方法 & Node 核心 API' },
           { key: 'godot-docs', title: '📖 Godot 4 官方文档与资源传送门' }
         ]
