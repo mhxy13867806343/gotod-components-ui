@@ -462,6 +462,8 @@ window.convertGDScriptToCSharp = function(gdCode) {
     return line + ';';
   });
 
+  let bodyCode = formattedLines.join('\n').trim();
+
   let result = '';
   if (hasFunctions) {
     const openBraces = (bodyCode.match(/\{/g) || []).length;
