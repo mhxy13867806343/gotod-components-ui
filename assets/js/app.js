@@ -259,7 +259,7 @@ window.showDoc = function(key) {
       const curLang = window.currentCodeLang || 'gdscript';
 
       return `
-        <div class="demo-card" style="margin-bottom: 36px; border: 1px solid var(--border-base); border-radius: var(--radius-lg, 10px); background: var(--bg-surface); overflow: hidden;">
+        <div id="demoCard_${idx}" class="demo-card" style="margin-bottom: 36px; border: 1px solid var(--border-base); border-radius: var(--radius-lg, 10px); background: var(--bg-surface); overflow: hidden; scroll-margin-top: 80px;">
           <div class="demo-card-header" style="padding: 16px 20px; border-bottom: 1px solid var(--border-base); background: var(--bg-card); display: flex; align-items: center; justify-content: space-between;">
             <div class="demo-card-title" style="font-size: 15px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center;">${d.title} ${vBadge}</div>
           </div>
@@ -333,19 +333,19 @@ window.showDoc = function(key) {
   let propsHtml = '';
 
   // 1. Attributes Table
-  propsHtml += renderApiTable(`${compName} Attributes (属性)`, propHeaders, doc.props);
+  propsHtml += renderApiTable(`${compName} Attributes (属性)`, propHeaders, doc.props, '', 'apiProps');
 
   // 2. Specific Methods Table
-  propsHtml += renderApiTable(`${compName} Specific Methods (组件专属外部方法)`, methodHeaders, doc.methods);
+  propsHtml += renderApiTable(`${compName} Specific Methods (组件专属外部方法)`, methodHeaders, doc.methods, '', 'apiMethods');
 
   // 3. Events Table
-  propsHtml += renderApiTable(`${compName} Events / Signals (自定义信号)`, eventHeaders, doc.events);
+  propsHtml += renderApiTable(`${compName} Events / Signals (自定义信号)`, eventHeaders, doc.events, '', 'apiEvents');
 
   // 4. Slots Table
-  propsHtml += renderApiTable(`${compName} Slots (插槽与节点挂载)`, slotHeaders, doc.slots);
+  propsHtml += renderApiTable(`${compName} Slots (插槽与节点挂载)`, slotHeaders, doc.slots, '', 'apiSlots');
 
   // 5. Sub-component Attributes Table
-  propsHtml += renderApiTable('Sub-component Attributes (子组件/子面板属性)', propHeaders, doc.paneProps);
+  propsHtml += renderApiTable('Sub-component Attributes (子组件/子面板属性)', propHeaders, doc.paneProps, '', 'apiSubProps');
 
   // 6. Control/Node Base Methods Table (ONLY rendered on dedicated common methods / godot globals pages)
   if (key === 'guide-common-methods' && window.COMMON_CONTROL_METHODS) {
@@ -357,7 +357,8 @@ window.showDoc = function(key) {
         { title: '参数与返回值 / Signature', width: '25%', key: 'params', className: 'api-type' }
       ],
       window.COMMON_CONTROL_METHODS,
-      '所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：'
+      '所有 UI 控件均继承自 Godot 4 官方 Control / Node 基类，可直接调用以下 14 个核心通用方法：',
+      'apiCommonMethods'
     );
   } else if (!['guide-', 'game-', 'play-', 'studio-', 'imp-', 'godot-'].some(p => key.startsWith(p))) {
     // Elegant tip on component pages at the bottom of the API table
@@ -377,7 +378,7 @@ window.showDoc = function(key) {
   let platformMatrixHtml = '';
   if (!['guide-', 'game-', 'play-', 'studio-', 'imp-', 'godot-'].some(p => key.startsWith(p))) {
     platformMatrixHtml = `
-      <div class="api-table-wrapper" style="margin: 20px 0 36px 0;">
+      <div id="platformMatrix" class="api-table-wrapper" style="margin: 20px 0 36px 0; scroll-margin-top: 80px;">
         <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <i class="fa-solid fa-cubes-stacked" style="color: var(--primary);"></i>
@@ -428,6 +429,12 @@ window.showDoc = function(key) {
     `;
     mainContentEl.scrollTop = 0;
   }
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+
+  // Render Right Anchor Nav Outline (Naive UI / Element Plus style)
+  window.renderAnchorNav(doc, key);
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;

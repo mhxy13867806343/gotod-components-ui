@@ -55,8 +55,9 @@ window.toggleTheme = function() {
 // ==========================================
 // 3. Generic API Table Component Generator
 // ==========================================
-window.renderApiTable = function(title, headers, rows, subtitle = '') {
+window.renderApiTable = function(title, headers, rows, subtitle = '', sectionId = '') {
   if (!rows || rows.length === 0) return '';
+  const idAttr = sectionId ? `id="${sectionId}" style="scroll-margin-top: 80px;"` : '';
   const subHtml = subtitle ? `<p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">${subtitle}</p>` : '';
   const theadHtml = headers.map(h => `<th style="width:${h.width || 'auto'};">${h.title}</th>`).join('');
   const tbodyHtml = rows.map(r => `
@@ -84,12 +85,14 @@ window.renderApiTable = function(title, headers, rows, subtitle = '') {
   `).join('');
 
   return `
-    <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${title}</h3>
-    ${subHtml}
-    <table class="api-table">
-      <thead><tr>${theadHtml}</tr></thead>
-      <tbody>${tbodyHtml}</tbody>
-    </table>
+    <div ${idAttr} class="api-table-section">
+      <h3 style="margin: 36px 0 14px; font-size: 1.35rem; font-weight:700;">${title}</h3>
+      ${subHtml}
+      <table class="api-table">
+        <thead><tr>${theadHtml}</tr></thead>
+        <tbody>${tbodyHtml}</tbody>
+      </table>
+    </div>
   `;
 };
 
