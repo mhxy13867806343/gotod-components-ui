@@ -1,236 +1,134 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark" data-preset="naive">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gotod UI (Vue 3.5.9 v2 Edition) - Godot 4 高保真游戏 UI 框架</title>
+  <title>Gotod UI (Vue 3.5.9 v2 Edition) - 开发中</title>
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_53">
-  <!-- Vue 3.5.9 CDN -->
+  <link rel="stylesheet" href="../../assets/css/theme.css?v=20260831_55">
+  <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_55">
+  <!-- Vue 3.5.9 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.9/vue.global.prod.js"></script>
+  <style>
+    .v2-dev-container {
+      min-height: calc(100vh - 56px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .v2-dev-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-base);
+      border-radius: 16px;
+      padding: 48px 36px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(16px);
+    }
+    .v2-dev-icon {
+      font-size: 56px;
+      color: #42b883;
+      margin-bottom: 20px;
+      animation: v2Pulse 2s infinite ease-in-out;
+    }
+    @keyframes v2Pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.85; }
+    }
+  </style>
 </head>
 <body>
-  <div id="vueApp" class="app-container">
+  <div id="vueApp">
     <!-- Header -->
-    <header class="header">
-      <div class="logo">
-        <div class="logo-icon"><i class="fa-solid fa-gamepad"></i></div>
-        <div class="logo-text">
-          <span class="brand-title">Gotod UI</span>
-          <span class="brand-subtitle">Godot 4 Components (Vue 3.5.9 Edition)</span>
-        </div>
+    <header style="height:56px; padding:0 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border-base); background:var(--bg-header);">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <!-- Clicking top-left brand returns to V1 Classic Edition -->
+        <a href="../../" class="brand" title="点击返回 Gotod UI V1 经典版" style="display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--text-main); font-weight:700; font-size:16px;">
+          <i class="fa-solid fa-shapes" style="color: var(--primary);"></i>
+          <span>gotod-components-ui</span>
+          <span class="brand-badge" style="background:#065f46; color:#a7f3d0; font-size:11px; padding:2px 8px; border-radius:10px; font-weight:700;">Vue 3.5.9 v2</span>
+          <span style="font-size:12px; color:var(--text-secondary); margin-left:8px; display:flex; align-items:center; gap:4px;">
+            <i class="fa-solid fa-arrow-left"></i> 返回 V1 经典版
+          </span>
+        </a>
       </div>
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="globalSearchInput" placeholder="在 Gotod UI 中全站搜索组件、API 或属性 (快捷键 /)..." autocomplete="off">
-        <div class="search-kbd"><kbd>/</kbd></div>
-      </div>
-      <div class="header-actions">
-        <div class="header-badge" style="background:#065f46; color:#a7f3d0; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;"><i class="fa-brands fa-vuejs"></i> Vue v3.5.9</div>
-        <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="header-btn" title="GitHub 仓库"><i class="fa-brands fa-github"></i></a>
+
+      <div class="header-actions" style="display:flex; align-items:center; gap:12px;">
+        <a href="../../" class="g-btn g-btn-primary" style="font-size:12px; padding:6px 14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; border-radius:var(--radius); font-weight:700;">
+          <i class="fa-solid fa-house"></i>
+          <span>返回 V1 经典版</span>
+        </a>
+        <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="header-btn" title="GitHub 仓库" style="color:var(--text-secondary); font-size:16px; text-decoration:none;">
+          <i class="fa-brands fa-github"></i>
+        </a>
       </div>
     </header>
 
-    <!-- JD.com Style Right-Side Fixed Toolbar Dock (京东右侧悬浮固定侧边栏) -->
-    <aside class="jd-sidebar-dock" aria-label="快捷侧边栏">
-      <!-- 1. 板块导航 (With Flyout Submenu) -->
-      <div class="jd-dock-item has-flyout" title="切换功能板块">
-        <i class="fa-solid fa-layer-group" style="color:var(--primary);"></i>
-        <span>板块</span>
-        <div class="jd-sections-flyout">
-          <div class="jd-flyout-header"><i class="fa-solid fa-compass"></i> 选择文档板块</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('guide')">1. 指南与快速上手 (Guide)</div>
-          <div class="jd-flyout-item active" onclick="switchTopSection('components')">2. 组件库全量文档 (Components)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('game')">3. 游戏实战案例 (Game UI)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('playground')">4. 属性与方法演练 (Playground)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('imperative')">5. 编程式/命令式调用 (Imperative)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('hooks')">6. Hooks 响应式钩子 (Hooks)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('signals')">7. 自定义信号总线 (Signals)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('decorator')">8. 装饰器工坊 (Decorator)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('storage')">9. 游戏存档存储 (Storage)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('router')">10. 格式化与转场路由 (Router)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('lifecycle')">11. 生命周期全图谱 (Lifecycle)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('studio')">12. .tres 资源工坊 (Studio)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('godot-globals')">13. 全局基类速查 (Globals)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('networking')">14. 网络与物理 (Networking)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('slots')">15. Slots 插槽专题 (Slots)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('icons-gallery')">16. 矢量图标中心 (26,000+ Icons)</div>
-          <div class="jd-flyout-item" onclick="switchTopSection('changelog')">17. 更新日志与时间线 (Changelog)</div>
+    <!-- Main Content Area -->
+    <main class="v2-dev-container">
+      <div class="v2-dev-card">
+        <div class="v2-dev-icon">
+          <i class="fa-brands fa-vuejs"></i>
+        </div>
+        <h1 style="font-size:28px; font-weight:800; color:var(--text-main); margin-bottom:12px;">
+          Gotod UI v2 (Vue 3.5.9) 正在火热开发中...
+        </h1>
+        <p style="font-size:15px; color:var(--text-secondary); line-height:1.7; margin-bottom:28px;">
+          全新架构升级：基于 Vue 3.5.9 响应式驱动与 Godot 4 高性能游戏 UI 解耦方案重构中。<br>
+          您可以随时点击下方或左上角按钮，返回功能完备的 V1 经典版。
+        </p>
+
+        <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+          <a href="../../" class="g-btn g-btn-primary" style="font-size:14px; padding:10px 24px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:var(--radius); font-weight:700; box-shadow:0 4px 16px rgba(34,197,94,0.35);">
+            <i class="fa-solid fa-house"></i>
+            <span>立即返回 V1 经典版文档</span>
+          </a>
+          <a href="../v-jquery/" class="g-btn g-btn-default" style="font-size:14px; padding:10px 20px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:var(--radius); font-weight:600;">
+            <i class="fa-brands fa-js" style="color:#f7df1e;"></i>
+            <span>查看 jQuery 版专区</span>
+          </a>
         </div>
       </div>
+    </main>
 
-      <!-- 2. 更新日志 (Changelog) -->
-      <button class="jd-dock-item" onclick="switchTopSection('changelog')" title="查看基于 Steps 步骤条构建的版本更新日志">
-        <span class="jd-dock-badge">v1.6</span>
-        <i class="fa-solid fa-clock-rotate-left" style="color:#eab308;"></i>
-        <span>日志</span>
-      </button>
-
-      <!-- 3. jQuery Edition -->
+    <!-- JD.com Style Right-Side Fixed Toolbar Dock -->
+    <div class="jd-sidebar-dock" aria-label="快捷侧边栏">
+      <a href="../../" class="jd-dock-item" title="返回 V1 经典版">
+        <i class="fa-solid fa-house" style="color:var(--primary);"></i>
+        <span>V1版</span>
+      </a>
       <a href="../v-jquery/" class="jd-dock-item" title="切换到 jQuery 架构版本">
         <i class="fa-brands fa-js" style="color:#f7df1e;"></i>
         <span>JQ版</span>
       </a>
-
-      <!-- 4. 经典版 (V1 Classic) -->
-      <a href="../../" class="jd-dock-item" title="返回经典版">
-        <i class="fa-solid fa-house" style="color:#94a3b8;"></i>
-        <span>V1版</span>
-      </a>
-
-      <!-- 5. 强制刷新 / 清除缓存 -->
-      <button class="jd-dock-item" onclick="window.forceHardReload()" title="清除浏览器本地静态缓存并强制刷新最新代码">
-        <i class="fa-solid fa-rotate" style="color:#38bdf8;"></i>
-        <span>刷新</span>
-      </button>
-
-      <!-- 6. 源码仓库 (GitHub) -->
       <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="jd-dock-item" title="访问 GitHub 开源仓库">
         <i class="fa-brands fa-github"></i>
-        <span>GitHub</span>
+        <span>源码</span>
       </a>
-
-      <!-- 7. 回到顶部 -->
-      <button class="jd-dock-item" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); const el=document.getElementById('mainContent'); if(el) el.scrollTo({top: 0, behavior: 'smooth'});" title="回到顶部">
+      <button class="jd-dock-item" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" title="回到顶部">
         <i class="fa-solid fa-arrow-up"></i>
         <span>顶部</span>
       </button>
-    </aside>
-
-    <div class="main-layout">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-search" style="padding:10px 12px; border-bottom:1px solid var(--border-base);">
-          <div style="position:relative; width:100%;">
-            <i class="fa-solid fa-filter" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text-secondary); font-size:12px;"></i>
-            <input type="text" id="vueSidebarFilter" placeholder="Vue 3 过滤组件..." style="width:100%; box-sizing:border-box; padding:6px 10px 6px 30px; border:1px solid var(--border-base); border-radius:var(--radius); background:var(--bg-input); color:var(--text-main); font-size:12px;">
-          </div>
-        </div>
-        <nav class="sidebar-nav" id="sidebarNav">
-          <!-- Dynamically populated -->
-        </nav>
-      </aside>
-
-      <!-- Main Content Area -->
-      <main class="content" id="mainContent">
-        <div class="content-body" id="docContent">
-          <!-- Content dynamically rendered -->
-        </div>
-      </main>
     </div>
   </div>
 
-  <!-- Local Standalone UI Helpers Modules -->
-  <script src="../../assets/js/ui_core.js?v=20260831_53"></script>
-  <script src="../../assets/js/ui_simulators.js?v=20260831_53"></script>
-  <script src="../../assets/js/ui_feedback_simulators.js?v=20260831_53"></script>
-  <script src="../../assets/js/ui_dialogue_simulators.js?v=20260831_53"></script>
-  <script src="../../assets/js/ui_select_engine.js?v=20260831_53"></script>
-  <script src="../../assets/js/ui_icon_tools.js?v=20260831_53"></script>
-  <script src="../../assets/js/ui_data_components.js?v=20260831_53"></script>
-  <script src="../../assets/js/ui_game_engine_studios.js?v=20260831_53"></script>
-
-  <script src="../../assets/js/sidebar_nav.js?v=20260831_53"></script>
-  <script src="../../assets/js/icons_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_catalog.js?v=20260831_53"></script>
-  <!-- Individual Component Catalogs -->
-  <script src="../../assets/js/components_button.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_text.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_container.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_divider.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_icon.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_fab.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_input.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_textarea.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_input_number.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_stepper.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_switch.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_checkbox.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_radio.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_select.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_picker.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_slider.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_form.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_dialog.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_dialogue.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_chat.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_popup.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_overlay.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_action_sheet.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_popover.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_notice_bar.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_message.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_toast.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_alert.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_drawer.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_tooltip.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_loading.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_skeleton.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_tour.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_haptic.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_ai_dialogue.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_card.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_tag.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_badge.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_avatar.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_progress.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_tabs.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_collapse.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_steps.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_virtual_list.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_i18n.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_table.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_particle_studio.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_skeleton_particle.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_shader_studio.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_hud3d.js?v=20260831_53"></script>
-  <script src="../../assets/js/components_space.js?v=20260831_53"></script>
-  <script src="../../assets/js/slots_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/game_templates.js?v=20260831_53"></script>
-  <script src="../../assets/js/api_playground.js?v=20260831_53"></script>
-  <script src="../../assets/js/imperative_api.js?v=20260831_53"></script>
-  <script src="../../assets/js/hooks_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/signals_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/decorator_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/storage_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/utils_router_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/lifecycle_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/godot_globals_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/resource_studio.js?v=20260831_53"></script>
-  <script src="../../assets/js/networking_physics_catalog.js?v=20260831_53"></script>
-  <script src="../../assets/js/global_search.js?v=20260831_53"></script>
-  <script src="../../assets/js/nav_dropdown.js?v=20260831_53"></script>
-  <script src="../../assets/js/changelog_page.js?v=20260831_53"></script>
-  <script src="../../assets/js/app.js?v=20260831_53"></script>
-
-  <!-- Vue 3.5.9 Reactive Composition Bridge -->
   <script>
     if (window.Vue) {
-      const { createApp, ref, onMounted } = Vue;
-      const app = createApp({
+      const { createApp } = Vue;
+      createApp({
         setup() {
-          const filterKeyword = ref('');
-          onMounted(() => {
-            console.log('Gotod UI (Vue 3.5.9 v2 Edition) mounted successfully in v2/v-vue.');
-            const input = document.getElementById('vueSidebarFilter');
-            if (input) {
-              input.addEventListener('input', (e) => {
-                const val = e.target.value.toLowerCase();
-                document.querySelectorAll('.nav-item').forEach(item => {
-                  const txt = item.textContent.toLowerCase();
-                  item.style.display = txt.includes(val) ? '' : 'none';
-                });
-              });
-            }
-          });
-          return { filterKeyword };
+          console.log('Gotod UI (Vue 3.5.9 v2 Dev Page) loaded.');
+          return {};
         }
-      });
-      app.mount('#vueApp');
+      }).mount('#vueApp');
     }
   </script>
 </body>
