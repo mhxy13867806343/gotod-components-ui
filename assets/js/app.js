@@ -140,6 +140,8 @@ window.showDoc = function(key) {
   const doc = catalog[key];
   if (!doc) return;
 
+  if (typeof window.startTopProgress === 'function') window.startTopProgress();
+
   // Update active item in sidebar
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.toggle('active', item.getAttribute('data-key') === key);
@@ -438,6 +440,8 @@ window.showDoc = function(key) {
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
+
+  if (typeof window.finishTopProgress === 'function') setTimeout(window.finishTopProgress, 120);
 
   // Dynamic Workspace Post-Render Hooks
   if (key === 'studio-theme-editor') {
