@@ -191,78 +191,78 @@ window.SIDEBAR_CONFIG = {
       {
         title: 'Layout & General 基础与布局',
         items: [
-          { key: 'button', title: 'GButton 按钮' },
-          { key: 'container', title: 'GContainer 布局容器' },
-          { key: 'space', title: 'GSpace 间距布局' },
-          { key: 'text', title: 'GText / GTitle 文本' },
-          { key: 'divider', title: 'GDivider 分割线' },
-          { key: 'icon', title: 'GIcon 图标' },
-          { key: 'fab', title: 'GFab 悬浮按钮' }
+          { key: 'button', title: 'GButton 按钮', version: 'v1.0' },
+          { key: 'container', title: 'GContainer 布局容器', version: 'v1.0' },
+          { key: 'space', title: 'GSpace 间距布局', version: 'v1.0' },
+          { key: 'text', title: 'GText / GTitle 文本', version: 'v1.0' },
+          { key: 'divider', title: 'GDivider 分割线', version: 'v1.0' },
+          { key: 'icon', title: 'GIcon 矢量图标', version: 'v1.1' },
+          { key: 'fab', title: 'GFab 悬浮按钮 (2D拖拽/磁吸)', version: 'v1.2' }
         ]
       },
       {
-        title: 'Form 表单',
+        title: 'Form 表单与录入',
         items: [
-          { key: 'input', title: 'GInput 输入框' },
-          { key: 'textarea', title: 'GTextarea 文本域' },
-          { key: 'input-number', title: 'GInputNumber 数字输入' },
-          { key: 'stepper', title: 'GStepper 步进器' },
-          { key: 'switch', title: 'GSwitch 开关' },
-          { key: 'checkbox', title: 'GCheckbox 多选框' },
-          { key: 'radio', title: 'GRadio 单选框' },
-          { key: 'select', title: 'GSelect 下拉选择' },
-          { key: 'picker', title: 'GPicker 选择器' },
-          { key: 'slider', title: 'GSlider 滑块' },
-          { key: 'form', title: 'GForm 表单布局' }
+          { key: 'input', title: 'GInput 输入框 (密码显隐)', version: 'v1.2' },
+          { key: 'textarea', title: 'GTextarea 文本域', version: 'v1.0' },
+          { key: 'input-number', title: 'GInputNumber 数字输入 (极值禁用)', version: 'v1.2' },
+          { key: 'stepper', title: 'GStepper 步进器 (极值禁用)', version: 'v1.2' },
+          { key: 'switch', title: 'GSwitch 开关', version: 'v1.0' },
+          { key: 'checkbox', title: 'GCheckbox 多选框', version: 'v1.0' },
+          { key: 'radio', title: 'GRadio 单选框', version: 'v1.0' },
+          { key: 'select', title: 'GSelect 下拉选择', version: 'v1.0' },
+          { key: 'picker', title: 'GPicker 选择器', version: 'v1.0' },
+          { key: 'slider', title: 'GSlider 滑块', version: 'v1.0' },
+          { key: 'form', title: 'GForm 表单布局', version: 'v1.0' }
         ]
       },
       {
-        title: 'Feedback 反馈',
+        title: 'Feedback 反馈与交互',
         items: [
-          { key: 'dialog', title: 'GDialog / GModal 弹窗' },
-          { key: 'dialogue', title: 'GDialogue 剧情对话系统' },
-          { key: 'chat', title: 'GChat 微信/气泡对话流' },
-          { key: 'popup', title: 'GPopup 弹出层' },
-          { key: 'overlay', title: 'GOverlay 遮罩层' },
-          { key: 'action-sheet', title: 'GActionSheet 动作面板' },
-          { key: 'popover', title: 'GPopover 气泡框' },
-          { key: 'notice-bar', title: 'GNoticeBar 通知栏' },
-          { key: 'message', title: 'GMessage 全局提示' },
-          { key: 'toast', title: 'GToast 轻提示' },
-          { key: 'alert', title: 'GAlert 警告提示' },
-          { key: 'drawer', title: 'GDrawer 抽屉' },
-          { key: 'tooltip', title: 'GTooltip 悬浮提示' },
-          { key: 'loading', title: 'GLoading 加载指示器' },
-          { key: 'skeleton', title: 'GSkeleton 骨架屏' },
-          { key: 'tour', title: 'GTour 漫游式引导' },
-          { key: 'haptic', title: '📳 GHaptic 触觉反馈' },
-          { key: 'ai-dialogue', title: '🤖 GAIDialogueTree AI 对话树 (v1.5)' }
+          { key: 'haptic', title: '📳 GHaptic 触觉反馈', version: 'v1.4' },
+          { key: 'ai-dialogue', title: '🤖 GAIDialogueTree AI 对话树', version: 'v1.5' },
+          { key: 'dialog', title: 'GDialog / GModal 弹窗', version: 'v1.0' },
+          { key: 'dialogue', title: 'GDialogue 剧情对话系统', version: 'v1.0' },
+          { key: 'chat', title: 'GChat 微信/气泡对话流', version: 'v1.0' },
+          { key: 'popup', title: 'GPopup 弹出层', version: 'v1.0' },
+          { key: 'overlay', title: 'GOverlay 遮罩层', version: 'v1.0' },
+          { key: 'action-sheet', title: 'GActionSheet 动作面板', version: 'v1.0' },
+          { key: 'popover', title: 'GPopover 气泡框', version: 'v1.0' },
+          { key: 'notice-bar', title: 'GNoticeBar 通知栏', version: 'v1.0' },
+          { key: 'message', title: 'GMessage 全局提示', version: 'v1.0' },
+          { key: 'toast', title: 'GToast 轻提示', version: 'v1.0' },
+          { key: 'alert', title: 'GAlert 警告提示', version: 'v1.0' },
+          { key: 'drawer', title: 'GDrawer 抽屉', version: 'v1.0' },
+          { key: 'tooltip', title: 'GTooltip 悬浮提示', version: 'v1.0' },
+          { key: 'loading', title: 'GLoading 加载指示器', version: 'v1.0' },
+          { key: 'skeleton', title: 'GSkeleton 骨架屏', version: 'v1.0' },
+          { key: 'tour', title: 'GTour 漫游式引导', version: 'v1.0' }
         ]
       },
       {
-        title: 'Data Display 数据',
+        title: 'Data Display 数据展示',
         items: [
-          { key: 'table', title: '📊 GTable & TableV2 表格' },
-          { key: 'particle-studio', title: '✨ GParticleStudio 粒子工坊 (v1.5)' },
-          { key: 'card', title: 'GCard 卡片' },
-          { key: 'tag', title: 'GTag 标签' },
-          { key: 'badge', title: 'GBadge 徽标' },
-          { key: 'avatar', title: 'GAvatar 头像' },
-          { key: 'progress', title: 'GProgress 进度条' },
-          { key: 'tabs', title: 'GTabs 标签页' },
-          { key: 'collapse', title: 'GCollapse 折叠面板' },
-          { key: 'steps', title: 'GSteps 步骤条' },
-          { key: 'virtual-list', title: '⚡ GVirtualList 虚拟长列表' },
-          { key: 'i18n', title: '🌐 GI18n 国际化引擎' },
-          { key: 'space', title: 'GSpace 间距布局' }
+          { key: 'table', title: '📊 GTable & TableV2 表格', version: 'v1.4' },
+          { key: 'particle-studio', title: '✨ GParticleStudio 粒子工坊', version: 'v1.5' },
+          { key: 'virtual-list', title: '⚡ GVirtualList 虚拟长列表', version: 'v1.3' },
+          { key: 'i18n', title: '🌐 GI18n 国际化引擎', version: 'v1.3' },
+          { key: 'tabs', title: 'GTabs 标签页 (吸顶/动画/拖拽)', version: 'v1.2' },
+          { key: 'collapse', title: 'GCollapse 折叠面板 (手势/曲线)', version: 'v1.3' },
+          { key: 'steps', title: 'GSteps 步骤条', version: 'v1.0' },
+          { key: 'card', title: 'GCard 卡片', version: 'v1.0' },
+          { key: 'tag', title: 'GTag 标签', version: 'v1.0' },
+          { key: 'badge', title: 'GBadge 徽标', version: 'v1.0' },
+          { key: 'avatar', title: 'GAvatar 头像', version: 'v1.0' },
+          { key: 'progress', title: 'GProgress 进度条', version: 'v1.0' },
+          { key: 'space', title: 'GSpace 间距布局', version: 'v1.0' }
         ]
       },
       {
         title: 'Godot 3D & 核心全局 (3D Space & Engine Core)',
         items: [
-          { key: 'hud3d', title: '🎮 GHud3D 3D空间HUD投影' },
-          { key: 'godot-globals', title: '🌐 Godot 全局方法 & Node 核心 API' },
-          { key: 'godot-docs', title: '📖 Godot 4 官方文档与资源传送门' }
+          { key: 'hud3d', title: '🎮 GHud3D 3D空间HUD投影', version: 'v1.4' },
+          { key: 'godot-globals', title: '🌐 Godot 全局方法 & Node 核心 API', version: 'v1.0' },
+          { key: 'godot-docs', title: '📖 Godot 4 官方文档与资源传送门', version: 'v1.0' }
         ]
       }
     ],
@@ -354,7 +354,33 @@ window.renderSidebarNav = function(section, targetDocKey) {
     html += `<div class="nav-group"><div class="nav-group-title">${group.title}</div>`;
     group.items.forEach(item => {
       const isActive = item.key === activeKey ? 'active' : '';
-      html += `<div class="nav-item ${isActive}" data-key="${item.key}" onclick="showDoc('${item.key}')"><span>${item.title}</span></div>`;
+      const v = item.version || (item.title && item.title.match(/v\d+\.\d+/)?.[0]) || 'v1.0';
+      let vColor = '#909399';
+      let vBg = 'rgba(144,147,153,0.15)';
+      
+      if (v.includes('1.5')) {
+        vColor = '#a855f7';
+        vBg = 'rgba(168,85,247,0.18)';
+      } else if (v.includes('1.4')) {
+        vColor = '#3b82f6';
+        vBg = 'rgba(59,130,246,0.18)';
+      } else if (v.includes('1.3')) {
+        vColor = '#e6a23c';
+        vBg = 'rgba(230,162,60,0.18)';
+      } else if (v.includes('1.2')) {
+        vColor = '#18a058';
+        vBg = 'rgba(24,160,88,0.18)';
+      } else if (v.includes('1.1')) {
+        vColor = '#10b981';
+        vBg = 'rgba(16,185,129,0.15)';
+      }
+
+      // Clean item display title if it had manual (vX.X) in text
+      const cleanTitle = item.title.replace(/\s*\(v\d+\.\d+\)/g, '').replace(/^[\d\.\s]+/, '');
+
+      const vBadge = `<span class="nav-v-badge" style="font-size:10px; font-weight:700; color:${vColor}; background:${vBg}; padding:1px 5px; border-radius:4px; margin-left:auto; font-family:var(--font-mono); line-height:1.2; flex-shrink:0;">${v}</span>`;
+      
+      html += `<div class="nav-item ${isActive}" data-key="${item.key}" onclick="showDoc('${item.key}')" style="display:flex; align-items:center; justify-content:space-between; gap:6px;"><span>${cleanTitle}</span>${vBadge}</div>`;
     });
     html += `</div>`;
   });
