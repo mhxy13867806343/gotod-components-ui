@@ -324,6 +324,9 @@ window.showDoc = function(key) {
     if (typeof window.initSelectDemos === 'function') setTimeout(window.initSelectDemos, 30);
   } else if (key === 'icon') {
     if (typeof window.initIconGallery === 'function') setTimeout(window.initIconGallery, 30);
+  } else if (key === 'virtual-list') {
+    const c = document.getElementById('vListContainer');
+    if (c && typeof window.onVListScroll === 'function') setTimeout(() => window.onVListScroll(c), 30);
   }
 };
 

@@ -39,52 +39,23 @@ window.COMPONENT_CATALOG['i18n'] = {
             </div>
           </div>
         </div>
-
-        <script>
-          (function(){
-            const dict = {
-              zh: {
-                title: "🏰 遗忘神庙 · 讨伐任务",
-                desc: "勇士 Arthur，你已成功升至 Lv.88！目前剩余 350 点体力，准备好迎接最终 BOSS 战了吗？",
-                start: "⚔️ 开始远征",
-                shop: "🛒 道具补给"
-              },
-              en: {
-                title: "🏰 Forgotten Temple · Conquest Quest",
-                desc: "Warrior Arthur, you have leveled up to Lv.88! You have 350 stamina left. Ready for the final BOSS fight?",
-                start: "⚔️ Start Expedition",
-                shop: "🛒 Item Supply"
-              },
-              ja: {
-                title: "🏰 忘れられた神殿 · 討伐クエスト",
-                desc: "勇者アーサー、Lv.88に到達しました！スタミナ残量 350。最終BOSS戦の準備はできましたか？",
-                start: "⚔️ 遠征開始",
-                shop: "🛒 アイテム補給"
-              },
-              ko: {
-                title: "🏰 잊혀진 신전 · 토벌 퀘스트",
-                desc: "용사 Arthur, Lv.88 달성을 축하합니다! 현재 남은 스테미너 350. 최종 BOSS전에 도전하시겠습니까?",
-                start: "⚔️ 원정 시작",
-                shop: "🛒 아이템 보급"
-              }
-            };
-
-            window.switchDemoLang = function(locale) {
-              ['zh', 'en', 'ja', 'ko'].forEach(l => {
-                const btn = document.getElementById('i18nBtn_' + l);
-                if (btn) btn.className = l === locale ? 'g-btn g-btn-primary' : 'g-btn g-btn-default';
-              });
-              const t = dict[locale] || dict.zh;
-              document.getElementById('i18nTitle').innerText = t.title;
-              document.getElementById('i18nDesc').innerText = t.desc;
-              document.getElementById('i18nBtnStart').innerText = t.start;
-              document.getElementById('i18nBtnShop').innerText = t.shop;
-              showToast('语言已动态热切换至: ' + locale.toUpperCase(), 'success');
-            };
-          })();
-        </script>
       `,
       "code": "# GDScript: 国际化多语言引擎\nGI18n.set_locale(\"en\") # 动态热切换\nvar text = GI18n.t(\"quest.desc\", { \"name\": \"Arthur\", \"level\": 88 })\nlabel.text = text"
+    },
+    {
+      "title": "2. 动态参数插值与复数格式化 (Parameter Interpolation)",
+      "render": `
+        <div style="max-width:540px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; padding:16px;">
+          <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">
+            💡 支持在 GDScript 词条中使用 <code>{param}</code> 占位符进行安全传参插值：
+          </div>
+          <div style="background:var(--bg-card); padding:10px 14px; border-radius:6px; border:1px solid var(--border-base); font-size:12px; color:var(--text-regular); line-height:1.6;">
+            <b>词条定义</b>: <code>"inventory.item_gain": "获得了 {count} 个 {item_name}！"</code><br>
+            <b>运行时输出</b>: <span style="color:var(--success); font-weight:700;">获得了 5 个 远古龙晶！</span>
+          </div>
+        </div>
+      `,
+      "code": "# GDScript: 参数插值\nvar msg = GI18n.t(\"inventory.item_gain\", {\n    \"count\": 5,\n    \"item_name\": \"远古龙晶\"\n})"
     }
   ],
   "props": [
@@ -100,6 +71,13 @@ window.COMPONENT_CATALOG['i18n'] = {
       "type": "String",
       "default": "\"en_US\"",
       "desc": "当指定词条缺失时的默认回退语言",
+      "version": "v1.3.0"
+    },
+    {
+      "name": "auto_reload",
+      "type": "boolean",
+      "default": "true",
+      "desc": "切换语言时是否自动遍历通知所有挂载的 UI 节点刷新词条",
       "version": "v1.3.0"
     }
   ],
@@ -122,6 +100,12 @@ window.COMPONENT_CATALOG['i18n'] = {
       "name": "set_locale(new_locale: String)",
       "desc": "动态切换全局语言并触发全 UI 节点自动重绘",
       "params": "(new_locale: String) -> void",
+      "version": "v1.3.0"
+    },
+    {
+      "name": "has_key(key: String, locale: String = \"\")",
+      "desc": "检查指定语言或当前语言中是否存在该词条",
+      "params": "(key: String, locale: String) -> bool",
       "version": "v1.3.0"
     }
   ]

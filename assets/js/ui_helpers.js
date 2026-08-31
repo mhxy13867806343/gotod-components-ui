@@ -2471,3 +2471,103 @@ window.forceHardReload = function() {
     window.location.reload(true);
   }
 };
+
+// =========================================================================
+// GVirtualList Global Demo Helpers
+// =========================================================================
+window.onVListScroll = function(container) {
+  if (!container) return;
+  const ITEM_HEIGHT = 46;
+  const TOTAL_ITEMS = 1000000;
+  const VISIBLE_COUNT = 10;
+  const BUFFER = 3;
+
+  const scrollTop = container.scrollTop;
+  const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER);
+  const endIndex = Math.min(TOTAL_ITEMS, startIndex + VISIBLE_COUNT + BUFFER * 2);
+
+  const content = document.getElementById('vListContent');
+  if (!content) return;
+
+  content.style.transform = 'translateY(' + (startIndex * ITEM_HEIGHT) + 'px)';
+
+  let html = '';
+  for (let i = startIndex; i < endIndex; i++) {
+    const rank = i + 1;
+    const score = (10000000 - i * 9.8).toFixed(0);
+    let medal = rank === 1 ? '🥇' : (rank === 2 ? '🥈' : (rank === 3 ? '🥉' : '⚔️'));
+    let bg = rank <= 3 ? 'background:rgba(24,160,88,0.08); border-color:var(--primary);' : 'background:var(--bg-surface);';
+    
+    html += '<div style="height:' + (ITEM_HEIGHT - 6) + 'px; ' + bg + ' border:1px solid var(--border-base); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">';
+    html += '  <div style="display:flex; align-items:center; gap:8px;">';
+    html += '    <span style="font-weight:700; width:60px;">' + medal + ' #' + rank + '</span>';
+    html += '    <span>传奇勇士_' + (i % 9999 + 1000) + '</span>';
+    html += '  </div>';
+    html += '  <div style="font-weight:700; color:#e6a23c; font-family:var(--font-mono);">' + score + ' 战力</div>';
+    html += '</div>';
+  }
+
+  content.innerHTML = html;
+  const posTip = document.getElementById('vListPosTip');
+  if (posTip) posTip.innerText = '当前视口：第 ' + (startIndex + 1) + ' ~ ' + endIndex + ' 条';
+  const domCount = document.getElementById('vListDomCount');
+  if (domCount) domCount.innerText = '⚡ 实际渲染节点: ' + (endIndex - startIndex) + ' 个';
+};
+
+window.scrollVListTo = function(idx) {
+  const container = document.getElementById('vListContainer');
+  if (container) {
+    const ITEM_HEIGHT = 46;
+    container.scrollTop = idx * ITEM_HEIGHT;
+    window.onVListScroll(container);
+    if (window.showToast) window.showToast('已极速定位至第 ' + (idx + 1) + ' 条数据', 'info');
+  }
+};
+
+// =========================================================================
+// GI18n Global Demo Helpers
+// =========================================================================
+window.I18N_DICT = {
+  zh: {
+    title: "🏰 遗忘神庙 · 讨伐任务",
+    desc: "勇士 Arthur，你已成功升至 Lv.88！目前剩余 350 点体力，准备好迎接最终 BOSS 战了吗？",
+    start: "⚔️ 开始远征",
+    shop: "🛒 道具补给"
+  },
+  en: {
+    title: "🏰 Forgotten Temple · Conquest Quest",
+    desc: "Warrior Arthur, you have leveled up to Lv.88! You have 350 stamina left. Ready for the final BOSS fight?",
+    start: "⚔️ Start Expedition",
+    shop: "🛒 Item Supply"
+  },
+  ja: {
+    title: "🏰 忘れられた神殿 · 討伐クエスト",
+    desc: "勇者アーサー、Lv.88に到達しました！スタミナ残量 350。最終BOSS戦の準備はできましたか？",
+    start: "⚔️ 遠征開始",
+    shop: "🛒 アイテム補給"
+  },
+  ko: {
+    title: "🏰 잊혀진 신전 · 토벌 퀘스트",
+    desc: "용사 Arthur, Lv.88 달성을 축하합니다! 현재 남은 스테미너 350. 최종 BOSS전에 도전하시겠습니까?",
+    start: "⚔️ 원정 시작",
+    shop: "🛒 아이템 보급"
+  }
+};
+
+window.switchDemoLang = function(locale) {
+  ['zh', 'en', 'ja', 'ko'].forEach(l => {
+    const btn = document.getElementById('i18nBtn_' + l);
+    if (btn) btn.className = l === locale ? 'g-btn g-btn-primary' : 'g-btn g-btn-default';
+  });
+  const t = window.I18N_DICT[locale] || window.I18N_DICT.zh;
+  const title = document.getElementById('i18nTitle');
+  const desc = document.getElementById('i18nDesc');
+  const btnStart = document.getElementById('i18nBtnStart');
+  const btnShop = document.getElementById('i18nBtnShop');
+  if (title) title.innerText = t.title;
+  if (desc) desc.innerText = t.desc;
+  if (btnStart) btnStart.innerText = t.start;
+  if (btnShop) btnShop.innerText = t.shop;
+  if (window.showToast) window.showToast('语言已动态热切换至: ' + locale.toUpperCase(), 'success');
+};
+

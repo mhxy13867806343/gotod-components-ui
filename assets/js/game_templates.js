@@ -948,7 +948,7 @@ window.GAME_CATALOG = {
   // ========================================================
   'game-memory-match': {
     title: '🎴 记忆大师实战案例 (Memory Match Game Full Showcase)',
-    desc: '基于 gotod-components-ui 构建的完整 Godot 4 游戏实战项目。深度集成 28+ UI 组件、指令式服务、Vue Hooks、GRouter 场景路由与 GAxios 真实网络请求。可在右侧通过 Tab 标签页自由切换查看【修复后标准代码】与【修复前问题代码】对比。',
+    desc: '基于 gotod-components-ui 构建的完整 Godot 4 游戏实战项目。深度集成 28+ UI 组件、指令式服务、Vue Hooks、GRouter 场景路由与 GAxios 真实网络请求。现提供 8 个从基础到高级/复杂的渐进式示例，可在右侧查看交互预览与 GDScript 实现。',
     demos: [
       {
         title: '1. 记忆大作战主菜单大厅 (Main Menu & Navigation)',
@@ -1344,6 +1344,122 @@ hud.notice.color = "orange"
 hud.slotName = "bag"
 hud.bag.text = "背包 (28/50)"
 hud.bag.count = 28`
+      },
+      {
+        title: '5. 🟢 基础：新手教学与记忆规则卡 (Tutorial & Rules)',
+        render: `
+          <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:stretch;">
+            <div style="flex:1; min-width:220px; padding:16px; background:linear-gradient(145deg,#102a43,#0b1b2b); border:1px solid #2f80ed; border-radius:10px; color:#fff;">
+              <div style="font-size:11px; color:#7dd3fc; font-weight:700; letter-spacing:1px;">MEMORY ACADEMY · 01</div>
+              <div style="font-size:20px; font-weight:800; margin:8px 0;">记住每一对卡片</div>
+              <div style="font-size:12px; color:#cbd5e1; line-height:1.7;">翻开两张卡片，找到相同图案。配对成功会锁定卡片，配对失败会自动翻回。</div>
+              <div style="display:flex; gap:8px; margin-top:14px;"><span style="padding:5px 8px; border-radius:5px; background:rgba(255,255,255,.12); font-size:11px;">🎯 目标：6 对</span><span style="padding:5px 8px; border-radius:5px; background:rgba(255,255,255,.12); font-size:11px;">⏱ 90 秒</span></div>
+            </div>
+            <div style="flex:1; min-width:220px; padding:16px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:10px;">
+              <div style="font-weight:700; margin-bottom:10px;">三步快速上手</div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;"><div>① 观察牌面，记住位置</div><div>② 点击两张相同卡片</div><div>③ 完成所有配对通关</div></div>
+              <button class="g-btn g-btn-primary" style="margin-top:14px; width:100%;" onclick="showToast('教学完成！已解锁简单关卡', 'success');">完成教学并开始</button>
+            </div>
+          </div>
+        `,
+        code: `# GDScript: 新手教学状态机
+class_name MemoryTutorial
+extends Control
+
+signal tutorial_finished
+var step := 0
+
+func _on_next_pressed() -> void:
+    step += 1
+    $StepLabel.text = "步骤 %d / 3" % step
+    $Progress.value = step / 3.0 * 100.0
+    if step >= 3:
+        tutorial_finished.emit()
+        GMessage.success("教学完成，开始第一关！")`
+      },
+      {
+        title: '6. 🟢 基础：可复用卡片网格与翻牌状态 (Reusable Card Grid)',
+        render: `
+          <div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div><b>森林主题 · 练习关卡</b><div style="font-size:11px; color:var(--text-secondary); margin-top:3px;">点击卡片体验 flip / match / reset 状态</div></div><span id="basicMemoryScore" class="g-tag g-tag-primary">0 / 2 对</span></div>
+            <div style="display:grid; grid-template-columns:repeat(4, minmax(48px,1fr)); gap:8px; max-width:400px;">
+              <button class="g-btn g-btn-default" style="height:58px; font-size:23px;" onclick="this.innerText='🌲'; this.disabled=true;">?</button><button class="g-btn g-btn-default" style="height:58px; font-size:23px;" onclick="this.innerText='🌲'; this.disabled=true; document.getElementById('basicMemoryScore').innerText='1 / 2 对'; showToast('找到一对：森林树木', 'success');">?</button><button class="g-btn g-btn-default" style="height:58px; font-size:23px;" onclick="this.innerText='🦉'; this.disabled=true;">?</button><button class="g-btn g-btn-default" style="height:58px; font-size:23px;" onclick="this.innerText='🦉'; this.disabled=true; document.getElementById('basicMemoryScore').innerText='2 / 2 对'; showToast('练习完成！', 'success');">?</button>
+            </div>
+            <button class="g-btn g-btn-default" style="margin-top:12px;" onclick="location.reload();">重新洗牌</button>
+          </div>
+        `,
+        code: `# GDScript: 可复用 MemoryCard 与网格
+class_name MemoryBoard
+extends GridContainer
+
+var cards: Array[MemoryCard] = []
+var opened: Array[MemoryCard] = []
+
+func setup(deck: Array) -> void:
+    columns = 4
+    for value in deck:
+        var card := MemoryCard.new()
+        card.value = value
+        card.flipped.connect(_on_card_flipped.bind(card))
+        add_child(card)
+        cards.append(card)
+
+func _on_card_flipped(card: MemoryCard) -> void:
+    opened.append(card)
+    if opened.size() == 2:
+        _resolve_pair.call_deferred()`
+      },
+      {
+        title: '7. 🟡 中级：连击、提示技能与结算统计 (Combo & Skill System)',
+        render: `
+          <div style="padding:15px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><b style="color:var(--warning);">⚡ 限时连击挑战</b><div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">连续配对提升倍率，错误会清空连击</div></div><div style="display:flex; gap:6px;"><span class="g-tag g-tag-success">Combo <strong id="comboDemo">4</strong>x</span><span class="g-tag g-tag-warning">得分 <strong id="comboScore">1,280</strong></span></div></div>
+            <div style="height:8px; background:var(--bg-card); border-radius:5px; overflow:hidden; margin:14px 0 10px;"><div id="comboProgress" style="height:100%; width:72%; background:linear-gradient(90deg,var(--warning),#f56c6c); transition:width .3s;"></div></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;"><button id="comboSkillDemo" class="g-btn g-btn-warning" onclick="this.disabled=true; this.innerText='⏳ 冷却 5s'; let s=5; let timer=setInterval(()=>{s--;this.innerText='⏳ 冷却 '+s+'s';if(s<=0){clearInterval(timer);this.disabled=false;this.innerText='👁 透视之眼';showToast('技能恢复，可以再次使用', 'success')}},1000); showToast('已揭示两张卡片 1.5 秒', 'info');">👁 透视之眼</button><button class="g-btn g-btn-primary" onclick="let c=document.getElementById('comboDemo'); let n=Math.min(9,parseInt(c.innerText)+1); c.innerText=n; document.getElementById('comboScore').innerText=(1280+n*120).toLocaleString(); document.getElementById('comboProgress').style.width=Math.min(100,72+n*3)+'%'; showToast('完美配对！连击提升至 '+n+'x', 'success');">模拟完美配对</button><button class="g-btn g-btn-default" onclick="document.getElementById('comboDemo').innerText='0'; showToast('配对失误，连击已重置', 'warning');">模拟失误</button></div>
+          </div>
+        `,
+        code: `# GDScript: 连击与技能冷却协作
+var combo := 0
+var score := 0
+var peek_cd: UseCooldown
+
+func _ready() -> void:
+    peek_cd = UseCooldown.create(5.0)
+    peek_cd.cooldown_finished.connect(func():
+        $PeekButton.disabled = false
+        $PeekButton.text = "透视之眼")
+
+func on_pair_resolved(is_match: bool) -> void:
+    combo = combo + 1 if is_match else 0
+    score += 100 * maxi(combo, 1)
+    $ComboLabel.text = "Combo %dx" % combo`
+      },
+      {
+        title: '8. 🟣 高级 / 复杂：每日挑战、排行榜与断线恢复 (Live Challenge Pipeline)',
+        render: `
+          <div style="padding:15px; background:linear-gradient(135deg,var(--bg-surface),rgba(124,58,237,.08)); border:1px solid #8b5cf6; border-radius:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;"><div><b style="color:#a855f7;">🌌 星轨每日挑战 #1284</b><div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">挑战种子固定 · 云端保存 · 全服排名</div></div><span id="syncStatusDemo" class="g-tag g-tag-success">● 已同步</span></div>
+            <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:12px; margin-top:14px;"><div style="padding:12px; background:var(--bg-card); border-radius:8px;"><div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary);"><span>当前进度</span><span>18 / 24 对</span></div><div class="g-progress-bar" style="margin:8px 0 12px;"><div class="g-progress-fill" style="width:75%; background:#8b5cf6;"></div></div><div style="display:flex; gap:7px; flex-wrap:wrap;"><button class="g-btn g-btn-primary" onclick="let s=document.getElementById('syncStatusDemo'); s.className='g-tag g-tag-warning'; s.innerText='◌ 同步中'; setTimeout(()=>{s.className='g-tag g-tag-success';s.innerText='● 已同步';showToast('战绩已上传，当前排名 #42', 'success')},900);">上传战绩</button><button class="g-btn g-btn-default" onclick="showToast('已从云端恢复至 18 / 24 对', 'info');">恢复进度</button></div></div><div style="padding:12px; background:var(--bg-card); border-radius:8px;"><div style="font-size:12px; font-weight:700; margin-bottom:8px;">实时排行榜</div><div style="display:flex; flex-direction:column; gap:6px; font-size:11px;"><div style="display:flex; justify-content:space-between;"><span>🥇 记忆旅人</span><b>24 对 · 31.2s</b></div><div style="display:flex; justify-content:space-between;"><span>🥈 星尘猎手</span><b>24 对 · 34.8s</b></div><div style="display:flex; justify-content:space-between; color:var(--primary);"><span>🎮 你</span><b>18 对 · 52.4s</b></div></div></div></div>
+          </div>
+        `,
+        code: `# GDScript: 每日挑战的状态机与网络恢复
+enum MatchState { IDLE, PLAYING, PAUSED, SYNCING, FINISHED }
+var state := MatchState.PLAYING
+var challenge_seed: int
+
+func load_daily_challenge() -> void:
+    var result = await GAxios.get("/memory/daily", {"date": Time.get_date_string_from_system()})
+    if result.ok:
+        challenge_seed = result.data["seed"]
+        _build_deck(challenge_seed)
+        _restore_local_progress(result.data.get("progress", {}))
+
+func sync_result() -> void:
+    state = MatchState.SYNCING
+    var result = await GAxios.post("/memory/results", {"seed": challenge_seed, "score": score})
+    state = MatchState.FINISHED if result.ok else MatchState.PAUSED
+    if not result.ok:
+        GNotification.warning("同步失败", "结果已保存在本地，稍后自动重试")`
       }
     ]
   },

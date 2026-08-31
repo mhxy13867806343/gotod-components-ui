@@ -29,12 +29,35 @@ window.COMPONENT_CATALOG['virtual-list'] = {
 
           <!-- Virtual Scroll Viewport Simulator -->
           <div id="vListContainer" style="height:260px; overflow-y:auto; position:relative; background:var(--bg-card); border-radius:6px; border:1px solid var(--border-base);" onscroll="window.onVListScroll(this)">
-            <!-- Phantom Scroll Height Spacer (48px per item * 1,000,000 = 48,000,000px, scaled) -->
-            <div id="vListPhantom" style="height:480000px; position:absolute; left:0; top:0; right:0; z-index:-1;"></div>
+            <!-- Phantom Scroll Height Spacer (46px per item * 1,000,000 = 46,000,000px) -->
+            <div id="vListPhantom" style="height:46000000px; position:absolute; left:0; top:0; right:0; z-index:-1;"></div>
             
             <!-- Visible Items Slice Layer -->
-            <div id="vListContent" style="position:absolute; left:0; right:0; top:0; padding:6px; display:flex; flex-direction:column; gap:6px;">
-              <!-- Dynamically populated on scroll -->
+            <div id="vListContent" style="position:absolute; left:0; right:0; top:0; padding:6px; display:flex; flex-direction:column; gap:6px; transform: translateY(0px);">
+              <div style="height:40px; background:rgba(24,160,88,0.08); border:1px solid var(--primary); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:700; width:60px;">🥇 #1</span><span>传奇勇士_9999</span></div>
+                <div style="font-weight:700; color:#e6a23c; font-family:var(--font-mono);">10000000 战力</div>
+              </div>
+              <div style="height:40px; background:rgba(24,160,88,0.08); border:1px solid var(--primary); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:700; width:60px;">🥈 #2</span><span>传奇勇士_8888</span></div>
+                <div style="font-weight:700; color:#e6a23c; font-family:var(--font-mono);">9999990 战力</div>
+              </div>
+              <div style="height:40px; background:rgba(24,160,88,0.08); border:1px solid var(--primary); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:700; width:60px;">🥉 #3</span><span>传奇勇士_7777</span></div>
+                <div style="font-weight:700; color:#e6a23c; font-family:var(--font-mono);">9999980 战力</div>
+              </div>
+              <div style="height:40px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:700; width:60px;">⚔️ #4</span><span>传奇勇士_6666</span></div>
+                <div style="font-weight:700; color:#e6a23c; font-family:var(--font-mono);">9999971 战力</div>
+              </div>
+              <div style="height:40px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:700; width:60px;">⚔️ #5</span><span>传奇勇士_5555</span></div>
+                <div style="font-weight:700; color:#e6a23c; font-family:var(--font-mono);">9999961 战力</div>
+              </div>
+              <div style="height:40px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:700; width:60px;">⚔️ #6</span><span>传奇勇士_4444</span></div>
+                <div style="font-weight:700; color:#e6a23c; font-family:var(--font-mono);">9999951 战力</div>
+              </div>
             </div>
           </div>
 
@@ -43,62 +66,6 @@ window.COMPONENT_CATALOG['virtual-list'] = {
             <span id="vListPosTip" style="color:var(--primary); font-weight:700;">当前视口：第 1 ~ 10 条</span>
           </div>
         </div>
-
-        <script>
-          (function(){
-            const ITEM_HEIGHT = 46;
-            const TOTAL_ITEMS = 1000000;
-            const VISIBLE_COUNT = 10;
-            const BUFFER = 3;
-
-            window.onVListScroll = function(container) {
-              const scrollTop = container.scrollTop;
-              const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER);
-              const endIndex = Math.min(TOTAL_ITEMS, startIndex + VISIBLE_COUNT + BUFFER * 2);
-
-              const content = document.getElementById('vListContent');
-              if(!content) return;
-
-              content.style.transform = 'translateY(' + (startIndex * ITEM_HEIGHT) + 'px)';
-
-              let html = '';
-              for(let i = startIndex; i < endIndex; i++) {
-                const rank = i + 1;
-                const score = (10000000 - i * 9.8).toFixed(0);
-                let medal = rank === 1 ? '🥇' : (rank === 2 ? '🥈' : (rank === 3 ? '🥉' : '⚔️'));
-                let bg = rank <= 3 ? 'background:rgba(24,160,88,0.08); border-color:var(--primary);' : 'background:var(--bg-surface);';
-                
-                html += '<div style=\"height:' + (ITEM_HEIGHT - 6) + 'px; ' + bg + ' border:1px solid var(--border-base); border-radius:6px; padding:0 12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;\">';
-                html += '  <div style=\"display:flex; align-items:center; gap:8px;\">';
-                html += '    <span style=\"font-weight:700; width:60px;\">' + medal + ' #' + rank + '</span>';
-                html += '    <span>传奇勇士_' + (i % 9999 + 1000) + '</span>';
-                html += '  </div>';
-                html += '  <div style=\"font-weight:700; color:#e6a23c; font-family:var(--font-mono);\">' + score + ' 战力</div>';
-                html += '</div>';
-              }
-
-              content.innerHTML = html;
-              const posTip = document.getElementById('vListPosTip');
-              if(posTip) posTip.innerText = '当前视口：第 ' + (startIndex + 1) + ' ~ ' + endIndex + ' 条';
-              const domCount = document.getElementById('vListDomCount');
-              if(domCount) domCount.innerText = '⚡ 实际渲染节点: ' + (endIndex - startIndex) + ' 个';
-            };
-
-            window.scrollVListTo = function(idx) {
-              const container = document.getElementById('vListContainer');
-              if(container) {
-                container.scrollTop = idx * ITEM_HEIGHT;
-                window.onVListScroll(container);
-                showToast('已极速定位至第 ' + (idx + 1) + ' 条数据', 'info');
-              }
-            };
-
-            setTimeout(() => {
-              const c = document.getElementById('vListContainer');
-              if(c) window.onVListScroll(c);
-            }, 50);
-          })();
-        </script>
       `,
       "code": "# GDScript: 百万级虚拟长列表\nvar vlist = GVirtualList.new()\nvlist.item_height = 46\nvlist.total_count = 1000000\nvlist.item_render.connect(func(index: int, node: Control):\n    var data = leaderboard[index]\n    node.get_node(\"Name\").text = data.name\n    node.get_node(\"Score\").text = str(data.score)\n)\nadd_child(vlist)"
     },
@@ -136,7 +103,7 @@ window.COMPONENT_CATALOG['virtual-list'] = {
     {
       "name": "item_height",
       "type": "float",
-      "default": "48.0",
+      "default": "46.0",
       "desc": "固定条目高度（开启 dynamic_height 时作为预估参考高度）",
       "version": "v1.3.0"
     },
