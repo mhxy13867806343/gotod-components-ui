@@ -30,33 +30,76 @@
         <div class="search-kbd"><kbd>/</kbd></div>
       </div>
       <div class="header-actions">
-        <select class="select-theme" style="font-weight:700; font-size:12px; height:32px; padding:0 10px; cursor:pointer; background:linear-gradient(135deg, rgba(34,197,94,0.15), rgba(59,130,246,0.15)); border:1px solid var(--primary); color:var(--primary);" onchange="if(this.value){window.location.href=this.value;}">
-          <option value="" disabled selected>⚡ jQuery Edition (当前)</option>
-          <option value="../v-vue/">✨ 切换至 Vue 3.5.9 Edition</option>
-          <option value="../../">🏠 返回经典版 (V1 Classic)</option>
-        </select>
         <div class="header-badge" style="background:#075985; color:#e0f2fe; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;"><i class="fa-brands fa-js"></i> jQuery v3.7.1</div>
         <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="header-btn" title="GitHub 仓库"><i class="fa-brands fa-github"></i></a>
       </div>
     </header>
 
-    <!-- Right Floating Action Quick Dock -->
-    <div class="v2-floating-dock" style="position:fixed; right:16px; top:45%; transform:translateY(-50%); z-index:999; display:flex; flex-direction:column; gap:8px; background:var(--bg-card); border:1px solid var(--border-base); padding:10px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.35); backdrop-filter:blur(10px);">
-      <div style="font-size:11px; font-weight:800; color:var(--text-secondary); text-align:center; padding-bottom:6px; border-bottom:1px solid var(--border-base); display:flex; align-items:center; justify-content:center; gap:4px;">
-        <i class="fa-solid fa-compass" style="color:var(--primary);"></i> 快捷导航
+    <!-- JD.com Style Right-Side Fixed Toolbar Dock (京东右侧悬浮固定侧边栏) -->
+    <aside class="jd-sidebar-dock" aria-label="快捷侧边栏">
+      <!-- 1. 板块导航 (With Flyout Submenu) -->
+      <div class="jd-dock-item has-flyout" title="切换功能板块">
+        <i class="fa-solid fa-layer-group" style="color:var(--primary);"></i>
+        <span>板块</span>
+        <div class="jd-sections-flyout">
+          <div class="jd-flyout-header"><i class="fa-solid fa-compass"></i> 选择文档板块</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('guide')">1. 指南与快速上手 (Guide)</div>
+          <div class="jd-flyout-item active" onclick="switchTopSection('components')">2. 组件库全量文档 (Components)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('game')">3. 游戏实战案例 (Game UI)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('playground')">4. 属性与方法演练 (Playground)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('imperative')">5. 编程式/命令式调用 (Imperative)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('hooks')">6. Hooks 响应式钩子 (Hooks)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('signals')">7. 自定义信号总线 (Signals)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('decorator')">8. 装饰器工坊 (Decorator)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('storage')">9. 游戏存档存储 (Storage)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('router')">10. 格式化与转场路由 (Router)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('lifecycle')">11. 生命周期全图谱 (Lifecycle)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('studio')">12. .tres 资源工坊 (Studio)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('godot-globals')">13. 全局基类速查 (Globals)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('networking')">14. 网络与物理 (Networking)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('slots')">15. Slots 插槽专题 (Slots)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('icons-gallery')">16. 矢量图标中心 (26,000+ Icons)</div>
+          <div class="jd-flyout-item" onclick="switchTopSection('changelog')">17. 更新日志与时间线 (Changelog)</div>
+        </div>
       </div>
-      <button class="g-btn g-btn-primary" style="font-size:11px; padding:6px 10px; gap:6px; border-radius:6px; cursor:pointer; font-weight:700; box-shadow:0 2px 8px rgba(34,197,94,0.3); justify-content:center;" onclick="switchTopSection('changelog')" title="查看基于 Steps 步骤条构建的版本更新日志">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        <span>更新日志</span>
-        <span style="background:rgba(255,255,255,0.25); color:#fff; font-size:10px; padding:1px 5px; border-radius:8px; font-weight:800;">v1.6</span>
+
+      <!-- 2. 更新日志 (Changelog) -->
+      <button class="jd-dock-item" onclick="switchTopSection('changelog')" title="查看基于 Steps 步骤条构建的版本更新日志">
+        <span class="jd-dock-badge">v1.6</span>
+        <i class="fa-solid fa-clock-rotate-left" style="color:#eab308;"></i>
+        <span>日志</span>
       </button>
-      <a href="../v-vue/" class="g-btn g-btn-default" style="font-size:11px; padding:6px 10px; text-decoration:none; display:flex; align-items:center; gap:6px; border-radius:6px; font-weight:700;" title="进入 Vue 3.5.9 架构版本">
-        <i class="fa-brands fa-vuejs" style="color:#42b883;"></i> Vue 3.5.9
+
+      <!-- 3. Vue 3.5.9 Edition -->
+      <a href="../v-vue/" class="jd-dock-item" title="切换到 Vue 3.5.9 响应式架构版本">
+        <i class="fa-brands fa-vuejs" style="color:#42b883;"></i>
+        <span>Vue版</span>
       </a>
-      <a href="../../" class="g-btn g-btn-default" style="font-size:11px; padding:6px 10px; text-decoration:none; display:flex; align-items:center; gap:6px; border-radius:6px; font-weight:700;" title="返回经典版">
-        <i class="fa-solid fa-house"></i> V1 Classic
+
+      <!-- 4. 经典版 (V1 Classic) -->
+      <a href="../../" class="jd-dock-item" title="返回经典版">
+        <i class="fa-solid fa-house" style="color:#94a3b8;"></i>
+        <span>V1版</span>
       </a>
-    </div>
+
+      <!-- 5. 强制刷新 / 清除缓存 -->
+      <button class="jd-dock-item" onclick="window.forceHardReload()" title="清除浏览器本地静态缓存并强制刷新最新代码">
+        <i class="fa-solid fa-rotate" style="color:#38bdf8;"></i>
+        <span>刷新</span>
+      </button>
+
+      <!-- 6. 源码仓库 (GitHub) -->
+      <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="jd-dock-item" title="访问 GitHub 开源仓库">
+        <i class="fa-brands fa-github"></i>
+        <span>GitHub</span>
+      </a>
+
+      <!-- 7. 回到顶部 -->
+      <button class="jd-dock-item" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); const el=document.getElementById('mainContent'); if(el) el.scrollTo({top: 0, behavior: 'smooth'});" title="回到顶部">
+        <i class="fa-solid fa-arrow-up"></i>
+        <span>顶部</span>
+      </button>
+    </aside>
 
     <div class="main-layout">
       <!-- Sidebar -->

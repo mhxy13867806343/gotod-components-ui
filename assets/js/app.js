@@ -20,6 +20,12 @@ window.switchTopSection = function(section, targetDocKey) {
     topSelect.value = section;
   }
 
+  // Sync Flyout item active states
+  document.querySelectorAll('.jd-flyout-item').forEach(item => {
+    const isThis = item.getAttribute('onclick') && item.getAttribute('onclick').includes(`'${section}'`);
+    item.classList.toggle('active', !!isThis);
+  });
+
   // Render Sidebar and dispatch doc view
   if (typeof window.renderSidebarNav === 'function') {
     window.renderSidebarNav(section, targetDocKey);
