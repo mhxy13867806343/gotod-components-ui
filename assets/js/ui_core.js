@@ -539,9 +539,21 @@ window.getComponentGitHubUrl = function(key) {
   const baseRepo = 'https://github.com/mhxy13867806343/gotod-components-ui/blob/main';
   if (!key) return 'https://github.com/mhxy13867806343/gotod-components-ui';
 
-  // 1. Guide sections -> components_catalog.js
+  // 1. Guide sections -> game_templates.js with precise line numbers
   if (key.startsWith('guide-') || key === 'guide') {
-    return `${baseRepo}/assets/js/components_catalog.js`;
+    const guideLineMap = {
+      'guide-install': 'L8',
+      'guide-third-party': 'L119',
+      'guide-css-style-engine': 'L369',
+      'guide-common-methods': 'L569',
+      'guide-dynamic-api': 'L632',
+      'guide-theme': 'L713',
+      'guide-autoload': 'L743',
+      'guide-treeshaking': 'L764',
+      'guide-imperative-api': 'L839'
+    };
+    const anchor = guideLineMap[key] ? `#${guideLineMap[key]}` : '';
+    return `${baseRepo}/assets/js/game_templates.js${anchor}`;
   }
 
   // 2. Changelog -> changelog_page.js
