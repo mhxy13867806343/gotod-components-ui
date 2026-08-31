@@ -1,12 +1,38 @@
 // =========================================================================
 // Gotod Components UI - Changelog & Release Updates (Using Steps Component)
+// 排序逻辑：未来规划在最前 -> 最新现行版本 -> 历史版本往后排列
 // =========================================================================
 
 window.CHANGELOG_DATA = [
   {
+    version: "v1.3.0 (规划中)",
+    date: "2026-09-15 预计",
+    status: "wait", // wait, process, finish
+    icon: "fa-compass",
+    title: "v1.3.0 未来版本规划 (Roadmap)",
+    summary: "计划引入虚拟滚动长列表 (Virtual List)、移动端手势折叠手风琴增强及游戏多语言 i18n 实时热切换引擎。",
+    highlights: [
+      {
+        tag: "Virtual List 虚拟列表",
+        type: "info",
+        desc: "支持百万级数据超高性能虚拟长列表平滑渲染，GPU 节点自动回收，内存零激增。"
+      },
+      {
+        tag: "i18n 国际化引擎",
+        type: "info",
+        desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持全场景多语言动态热切换。"
+      },
+      {
+        tag: "Collapse 手风琴手势",
+        type: "info",
+        desc: "增强移动端触控滑动展开与自定义折叠过渡曲线。"
+      }
+    ]
+  },
+  {
     version: "v1.2.0",
     date: "2026-08-31",
-    status: "process", // finish, process, wait
+    status: "process",
     icon: "fa-rocket",
     title: "v1.2.0 重磅功能发布 (今日全量升级)",
     summary: "Tabs 滚动吸顶与全交互重构、FAB 二维自由拖拽与磁吸、数字输入范围极值拦截、密码显隐切换与 42 组件单文件解耦架构。",
@@ -82,34 +108,22 @@ window.CHANGELOG_DATA = [
         desc: "GDialog, GDialogue, GChat, GPopup, GOverlay, GActionSheet, GPopover, GNoticeBar, GMessage, GToast, GAlert, GDrawer, GTooltip, GLoading, GSkeleton, GTour。"
       }
     ]
-  },
-  {
-    version: "v1.3.0 (规划中)",
-    date: "2026-09-15 预计",
-    status: "wait",
-    icon: "fa-compass",
-    title: "v1.3.0 未来版本规划 (Roadmap)",
-    summary: "计划引入虚拟滚动长列表 (Virtual List)、移动端手势折叠手风琴增强及游戏多语言 i18n 实时热切换引擎。",
-    highlights: [
-      {
-        tag: "Virtual List",
-        type: "info",
-        desc: "支持百万级数据超高性能虚拟长列表平滑渲染，内存零激增。"
-      },
-      {
-        tag: "i18n 引擎",
-        type: "info",
-        desc: "无缝对接 Godot 4 国际化 Translation 词条，支持多语言动态热切换。"
-      }
-    ]
   }
 ];
 
-window.currentStepIndex = 0; // 0 represents latest (v1.2.0)
+window.currentStepIndex = 1; // Default highlight v1.2.0 (index 1)
 
 window.renderChangelogPage = function(subKey = 'changelog-latest') {
   const container = document.getElementById('mainContent');
   if (!container) return;
+
+  if (subKey === 'changelog-roadmap') {
+    window.currentStepIndex = 0;
+  } else if (subKey === 'changelog-latest') {
+    window.currentStepIndex = 1;
+  } else if (subKey === 'changelog-history') {
+    window.currentStepIndex = 2;
+  }
 
   const stepsCount = window.CHANGELOG_DATA.length;
 
@@ -122,48 +136,53 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             版本更新日志与发布历程 (Changelog)
           </h1>
           <p style="font-size:13px; color:var(--text-secondary); margin:0;">
-            基于 <b>GSteps (步骤条组件)</b> 构建的可视化版本流转时间线，记录 gotod-components-ui 的每一次迭代演进。
+            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本居中 ➔ 历史版本在后。
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
           <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="window.prevChangelogStep()">
-            <i class="fa-solid fa-arrow-up"></i> 上一版本
+            <i class="fa-solid fa-arrow-left"></i> 前一版本
           </button>
           <button class="g-btn g-btn-primary" style="font-size:12px; padding:4px 12px;" onclick="window.nextChangelogStep()">
-            下一版本 <i class="fa-solid fa-arrow-down"></i>
+            后一版本 <i class="fa-solid fa-arrow-right"></i>
           </button>
-          <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="window.setChangelogStep(0)">
-            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 跳转最新 (v1.2.0)
+          <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="window.setChangelogStep(1)">
+            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.2.0)
           </button>
         </div>
       </div>
     </div>
   `;
 
-  // Horizontal Quick Steps Bar Simulator
+  // Horizontal Steps Bar (Roadmap -> Latest -> History)
   let horizontalStepsHtml = `
-    <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:10px; padding:16px 20px; margin-bottom:24px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+    <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:10px; padding:18px 24px; margin-bottom:24px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
       <div style="display:flex; justify-content:space-between; align-items:center; position:relative;">
-        <div style="position:absolute; top:18px; left:30px; right:30px; height:3px; background:var(--border-base); z-index:1;"></div>
-        <div id="stepProgressLine" style="position:absolute; top:18px; left:30px; width:${(window.currentStepIndex / (stepsCount - 1)) * 100}%; height:3px; background:var(--primary); z-index:2; transition:width 0.35s ease;"></div>
+        <div style="position:absolute; top:20px; left:40px; right:40px; height:3px; background:var(--border-base); z-index:1;"></div>
+        <div id="stepProgressLine" style="position:absolute; top:20px; left:40px; width:${(window.currentStepIndex / (stepsCount - 1)) * 100}%; height:3px; background:var(--primary); z-index:2; transition:width 0.35s ease;"></div>
         ${window.CHANGELOG_DATA.map((item, idx) => {
           const isActive = idx === window.currentStepIndex;
-          const isDone = idx < window.currentStepIndex;
           let nodeBg = 'var(--bg-card)';
           let nodeBorder = 'var(--border-base)';
           let nodeColor = 'var(--text-secondary)';
-          if (isActive) {
-            nodeBg = 'var(--primary)';
+
+          if (item.status === 'process') {
+            nodeBg = isActive ? 'var(--primary)' : 'rgba(24,160,88,0.2)';
             nodeBorder = 'var(--primary)';
-            nodeColor = '#ffffff';
-          } else if (isDone) {
-            nodeBg = 'var(--success)';
-            nodeBorder = 'var(--success)';
-            nodeColor = '#ffffff';
+            nodeColor = isActive ? '#ffffff' : 'var(--primary)';
+          } else if (item.status === 'wait') {
+            nodeBg = isActive ? '#e6a23c' : 'rgba(230,162,60,0.15)';
+            nodeBorder = '#e6a23c';
+            nodeColor = isActive ? '#ffffff' : '#e6a23c';
+          } else {
+            nodeBg = isActive ? 'var(--primary)' : 'var(--bg-card)';
+            nodeBorder = isActive ? 'var(--primary)' : 'var(--border-base)';
+            nodeColor = isActive ? '#ffffff' : 'var(--text-secondary)';
           }
+
           return `
             <div style="display:flex; flex-direction:column; align-items:center; position:relative; z-index:3; cursor:pointer;" onclick="window.setChangelogStep(${idx})">
-              <div style="width:36px; height:36px; border-radius:50%; background:${nodeBg}; border:2px solid ${nodeBorder}; color:${nodeColor}; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; transition:all 0.3s; box-shadow:${isActive ? '0 0 0 4px rgba(24,160,88,0.2)' : 'none'};">
+              <div style="width:40px; height:40px; border-radius:50%; background:${nodeBg}; border:2px solid ${nodeBorder}; color:${nodeColor}; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:all 0.3s; box-shadow:${isActive ? '0 0 0 5px rgba(24,160,88,0.25)' : 'none'};">
                 <i class="fa-solid ${item.icon}"></i>
               </div>
               <div style="font-weight:${isActive ? '700' : '500'}; font-size:12px; margin-top:8px; color:${isActive ? 'var(--primary)' : 'var(--text-primary)'};">${item.version}</div>
@@ -175,20 +194,20 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
     </div>
   `;
 
-  // Vertical Detailed Steps Timeline
+  // Vertical Detailed Steps Timeline (From Top: Future -> Latest -> History)
   let verticalStepsHtml = `
     <div style="display:flex; flex-direction:column; gap:20px;">
       ${window.CHANGELOG_DATA.map((item, idx) => {
         const isCur = idx === window.currentStepIndex;
-        let badgeColor = item.status === 'process' ? 'var(--primary)' : (item.status === 'finish' ? 'var(--success)' : 'var(--warning)');
-        let badgeText = item.status === 'process' ? 'Latest 现行最新版' : (item.status === 'finish' ? 'Released 已发布' : 'Roadmap 规划中');
+        let badgeColor = item.status === 'process' ? 'var(--primary)' : (item.status === 'wait' ? '#e6a23c' : 'var(--text-secondary)');
+        let badgeText = item.status === 'process' ? 'Latest 现行最新版' : (item.status === 'wait' ? 'Roadmap 规划中' : 'Released 已发布');
         
         return `
-          <div id="stepCard_${idx}" class="demo-card" style="border-left:4px solid ${isCur ? 'var(--primary)' : 'var(--border-base)'}; background:var(--bg-surface); padding:20px; border-radius:8px; transition:all 0.3s; box-shadow:${isCur ? '0 4px 16px rgba(0,0,0,0.1)' : 'none'};">
+          <div id="stepCard_${idx}" class="demo-card" style="border-left:5px solid ${badgeColor}; background:var(--bg-surface); padding:20px; border-radius:8px; transition:all 0.3s; box-shadow:${isCur ? '0 4px 18px rgba(0,0,0,0.12)' : 'none'}; ${isCur ? 'outline: 2px solid ' + badgeColor + ';' : ''}">
             <!-- Step Card Header -->
             <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
               <div style="display:flex; align-items:center; gap:10px;">
-                <span class="g-tag g-tag-primary" style="font-size:13px; padding:3px 10px; font-weight:800; border-radius:6px; background:${badgeColor}; color:#fff;">
+                <span class="g-tag" style="font-size:13px; padding:3px 10px; font-weight:800; border-radius:6px; background:${badgeColor}; color:#fff;">
                   ${item.version}
                 </span>
                 <h3 style="margin:0; font-size:1.15rem; font-weight:700;">${item.title}</h3>
@@ -242,7 +261,7 @@ window.prevChangelogStep = function() {
   if (window.currentStepIndex > 0) {
     window.setChangelogStep(window.currentStepIndex - 1);
   } else {
-    if (window.showToast) window.showToast('已是最新版本！', 'info');
+    if (window.showToast) window.showToast('已是最前方的未来规划版本！', 'info');
   }
 };
 
@@ -250,25 +269,12 @@ window.nextChangelogStep = function() {
   if (window.currentStepIndex < window.CHANGELOG_DATA.length - 1) {
     window.setChangelogStep(window.currentStepIndex + 1);
   } else {
-    if (window.showToast) window.showToast('已到达路线图最后一步！', 'info');
+    if (window.showToast) window.showToast('已到达最早的历史版本！', 'info');
   }
 };
 
-// Also define standard catalog entry for fallback
 window.CHANGELOG_CATALOG = {
-  'changelog-latest': {
-    title: "v1.2.0 最新发布 (Steps 步骤条展示)",
-    desc: "使用 GSteps 步骤条组件展示的更新日志。",
-    demos: []
-  },
-  'changelog-history': {
-    title: "历史版本历程 (v1.0 ~ v1.2)",
-    desc: "使用 GSteps 步骤条组件展示的历史版本时间线。",
-    demos: []
-  },
-  'changelog-roadmap': {
-    title: "未来版本路线图 (Roadmap)",
-    desc: "规划中特性。",
-    demos: []
-  }
+  'changelog-roadmap': { title: "v1.3.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
+  'changelog-latest': { title: "v1.2.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
+  'changelog-history': { title: "历史版本历程 (v1.1 / v1.0)", desc: "历史版本时间线。", demos: [] }
 };
