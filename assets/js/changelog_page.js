@@ -253,3 +253,22 @@ window.nextChangelogStep = function() {
     if (window.showToast) window.showToast('已到达路线图最后一步！', 'info');
   }
 };
+
+// Also define standard catalog entry for fallback
+window.CHANGELOG_CATALOG = {
+  'changelog-latest': {
+    title: "v1.2.0 最新发布 (Steps 步骤条展示)",
+    desc: "使用 GSteps 步骤条组件展示的更新日志。",
+    demos: []
+  },
+  'changelog-history': {
+    title: "历史版本历程 (v1.0 ~ v1.2)",
+    desc: "使用 GSteps 步骤条组件展示的历史版本时间线。",
+    demos: []
+  },
+  'changelog-roadmap': {
+    title: "未来版本路线图 (Roadmap)",
+    desc: "规划中特性。",
+    demos: []
+  }
+};

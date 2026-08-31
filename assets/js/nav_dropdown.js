@@ -16,7 +16,11 @@ window.TOP_SECTIONS = [
   { key: 'router', label: '10. 格式化、资源导入与转场路由 (Utils & Router)', icon: 'fa-route', desc: '富文本、音效、场景平滑转场路由与守卫' },
   { key: 'lifecycle', label: '11. Godot 4 全量生命周期与节点钩子 (Lifecycle Atlas)', icon: 'fa-rotate', desc: '7 大阶段生命周期状态机与可视化追踪' },
   { key: 'studio', label: '12. .tres 资源工坊与主题导出 (Resource Studio)', icon: 'fa-palette', desc: '实时可视化主题定制与 .tres 文件生成' },
-  { key: 'godot-globals', label: '13. 全局与基类方法速查 (Godot Globals & Base APIs)', icon: 'fa-globe', desc: 'Node 核心树方法、@GlobalScope 全局函数速查' }
+  { key: 'godot-globals', label: '13. 全局与基类方法速查 (Godot Globals & Base APIs)', icon: 'fa-globe', desc: 'Node 核心树方法、@GlobalScope 全局函数速查' },
+  { key: 'networking', label: '14. 网络通信与程序化物理 (Networking & Physics)', icon: 'fa-network-wired', desc: 'WebSocket/RPC 多人联机与 2D/3D 物理引擎' },
+  { key: 'slots', label: '15. Slots 插槽系统专题 (Vue-Style Slot System)', icon: 'fa-cubes', desc: '默认插槽、具名插槽与作用域插槽' },
+  { key: 'icons-gallery', label: '16. 矢量图标超级中心 (26,000+ Icons)', icon: 'fa-icons', desc: '全图库检索与复制代码' },
+  { key: 'changelog', label: '17. 版本更新日志与步骤时间线 (Changelog - GSteps)', icon: 'fa-clock-rotate-left', desc: '基于 GSteps 步骤条展示的发布历程与路线图' }
 ];
 
 // Initialize Top Nav GSelect Dropdown
