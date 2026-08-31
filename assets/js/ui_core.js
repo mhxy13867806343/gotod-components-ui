@@ -23,34 +23,44 @@ window.StorageUtil = {
 // 2. Global Theme & Preset DOM Sync Handlers
 // ==========================================
 window.syncThemeDOM = function(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
+  const t = theme || window.StorageUtil.getTheme() || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
   const icon = document.getElementById('themeIcon');
   const text = document.getElementById('themeText');
-  if (icon) icon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-  if (text) text.innerText = theme === 'dark' ? 'Dark' : 'Light';
+  const btn = document.getElementById('themeModeBtn');
+  if (icon) icon.className = t === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  if (btn) {
+    const i = btn.querySelector('i');
+    if (i) i.className = t === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  }
+  if (text) text.innerText = t === 'dark' ? 'Dark' : 'Light';
 };
 
 window.syncPresetDOM = function(preset) {
-  document.documentElement.setAttribute('data-preset', preset);
-  const selectElem = document.getElementById('presetSelect');
-  if (selectElem && selectElem.value !== preset) selectElem.value = preset;
+  const p = preset || window.StorageUtil.getPreset() || 'naive';
+  document.documentElement.setAttribute('data-preset', p);
+  const selectElem = document.getElementById('presetSelect') || document.getElementById('themeSelect');
+  if (selectElem && selectElem.value !== p) selectElem.value = p;
 };
 
 window.changePreset = function(preset) {
   window.StorageUtil.setPreset(preset);
   window.syncPresetDOM(preset);
-  showToast('Theme preset switched to: ' + preset.toUpperCase() + ' tokens', 'info');
+  if (window.showToast) window.showToast('主题风格已切换至: ' + preset.toUpperCase(), 'info');
   if (window.currentDocKey && typeof window.showDoc === 'function') {
     window.showDoc(window.currentDocKey);
   }
 };
+window.setTheme = window.changePreset;
 
 window.toggleTheme = function() {
-  const cur = window.StorageUtil.getTheme();
+  const cur = document.documentElement.getAttribute('data-theme') || window.StorageUtil.getTheme() || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
   window.StorageUtil.setTheme(next);
   window.syncThemeDOM(next);
+  if (window.showToast) window.showToast('已切换为 ' + (next === 'dark' ? '暗黑模式 🌙' : '明亮模式 ☀️'), 'info');
 };
+window.toggleDark = window.toggleTheme;
 
 // ==========================================
 // 3. Generic API Table Component Generator
