@@ -557,7 +557,7 @@ window.runLiveTreeShaker = function() {
   }
 };
 
-window.setTreeShakerPreset = function(preset) {
+window.setTreeShakerPreset = function(preset, btn) {
   const grid = document.getElementById('shakerCheckGrid');
   if (!grid) return;
   const checkboxes = Array.from(grid.querySelectorAll('input[type="checkbox"]'));
@@ -570,15 +570,11 @@ window.setTreeShakerPreset = function(preset) {
   ]);
 
   let msg = '预设已应用';
-  const allChecked = checkboxes.length > 0 && checkboxes.every(cb => cb.checked);
 
   if (preset === 'all') {
-    // If all are already checked, toggle to uncheck all (取消全选)
-    const newChecked = !allChecked;
-    checkboxes.forEach(cb => { cb.checked = newChecked; });
-    msg = newChecked ? '已全选 52 个组件' : '已取消全选 (清空)';
+    checkboxes.forEach(cb => { cb.checked = true; });
+    msg = '已全选 52 个组件';
   } else if (preset === 'invert') {
-    // Invert selection (反选)
     checkboxes.forEach(cb => { cb.checked = !cb.checked; });
     msg = '已执行组件反选';
   } else if (preset === 'none') {
@@ -596,6 +592,14 @@ window.setTreeShakerPreset = function(preset) {
       cb.checked = rpgSet.has(name);
     });
     msg = '已应用【中重度 RPG】预设 (18个)';
+  }
+
+  // Update button active style
+  if (btn && btn.parentElement) {
+    btn.parentElement.querySelectorAll('button').forEach(b => {
+      b.className = 'g-btn g-btn-default';
+    });
+    btn.className = 'g-btn g-btn-primary';
   }
 
   window.runLiveTreeShaker();

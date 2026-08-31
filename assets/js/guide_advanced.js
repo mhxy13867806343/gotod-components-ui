@@ -215,19 +215,19 @@ GMessage.error("网络连接断开")`
               <!-- Quick Preset Actions Toolbar -->
               <div style="display:flex; align-items:center; gap:8px; margin-top:12px; flex-wrap:wrap;">
                 <span style="font-size:12px; color:var(--text-secondary); font-weight:600;">快速预设:</span>
-                <button type="button" class="g-btn g-btn-primary" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px; font-weight:700;" onclick="setTreeShakerPreset('core')">
+                <button type="button" class="g-btn g-btn-primary" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px; font-weight:700;" onclick="window.setTreeShakerPreset('core', this)">
                   <i class="fa-solid fa-bolt"></i> 核心精简 (6个)
                 </button>
-                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px; font-weight:600;" onclick="setTreeShakerPreset('rpg')">
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px; font-weight:600;" onclick="window.setTreeShakerPreset('rpg', this)">
                   <i class="fa-solid fa-gamepad"></i> RPG 实战 (18个)
                 </button>
-                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('all')">
-                  <i class="fa-solid fa-check-double"></i> 全选 / 取消
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="window.setTreeShakerPreset('all', this)">
+                  <i class="fa-solid fa-check-double"></i> 全选 (52个)
                 </button>
-                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('invert')">
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="window.setTreeShakerPreset('invert', this)">
                   <i class="fa-solid fa-arrows-rotate"></i> 反选
                 </button>
-                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('none')">
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="window.setTreeShakerPreset('none', this)">
                   <i class="fa-solid fa-xmark"></i> 清空
                 </button>
               </div>
