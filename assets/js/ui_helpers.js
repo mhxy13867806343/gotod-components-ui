@@ -63,9 +63,14 @@ window.renderApiTable = function(title, headers, rows, subtitle = '') {
     <tr>
       ${headers.map(h => {
         let val = r[h.key] !== undefined ? r[h.key] : '';
+        if (h.key === 'name') {
+          const vStr = r.version || r.since;
+          const vTag = vStr ? `<span class="g-tag ${vStr.includes('1.2') || vStr.includes('1.0.5') ? 'g-tag-success' : 'g-tag-primary'}" style="font-size:10px; padding:1px 6px; margin-left:6px; border-radius:10px; font-weight:700;">${vStr}</span>` : '';
+          return `<td class="${h.className || 'api-prop'}"><code>${val}</code>${vTag}</td>`;
+        }
         if (h.key === 'version') {
           const vStr = val || r.version || r.since || 'v1.0.0';
-          const isNew = String(vStr).includes('1.0.5');
+          const isNew = String(vStr).includes('1.2') || String(vStr).includes('1.0.5');
           return `<td class="api-type" style="text-align:center;"><span class="g-tag ${isNew ? 'g-tag-success' : 'g-tag-primary'}" style="font-size:10px; padding:2px 7px; border-radius:10px; font-weight:700;">${vStr}</span></td>`;
         }
         if (h.isCode) {

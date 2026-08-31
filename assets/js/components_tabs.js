@@ -13,7 +13,7 @@ window.COMPONENT_CATALOG['tabs'] = {
     },
     {
       "title": "2. 滚动吸顶模式 (Sticky Header Tabs: 向下滚动时标签栏自动贴顶悬浮)",
-      "render": "\n        <div style=\"max-width:480px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; overflow:hidden;\">\n          <!-- Sticky Control Switch -->\n          <div style=\"padding:10px 14px; background:var(--bg-card); border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;\">\n            <span style=\"font-size:12px; color:var(--text-secondary);\"><i class=\"fa-solid fa-thumbtack\" style=\"color:var(--primary);\"></i> 试着在下方列表内向下滑动页面：</span>\n            <label style=\"display:inline-flex; align-items:center; gap:6px; font-size:11px; cursor:pointer; font-weight:600;\">\n              <input type=\"checkbox\" id=\"tabStickyToggle\" checked onchange=\"\n                const header = document.getElementById('stickyTabHeader');\n                header.style.position = this.checked ? 'sticky' : 'static';\n                showToast(this.checked ? '已开启 Tabs 吸顶模式' : '已关闭 Tabs 吸顶模式', 'info');\n              \"> 启用 sticky 吸顶模式\n            </label>\n          </div>\n\n          <!-- Scrollable Viewport Simulator -->\n          <div id=\"stickyScrollContainer\" style=\"height:220px; overflow-y:auto; position:relative; scroll-behavior:smooth;\">\n            <!-- Top Hero Banner (Scrolls away) -->\n            <div style=\"height:90px; background:linear-gradient(135deg, #1e3a8a, #0f172a); padding:16px; color:#fff; display:flex; flex-direction:column; justify-content:center;\">\n              <div style=\"font-weight:700; font-size:15px;\">🏰 遗忘神庙 · 讨伐物资清单</div>\n              <div style=\"font-size:11px; opacity:0.75; margin-top:4px;\">向下滚动列表时，下方分类栏将自动吸附贴顶固定！</div>\n            </div>\n\n            <!-- Sticky Tab Header Bar -->\n            <div id=\"stickyTabHeader\" style=\"position:sticky; top:0; z-index:10; background:var(--bg-surface); border-bottom:1px solid var(--border-base); box-shadow:0 2px 8px rgba(0,0,0,0.15); display:flex; gap:6px; padding:6px 12px;\">\n              <button class=\"g-btn g-btn-primary\" style=\"font-size:11px; padding:3px 10px;\" onclick=\"showToast('切换至武器栏', 'info')\">⚔️ 武器装备</button>\n              <button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:3px 10px;\" onclick=\"showToast('切换至防具栏', 'info')\">🛡️ 传奇护甲</button>\n              <button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:3px 10px;\" onclick=\"showToast('切换至药剂栏', 'info')\">🧪 炼金消耗品</button>\n            </div>\n\n            <!-- Long Product Feed List -->\n            <div style=\"padding:12px; display:flex; flex-direction:column; gap:8px;\">\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🗡️ 龙鳞破天剑 (Lv.80)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">攻击力 +480 | 暴击伤害 +35%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🏹 精灵逐风长弓 (Lv.75)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">攻击速度 +40% | 命中率 +100%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🪄 远古大魔导师法杖 (Lv.85)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">法术强度 +620 | 冷却缩减 +20%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🛡️ 泰坦重型神盾 (Lv.80)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">物理防御 +360 | 格挡率 45%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🧪 远古生命复苏圣水</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">战斗中瞬间恢复 100% HP 与全状态异常</span>\n              </div>\n            </div>\n          </div>\n        </div>\n      ",
+      "render": "\n        <div style=\"max-width:480px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:8px; overflow:hidden;\">\n          <div style=\"padding:10px 14px; background:var(--bg-card); border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;\">\n            <span style=\"font-size:12px; color:var(--text-secondary);\"><i class=\"fa-solid fa-thumbtack\" style=\"color:var(--primary);\"></i> 试着在下方列表内向下滑动页面：</span>\n            <label style=\"display:inline-flex; align-items:center; gap:6px; font-size:11px; cursor:pointer; font-weight:600;\">\n              <input type=\"checkbox\" id=\"tabStickyToggle\" checked onchange=\"\n                const header = document.getElementById('stickyTabHeader');\n                header.style.position = this.checked ? 'sticky' : 'static';\n                showToast(this.checked ? '已开启 Tabs 吸顶模式' : '已关闭 Tabs 吸顶模式', 'info');\n              \"> 启用 sticky 吸顶模式\n            </label>\n          </div>\n\n          <div id=\"stickyScrollContainer\" style=\"height:220px; overflow-y:auto; position:relative; scroll-behavior:smooth;\">\n            <div style=\"height:90px; background:linear-gradient(135deg, #1e3a8a, #0f172a); padding:16px; color:#fff; display:flex; flex-direction:column; justify-content:center;\">\n              <div style=\"font-weight:700; font-size:15px;\">🏰 遗忘神庙 · 讨伐物资清单</div>\n              <div style=\"font-size:11px; opacity:0.75; margin-top:4px;\">向下滚动列表时，下方分类栏将自动吸附贴顶固定！</div>\n            </div>\n\n            <div id=\"stickyTabHeader\" style=\"position:sticky; top:0; z-index:10; background:var(--bg-surface); border-bottom:1px solid var(--border-base); box-shadow:0 2px 8px rgba(0,0,0,0.15); display:flex; gap:6px; padding:6px 12px;\">\n              <button class=\"g-btn g-btn-primary\" style=\"font-size:11px; padding:3px 10px;\" onclick=\"showToast('切换至武器栏', 'info')\">⚔️ 武器装备</button>\n              <button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:3px 10px;\" onclick=\"showToast('切换至防具栏', 'info')\">🛡️ 传奇护甲</button>\n              <button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:3px 10px;\" onclick=\"showToast('切换至药剂栏', 'info')\">🧪 炼金消耗品</button>\n            </div>\n\n            <div style=\"padding:12px; display:flex; flex-direction:column; gap:8px;\">\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🗡️ 龙鳞破天剑 (Lv.80)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">攻击力 +480 | 暴击伤害 +35%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🏹 精灵逐风长弓 (Lv.75)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">攻击速度 +40% | 命中率 +100%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🪄 远古大魔导师法杖 (Lv.85)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">法术强度 +620 | 冷却缩减 +20%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🛡️ 泰坦重型神盾 (Lv.80)</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">物理防御 +360 | 格挡率 45%</span>\n              </div>\n              <div style=\"background:var(--bg-card); padding:10px; border-radius:6px; border:1px solid var(--border-base); font-size:12px;\">\n                <b>🧪 远古生命复苏圣水</b><br><span style=\"color:var(--text-secondary); font-size:11px;\">战斗中瞬间恢复 100% HP 与全状态异常</span>\n              </div>\n            </div>\n          </div>\n        </div>\n      ",
       "code": "# GDScript: 启用标签栏滚动吸顶模式 (Sticky Header)\nvar tabs = GTabs.new()\ntabs.sticky = true # 开启滚动吸顶\ntabs.offset_top = 0 # 吸顶距离容器顶部的像素偏移量\nscroll_container.add_child(tabs)"
     },
     {
@@ -54,15 +54,15 @@ window.COMPONENT_CATALOG['tabs'] = {
       "name": "sticky",
       "type": "boolean",
       "default": "false",
-      "desc": "是否开启滚动吸顶固定模式（在滚动容器内滚动时标签栏固定在顶部）",
-      "version": "v1.0.5"
+      "desc": "是否开启滚动吸顶固定模式（在滚动容器内向下滚动时标签栏自动贴顶悬浮）",
+      "version": "v1.2"
     },
     {
       "name": "offset_top",
       "type": "int",
       "default": "0",
       "desc": "吸顶时与视口/滚动容器顶部的像素偏移量（支持自定义顶部安全区）",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "type",
@@ -76,14 +76,14 @@ window.COMPONENT_CATALOG['tabs'] = {
       "type": "enum",
       "default": "GTabs.Transition.FADE",
       "desc": "内容切换动画过渡类型：NONE, FADE (淡入), SLIDE (滑动), ZOOM (缩放)",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "transition_duration",
       "type": "float",
       "default": "0.25",
       "desc": "过渡动画时长（单位：秒）",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "closable",
@@ -104,14 +104,14 @@ window.COMPONENT_CATALOG['tabs'] = {
       "type": "boolean",
       "default": "false",
       "desc": "标签是否同时可增加、双击重命名和关闭",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "draggable / reorderable",
       "type": "boolean",
       "default": "false",
       "desc": "是否允许玩家鼠标/手指拖拽标签重新排序",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "tab-position",
@@ -125,7 +125,7 @@ window.COMPONENT_CATALOG['tabs'] = {
       "type": "Callable / Function",
       "default": "() => true",
       "desc": "切换标签之前的异步/同步钩子函数，若返回 false 则阻止切换",
-      "version": "v1.0.5"
+      "version": "v1.2"
     }
   ],
   "events": [
@@ -145,31 +145,31 @@ window.COMPONENT_CATALOG['tabs'] = {
       "name": "tab_sticky_state_changed",
       "desc": "标签栏吸顶状态改变时触发（进入吸顶/脱离吸顶）",
       "params": "(is_sticky: bool)",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "tab_added",
       "desc": "动态添加新选项卡时触发",
       "params": "(index: int, name: String)",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "tab_removed",
       "desc": "选项卡被移除销毁时触发",
       "params": "(index: int, name: String)",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "tab_renamed",
       "desc": "选项卡被编辑重命名时触发",
       "params": "(index: int, new_title: String)",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "tab_reordered",
       "desc": "选项卡被拖拽移动改变顺序时触发",
       "params": "(from_index: int, to_index: int)",
-      "version": "v1.0.5"
+      "version": "v1.2"
     }
   ],
   "methods": [
@@ -189,25 +189,25 @@ window.COMPONENT_CATALOG['tabs'] = {
       "name": "set_sticky(enabled, offset_top=0)",
       "desc": "程序化开启或关闭吸顶悬浮固定模式",
       "params": "(enabled: bool, offset_top: int) -> void",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "set_tab_loading(index, is_loading)",
       "desc": "设置指定标签是否显示异步旋转 Loading 指示器",
       "params": "(index: int, is_loading: bool) -> void",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "set_tab_title(index, new_title)",
       "desc": "重命名或更新指定索引处选项卡的标题文本",
       "params": "(index: int, new_title: String) -> void",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "move_tab(from_index, to_index)",
       "desc": "将指定索引处的标签移动到新的索引位置",
       "params": "(from_index: int, to_index: int) -> void",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "set_current_tab(index)",
@@ -229,14 +229,14 @@ window.COMPONENT_CATALOG['tabs'] = {
       "desc": "标签栏前置自定义挂件区域（如搜索框、大区选择器）",
       "child": "Control",
       "example": "<template #prefix><GInput placeholder=\"搜索...\" /></template>",
-      "version": "v1.0.5"
+      "version": "v1.2"
     },
     {
       "name": "suffix",
       "desc": "标签栏后置自定义操作区域（如一键全部关闭、配置齿轮）",
       "child": "Control",
       "example": "<template #suffix><GButton icon=\"gear\" /></template>",
-      "version": "v1.0.5"
+      "version": "v1.2"
     }
   ]
 };
