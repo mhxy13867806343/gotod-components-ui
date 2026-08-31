@@ -646,10 +646,6 @@ window.switchCodeLanguage = function(lang, btn) {
       p.style.display = (lang === 'csharp') ? 'block' : 'none';
     });
   }
-
-  if (window.showToast) {
-    window.showToast(`已切换并展开【${lang === 'csharp' ? 'C# (Godot .NET)' : 'GDScript'}】代码`, 'info');
-  }
 };
 
 window.getComponentGitHubUrl = function(key) {

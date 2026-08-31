@@ -811,6 +811,20 @@ main {
   bottom: calc(100% + 6px);
 }
 
+/* Multi-level Recursive Submenu Indentation (Level 2 to Level 5+) */
+.g-sub-menu-panel .g-menu-item {
+  padding-left: 28px;
+}
+.g-sub-menu-panel .g-sub-menu-panel .g-menu-item {
+  padding-left: 44px;
+}
+.g-sub-menu-panel .g-sub-menu-panel .g-sub-menu-panel .g-menu-item {
+  padding-left: 60px;
+}
+.g-sub-menu-panel .g-sub-menu-panel .g-sub-menu-panel .g-sub-menu-panel .g-menu-item {
+  padding-left: 76px;
+}
+
 /* Disabled State for Buttons & Form Controls */
 .g-btn:disabled,
 .g-btn.is-disabled,
@@ -1241,6 +1255,22 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
 }
 .g-popover-bubble.active {
   display: block;
+}
+.g-popover-bubble.placement-bottom {
+  top: calc(100% + 8px);
+  left: 0;
+}
+.g-popover-bubble.placement-top {
+  bottom: calc(100% + 8px);
+  left: 0;
+}
+.g-popover-bubble.placement-left {
+  right: calc(100% + 8px);
+  top: 0;
+}
+.g-popover-bubble.placement-right {
+  left: calc(100% + 8px);
+  top: 0;
 }
 .g-popover-item {
   padding: 8px 16px;
@@ -1879,6 +1909,127 @@ input:checked + .g-switch-slider:before { transform: translateX(22px); }
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+/* =========================================================================
+   Real Interactive Modal Dialog, Overlay, Popup Styles
+   ========================================================================= */
+.g-dialog-modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99990;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: gToastFadeIn 0.2s ease forwards;
+}
+.g-dialog-modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 440px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: gDialogZoomIn 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+@keyframes gDialogZoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.g-dialog-modal-header {
+  padding: 16px 20px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.g-dialog-modal-body {
+  padding: 8px 20px 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.g-dialog-modal-footer {
+  padding: 12px 20px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-base);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.g-overlay-fullscreen-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99980;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: gToastFadeIn 0.2s ease forwards;
+}
+.g-overlay-center-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: 10px;
+  padding: 20px 28px;
+  color: var(--text-primary);
+  font-size: 13px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.g-popup-fullscreen-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99985;
+  display: none;
+  animation: gToastFadeIn 0.2s ease forwards;
+}
+.g-popup-panel {
+  position: absolute;
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  padding: 18px 22px;
+}
+.g-popup-panel.pos-center {
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  min-width: 300px;
+  max-width: 90%;
+}
+.g-popup-panel.pos-bottom {
+  left: 0; right: 0; bottom: 0;
+  border-radius: 16px 16px 0 0;
+  border-bottom: none;
+}
+.g-popup-panel.pos-top {
+  left: 0; right: 0; top: 0;
+  border-radius: 0 0 16px 16px;
+  border-top: none;
+}
+.g-popup-panel.pos-left {
+  left: 0; top: 0; bottom: 0;
+  width: 280px;
+  border-left: none;
+}
+.g-popup-panel.pos-right {
+  right: 0; top: 0; bottom: 0;
+  width: 280px;
+  border-right: none;
 }
 .g-toast-mask.pos-top .g-toast-box {
   margin-top: 80px;

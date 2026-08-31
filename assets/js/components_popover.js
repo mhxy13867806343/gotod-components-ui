@@ -8,7 +8,7 @@ window.COMPONENT_CATALOG['popover'] = {
   "demos": [
     {
       "title": "1. 基础点击触发 (Click Trigger Popover)",
-      "render": "<button class=\"g-btn g-btn-default\" onclick=\"showToast('弹出气泡卡片：展示装备强化成功率 75%', 'info')\">🔍 查看强化几率</button>",
+      "render": "<div class=\"g-popover-wrapper\" style=\"position:relative; display:inline-block;\"><button class=\"g-btn g-btn-default\" onclick=\"toggleSimPopover(this)\">🔍 查看强化几率</button><div class=\"g-popover-bubble placement-bottom\" style=\"padding:10px 14px; min-width:180px;\"><div style=\"font-weight:700; color:#ffd04b; margin-bottom:4px;\">装备强化分析</div><div style=\"color:#fff; font-size:12px;\">强化至 +12 成功率：<b style=\"color:var(--success);\">75%</b></div><div style=\"color:var(--text-disabled); font-size:11px; margin-top:4px;\">失败将掉回 +10</div></div></div>",
       "code": "# GDScript: 基础气泡卡片\nvar pop = GPopover.new()\npop.content = \"强化成功率: 75%\"\nadd_child(pop)"
     },
     {
@@ -23,7 +23,7 @@ window.COMPONENT_CATALOG['popover'] = {
     },
     {
       "title": "4. 多方向定位 (Placement: Top / Bottom / Left / Right)",
-      "render": "<div style=\"display:flex; gap:8px;\"><button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:2px 8px;\">上方 (Top)</button><button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:2px 8px;\">下方 (Bottom)</button><button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:2px 8px;\">左侧 (Left)</button><button class=\"g-btn g-btn-default\" style=\"font-size:11px; padding:2px 8px;\">右侧 (Right)</button></div>",
+      "render": "<div style=\"display:flex; gap:16px; flex-wrap:wrap; padding:20px 0;\"><div class=\"g-popover-wrapper\" style=\"position:relative; display:inline-block;\"><button class=\"g-btn g-btn-default\" onclick=\"toggleSimPopover(this)\">上方 (Top)</button><div class=\"g-popover-bubble placement-top\" style=\"padding:8px 12px; min-width:140px; text-align:center;\">上方气泡内容</div></div><div class=\"g-popover-wrapper\" style=\"position:relative; display:inline-block;\"><button class=\"g-btn g-btn-default\" onclick=\"toggleSimPopover(this)\">下方 (Bottom)</button><div class=\"g-popover-bubble placement-bottom\" style=\"padding:8px 12px; min-width:140px; text-align:center;\">下方气泡内容</div></div><div class=\"g-popover-wrapper\" style=\"position:relative; display:inline-block;\"><button class=\"g-btn g-btn-default\" onclick=\"toggleSimPopover(this)\">左侧 (Left)</button><div class=\"g-popover-bubble placement-left\" style=\"padding:8px 12px; min-width:140px; text-align:center;\">左侧气泡内容</div></div><div class=\"g-popover-wrapper\" style=\"position:relative; display:inline-block;\"><button class=\"g-btn g-btn-default\" onclick=\"toggleSimPopover(this)\">右侧 (Right)</button><div class=\"g-popover-bubble placement-right\" style=\"padding:8px 12px; min-width:140px; text-align:center;\">右侧气泡内容</div></div></div>",
       "code": "# GDScript: 方位设定\npop.placement = GPopover.Placement.TOP"
     },
     {

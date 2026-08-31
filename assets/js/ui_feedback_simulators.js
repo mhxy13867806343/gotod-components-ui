@@ -330,3 +330,137 @@ window.closeSimLoading = function() {
   }
 };
 
+// ==========================================
+// 1. Real GDialog / GModal Interactive Simulator
+// ==========================================
+let simDialogCallback = null;
+window.openSimModalDialog = function(opts, customTitle, onConfirm) {
+  if (typeof opts === 'string') {
+    opts = { message: opts, title: customTitle || '系统确认', onConfirm: onConfirm };
+  }
+  opts = opts || {};
+  const title = opts.title || '系统确认';
+  const message = opts.message || opts.content || '是否确认执行此项操作？';
+  const confirmText = opts.confirmText || opts.confirm_text || '确认开启';
+  const cancelText = opts.cancelText || opts.cancel_text || '取消';
+  const showCancel = opts.showCancel !== false && opts.show_cancel !== false;
+  simDialogCallback = opts.onConfirm || onConfirm || null;
+
+  let mask = document.getElementById('simDialogModalMask');
+  if (!mask) {
+    mask = document.createElement('div');
+    mask.id = 'simDialogModalMask';
+    mask.className = 'g-dialog-modal-mask';
+    mask.onclick = window.closeSimModalDialog;
+    document.body.appendChild(mask);
+  }
+
+  mask.innerHTML = `
+    <div class="g-dialog-modal-card" onclick="event.stopPropagation()">
+      <div class="g-dialog-modal-header">
+        <span>${title}</span>
+        <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--text-secondary); font-size:14px;" onclick="window.closeSimModalDialog()"></i>
+      </div>
+      <div class="g-dialog-modal-body">
+        ${message}
+      </div>
+      <div class="g-dialog-modal-footer">
+        ${showCancel ? `<button class="g-btn g-btn-default" onclick="window.closeSimModalDialog()">${cancelText}</button>` : ''}
+        <button class="g-btn g-btn-primary" onclick="window.confirmSimModalDialog()">${confirmText}</button>
+      </div>
+    </div>
+  `;
+  mask.style.display = 'flex';
+};
+
+window.confirmSimModalDialog = function() {
+  if (simDialogCallback && typeof simDialogCallback === 'function') {
+    simDialogCallback();
+  } else {
+    showToast('对话框操作已确认！', 'success');
+  }
+  window.closeSimModalDialog();
+};
+
+window.closeSimModalDialog = function() {
+  const mask = document.getElementById('simDialogModalMask');
+  if (mask) mask.style.display = 'none';
+};
+
+// ==========================================
+// 2. Real GOverlay Interactive Simulator
+// ==========================================
+window.openSimOverlay = function(opts) {
+  if (typeof opts === 'string') opts = { content: opts };
+  opts = opts || {};
+  const content = opts.content || '';
+
+  let mask = document.getElementById('simOverlayMask');
+  if (!mask) {
+    mask = document.createElement('div');
+    mask.id = 'simOverlayMask';
+    mask.className = 'g-overlay-fullscreen-mask';
+    mask.onclick = window.closeSimOverlay;
+    document.body.appendChild(mask);
+  }
+
+  if (content) {
+    mask.innerHTML = `
+      <div class="g-overlay-center-box" onclick="event.stopPropagation()">
+        ${content}
+        <div style="margin-top:12px;">
+          <button class="g-btn g-btn-primary" style="font-size:11px; padding:2px 10px;" onclick="window.closeSimOverlay()">关闭遮罩</button>
+        </div>
+      </div>
+    `;
+  } else {
+    mask.innerHTML = `
+      <div style="color:#fff; font-size:14px; text-align:center; padding:20px;">
+        <i class="fa-solid fa-hand-pointer" style="font-size:24px; margin-bottom:8px; display:block;"></i>
+        全屏半透明遮罩层已展开，点击任意区域平滑关闭
+      </div>
+    `;
+  }
+  mask.style.display = 'flex';
+};
+
+window.closeSimOverlay = function() {
+  const mask = document.getElementById('simOverlayMask');
+  if (mask) mask.style.display = 'none';
+};
+
+// ==========================================
+// 3. Real GPopup Interactive Simulator
+// ==========================================
+window.openSimPopup = function(pos = 'center', title = 'Popup 弹出层', content = '这是一个弹出的浮动层内容') {
+  let mask = document.getElementById('simPopupMask');
+  if (!mask) {
+    mask = document.createElement('div');
+    mask.id = 'simPopupMask';
+    mask.className = 'g-popup-fullscreen-mask';
+    mask.onclick = window.closeSimPopup;
+    document.body.appendChild(mask);
+  }
+
+  mask.innerHTML = `
+    <div class="g-popup-panel pos-${pos}" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-weight:700; font-size:14px; color:var(--text-primary);">${title}</span>
+        <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--text-secondary);" onclick="window.closeSimPopup()"></i>
+      </div>
+      <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+        ${content}
+      </div>
+      <div style="margin-top:14px; text-align:right;">
+        <button class="g-btn g-btn-primary" style="font-size:11px; padding:3px 12px;" onclick="window.closeSimPopup()">我知道了</button>
+      </div>
+    </div>
+  `;
+  mask.style.display = 'block';
+};
+
+window.closeSimPopup = function() {
+  const mask = document.getElementById('simPopupMask');
+  if (mask) mask.style.display = 'none';
+};
+

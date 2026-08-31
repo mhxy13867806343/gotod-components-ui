@@ -321,13 +321,20 @@ func _apply_button_theme(button: Button, is_active: bool, is_disabled: bool, dep
 	if is_disabled:
 		text_col = GotodTheme.get_color("text_disabled")
 
+	var indent = 12 + depth * 16
 	var normal = GotodTheme.create_stylebox_flat(bg_col, border_col, 1, 6.0)
-	normal.content_margin_left = 12
+	normal.content_margin_left = indent
 	normal.content_margin_right = 12
 	normal.content_margin_top = 6
 	normal.content_margin_bottom = 6
 	button.add_theme_stylebox_override("normal", normal)
-	button.add_theme_stylebox_override("hover", GotodTheme.create_stylebox_flat(GotodTheme.get_color("bg_card"), GotodTheme.get_color("primary"), 1, 6.0))
+
+	var hover = GotodTheme.create_stylebox_flat(GotodTheme.get_color("bg_card"), GotodTheme.get_color("primary"), 1, 6.0)
+	hover.content_margin_left = indent
+	hover.content_margin_right = 12
+	hover.content_margin_top = 6
+	hover.content_margin_bottom = 6
+	button.add_theme_stylebox_override("hover", hover)
 	button.add_theme_stylebox_override("pressed", normal)
 	button.add_theme_color_override("font_color", text_col)
 	button.add_theme_color_override("font_hover_color", GotodTheme.get_color("primary") if not is_active else Color.WHITE)

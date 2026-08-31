@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['dialog'] = {
   "desc": "居中弹出的模态对话框，包含基础确认、删除高危确认、自定义内容区、无取消按钮等完整弹窗场景。",
   "demos": [
     {
-      "title": "1. 基础确认对话框 (Basic Modal Dialog)",
-      "render": "<button class=\"g-btn g-btn-primary\" onclick=\"showToast('弹出基础对话框：是否确认开启深渊挑战？', 'info')\">打开模态对话框</button>",
-      "code": "# GDScript: 基础对话框\nGDialog.confirm(\"是否确认开启深渊挑战？\", func(): print(\"确认开启\"))"
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
+      "render": "<button class=\"g-btn g-btn-primary\" onclick=\"openSimModalDialog('是否确认开启深渊挑战？', '深渊挑战确认', function(){ showToast('已开启深渊挑战！', 'success') })\">打开模态对话框</button>",
+      "code": "# 方式 1: 单一文本内容快捷构建\nvar dlg1 = GDialog.create(\"是否确认开启深渊挑战？\")\n\n# 方式 2: 完整字典配置对象 (或服务化调用)\nvar dlg2 = GDialog.create({\n    \"title\": \"神话级强化确认\",\n    \"content\": \"本次强化将消耗 10 颗神圣宝石，成功率 65%。\",\n    \"confirm_text\": \"立即强化\",\n    \"on_confirm\": func(): GMessage.success(\"强化成功！\")\n})\n\n# 方式 3: 多参数位置传参 (标题, 内容, 确认回调)\nvar dlg3 = GDialog.create(\"系统提示\", \"装备耐久度已归零\", func(): print(\"已知悉\"))"
     },
     {
       "title": "2. 自定义 Header 与 Footer 插槽 (Custom Header & Footer)",
@@ -18,12 +18,12 @@ window.COMPONENT_CATALOG['dialog'] = {
     },
     {
       "title": "3. 异步确认加载状态 (Async Loading Dialog)",
-      "render": "<button class=\"g-btn g-btn-warning\" onclick=\"showToast('正在向云端扣除钻石...', 'info')\">💎 购买月卡 (带 Loading 确认)</button>",
+      "render": "<button class=\"g-btn g-btn-warning\" onclick=\"openSimModalDialog({ title: '💎 购买月卡', message: '将消耗 300 钻石兑换 30 天月卡特权，是否继续？', confirmText: '立即支付', onConfirm: function(){ showToast('支付成功！月卡已生效', 'success') } })\">💎 购买月卡 (带 Loading 确认)</button>",
       "code": "# GDScript: 异步加载\ndialog.before_close = func(action, done):\n    # 异步联网处理\n    done.call()"
     },
     {
       "title": "4. 居中与自定义尺寸 (Center Alignment & Width)",
-      "render": "<button class=\"g-btn g-btn-default\" onclick=\"showToast('居中弹出 500px 大号对话框', 'info')\">居中大号对话框</button>",
+      "render": "<button class=\"g-btn g-btn-default\" onclick=\"openSimModalDialog({ title: '大号系统设置弹窗 (500px)', message: '居中全屏遮罩展示大号模态对话框，支持嵌入复杂的技能加点树或装备列表。', confirmText: '保存设置' })\">居中大号对话框</button>",
       "code": "# GDScript: 对齐与尺寸\ndialog.center = true\ndialog.width = 500.0"
     },
     {

@@ -7,7 +7,7 @@ window.COMPONENT_CATALOG['menu'] = {
   "desc": "为应用提供导航功能的菜单组件，对标 Element Plus Menu。支持水平/垂直模式、子菜单展开/浮层弹出、激活态、默认展开、唯一展开、禁用菜单项，以及 AUTO/TOP/BOTTOM 弹出方向。",
   "demos": [
     {
-      "title": "1. 顶栏菜单 (Horizontal Menu)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(arr) / xx(opts) / xx(a,b,c))",
       "render": `
         <div class="g-menu g-menu-horizontal" style="max-width:760px;">
           <button class="g-menu-item is-active" type="button" onclick="window.activateGMenuItem(this)"><i class="fa-solid fa-gauge-high"></i> 总览</button>
@@ -26,7 +26,7 @@ window.COMPONENT_CATALOG['menu'] = {
           <button class="g-menu-item is-disabled" disabled><i class="fa-solid fa-lock"></i> 已禁用</button>
         </div>
       `,
-      "code": "# GDScript: 横向菜单，子菜单点击后按剩余空间向上或向下弹出\nvar menu = GMenu.new()\nmenu.mode = GMenu.MenuMode.HORIZONTAL\nmenu.popper_placement = GMenu.PopperPlacement.AUTO\nmenu.items = [\n    { \"index\": \"dashboard\", \"label\": \"总览\", \"icon\": \"⌂\" },\n    { \"index\": \"workspace\", \"label\": \"工作台\", \"icon\": \"▣\", \"children\": [\n        { \"index\": \"assets\", \"label\": \"资源库\", \"icon\": \"▦\" },\n        { \"index\": \"scenes\", \"label\": \"场景管理\", \"icon\": \"▶\" }\n    ] },\n    { \"index\": \"orders\", \"label\": \"订单\", \"icon\": \"≡\" }\n]\nmenu.active_index = \"dashboard\"\nmenu.item_selected.connect(func(index, key_path, item):\n    print(index, key_path, item)\n)\nadd_child(menu)"
+      "code": "# 方式 1: 菜单数据数组单值快捷构建\nvar menu1 = GMenu.create([\n    { \"index\": \"dashboard\", \"label\": \"总览\", \"icon\": \"⌂\" },\n    { \"index\": \"orders\", \"label\": \"订单\", \"icon\": \"≡\" }\n])\n\n# 方式 2: 完整字典配置对象 (支持横向/纵向/默认激活/折叠/递归子菜单)\nvar menu2 = GMenu.create({\n    \"mode\": \"horizontal\",\n    \"active\": \"dashboard\",\n    \"items\": [\n        { \"index\": \"dashboard\", \"label\": \"总览\", \"icon\": \"⌂\" },\n        { \"index\": \"workspace\", \"label\": \"工作台\", \"icon\": \"▣\", \"children\": [\n            { \"index\": \"assets\", \"label\": \"资源库\", \"icon\": \"▦\" },\n            { \"index\": \"scenes\", \"label\": \"场景管理\", \"icon\": \"▶\" }\n        ] }\n    ],\n    \"on_select\": func(idx, item): GMessage.info(\"选中: \" + str(idx))\n})\n\n# 方式 3: 多参数位置传参 (菜单数据列表, 布局方向, 默认激活项)\nvar menu3 = GMenu.create(items_list, \"horizontal\", \"dashboard\")"
     },
     {
       "title": "2. 侧栏子菜单 (Vertical Sub Menu)",
@@ -77,6 +77,57 @@ window.COMPONENT_CATALOG['menu'] = {
         </div>
       `,
       "code": "# GDScript: 点语法插槽\nvar menu = GMenu.new()\nmenu.slotName = \"title\"\nmenu.title.text = \"Workspace\"\nmenu.slotName = \"icon\"\nvar icon = GIcon.new()\nicon.icon_name = \"folder-tree\"\nmenu.icon = icon\nmenu.default.text = \"Navigator One\""
+    },
+    {
+      "title": "5. 多级递归嵌套菜单 (4 级 / 5 级无限级递归展开)",
+      "render": `
+        <div class="g-menu" style="max-width:320px;">
+          <!-- Level 1 -->
+          <div class="g-sub-menu is-open">
+            <button class="g-menu-item g-sub-menu-title" type="button" onclick="window.toggleGMenuSub(event)">
+              <span>🏰 1级 游戏主系统</span>
+              <i class="fa-solid fa-chevron-down g-sub-menu-arrow"></i>
+            </button>
+            <div class="g-sub-menu-panel">
+              <!-- Level 2 -->
+              <div class="g-sub-menu is-open">
+                <button class="g-menu-item g-sub-menu-title" type="button" onclick="window.toggleGMenuSub(event)">
+                  <span>⚡ 2级 战斗技能树</span>
+                  <i class="fa-solid fa-chevron-down g-sub-menu-arrow"></i>
+                </button>
+                <div class="g-sub-menu-panel">
+                  <!-- Level 3 -->
+                  <div class="g-sub-menu is-open">
+                    <button class="g-menu-item g-sub-menu-title" type="button" onclick="window.toggleGMenuSub(event)">
+                      <span>🔥 3级 元素禁忌流派</span>
+                      <i class="fa-solid fa-chevron-down g-sub-menu-arrow"></i>
+                    </button>
+                    <div class="g-sub-menu-panel">
+                      <!-- Level 4 -->
+                      <div class="g-sub-menu is-open">
+                        <button class="g-menu-item g-sub-menu-title" type="button" onclick="window.toggleGMenuSub(event)">
+                          <span>☄️ 4级 终焉烈焰神咒</span>
+                          <i class="fa-solid fa-chevron-down g-sub-menu-arrow"></i>
+                        </button>
+                        <div class="g-sub-menu-panel">
+                          <!-- Level 5 -->
+                          <button class="g-menu-item is-active" type="button" onclick="window.activateGMenuItem(this)">💥 5级 陨石天降 (EX)</button>
+                          <button class="g-menu-item" type="button" onclick="window.activateGMenuItem(this)">🌋 5级 灭世红莲 (SSS)</button>
+                        </div>
+                      </div>
+                      <button class="g-menu-item" type="button" onclick="window.activateGMenuItem(this)">❄️ 4级 极寒冰封神咒</button>
+                    </div>
+                  </div>
+                  <button class="g-menu-item" type="button" onclick="window.activateGMenuItem(this)">⚔️ 3级 狂暴近战流派</button>
+                </div>
+              </div>
+              <button class="g-menu-item" type="button" onclick="window.activateGMenuItem(this)">🗝️ 2级 深渊副本挑战</button>
+            </div>
+          </div>
+          <button class="g-menu-item" type="button" onclick="window.activateGMenuItem(this)">⚙ 1级 基础系统设置</button>
+        </div>
+      `,
+      "code": "# GDScript: 5 级无限递归嵌套菜单构建\nvar menu = GMenu.create({\n    \"mode\": \"vertical\",\n    \"items\": [\n        {\n            \"index\": \"level1_main\",\n            \"label\": \"1级 游戏主系统\",\n            \"icon\": \"🏰\",\n            \"children\": [\n                {\n                    \"index\": \"level2_combat\",\n                    \"label\": \"2级 战斗技能树\",\n                    \"icon\": \"⚡\",\n                    \"children\": [\n                        {\n                            \"index\": \"level3_element\",\n                            \"label\": \"3级 元素禁忌流派\",\n                            \"icon\": \"🔥\",\n                            \"children\": [\n                                {\n                                    \"index\": \"level4_fire\",\n                                    \"label\": \"4级 终焉烈焰神咒\",\n                                    \"icon\": \"☄️\",\n                                    \"children\": [\n                                        { \"index\": \"skill_meteor\", \"label\": \"5级 陨石天降 (EX)\", \"icon\": \"💥\" },\n                                        { \"index\": \"skill_lotus\", \"label\": \"5级 灭世红莲 (SSS)\", \"icon\": \"🌋\" }\n                                    ]\n                                },\n                                { \"index\": \"level4_ice\", \"label\": \"4级 极寒冰封神咒\", \"icon\": \"❄️\" }\n                            ]\n                        },\n                        { \"index\": \"level3_melee\", \"label\": \"3级 狂暴近战流派\", \"icon\": \"⚔️\" }\n                    ]\n                },\n                { \"index\": \"level2_dungeon\", \"label\": \"2级 深渊副本挑战\", \"icon\": \"🗝️\" }\n            ]\n        },\n        { \"index\": \"settings\", \"label\": \"1级 基础系统设置\", \"icon\": \"⚙\" }\n    ],\n    \"default_openeds\": [\"level1_main\", \"level2_combat\", \"level3_element\", \"level4_fire\"]\n})\nmenu.item_selected.connect(func(index, key_path, item):\n    print(\"当前选中项路径:\", key_path, \"数据:\", item)\n)"
     }
   ],
   "props": [

@@ -138,10 +138,16 @@ window.toggleGMenuSub = function(event) {
   if (!sub) return;
 
   const willOpen = !sub.classList.contains('is-open');
-  const root = sub.closest('.g-menu') || document;
-  root.querySelectorAll('.g-sub-menu.is-open').forEach(item => {
-    if (item !== sub) item.classList.remove('is-open', 'is-placement-top', 'is-placement-bottom');
-  });
+  // Only close sibling submenus at same container level, preserving parents and ancestors for deep recursion
+  const parentMenu = sub.parentElement;
+  if (parentMenu && sub.closest('.unique-opened')) {
+    Array.from(parentMenu.children).forEach(child => {
+      if (child !== sub && child.classList && child.classList.contains('g-sub-menu')) {
+        child.classList.remove('is-open', 'is-placement-top', 'is-placement-bottom');
+      }
+    });
+  }
+
   sub.classList.toggle('is-open', willOpen);
   if (!willOpen) {
     sub.classList.remove('is-placement-top', 'is-placement-bottom');
