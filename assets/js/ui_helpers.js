@@ -173,6 +173,146 @@ window.startFabDrag = function(e, fab) {
 };
 
 // ==========================================
+// 4.5 Tabs Dynamic CRUD & Drag Reorder Handlers
+// ==========================================
+window.crudTabCount = 3;
+
+window.selectCrudTab = function(id) {
+  const bar = document.getElementById('crudTabBar');
+  const panelBox = document.getElementById('crudPanelBox');
+  if (!bar || !panelBox) return;
+  Array.from(bar.children).forEach(t => {
+    const isCur = t.id === id;
+    t.className = isCur ? 'g-tag g-tag-primary' : 'g-tag g-tag-default';
+    t.style.boxShadow = isCur ? '0 0 0 2px var(--primary)' : 'none';
+  });
+  Array.from(panelBox.children).forEach(p => {
+    p.style.display = (p.id === 'panel_' + id) ? 'block' : 'none';
+  });
+};
+
+window.addCrudTab = function() {
+  window.crudTabCount = (window.crudTabCount || 3) + 1;
+  const bar = document.getElementById('crudTabBar');
+  const panelBox = document.getElementById('crudPanelBox');
+  if (!bar || !panelBox) return;
+  const newId = 'crudT_' + window.crudTabCount;
+  
+  const tab = document.createElement('div');
+  tab.id = newId;
+  tab.className = 'g-tag g-tag-primary';
+  tab.style = 'display:inline-flex; align-items:center; gap:6px; cursor:pointer; padding:4px 10px; font-size:12px; border-radius:6px;';
+  tab.innerHTML = `<span class="tab-title" ondblclick="window.editTabTitle(this)">自定义面板 ${window.crudTabCount}</span> <i class="fa-solid fa-pen" style="font-size:10px; opacity:0.6;" title="重命名" onclick="window.editTabTitle(this.previousElementSibling)"></i> <i class="fa-solid fa-xmark" style="font-size:11px; margin-left:2px;" title="关闭" onclick="window.removeCrudTab('${newId}')"></i>`;
+  tab.onclick = function(e) {
+    if (!e.target.classList.contains('fa-xmark') && !e.target.classList.contains('fa-pen') && e.target.tagName !== 'INPUT') {
+      window.selectCrudTab(newId);
+    }
+  };
+  bar.appendChild(tab);
+
+  const p = document.createElement('div');
+  p.id = 'panel_' + newId;
+  p.style = 'display:none; font-size:13px; color:var(--text-regular); line-height:1.6;';
+  p.innerHTML = `📄 这是 <b>自定义面板 ${window.crudTabCount}</b> 的内容区。<br><span style="color:var(--text-secondary); font-size:11px;">创建时间: ${new Date().toLocaleTimeString()}</span>`;
+  panelBox.appendChild(p);
+
+  window.selectCrudTab(newId);
+  if (window.showToast) window.showToast(`已成功新增【自定义面板 ${window.crudTabCount}】`, 'success');
+};
+
+window.editTabTitle = function(spanEl) {
+  if (!spanEl || spanEl.querySelector('input')) return;
+  const oldText = spanEl.innerText;
+  spanEl.innerHTML = `<input type="text" value="${oldText}" style="width:90px; height:20px; font-size:11px; padding:0 4px; border:1px solid var(--primary); border-radius:3px; outline:none; background:var(--bg-card); color:var(--text-primary);" autofocus>`;
+  const input = spanEl.querySelector('input');
+  input.focus();
+  input.select();
+  function finish() {
+    const newTitle = input.value.trim() || oldText;
+    spanEl.innerText = newTitle;
+    if (window.showToast) window.showToast('标签已重命名为：' + newTitle, 'info');
+  }
+  input.onblur = finish;
+  input.onkeydown = function(e) {
+    if (e.key === 'Enter') finish();
+  };
+};
+
+window.removeCrudTab = function(id) {
+  const tab = document.getElementById(id);
+  const panel = document.getElementById('panel_' + id);
+  const bar = document.getElementById('crudTabBar');
+  if (bar && bar.children.length <= 1) {
+    if (window.showToast) window.showToast('至少保留一个标签页，无法继续删除！', 'warning');
+    return;
+  }
+  if (tab) tab.remove();
+  if (panel) panel.remove();
+  if (window.showToast) window.showToast('已关闭并移除标签页', 'info');
+  if (bar && bar.children.length > 0) {
+    window.selectCrudTab(bar.children[0].id);
+  }
+};
+
+// Drag & Drop Sort Handlers
+window.draggedTabItem = null;
+
+window.onTabDragStart = function(e, el) {
+  window.draggedTabItem = el;
+  el.style.opacity = '0.4';
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', el.getAttribute('data-name') || '');
+  }
+};
+
+window.onTabDragOver = function(e, el) {
+  e.preventDefault();
+  if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+  const container = el.parentElement;
+  if (!container || !window.draggedTabItem || window.draggedTabItem === el) return;
+  const bounding = el.getBoundingClientRect();
+  const offset = e.clientX - bounding.left - bounding.width / 2;
+  if (offset > 0) {
+    container.insertBefore(window.draggedTabItem, el.nextSibling);
+  } else {
+    container.insertBefore(window.draggedTabItem, el);
+  }
+};
+
+window.onTabDrop = function(e, el) {
+  e.preventDefault();
+};
+
+window.onTabDragEnd = function(e, el) {
+  el.style.opacity = '1';
+  window.draggedTabItem = null;
+  const container = document.getElementById('sortableTabBar');
+  if (container) {
+    const items = Array.from(container.querySelectorAll('.drag-tab-item')).map(i => i.getAttribute('data-name'));
+    if (window.showToast) window.showToast('标签新顺序: ' + items.join(' → '), 'success');
+  }
+};
+
+window.shiftTabLeft = function() {
+  const container = document.getElementById('sortableTabBar');
+  if (container && container.firstElementChild) {
+    container.appendChild(container.firstElementChild);
+    const items = Array.from(container.querySelectorAll('.drag-tab-item')).map(i => i.getAttribute('data-name'));
+    if (window.showToast) window.showToast('标签新顺序: ' + items.join(' → '), 'info');
+  }
+};
+
+window.shiftTabRight = function() {
+  const container = document.getElementById('sortableTabBar');
+  if (container && container.lastElementChild) {
+    container.insertBefore(container.lastElementChild, container.firstElementChild);
+    const items = Array.from(container.querySelectorAll('.drag-tab-item')).map(i => i.getAttribute('data-name'));
+    if (window.showToast) window.showToast('标签新顺序: ' + items.join(' → '), 'info');
+  }
+};
+
+// ==========================================
 // 5. Toast Floating Message System
 // ==========================================
 window.showToast = function(msg, type = 'info') {
