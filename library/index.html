@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Godot Library · 开源库与插件索引</title>
+  <link rel="stylesheet" href="../assets/css/theme.css?v=20260831_55">
+  <link rel="stylesheet" href="../assets/css/style.css?v=20260831_55">
+  <style>
+    :root { --lib-accent:#22c55e; --lib-blue:#38bdf8; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at 15% 0%,#16243d 0,#0e1018 42%,#090b10 100%); color:var(--text-primary); font-family:Inter,system-ui,sans-serif; }
+    .library-page { max-width:1480px; margin:0 auto; padding:30px 24px 70px; }
+    .library-header { display:flex; justify-content:space-between; gap:20px; align-items:flex-start; margin-bottom:26px; }
+    .library-kicker { color:#67e8f9; font:700 11px var(--font-mono); letter-spacing:2px; }
+    h1 { margin:10px 0 10px; font-size:clamp(28px,4vw,48px); line-height:1.1; }
+    .library-lead { color:var(--text-secondary); max-width:850px; line-height:1.8; margin:0; }
+    .library-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .library-actions a { text-decoration:none; white-space:nowrap; }
+    .library-toolbar { position:sticky; top:10px; z-index:10; padding:10px; margin-bottom:20px; display:flex; gap:10px; align-items:center; background:rgba(20,23,31,.9); border:1px solid var(--border-base); border-radius:12px; backdrop-filter:blur(16px); box-shadow:0 10px 30px rgba(0,0,0,.22); }
+    .library-search { flex:1; min-width:180px; padding:10px 13px 10px 36px; border:1px solid var(--border-base); border-radius:8px; background:var(--bg-input); color:var(--text-primary); outline:none; }
+    .library-search-wrap { flex:1; position:relative; }
+    .library-search-wrap i { position:absolute; left:13px; top:12px; color:var(--text-secondary); }
+    .library-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; }
+    .library-tab { flex:0 0 auto; border:1px solid var(--border-base); background:var(--bg-surface); color:var(--text-secondary); border-radius:7px; padding:9px 11px; cursor:pointer; font-weight:700; transition:.2s; }
+    .library-tab:hover { transform:translateY(-2px); border-color:var(--lib-blue); color:#fff; }
+    .library-tab.active { background:var(--lib-accent); border-color:var(--lib-accent); color:#07130b; }
+    .library-meta { display:flex; justify-content:space-between; align-items:center; margin:0 0 12px; color:var(--text-secondary); font-size:12px; }
+    .library-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(225px,1fr)); gap:14px; }
+    .library-card { min-height:220px; display:flex; flex-direction:column; background:rgba(25,27,34,.88); border:1px solid var(--border-base); border-radius:12px; overflow:hidden; transition:transform .22s,box-shadow .22s,border-color .22s; animation:libEnter .35s both; }
+    .library-card:hover { transform:translateY(-6px); border-color:var(--lib-blue); box-shadow:0 16px 34px rgba(0,0,0,.3),0 0 0 1px rgba(56,189,248,.12); }
+    .library-card-media { height:76px; display:flex; align-items:center; gap:12px; padding:12px 14px; background:linear-gradient(135deg,rgba(56,189,248,.13),rgba(34,197,94,.08)); }
+    .library-card-media img,.library-avatar { width:46px; height:46px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.16); background:#172033; }
+    .library-avatar { display:grid; place-items:center; font-size:20px; }
+    .library-card h2 { font-size:15px; margin:0; line-height:1.3; }
+    .library-card-body { flex:1; padding:13px 14px; }
+    .library-card-body p { margin:0; color:var(--text-secondary); font-size:12px; line-height:1.65; }
+    .library-tags { display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; }
+    .library-tag { font-size:10px; padding:3px 6px; color:#bae6fd; background:rgba(56,189,248,.1); border:1px solid rgba(56,189,248,.25); border-radius:4px; }
+    .library-card-footer { display:flex; gap:6px; padding:10px 14px; border-top:1px solid var(--border-base); }
+    .library-card-footer a,.library-card-footer button { flex:1; text-align:center; text-decoration:none; font-size:11px; padding:6px 7px; border-radius:6px; cursor:pointer; }
+    .library-github { color:#fff; background:#24292f; border:1px solid #475569; }
+    .library-copy { color:#a7f3d0; background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.35); }
+    .library-empty { padding:40px; text-align:center; color:var(--text-secondary); border:1px dashed var(--border-base); border-radius:12px; }
+    .library-source { margin-top:28px; color:var(--text-secondary); font-size:12px; line-height:1.7; }
+    @keyframes libEnter { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+    @media (min-width:1250px) { .library-grid { grid-template-columns:repeat(5,minmax(0,1fr)); } }
+    @media (max-width:760px) { .library-page { padding:22px 14px 50px; } .library-header { flex-direction:column; } .library-actions { justify-content:flex-start; } .library-toolbar { position:static; flex-direction:column; align-items:stretch; } .library-tabs { width:100%; } }
+  </style>
+</head>
+<body>
+  <main class="library-page">
+    <header class="library-header"><div><div class="library-kicker">GODOT OPEN SOURCE LIBRARY · 4.x</div><h1>Godot 开源库与插件 Library</h1><p class="library-lead">精选全球与中文社区中高星标、广泛应用的 Godot 第三方库、Addons 与 GDExtensions。按架构、叙事、3D、网络、UI、工具和跨语言分类，支持中英文浏览与仓库直达。</p></div><div class="library-actions"><a class="g-btn g-btn-primary" href="../" >返回主站</a><a class="g-btn g-btn-default" href="https://github.com/godotengine/awesome-godot" target="_blank"><i class="fa-brands fa-github"></i> Awesome Godot</a></div></header>
+    <section class="library-toolbar"><div class="library-search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="librarySearch" class="library-search" placeholder="搜索库名、用途、作者或领域..." autocomplete="off"></div><div id="libraryTabs" class="library-tabs"></div><button id="languageToggle" class="g-btn g-btn-default" type="button">中文 / EN</button></section>
+    <div class="library-meta"><span id="libraryCount">加载中...</span><span>悬停卡片查看动效 · GitHub 直达 · 一键复制链接</span></div>
+    <section id="libraryGrid" class="library-grid"></section>
+    <p class="library-source">数据入口：<a href="https://github.com/godotengine/awesome-godot" target="_blank">awesome-godot</a>、<a href="https://godotengine.org/asset-library/asset" target="_blank">Godot Asset Library</a> 与各项目官方仓库。第三方项目的许可证、Godot 版本和维护状态请以仓库页面为准。</p>
+  </main>
+  <script>
+    const groups = [
+      ['架构 / AI','Architecture & AI',[['LimboAI','Visual behavior trees and hierarchical state machines.','limbonaut/limboai','C++','GDExtension'],['Beehave','Native GDScript behavior tree plugin built around the scene tree.','bitbrain/beehave','GDScript','AI'],['Godot State Charts','Hierarchical state chart workflow for complex game flows.','derkork/godot-state-charts','State Machine','Godot 4']]],
+      ['对话 / 叙事','Dialogue & Narrative',[['Dialogic','Visual dialogue, characters, branching and timeline authoring.','dialogic-godot/dialogic','Narrative','Editor'],['Dialogue Manager','Text-driven dialogue system with a lightweight authoring workflow.','nathanhoad/godot_dialogue_manager','GDScript','Dialogue'],['YarnSpinner-Godot','Godot integration for the Yarn Spinner narrative language.','YarnSpinnerTool/YarnSpinner-Godot','Yarn','Narrative']]],
+      ['3D / 渲染','3D & Rendering',[['Terrain3D','High-performance editable 3D terrain using GDExtension.','TokisanGames/Terrain3D','Terrain','GDExtension'],['Zylann Voxel','Dynamic voxel terrain generation, editing and destruction.','Zylann/godot_voxel','Voxel','3D'],['Phantom Camera','Professional 2D/3D camera transitions inspired by Cinemachine.','ramok/phantom-camera','Camera','3D']]],
+      ['地形 / 环境','World & Environment',[['ProtonScatter','Procedural scattering for vegetation and environment assets.','HungryProton/scatter','Scatter','Level Design'],['Godot Water 3D','Water surface shader with refraction, reflection and buoyancy patterns.','Bauxitedev/godot-water-shader','Water','Shader'],['Qodot','Quake .map import and geometry baking workflow.','QodotPlugin/Qodot','Level Tool','Map Import']]],
+      ['2D / 地图','2D & Maps',[['Aseprite Wizard','Import Aseprite files and generate SpriteFrames animations.','viniciusgerevini/godot-aseprite-wizard','2D','Animation'],['Tiled Map Importer','Import Tiled editor maps into Godot.','vnen/godot-tiled-importer','TileMap','Importer'],['LDtk-Godot','Workflow integration for LDtk 2D maps.','heyquark/ldtk-godot','LDtk','2D']]],
+      ['物理 / 运动','Physics & Movement',[['Godot Jolt','High-performance Jolt physics replacement for 3D projects.','godot-jolt/godot-jolt','Physics','GDExtension'],['Rapier 2D/3D','Rust Rapier powered physics integration.','appsinacup/godot-rapier-2d','Rust','Physics'],['FastNoiseLite','Noise generation for procedural worlds and gameplay.','Auburn/FastNoiseLite','Procedural','Noise']]],
+      ['网络 / 平台','Networking & Platform',[['GodotSteam','Steamworks integration for achievements, lobbies and P2P.','GodotSteam/GodotSteam','Steamworks','C++'],['Nakama Godot Client','Client SDK for authoritative multiplayer game backends.','heroiclabs/nakama-godot','Multiplayer','Backend'],['Netfox','Rollback and state synchronization networking framework.','foxssake/netfox','Rollback','Godot 4']]],
+      ['UI / 数据','UI & Data',[['Inventory System','Modular inventory grid, item properties and crafting.','expressobits/inventory-system','Inventory','UI'],['Godot ModLoader','Cross-platform mod loading and injection framework.','GodotModding/godot-mod-loader','Modding','Runtime'],['Virtual Joystick','Touch joystick and mobile control components.','MarcoFazioRandom/Virtual-Joystick-Godot','Mobile','Input']]],
+      ['调试 / 性能','Debug & Profiling',[['GUT','Community standard GDScript unit testing and TDD framework.','bitwes/Gut','Testing','GDScript'],['Godot Console','In-game console and command execution tool.','quentincaffeino/godot-console','Debug','Tools'],['Godot Node Preview','Editor previews for scene nodes on hover.','KoBeWi/Godot-Node-Preview','Editor','Workflow']]],
+      ['动画 / 特效','Animation & FX',[['Spine-Godot Runtime','Official Spine 2D skeletal animation runtime binding.','EsotericSoftware/spine-runtimes','Spine','Animation'],['Godot Shaker','Screen, node and material shake curve generator.','TheWalruzz/godot-shaker','Tween','FX'],['Godot Spring Arm Extended','Camera collision buffer and anti-clipping spring arm.','godotengine/godot','Camera','3D']]],
+      ['跨语言 / 绑定','Language Bindings',[['godot-rust gdext','Rust language binding for high-performance GDExtension code.','godot-rust/gdext','Rust','GDExtension'],['godot-cpp','Official C++ GDExtension core binding.','godotengine/godot-cpp','C++','GDExtension'],['Godot JVM','Kotlin and Java runtime integration for Godot.','utopia-rise/godot-jvm','Kotlin','JVM']]],
+      ['官方 / 聚合','Official Collections',[['Awesome Godot','Large curated index of free and libre Godot tools.','godotengine/awesome-godot','Index','Community'],['Godot Addons','Community organization for reusable Godot addons.','godot-addons','Addons','Community'],['Godot Shaders Library','Large visual library of open Godot shaders.','GodotShaders','Shader','Community']]]
+    ];
+    let language = 'zh'; let active = 0;
+    const $ = id => document.getElementById(id);
+    const repoUrl = repo => repo === 'godot-addons' || repo === 'GodotShaders' ? 'https://github.com/' + repo : 'https://github.com/' + repo;
+    function renderTabs() { $('libraryTabs').innerHTML = groups.map((g,i) => `<button class="library-tab ${i===active?'active':''}" data-index="${i}">${language==='zh'?g[0]:g[1]}</button>`).join(''); }
+    function renderCards() {
+      const query = $('librarySearch').value.trim().toLowerCase(); const group = groups[active];
+      const items = group[2].filter(item => item.join(' ').toLowerCase().includes(query));
+      $('libraryCount').textContent = `${items.length} 个项目 · ${language==='zh'?group[0]:group[1]}`;
+      $('libraryGrid').innerHTML = items.length ? items.map((item,i) => { const [name,desc,repo,...tags] = item; const url=repoUrl(repo); const owner=repo.split('/')[0]; return `<article class="library-card" style="animation-delay:${i*45}ms"><div class="library-card-media"><img src="https://github.com/${owner}.png?size=96" alt="${owner}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="library-avatar" style="display:none">◈</div><h2>${name}</h2></div><div class="library-card-body"><p>${desc}</p><div class="library-tags">${tags.map(tag=>`<span class="library-tag">${tag}</span>`).join('')}</div></div><div class="library-card-footer"><a class="library-github" href="${url}" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a><button class="library-copy" data-copy="${url}"><i class="fa-regular fa-copy"></i> 复制链接</button></div></article>`; }).join('') : '<div class="library-empty">没有找到匹配的项目，请换一个关键词。</div>';
+    }
+    $('libraryTabs').addEventListener('click', e => { const tab=e.target.closest('.library-tab'); if(!tab)return; active=Number(tab.dataset.index); renderTabs(); renderCards(); });
+    $('librarySearch').addEventListener('input', renderCards);
+    $('languageToggle').addEventListener('click', () => { language=language==='zh'?'en':'zh'; renderTabs(); renderCards(); });
+    $('libraryGrid').addEventListener('click', e => { const btn=e.target.closest('[data-copy]'); if(!btn)return; const url=btn.dataset.copy; const done=()=>{ btn.innerHTML='<i class="fa-solid fa-check"></i> 已复制'; window.showToast ? window.showToast(`${url} 复制成功`, 'success') : showLibraryToast(`${url} 复制成功`); setTimeout(()=>btn.innerHTML='<i class="fa-regular fa-copy"></i> 复制链接',1500); }; if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(url).then(done).catch(()=>fallback(url,done)); else fallback(url,done); });
+    function fallback(text, done) { const area=document.createElement('textarea'); area.value=text; area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.select(); const ok=document.execCommand('copy'); area.remove(); ok ? done() : showLibraryToast('复制失败，请手动复制链接'); }
+    function showLibraryToast(text) { let node=document.getElementById('libraryToast'); if(!node){node=document.createElement('div');node.id='libraryToast';node.style.cssText='position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 18px;border:1px solid #22c55e;border-radius:8px;background:#10251b;color:#bbf7d0;font-weight:700;box-shadow:0 8px 24px #0008';document.body.appendChild(node);} node.textContent=text; clearTimeout(node._timer); node._timer=setTimeout(()=>node.remove(),3000); }
+    renderTabs(); renderCards();
+  </script>
+</body>
+</html>

@@ -233,7 +233,23 @@ GMessage.error("网络连接断开")`
               </div>
 
               <div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); margin-top:12px;">
-                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">勾选您在游戏中实际用到的组件，模拟导出时的按需过滤：</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                  <p style="font-size:12px; color:var(--text-secondary); margin:0;">勾选您在游戏中实际用到的组件，模拟导出时的按需过滤：</p>
+                </div>
+
+                <!-- Instant Search & Autocomplete Dropdown (即时搜索过滤与高亮下拉联动框) -->
+                <div style="position:relative; margin-bottom:12px;">
+                  <div style="display:flex; align-items:center; background:var(--bg-card); border:1px solid var(--border-base); border-radius:var(--radius); padding:5px 12px; gap:8px;">
+                    <i class="fa-solid fa-magnifying-glass" style="color:var(--text-secondary); font-size:12px;"></i>
+                    <input type="text" id="shakerSearchInput" placeholder="输入搜索组件 (如: b, button, 按钮, 对话, 弹窗)..." style="flex:1; background:transparent; border:none; color:var(--text-primary); font-size:12px; outline:none;" oninput="window.filterShakerComponents(this.value)" onfocus="window.filterShakerComponents(this.value)">
+                    <button type="button" id="shakerSearchClearBtn" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:12px; display:none; padding:2px;" onclick="window.clearShakerSearch()" title="清除搜索并展示全部组件">
+                      <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                  </div>
+                  <!-- Dropdown Suggestions -->
+                  <div id="shakerSearchDropdown" style="display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; max-height:220px; overflow-y:auto; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); box-shadow:0 8px 24px rgba(0,0,0,0.35); z-index:100; padding:6px;"></div>
+                </div>
+
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(170px, 1fr)); gap:8px 12px; font-size:12px; max-height:280px; overflow-y:auto; padding-right:6px;" id="shakerCheckGrid">
                   <!-- General & Layout (7) -->
                   <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GButton (按钮)</label>

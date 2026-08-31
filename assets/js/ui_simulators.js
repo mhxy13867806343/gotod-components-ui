@@ -608,6 +608,118 @@ window.setTreeShakerPreset = function(preset, btn) {
   }
 };
 
+// -------------------------------------------------------------
+// Component Search / Filter with Autocomplete & Highlight Focus
+// -------------------------------------------------------------
+window.filterShakerComponents = function(query) {
+  const grid = document.getElementById('shakerCheckGrid');
+  const dropdown = document.getElementById('shakerSearchDropdown');
+  const clearBtn = document.getElementById('shakerSearchClearBtn');
+  if (!grid) return;
+
+  const labels = Array.from(grid.querySelectorAll('label'));
+  const q = (query || '').trim().toLowerCase();
+
+  if (clearBtn) clearBtn.style.display = q ? 'inline-block' : 'none';
+
+  if (!q) {
+    if (dropdown) dropdown.style.display = 'none';
+    labels.forEach(l => {
+      l.style.opacity = '1';
+      l.style.background = 'transparent';
+      l.style.display = 'flex';
+      l.classList.remove('shaker-item-highlight');
+    });
+    return;
+  }
+
+  const matches = [];
+  labels.forEach(l => {
+    const text = l.innerText.trim();
+    const isMatch = text.toLowerCase().includes(q);
+    if (isMatch) {
+      l.style.opacity = '1';
+      l.style.background = 'rgba(24, 160, 88, 0.14)';
+      l.style.borderRadius = '4px';
+      l.style.padding = '3px 6px';
+      l.style.display = 'flex';
+      matches.push({ label: l, text: text });
+    } else {
+      l.style.opacity = '0.22';
+      l.style.background = 'transparent';
+      l.classList.remove('shaker-item-highlight');
+    }
+  });
+
+  if (dropdown) {
+    if (matches.length === 0) {
+      dropdown.innerHTML = `<div style="padding:10px 12px; font-size:12px; color:var(--text-secondary); text-align:center;">未找到包含 "${query}" 的组件</div>`;
+      dropdown.style.display = 'block';
+    } else {
+      dropdown.innerHTML = `
+        <div style="font-size:11px; color:var(--text-secondary); padding:4px 8px 6px; font-weight:600; border-bottom:1px solid var(--border-base); display:flex; justify-content:space-between; align-items:center;">
+          <span>匹配组件 (${matches.length} 个)</span>
+          <span style="font-size:10px; color:var(--primary); font-weight:normal;">点击快速定位高亮</span>
+        </div>
+        ${matches.map(m => `
+          <div class="shaker-dropdown-item" onclick="window.selectShakerSearchItem('${m.text.replace(/'/g, "\\'")}')" style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; cursor:pointer; font-size:12px; border-radius:4px; transition:all 0.15s; margin-top:2px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-cube" style="color:var(--primary); font-size:11px;"></i>
+              <span style="font-weight:600; color:var(--text-primary);">${m.text}</span>
+            </div>
+            <span style="font-size:11px; color:var(--primary);"><i class="fa-solid fa-arrow-right"></i> 定位</span>
+          </div>
+        `).join('')}
+      `;
+      dropdown.style.display = 'block';
+    }
+  }
+};
+
+window.selectShakerSearchItem = function(targetText) {
+  const input = document.getElementById('shakerSearchInput');
+  const dropdown = document.getElementById('shakerSearchDropdown');
+  const grid = document.getElementById('shakerCheckGrid');
+  if (input) input.value = targetText;
+  if (dropdown) dropdown.style.display = 'none';
+
+  if (grid) {
+    const labels = Array.from(grid.querySelectorAll('label'));
+    labels.forEach(l => {
+      l.classList.remove('shaker-item-highlight');
+      if (l.innerText.trim().includes(targetText)) {
+        l.style.opacity = '1';
+        l.classList.add('shaker-item-highlight');
+        l.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        l.style.opacity = '0.22';
+      }
+    });
+  }
+  if (window.showToast) window.showToast(`已精确定位组件: ${targetText}`, 'success');
+};
+
+window.clearShakerSearch = function() {
+  const input = document.getElementById('shakerSearchInput');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  window.filterShakerComponents('');
+  if (window.showToast) window.showToast('已恢复展示全部 52 个组件', 'info');
+};
+
+// Global click outside to dismiss autocomplete dropdown
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('shakerSearchDropdown');
+  const input = document.getElementById('shakerSearchInput');
+  if (dropdown && dropdown.style.display === 'block') {
+    if (!dropdown.contains(e.target) && e.target !== input) {
+      dropdown.style.display = 'none';
+    }
+  }
+});
+
 // Interactive GSteps Demo Handler
 window.changeStepDemo = function(dir) {
   const box = document.getElementById('demoStepsBox');
