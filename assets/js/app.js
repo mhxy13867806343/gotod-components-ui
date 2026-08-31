@@ -145,6 +145,7 @@ window.showDoc = function(key) {
     demosHtml = doc.demos.map((d, idx) => {
       let codeSection = '';
       if (d.codeTabs && Array.isArray(d.codeTabs)) {
+        const curLang = window.currentCodeLang || 'gdscript';
         const tabBtns = d.codeTabs.map((t, tIdx) => `
           <button class="code-tab-btn ${t.type === 'before' ? 'tab-before' : 'tab-after'} ${tIdx === 0 ? 'active' : ''}" onclick="switchCodeTab(this, ${tIdx})">
             ${t.type === 'before' ? '<i class="fa-solid fa-triangle-exclamation"></i>' : '<i class="fa-solid fa-wand-magic-sparkles"></i>'}
@@ -152,28 +153,42 @@ window.showDoc = function(key) {
           </button>
         `).join('');
 
-        const tabPanels = d.codeTabs.map((t, tIdx) => `
-          <div class="code-tab-panel ${tIdx === 0 ? 'active' : ''}" data-index="${tIdx}">
-            ${t.desc ? `<div class="code-diff-tip"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> <span>${t.desc}</span></div>` : ''}
-            <div class="code-box" style="${t.type === 'before' ? 'background:#1a1418;' : ''}">
-              <pre><code style="${t.type === 'before' ? 'color:#fca5a5;' : ''}">${escapeHtml(t.code)}</code></pre>
+        const tabPanels = d.codeTabs.map((t, tIdx) => {
+          const gdCode = (typeof window.cleanPureGodotCode === 'function') ? window.cleanPureGodotCode(t.code) : t.code;
+          const csCode = t.codeCSharp || t.csharpCode || (typeof window.convertGDScriptToCSharp === 'function' ? window.convertGDScriptToCSharp(t.code) : gdCode);
+          return `
+            <div class="code-tab-panel ${tIdx === 0 ? 'active' : ''}" data-index="${tIdx}">
+              ${t.desc ? `<div class="code-diff-tip"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> <span>${t.desc}</span></div>` : ''}
+              <div class="code-panel-gdscript" style="${curLang === 'gdscript' ? 'display:block;' : 'display:none;'}">
+                <div class="code-box" style="${t.type === 'before' ? 'background:#1a1418;' : ''}">
+                  <pre><code style="${t.type === 'before' ? 'color:#fca5a5;' : ''}">${escapeHtml(gdCode)}</code></pre>
+                </div>
+              </div>
+              <div class="code-panel-csharp" style="${curLang === 'csharp' ? 'display:block;' : 'display:none;'}">
+                <div class="code-box" style="${t.type === 'before' ? 'background:#1f131a;' : 'background:#0f172a;'}">
+                  <pre><code style="${t.type === 'before' ? 'color:#fca5a5;' : 'color:#93c5fd;'}">${escapeHtml(csCode)}</code></pre>
+                </div>
+              </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
 
         codeSection = `
           <div class="code-tab-container">
             <div class="code-tab-bar">
               <div class="code-tab-buttons">${tabBtns}</div>
-              <button class="g-btn g-btn-default" style="height:24px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
-                <i class="fa-regular fa-copy"></i> 复制当前代码
-              </button>
             </div>
             ${tabPanels}
           </div>
         `;
       } else if (d.codeBefore && d.code) {
-        // Automatically render 2-tab diff view
+        const curLang = window.currentCodeLang || 'gdscript';
+        const gdCodeAfter = (typeof window.cleanPureGodotCode === 'function') ? window.cleanPureGodotCode(d.code) : d.code;
+        const csCodeAfter = d.codeCSharp || (typeof window.convertGDScriptToCSharp === 'function' ? window.convertGDScriptToCSharp(d.code) : gdCodeAfter);
+
+        const gdCodeBefore = (typeof window.cleanPureGodotCode === 'function') ? window.cleanPureGodotCode(d.codeBefore) : d.codeBefore;
+        const csCodeBefore = (typeof window.convertGDScriptToCSharp === 'function' ? window.convertGDScriptToCSharp(d.codeBefore) : gdCodeBefore);
+
         codeSection = `
           <div class="code-tab-container">
             <div class="code-tab-bar">
@@ -185,19 +200,30 @@ window.showDoc = function(key) {
                   <i class="fa-solid fa-triangle-exclamation"></i> ❌ 修复前代码 (Before / Problematic)
                 </button>
               </div>
-              <button class="g-btn g-btn-default" style="height:24px; padding:0 8px; font-size:11px;" onclick="copyCode(this)">
-                <i class="fa-regular fa-copy"></i> 复制当前代码
-              </button>
             </div>
             ${d.diffTip ? `<div class="code-diff-tip"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> <span>${d.diffTip}</span></div>` : ''}
             <div class="code-tab-panel active" data-index="0">
-              <div class="code-box">
-                <pre><code>${escapeHtml(d.code)}</code></pre>
+              <div class="code-panel-gdscript" style="${curLang === 'gdscript' ? 'display:block;' : 'display:none;'}">
+                <div class="code-box">
+                  <pre><code>${escapeHtml(gdCodeAfter)}</code></pre>
+                </div>
+              </div>
+              <div class="code-panel-csharp" style="${curLang === 'csharp' ? 'display:block;' : 'display:none;'}">
+                <div class="code-box" style="background:#0f172a;">
+                  <pre><code style="color:#93c5fd;">${escapeHtml(csCodeAfter)}</code></pre>
+                </div>
               </div>
             </div>
             <div class="code-tab-panel" data-index="1">
-              <div class="code-box" style="background:#1a1418;">
-                <pre><code style="color:#fca5a5;">${escapeHtml(d.codeBefore)}</code></pre>
+              <div class="code-panel-gdscript" style="${curLang === 'gdscript' ? 'display:block;' : 'display:none;'}">
+                <div class="code-box" style="background:#1a1418;">
+                  <pre><code style="color:#fca5a5;">${escapeHtml(gdCodeBefore)}</code></pre>
+                </div>
+              </div>
+              <div class="code-panel-csharp" style="${curLang === 'csharp' ? 'display:block;' : 'display:none;'}">
+                <div class="code-box" style="background:#1f131a;">
+                  <pre><code style="color:#fca5a5;">${escapeHtml(csCodeBefore)}</code></pre>
+                </div>
               </div>
             </div>
           </div>
