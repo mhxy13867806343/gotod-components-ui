@@ -235,13 +235,15 @@ window.SIDEBAR_CONFIG = {
           { key: 'loading', title: 'GLoading 加载指示器' },
           { key: 'skeleton', title: 'GSkeleton 骨架屏' },
           { key: 'tour', title: 'GTour 漫游式引导' },
-          { key: 'haptic', title: '📳 GHaptic 触觉反馈 (v1.4)' }
+          { key: 'haptic', title: '📳 GHaptic 触觉反馈' },
+          { key: 'ai-dialogue', title: '🤖 GAIDialogueTree AI 对话树 (v1.5)' }
         ]
       },
       {
         title: 'Data Display 数据',
         items: [
-          { key: 'table', title: '📊 GTable & TableV2 表格 (v1.4)' },
+          { key: 'table', title: '📊 GTable & TableV2 表格' },
+          { key: 'particle-studio', title: '✨ GParticleStudio 粒子工坊 (v1.5)' },
           { key: 'card', title: 'GCard 卡片' },
           { key: 'tag', title: 'GTag 标签' },
           { key: 'badge', title: 'GBadge 徽标' },
@@ -258,7 +260,7 @@ window.SIDEBAR_CONFIG = {
       {
         title: 'Godot 3D & 核心全局 (3D Space & Engine Core)',
         items: [
-          { key: 'hud3d', title: '🎮 GHud3D 3D空间HUD投影 (v1.4)' },
+          { key: 'hud3d', title: '🎮 GHud3D 3D空间HUD投影' },
           { key: 'godot-globals', title: '🌐 Godot 全局方法 & Node 核心 API' },
           { key: 'godot-docs', title: '📖 Godot 4 官方文档与资源传送门' }
         ]

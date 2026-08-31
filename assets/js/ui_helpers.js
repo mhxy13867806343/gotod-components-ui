@@ -2767,3 +2767,290 @@ window.triggerHaptic = function(type) {
 
   if (window.showToast) window.showToast(`马达触觉反馈: ${type.toUpperCase()}`, 'info');
 };
+
+// =========================================================================
+// GParticleStudio Global Demo Helpers
+// =========================================================================
+window.particleStudioState = {
+  amount: 60,
+  spread: 180,
+  velocity: 280,
+  gravity: 400,
+  preset: 'coin',
+  particles: []
+};
+
+window.initParticleStudio = function() {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  function renderLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const dt = 0.016;
+    const active = [];
+
+    window.particleStudioState.particles.forEach(p => {
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vy += window.particleStudioState.gravity * dt;
+      p.life -= dt;
+      p.alpha = Math.max(0, p.life / p.maxLife);
+
+      if (p.life > 0) {
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        active.push(p);
+      }
+    });
+
+    window.particleStudioState.particles = active;
+    const badge = document.getElementById('particleCountBadge');
+    if (badge) badge.innerText = '活动粒子: ' + active.length;
+
+    requestAnimationFrame(renderLoop);
+  }
+
+  renderLoop();
+  setTimeout(() => window.triggerParticleBurst(), 100);
+};
+
+window.spawnParticlesAt = function(x, y) {
+  const cfg = window.particleStudioState;
+  const colors = {
+    coin: ['#ffd700', '#ffea00', '#ffa500', '#ffffff'],
+    gacha: ['#a855f7', '#ec4899', '#3b82f6', '#ffd700'],
+    fire: ['#ef4444', '#f97316', '#fbbf24', '#ffffff'],
+    magic: ['#06b6d4', '#3b82f6', '#8b5cf6', '#ffffff']
+  };
+  const colorList = colors[cfg.preset] || colors.coin;
+
+  for (let i = 0; i < cfg.amount; i++) {
+    const angleRad = (Math.random() * cfg.spread - cfg.spread / 2 - 90) * (Math.PI / 180);
+    const speed = cfg.velocity * (0.5 + Math.random() * 0.8);
+    const maxLife = 0.6 + Math.random() * 0.8;
+
+    window.particleStudioState.particles.push({
+      x: x,
+      y: y,
+      vx: Math.cos(angleRad) * speed,
+      vy: Math.sin(angleRad) * speed,
+      life: maxLife,
+      maxLife: maxLife,
+      size: 2.5 + Math.random() * 3.5,
+      color: colorList[Math.floor(Math.random() * colorList.length)]
+    });
+  }
+};
+
+window.triggerParticleBurst = function() {
+  const canvas = document.getElementById('particleCanvas');
+  if (canvas) {
+    window.spawnParticlesAt(canvas.width / 2, canvas.height / 2 + 30);
+    if (window.showToast) window.showToast('🚀 触发粒子爆发 (Burst)!', 'success');
+  }
+};
+
+window.onParticleCanvasClick = function(e, container) {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top) * scaleY;
+  window.spawnParticlesAt(x, y);
+};
+
+window.applyParticlePreset = function(preset) {
+  window.particleStudioState.preset = preset;
+  if (preset === 'coin') {
+    window.particleStudioState.amount = 60;
+    window.particleStudioState.spread = 160;
+    window.particleStudioState.velocity = 320;
+    window.particleStudioState.gravity = 450;
+  } else if (preset === 'gacha') {
+    window.particleStudioState.amount = 120;
+    window.particleStudioState.spread = 360;
+    window.particleStudioState.velocity = 260;
+    window.particleStudioState.gravity = 0;
+  } else if (preset === 'fire') {
+    window.particleStudioState.amount = 80;
+    window.particleStudioState.spread = 90;
+    window.particleStudioState.velocity = 350;
+    window.particleStudioState.gravity = -200;
+  } else if (preset === 'magic') {
+    window.particleStudioState.amount = 70;
+    window.particleStudioState.spread = 240;
+    window.particleStudioState.velocity = 200;
+    window.particleStudioState.gravity = 80;
+  }
+
+  // Update controls
+  const cA = document.getElementById('pCtrlAmount');
+  const cS = document.getElementById('pCtrlSpread');
+  const cV = document.getElementById('pCtrlVelocity');
+  const cG = document.getElementById('pCtrlGravity');
+  if (cA) cA.value = window.particleStudioState.amount;
+  if (cS) cS.value = window.particleStudioState.spread;
+  if (cV) cV.value = window.particleStudioState.velocity;
+  if (cG) cG.value = window.particleStudioState.gravity;
+
+  const pA = document.getElementById('pValAmount');
+  const pS = document.getElementById('pValSpread');
+  const pV = document.getElementById('pValVelocity');
+  const pG = document.getElementById('pValGravity');
+  if (pA) pA.innerText = window.particleStudioState.amount;
+  if (pS) pS.innerText = window.particleStudioState.spread + '°';
+  if (pV) pV.innerText = window.particleStudioState.velocity;
+  if (pG) pG.innerText = window.particleStudioState.gravity;
+
+  window.triggerParticleBurst();
+};
+
+window.updateParticleParam = function(param, val) {
+  window.particleStudioState[param] = parseFloat(val);
+  const targetLabel = document.getElementById('pVal' + param.charAt(0).toUpperCase() + param.slice(1));
+  if (targetLabel) {
+    targetLabel.innerText = param === 'spread' ? val + '°' : val;
+  }
+};
+
+window.copyGodotParticleCode = function() {
+  const cfg = window.particleStudioState;
+  const code = `# Godot 4 GPUParticles2D 材质与代码\nvar particles = GPUParticles2D.new()\nvar mat = ParticleProcessMaterial.new()\nmat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_POINT\nmat.spread = ${cfg.spread}.0\nmat.initial_velocity_min = ${cfg.velocity * 0.8}.0\nmat.initial_velocity_max = ${cfg.velocity * 1.2}.0\nmat.gravity = Vector3(0, ${cfg.gravity}, 0)\nparticles.amount = ${cfg.amount}\nparticles.process_material = mat\nparticles.one_shot = true\nadd_child(particles)\nparticles.emitting = true`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(() => {
+      if (window.showToast) window.showToast('已复制 Godot 4 GPUParticles2D 材质配置！', 'success');
+    });
+  } else {
+    if (window.showToast) window.showToast('材质配置生成完毕！', 'success');
+  }
+};
+
+// =========================================================================
+// GAIDialogueTree Global Demo Helpers
+// =========================================================================
+window.chooseAIOption = function(type) {
+  const stream = document.getElementById('aiDialogueStream');
+  const optContainer = document.getElementById('aiOptionsContainer');
+  const moodTag = document.getElementById('aiNpcMoodTag');
+  if (!stream || !optContainer) return;
+
+  let playerText = '';
+  let npcReply = '';
+  let newMood = '友善 (Friendly)';
+  let moodTagClass = 'g-tag g-tag-primary';
+
+  if (type === 'honest') {
+    playerText = '是的，我必须摧毁它以挽救王国！';
+    npcReply = '很好，年轻人... 你的眼神中没有贪婪。拿着这块【破晓符文】，它能破除魔核的暗影护盾！';
+    newMood = '崇敬 (Admiring)';
+    moodTagClass = 'g-tag g-tag-success';
+  } else if (type === 'bargain') {
+    playerText = '我想要那件蕴含禁忌力量的古代法杖，做个交易吧。';
+    npcReply = '哼，凡人终究渴望力量。法杖我可以给你，但你必须替我带回三块深渊原石作为等价交换。';
+    newMood = '中立审视 (Neutral)';
+    moodTagClass = 'g-tag g-tag-warning';
+  } else if (type === 'threat') {
+    playerText = '把封印钥匙交出来，否则休怪我剑下无情！';
+    npcReply = '放肆！胆敢在守望者之塔拔剑相向，受死吧，狂妄之徒！[触发战斗事件]';
+    newMood = '敌对开战 (Hostile)';
+    moodTagClass = 'g-tag g-tag-danger';
+  }
+
+  // Append Player Bubble
+  stream.innerHTML += `
+    <div style="display:flex; justify-content:flex-end; gap:8px; align-items:flex-start;">
+      <div style="background:var(--primary); color:#fff; padding:8px 12px; border-radius:6px; font-size:12.5px; line-height:1.6; max-width:85%;">
+        ${playerText}
+      </div>
+      <span style="font-size:16px;">👤</span>
+    </div>
+  `;
+  stream.scrollTop = stream.scrollHeight;
+
+  // Simulate AI Thinking
+  optContainer.innerHTML = `<div style="font-size:12px; color:var(--text-secondary); padding:8px 0;"><i class="fa-solid fa-spinner fa-spin" style="color:var(--primary);"></i> AI 推理引擎正在根据上下文演算剧情分支...</div>`;
+
+  setTimeout(() => {
+    // Append NPC Reply
+    stream.innerHTML += `
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <span style="font-size:16px;">🧙‍♂️</span>
+        <div style="background:var(--bg-surface); padding:8px 12px; border-radius:6px; font-size:12.5px; border:1px solid var(--border-base); color:var(--text-regular); line-height:1.6; max-width:85%;">
+          ${npcReply}
+        </div>
+      </div>
+    `;
+    stream.scrollTop = stream.scrollHeight;
+
+    // Update Mood
+    if (moodTag) {
+      moodTag.className = moodTagClass;
+      moodTag.innerText = '态度: ' + newMood;
+    }
+
+    // Render Next Branches
+    if (type === 'threat') {
+      optContainer.innerHTML = `
+        <button class="g-btn g-btn-danger" style="font-size:12px; padding:6px 12px;" onclick="window.showToast('已进入回合制 BOSS 战斗场景！', 'error')">
+          ⚔️ [开战] 拔剑迎战 大法师艾尔温！
+        </button>
+      `;
+    } else {
+      optContainer.innerHTML = `
+        <button class="g-btn g-btn-primary" style="font-size:12px; padding:6px 12px;" onclick="window.showToast('已接受任务：前往深渊核心！', 'success')">
+          📜 [接受] 领受使命，前往深渊之井
+        </button>
+        <button class="g-btn g-btn-default" style="font-size:12px; padding:6px 12px;" onclick="window.showToast('继续询问世界观细节', 'info')">
+          ❓ [追问] 关于封印魔核的历史起源...
+        </button>
+      `;
+    }
+
+    if (window.showToast) window.showToast('AI 剧情分支推理完成！', 'info');
+  }, 450);
+};
+
+window.resetAIDialogue = function() {
+  const stream = document.getElementById('aiDialogueStream');
+  const optContainer = document.getElementById('aiOptionsContainer');
+  const moodTag = document.getElementById('aiNpcMoodTag');
+  if (stream) {
+    stream.innerHTML = `
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <span style="font-size:16px;">🧙‍♂️</span>
+        <div style="background:var(--bg-surface); padding:8px 12px; border-radius:6px; font-size:12.5px; border:1px solid var(--border-base); color:var(--text-regular); line-height:1.6; max-width:85%;">
+          旅行者，你身上流淌着远古符文的气息... 是为了封印深渊魔核而来的吗？
+        </div>
+      </div>
+    `;
+  }
+  if (moodTag) {
+    moodTag.className = 'g-tag g-tag-primary';
+    moodTag.innerText = '态度: 友善 (Friendly)';
+  }
+  if (optContainer) {
+    optContainer.innerHTML = `
+      <button class="g-btn g-btn-default" style="justify-content:flex-start; text-align:left; font-size:12px; padding:6px 12px;" onclick="window.chooseAIOption('honest')">
+        🗣️ [诚实] 是的，我必须摧毁它以挽救王国 (需要智力 ≥ 12)
+      </button>
+      <button class="g-btn g-btn-default" style="justify-content:flex-start; text-align:left; font-size:12px; padding:6px 12px;" onclick="window.chooseAIOption('bargain')">
+        💰 [商贾] 我想要那件蕴含禁忌力量的古代法杖，做个交易吧
+      </button>
+      <button class="g-btn g-btn-danger" style="justify-content:flex-start; text-align:left; font-size:12px; padding:6px 12px;" onclick="window.chooseAIOption('threat')">
+        ⚔️ [威吓] 把封印钥匙交出来，否则休怪我剑下无情！
+      </button>
+    `;
+  }
+  if (window.showToast) window.showToast('AI 对话树已重置为初始状态', 'info');
+};

@@ -1,41 +1,61 @@
 // =========================================================================
 // Gotod Components UI - Changelog & Release Updates (Using Steps Component)
-// 排序逻辑：未来规划在最前 -> 最新现行版本 (v1.4.0) -> 历史版本往后排列
+// 排序逻辑：未来规划在最前 -> 最新现行版本 (v1.5.0) -> 历史版本往后排列
 // =========================================================================
 
 window.CHANGELOG_DATA = [
   {
-    version: "v1.5.0 (规划中)",
-    date: "2026-09-25 预计",
+    version: "v1.6.0 (规划中)",
+    date: "2026-09-30 预计",
     status: "wait", // wait, process, finish
     icon: "fa-compass",
-    title: "v1.5.0 未来版本规划 (Roadmap)",
-    summary: "计划推出 Particle Studio UI 粒子特效工坊、智能 AI NPC 动态分支对话树引擎与 GPU 深度模糊毛玻璃滤镜。",
+    title: "v1.6.0 未来版本规划 (Roadmap)",
+    summary: "计划推出骨骼动画粒子特效绑定器 (Spine/DragonBones 挂点粒子)、GPU 实时着色器 Shader 工坊与动态毛玻璃背景模糊滤镜。",
     highlights: [
       {
-        tag: "UI 粒子工坊",
+        tag: "骨骼粒子挂点绑定",
         type: "info",
-        desc: "可视化调节金币爆发、抽卡流光粒子发射器，一键生成 Godot 4 GPUParticles2D 配置。"
+        desc: "支持将 GParticleStudio 粒子发射器动态锚定至 2D/3D 骨骼关节（如武器挥砍刀光、足底灰尘）。"
       },
       {
-        tag: "AI 对话树",
+        tag: "Shader 特效工坊",
         type: "info",
-        desc: "无缝对接大语言模型与本地行为树，支持游戏 NPC 动态智能分支剧本推理。"
+        desc: "可视化调节全屏后处理、溶解、彩虹流光、全息扫描线与冲击波特效代码导出。"
+      }
+    ]
+  },
+  {
+    version: "v1.5.0",
+    date: "2026-08-31",
+    status: "process",
+    icon: "fa-wand-magic-sparkles",
+    title: "v1.5.0 UI 粒子工坊与 AI 智能对话树重磅发布 (今日最新版)",
+    summary: "正式推出 GParticleStudio UI 粒子特效工坊与 Godot 4 GPUParticles2D 配置导出器，以及 GAIDialogueTree 大模型/行为树智能多分支剧本推理引擎。",
+    highlights: [
+      {
+        tag: "UI 粒子工坊 (GParticleStudio)",
+        type: "success",
+        desc: "可视化调节 <b>💰 金币爆发、✨ 抽卡金光、🔥 烈焰爆炸、💫 魔法星尘</b> 等粒子发射器，物理加速度实时模拟，一键导出 Godot 4 GPUParticles2D / CPUParticles2D 标准材质与 GDScript 挂载代码。"
+      },
+      {
+        tag: "AI 智能对话树 (GAIDialogueTree)",
+        type: "primary",
+        desc: "无缝对接大语言模型 (LLM) 与本地行为树，支持 NPC 情绪状态机、记忆上下文持久化、根据玩家性格与历史抉择动态生成智能多分支剧本推理。"
       }
     ]
   },
   {
     version: "v1.4.0",
     date: "2026-08-31",
-    status: "process",
+    status: "finish",
     icon: "fa-table-cells",
-    title: "v1.4.0 表格体系、3D 空间 HUD 与触觉引擎发布 (今日最新版)",
-    summary: "正式推出 Element Plus 规范 GTable 与十万级 TableV2 虚拟化表格、GHud3D 3D空间透视投影组件，以及 GHaptic 移动端跨平台触感振动反馈引擎。",
+    title: "v1.4.0 表格体系、3D 空间 HUD 与触觉引擎发布",
+    summary: "推出 Element Plus 规范 GTable 与十万级 TableV2 虚拟化表格、GHud3D 3D空间透视投影组件，以及 GHaptic 移动端跨平台触感振动反馈引擎。",
     highlights: [
       {
         tag: "GTable & TableV2 表格",
         type: "success",
-        desc: "全面参考 Element Plus 规范，支持斑马纹、带边框、固定表头、多选/单选、列排序、作用域插槽（Scoped Slot），以及 <b>100,000+ 行十万级数据 TableV2 虚拟化极速渲染</b>。"
+        desc: "全面参考 Element Plus 规范，支持斑马纹、带边框、固定表头、多选/单选、列排序、作用域插槽（Scoped Slot），以及 100,000+ 行十万级数据 TableV2 虚拟化极速渲染。"
       },
       {
         tag: "GHud3D 空间投影",
@@ -45,7 +65,7 @@ window.CHANGELOG_DATA = [
       {
         tag: "GHaptic 触觉反馈",
         type: "warning",
-        desc: "无缝对接 iOS Taptic Engine 与 Android 振动马达，提供轻快 (Light)、柔和 (Medium)、刚性 (Heavy)、成功 (Success) 与警告/错误等丰富物理点击触感反馈。"
+        desc: "无缝对接 iOS Taptic Engine 与 Android 振动马达，提供轻快 (Light)、柔和 (Medium)、刚性 (Heavy)、成功 (Success) 等物理点击触感反馈。"
       }
     ]
   },
@@ -60,17 +80,17 @@ window.CHANGELOG_DATA = [
       {
         tag: "GVirtualList 虚拟长列表",
         type: "success",
-        desc: "支持 1,000,000+ 百万级数据超高性能平滑渲染，GPU 节点自动切片回收，内存零激增，支持动态高度预估与毫秒级瞬时定位。"
+        desc: "支持 1,000,000+ 百万级数据超高性能平滑渲染，GPU 节点自动切片回收，内存零激增。"
       },
       {
         tag: "GI18n 国际化引擎",
         type: "primary",
-        desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持多语言全 UI 节点动态热切换与动态参数插值（<code>{name}</code>）。"
+        desc: "无缝对接 Godot 4 国际化 Translation 词条系统，支持多语言全 UI 节点动态热切换与参数插值。"
       },
       {
         tag: "GCollapse 手势与曲线",
         type: "warning",
-        desc: "增强移动端触控滑动展开手势（<code>gesture_enabled</code>），支持三次贝塞尔与弹簧果冻回弹过渡曲线。"
+        desc: "增强移动端触控滑动展开手势与弹簧果冻回弹过渡曲线。"
       }
     ]
   },
@@ -86,11 +106,6 @@ window.CHANGELOG_DATA = [
         tag: "Tabs 标签页",
         type: "success",
         desc: "新增滚动吸顶固定、内容过渡动画、异步懒加载、before-leave 切换拦截钩子、双击重命名与 HTML5 自由拖拽排序。"
-      },
-      {
-        tag: "组件单文件架构",
-        type: "info",
-        desc: "将原本 4500+ 行庞大文件彻底拆分为 42 个独立轻量组件文件，API 表格全量标注 v1.2 绿色胶囊版本徽标。"
       }
     ]
   },
@@ -126,7 +141,7 @@ window.CHANGELOG_DATA = [
   }
 ];
 
-window.currentStepIndex = 1; // Default highlight v1.4.0 (index 1)
+window.currentStepIndex = 1; // Default highlight v1.5.0 (index 1)
 
 window.renderChangelogPage = function(subKey = 'changelog-latest') {
   const container = document.getElementById('mainContent');
@@ -151,7 +166,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             版本更新日志与发布历程 (Changelog)
           </h1>
           <p style="font-size:13px; color:var(--text-secondary); margin:0;">
-            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本 (v1.4.0) 居中 ➔ 历史版本在后。
+            基于 <b>GSteps (步骤条组件)</b> 构建：未来规划在前 ➔ 最新版本 (v1.5.0) 居中 ➔ 历史版本在后。
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -162,7 +177,7 @@ window.renderChangelogPage = function(subKey = 'changelog-latest') {
             后一版本 <i class="fa-solid fa-arrow-right"></i>
           </button>
           <button class="g-btn g-btn-default" style="font-size:12px; padding:4px 12px;" onclick="window.setChangelogStep(1)">
-            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.4.0)
+            <i class="fa-solid fa-bolt" style="color:var(--warning);"></i> 聚焦现行最新版 (v1.5.0)
           </button>
         </div>
       </div>
@@ -289,7 +304,7 @@ window.nextChangelogStep = function() {
 };
 
 window.CHANGELOG_CATALOG = {
-  'changelog-roadmap': { title: "v1.5.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
-  'changelog-latest': { title: "v1.4.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
-  'changelog-history': { title: "历史版本历程 (v1.3 / v1.2 / v1.1 / v1.0)", desc: "历史版本时间线。", demos: [] }
+  'changelog-roadmap': { title: "v1.6.0 未来版本规划 (Roadmap)", desc: "未来特性规划。", demos: [] },
+  'changelog-latest': { title: "v1.5.0 最新发布 (Steps 步骤条展示)", desc: "使用 GSteps 步骤条组件展示的更新日志。", demos: [] },
+  'changelog-history': { title: "历史版本历程 (v1.4 ~ v1.0)", desc: "历史版本时间线。", demos: [] }
 };

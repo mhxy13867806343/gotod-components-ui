@@ -330,6 +330,8 @@ window.showDoc = function(key) {
   } else if (key === 'table') {
     const c = document.getElementById('tableV2Container');
     if (c && typeof window.onTableV2Scroll === 'function') setTimeout(() => window.onTableV2Scroll(c), 30);
+  } else if (key === 'particle-studio') {
+    if (typeof window.initParticleStudio === 'function') setTimeout(window.initParticleStudio, 30);
   }
 };
 
