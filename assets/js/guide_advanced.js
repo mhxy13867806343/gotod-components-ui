@@ -440,6 +440,4 @@ GNotification.close_all()`
       }
     ]
   }
-};
-
 });

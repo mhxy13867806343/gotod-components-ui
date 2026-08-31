@@ -259,11 +259,11 @@ window.showDoc = function(key) {
       const curLang = window.currentCodeLang || 'gdscript';
 
       return `
-        <div class="demo-card">
-          <div class="demo-card-header">
-            <div class="demo-card-title">${d.title} ${vBadge}</div>
+        <div class="demo-card" style="margin-bottom: 36px; border: 1px solid var(--border-base); border-radius: var(--radius-lg, 10px); background: var(--bg-surface); overflow: hidden;">
+          <div class="demo-card-header" style="padding: 16px 20px; border-bottom: 1px solid var(--border-base); background: var(--bg-card); display: flex; align-items: center; justify-content: space-between;">
+            <div class="demo-card-title" style="font-size: 15px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center;">${d.title} ${vBadge}</div>
           </div>
-          <div class="demo-card-body">
+          <div class="demo-card-body" style="padding: 26px 22px; background: var(--bg-surface); display: flex; flex-wrap: wrap; gap: 16px; align-items: center; box-sizing: border-box;">
             ${d.render}
           </div>
           ${codeSection ? `
@@ -377,7 +377,7 @@ window.showDoc = function(key) {
   let platformMatrixHtml = '';
   if (!['guide-', 'game-', 'play-', 'studio-', 'imp-', 'godot-'].some(p => key.startsWith(p))) {
     platformMatrixHtml = `
-      <div class="api-table-wrapper" style="margin: 16px 0 24px 0;">
+      <div class="api-table-wrapper" style="margin: 20px 0 36px 0;">
         <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <i class="fa-solid fa-cubes-stacked" style="color: var(--primary);"></i>

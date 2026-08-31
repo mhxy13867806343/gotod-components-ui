@@ -278,32 +278,49 @@ main {
   font-size: 1rem;
 }
 
-/* Demo Section Card */
-.demo-section {
+/* Demo Section & Demo Card Standards (Element Plus / Naive UI Style) */
+.demo-section,
+.demo-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-base);
-  border-radius: var(--radius-lg);
-  margin-bottom: 28px;
+  border-radius: var(--radius-lg, 10px);
+  margin-top: 24px;
+  margin-bottom: 36px;
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
 }
-.demo-section-header {
+.demo-section:hover,
+.demo-card:hover {
+  border-color: var(--border-hover, var(--border-base));
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+.demo-section-header,
+.demo-card-header {
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-base);
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.demo-section-title {
-  font-size: 1rem;
-  font-weight: 600;
-}
-.demo-canvas {
-  padding: 24px;
   background: var(--bg-card);
+}
+.demo-section-title,
+.demo-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+}
+.demo-canvas,
+.demo-card-body {
+  padding: 26px 22px;
+  background: var(--bg-surface);
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   align-items: center;
+  box-sizing: border-box;
 }
 .demo-canvas-col {
   flex-direction: column;
