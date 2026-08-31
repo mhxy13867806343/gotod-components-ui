@@ -33,8 +33,55 @@ window.COMPONENT_CATALOG['input'] = {
     },
     {
       "title": "5. 密码显隐与强弱程度检测 (Password Toggle & Strength Indicator)",
-      "render": "\n      <div style=\"max-width:360px; display:flex; flex-direction:column; gap:6px;\">\n        <div class=\"icon-search-wrapper\" style=\"width:100%;\">\n          <input type=\"password\" class=\"g-input\" id=\"pwdInputVal\" value=\"Godot4UI@\" style=\"width:100%; padding-right:32px;\" oninput=\"\n            const v = this.value;\n            const bar = document.getElementById('pwdBar');\n            let score = 0;\n            if (v.length >= 6) score += 33;\n            if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score += 33;\n            if (/[^a-zA-Z0-9]/.test(v)) score += 34;\n            bar.style.width = score + '%';\n            bar.style.background = score > 70 ? 'var(--success)' : (score > 35 ? 'var(--warning)' : 'var(--danger)');\n          \">\n          <span style=\"position:absolute; right:8px; cursor:pointer; color:var(--text-secondary);\" onclick=\"const p=document.getElementById('pwdInputVal'); p.type=p.type==='password'?'text':'password';\">\n            <i class=\"fa-solid fa-eye\"></i>\n          </span>\n        </div>\n        <div style=\"background:var(--bg-surface); height:4px; border-radius:2px; overflow:hidden;\">\n          <div id=\"pwdBar\" style=\"background:var(--success); width:100%; height:100%; transition:all 0.3s;\"></div>\n        </div>\n        <span style=\"font-size:11px; color:var(--text-secondary);\">密码强度：强 (包含大写字母、数字及特殊符号)</span>\n      </div>\n    ",
-      "code": "# GDScript: 密码强度校验\ninput.show_password = true\ninput.enable_strength_meter = true"
+      "render": `
+      <div style="max-width:380px; display:flex; flex-direction:column; gap:8px;">
+        <div style="position:relative; width:100%; display:flex; align-items:center;">
+          <input type="password" class="g-input" id="pwdInputVal" value="Godot4UI@" style="width:100%; padding-right:36px;" oninput="
+            const v = this.value;
+            const bar = document.getElementById('pwdBar');
+            const scoreText = document.getElementById('pwdStrengthText');
+            let score = 0;
+            if (v.length >= 6) score += 33;
+            if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score += 33;
+            if (/[^a-zA-Z0-9]/.test(v)) score += 34;
+            bar.style.width = score + '%';
+            if (score > 70) {
+              bar.style.background = 'var(--success)';
+              scoreText.innerText = '密码强度：强 (包含大写字母、数字及特殊符号)';
+              scoreText.style.color = 'var(--success)';
+            } else if (score > 35) {
+              bar.style.background = 'var(--warning)';
+              scoreText.innerText = '密码强度：中等 (建议增加特殊符号或大写字母)';
+              scoreText.style.color = 'var(--warning)';
+            } else {
+              bar.style.background = 'var(--danger)';
+              scoreText.innerText = '密码强度：弱 (长度过短或字符单一)';
+              scoreText.style.color = 'var(--danger)';
+            }
+          ">
+          <span style="position:absolute; right:10px; cursor:pointer; color:var(--text-secondary); display:flex; align-items:center; z-index:2;" title="切换密码显隐" onclick="
+            const p = document.getElementById('pwdInputVal');
+            const ic = document.getElementById('pwdEyeIcon');
+            if (p.type === 'password') {
+              p.type = 'text';
+              ic.className = 'fa-solid fa-eye-slash';
+              showToast('已显示密码明文', 'info');
+            } else {
+              p.type = 'password';
+              ic.className = 'fa-solid fa-eye';
+              showToast('已隐藏为密码密文', 'info');
+            }
+          ">
+            <i id="pwdEyeIcon" class="fa-solid fa-eye" style="font-size:15px;"></i>
+          </span>
+        </div>
+        <div style="background:var(--bg-surface); height:4px; border-radius:2px; overflow:hidden; border:1px solid var(--border-base);">
+          <div id="pwdBar" style="background:var(--success); width:100%; height:100%; transition:all 0.3s;"></div>
+        </div>
+        <span id="pwdStrengthText" style="font-size:11px; color:var(--success); font-weight:600;">密码强度：强 (包含大写字母、数字及特殊符号)</span>
+      </div>
+    `,
+      "code": "# GDScript: 密码强度校验与显隐切换\ninput.show_password = true\ninput.enable_strength_meter = true\ninput.show_password_toggle = true"
     },
     {
       "title": "6. 一键清空与前后缀插槽 (Clearable & Suffix Slots)",

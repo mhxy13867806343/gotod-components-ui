@@ -4,7 +4,7 @@
  * Zero external font dependency, rendered via crisp SVG CSS masks.
  */
 
-i[class^="fa-"], i[class*=" fa-"], .g-icon-svg {
+.g-icon-svg {
   display: inline-block;
   width: 1em;
   height: 1em;
