@@ -481,29 +481,26 @@ window.convertGDScriptToCSharp = function(gdCode) {
 };
 
 window.switchCodeLanguage = function(lang, btn) {
-  window.currentCodeLang = lang;
-  localStorage.setItem('gotod_code_lang', lang);
-
-  // Update all language button styles across all demo cards
-  document.querySelectorAll('.g-lang-btn').forEach(b => {
-    const isThisLang = b.getAttribute('data-lang') === lang;
-    b.style.background = isThisLang ? 'var(--primary)' : 'transparent';
-    b.style.borderColor = isThisLang ? 'var(--primary)' : 'var(--border-base)';
-    b.style.color = isThisLang ? '#ffffff' : 'var(--text-secondary)';
-  });
-
-  // Toggle code display panels
-  document.querySelectorAll('.code-panel-gdscript').forEach(p => {
-    p.style.display = (lang === 'gdscript') ? 'block' : 'none';
-  });
-  document.querySelectorAll('.code-panel-csharp').forEach(p => {
-    p.style.display = (lang === 'csharp') ? 'block' : 'none';
-  });
-
-  // Automatically expand the current demo card's source code area
   if (btn) {
     const card = btn.closest('.demo-card');
     if (card) {
+      // Update ONLY this card's language buttons
+      card.querySelectorAll('.g-lang-btn').forEach(b => {
+        const isThisLang = b.getAttribute('data-lang') === lang;
+        b.style.background = isThisLang ? 'var(--primary)' : 'transparent';
+        b.style.borderColor = isThisLang ? 'var(--primary)' : 'var(--border-base)';
+        b.style.color = isThisLang ? '#ffffff' : 'var(--text-secondary)';
+      });
+
+      // Toggle ONLY this card's code panels
+      card.querySelectorAll('.code-panel-gdscript').forEach(p => {
+        p.style.display = (lang === 'gdscript') ? 'block' : 'none';
+      });
+      card.querySelectorAll('.code-panel-csharp').forEach(p => {
+        p.style.display = (lang === 'csharp') ? 'block' : 'none';
+      });
+
+      // Automatically expand ONLY this demo card's source code area
       const wrapper = card.querySelector('.demo-source-wrapper');
       const toggleBtn = card.querySelector('.toggle-code-btn');
       if (wrapper) {
@@ -516,9 +513,24 @@ window.switchCodeLanguage = function(lang, btn) {
         }
       }
     }
+  } else {
+    window.currentCodeLang = lang;
+    localStorage.setItem('gotod_code_lang', lang);
+    document.querySelectorAll('.g-lang-btn').forEach(b => {
+      const isThisLang = b.getAttribute('data-lang') === lang;
+      b.style.background = isThisLang ? 'var(--primary)' : 'transparent';
+      b.style.borderColor = isThisLang ? 'var(--primary)' : 'var(--border-base)';
+      b.style.color = isThisLang ? '#ffffff' : 'var(--text-secondary)';
+    });
+    document.querySelectorAll('.code-panel-gdscript').forEach(p => {
+      p.style.display = (lang === 'gdscript') ? 'block' : 'none';
+    });
+    document.querySelectorAll('.code-panel-csharp').forEach(p => {
+      p.style.display = (lang === 'csharp') ? 'block' : 'none';
+    });
   }
 
   if (window.showToast) {
-    window.showToast(`已切换并展开【${lang === 'csharp' ? 'C# (Godot .NET)' : 'GDScript'}】源代码`, 'info');
+    window.showToast(`已切换并展开【${lang === 'csharp' ? 'C# (Godot .NET)' : 'GDScript'}】代码`, 'info');
   }
 };

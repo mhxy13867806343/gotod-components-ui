@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gotod UI (Vue 3.5.9 v2 Edition) - Godot 4 高保真游戏 UI 框架</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_53">
+  <!-- Vue 3.5.9 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.9/vue.global.prod.js"></script>
+</head>
+<body>
+  <div id="vueApp" class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-gamepad"></i></div>
+        <div class="logo-text">
+          <span class="brand-title">Gotod UI</span>
+          <span class="brand-subtitle">Godot 4 Components (Vue 3.5.9 Edition)</span>
+        </div>
+      </div>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="globalSearchInput" placeholder="在 Gotod UI 中全站搜索组件、API 或属性 (快捷键 /)..." autocomplete="off">
+        <div class="search-kbd"><kbd>/</kbd></div>
+      </div>
+      <div class="header-actions">
+        <div class="header-badge" style="background:#065f46; color:#a7f3d0; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;"><i class="fa-brands fa-vuejs"></i> Vue v3.5.9</div>
+        <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="header-btn" title="GitHub 仓库"><i class="fa-brands fa-github"></i></a>
+      </div>
+    </header>
+
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-search" style="padding:10px 12px; border-bottom:1px solid var(--border-base);">
+          <div style="position:relative; width:100%;">
+            <i class="fa-solid fa-filter" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text-secondary); font-size:12px;"></i>
+            <input type="text" id="vueSidebarFilter" placeholder="Vue 3 过滤组件..." style="width:100%; box-sizing:border-box; padding:6px 10px 6px 30px; border:1px solid var(--border-base); border-radius:var(--radius); background:var(--bg-input); color:var(--text-main); font-size:12px;">
+          </div>
+        </div>
+        <nav class="sidebar-nav" id="sidebarNav">
+          <!-- Dynamically populated -->
+        </nav>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="content" id="mainContent">
+        <div class="content-body" id="docContent">
+          <!-- Content dynamically rendered -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Local Standalone UI Helpers Modules -->
+  <script src="../../assets/js/ui_core.js?v=20260831_53"></script>
+  <script src="../../assets/js/ui_simulators.js?v=20260831_53"></script>
+  <script src="../../assets/js/ui_feedback_simulators.js?v=20260831_53"></script>
+  <script src="../../assets/js/ui_dialogue_simulators.js?v=20260831_53"></script>
+  <script src="../../assets/js/ui_select_engine.js?v=20260831_53"></script>
+  <script src="../../assets/js/ui_icon_tools.js?v=20260831_53"></script>
+  <script src="../../assets/js/ui_data_components.js?v=20260831_53"></script>
+  <script src="../../assets/js/ui_game_engine_studios.js?v=20260831_53"></script>
+
+  <script src="../../assets/js/sidebar_nav.js?v=20260831_53"></script>
+  <script src="../../assets/js/icons_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_catalog.js?v=20260831_53"></script>
+  <!-- Individual Component Catalogs -->
+  <script src="../../assets/js/components_button.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_text.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_container.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_divider.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_icon.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_fab.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_input.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_textarea.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_input_number.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_stepper.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_switch.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_checkbox.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_radio.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_select.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_picker.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_slider.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_form.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_dialog.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_dialogue.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_chat.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_popup.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_overlay.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_action_sheet.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_popover.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_notice_bar.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_message.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_toast.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_alert.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_drawer.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_tooltip.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_loading.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_skeleton.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_tour.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_haptic.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_ai_dialogue.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_card.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_tag.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_badge.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_avatar.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_progress.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_tabs.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_collapse.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_steps.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_virtual_list.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_i18n.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_table.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_particle_studio.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_skeleton_particle.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_shader_studio.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_hud3d.js?v=20260831_53"></script>
+  <script src="../../assets/js/components_space.js?v=20260831_53"></script>
+  <script src="../../assets/js/slots_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/game_templates.js?v=20260831_53"></script>
+  <script src="../../assets/js/api_playground.js?v=20260831_53"></script>
+  <script src="../../assets/js/imperative_api.js?v=20260831_53"></script>
+  <script src="../../assets/js/hooks_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/signals_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/decorator_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/storage_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/utils_router_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/lifecycle_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/godot_globals_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/resource_studio.js?v=20260831_53"></script>
+  <script src="../../assets/js/networking_physics_catalog.js?v=20260831_53"></script>
+  <script src="../../assets/js/global_search.js?v=20260831_53"></script>
+  <script src="../../assets/js/nav_dropdown.js?v=20260831_53"></script>
+  <script src="../../assets/js/changelog_page.js?v=20260831_53"></script>
+  <script src="../../assets/js/app.js?v=20260831_53"></script>
+
+  <!-- Vue 3.5.9 Reactive Composition Bridge -->
+  <script>
+    if (window.Vue) {
+      const { createApp, ref, onMounted } = Vue;
+      const app = createApp({
+        setup() {
+          const filterKeyword = ref('');
+          onMounted(() => {
+            console.log('Gotod UI (Vue 3.5.9 v2 Edition) mounted successfully in v2/v-vue.');
+            const input = document.getElementById('vueSidebarFilter');
+            if (input) {
+              input.addEventListener('input', (e) => {
+                const val = e.target.value.toLowerCase();
+                document.querySelectorAll('.nav-item').forEach(item => {
+                  const txt = item.textContent.toLowerCase();
+                  item.style.display = txt.includes(val) ? '' : 'none';
+                });
+              });
+            }
+          });
+          return { filterKeyword };
+        }
+      });
+      app.mount('#vueApp');
+    }
+  </script>
+</body>
+</html>
