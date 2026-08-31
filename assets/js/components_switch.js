@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['switch'] = {
   "desc": "表示两种相互对立的状态间的切换，多用于触发即时动作。支持尺寸切换、自定义色彩与禁用。",
   "demos": [
     {
-      "title": "1. 基础开关状态 (Basic Switch)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(bool) / xx(opts) / xx(a,b,c))",
       "render": "<div style=\"display:flex; gap:20px; align-items:center;\"><label style=\"position:relative; display:inline-block; width:44px; height:24px; cursor:pointer;\"><input type=\"checkbox\" checked style=\"opacity:0; width:0; height:0;\" onchange=\"this.nextElementSibling.style.background = this.checked ? 'var(--primary)' : 'var(--border-base)'; this.nextElementSibling.firstElementChild.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';\"><span style=\"position:absolute; top:0; left:0; right:0; bottom:0; background:var(--primary); border-radius:24px; transition:0.3s;\"><span style=\"position:absolute; height:18px; width:18px; left:3px; bottom:3px; background:white; border-radius:50%; transition:0.3s; transform:translateX(20px);\"></span></span></label><span style=\"font-size:13px; color:var(--text-secondary);\">已开启状态</span></div>",
-      "code": "# GDScript: 基础开关\nvar sw = GSwitch.new()\nsw.checked = true\nadd_child(sw)"
+      "code": "# 方式 1: 单一布尔值快捷构建\nvar sw1 = GSwitch.create(true)\n\n# 方式 2: 完整字典配置对象\nvar sw2 = GSwitch.create({\n    \"checked\": true,\n    \"checked_color\": Color(\"#67c23a\"),\n    \"on_toggle\": func(val): GMessage.info(\"开关状态: \" + str(val))\n})\n\n# 方式 3: 多参数位置传参 (初始布尔值, 状态切换回调, 是否禁用)\nvar sw3 = GSwitch.create(false, func(val): print(val), false)"
     },
     {
       "title": "2. 自定义主题配色 (Custom Active Color)",
@@ -65,12 +65,18 @@ window.COMPONENT_CATALOG['switch'] = {
   "events": [
     {
       "name": "toggled(checked)",
-      "desc": "开关状态改变时触发",
+      "desc": "开关状态切换时触发",
       "params": "(checked: bool)",
       "version": "v1.0"
     }
   ],
   "methods": [
+    {
+      "name": "create(checked_or_options: Variant, on_toggle: Variant = null, disabled: Variant = null) -> GSwitch",
+      "desc": "静态多态构建工厂方法。支持单布尔参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(checked_or_options: Variant, on_toggle: Variant = null, disabled: Variant = null) -> GSwitch",
+      "version": "v1.0.6"
+    },
     {
       "name": "toggle()",
       "desc": "翻转当前开关状态",

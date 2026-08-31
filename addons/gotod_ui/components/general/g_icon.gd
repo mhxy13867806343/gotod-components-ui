@@ -57,3 +57,24 @@ func _update_icon_texture() -> void:
 	var icon_path = "res://addons/gotod_ui/assets/icons/" + icon_name + ".svg"
 	if ResourceLoader.exists(icon_path):
 		texture = load(icon_path)
+
+## 静态多态构建工厂 (支持 1. 单值简写 create("heart"), 2. 字典对象 create({ ... }), 3. 多参数 create(name, size, color))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GIcon:
+	var icon = GIcon.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("name"): icon.icon_name = str(opts["name"])
+		elif opts.has("icon"): icon.icon_name = str(opts["icon"])
+		if opts.has("size"): icon.icon_size = float(opts["size"])
+		if opts.has("color"):
+			if opts["color"] is Color: icon.icon_color = opts["color"]
+			elif opts["color"] is String: icon.icon_color = Color(opts["color"])
+		if opts.has("spin"): icon.spin = bool(opts["spin"])
+	elif arg1 != null:
+		icon.icon_name = str(arg1)
+		if arg2 != null:
+			icon.icon_size = float(arg2)
+		if arg3 != null:
+			if arg3 is Color: icon.icon_color = arg3
+			elif arg3 is String: icon.icon_color = Color(arg3)
+	return icon

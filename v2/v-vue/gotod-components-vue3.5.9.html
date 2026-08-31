@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../../assets/css/theme.css?v=20260831_55">
-  <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_55">
+  <link rel="stylesheet" href="../../assets/css/theme.css?v=20260831_77">
+  <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_77">
   <!-- Vue 3.5.9 -->
   <script src="../../public/js/vue.global.min.js"></script>
   <style>
@@ -105,10 +105,17 @@
         <i class="fa-solid fa-house" style="color:var(--primary);"></i>
         <span>V1版</span>
       </a>
-      <a href="../v-jquery/" class="jd-dock-item" title="切换到 jQuery 架构版本">
-        <i class="fa-brands fa-js" style="color:#f7df1e;"></i>
-        <span>JQ版</span>
-      </a>
+      <div class="jd-dock-menu">
+        <button class="jd-dock-item" type="button" onclick="if(window.toggleDockMenu){toggleDockMenu(event);}else{event.stopPropagation();this.parentElement.classList.toggle('is-open');}" title="打开版本与资料菜单" aria-haspopup="menu" aria-expanded="false">
+          <i class="fa-solid fa-layer-group" style="color:#67e8f9;"></i>
+          <span>版本</span>
+        </button>
+        <div class="g-menu jd-dock-submenu" role="menu" aria-label="版本与资料菜单">
+          <a href="../../" class="g-menu-item" role="menuitem"><i class="fa-solid fa-house" style="color:var(--primary);"></i><span>V1 版</span></a>
+          <a href="../v-jquery/" class="g-menu-item" role="menuitem"><i class="fa-brands fa-js" style="color:#f7df1e;"></i><span>JQ 版</span></a>
+          <a href="../../library/" class="g-menu-item" role="menuitem"><i class="fa-solid fa-book-open-reader" style="color:#67e8f9;"></i><span>Library</span></a>
+        </div>
+      </div>
       <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="jd-dock-item" title="访问 GitHub 开源仓库">
         <i class="fa-brands fa-github"></i>
         <span>源码</span>
@@ -120,6 +127,7 @@
     </div>
   </div>
 
+  <script src="../../assets/js/nav_dropdown.js?v=20260831_77"></script>
   <script>
     if (window.Vue) {
       const { createApp } = Vue;

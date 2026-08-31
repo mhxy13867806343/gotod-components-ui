@@ -7,25 +7,66 @@ signal prompt_submitted(value: String)
 
 static var _current_box: GMessageBox = null
 
-# ==========================================
-# 命令式调用静态方法 (Imperative Static Methods)
-# ==========================================
+## 统一弹窗服务方法 (对标 service 规范避免与 Godot 冲突)
+static func service(options_or_message: Variant, context_node: Node = null) -> GMessageBox:
+	if options_or_message is Dictionary:
+		var opts = options_or_message as Dictionary
+		var box_type = opts.get("type", "alert")
+		match box_type:
+			"confirm": return confirm(opts, "确认", {}, context_node)
+			"prompt": return prompt(opts, "输入", {}, context_node)
+			_: return alert(opts, "提示", {}, context_node)
+	return alert(str(options_or_message), "提示", {}, context_node)
 
-## 消息提示框 (Alert Dialog)
-static func alert(message: String, title: String = "提示", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
-	var box = _create_box(title, message, options, context_node)
+## 启动别名方法
+static func open(options_or_message: Variant, context_node: Node = null) -> GMessageBox:
+	return service(options_or_message, context_node)
+
+## 消息提示框 (Alert Dialog - 支持 String 或 Dictionary 配置对象)
+static func alert(message_or_options: Variant, title: String = "提示", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
+	var final_msg = ""
+	var final_title = title
+	var final_opts = options
+	var final_ctx = context_node
+	if message_or_options is Dictionary:
+		final_opts = message_or_options as Dictionary
+		final_msg = final_opts.get("message", final_opts.get("text", ""))
+		final_title = final_opts.get("title", title)
+	else:
+		final_msg = str(message_or_options)
+	var box = _create_box(final_title, final_msg, final_opts, final_ctx)
 	box._setup_buttons(false, false)
 	return box
 
-## 确认取消框 (Confirm Dialog)
-static func confirm(message: String, title: String = "确认", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
-	var box = _create_box(title, message, options, context_node)
+## 确认取消框 (Confirm Dialog - 支持 String 或 Dictionary 配置对象)
+static func confirm(message_or_options: Variant, title: String = "确认", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
+	var final_msg = ""
+	var final_title = title
+	var final_opts = options
+	var final_ctx = context_node
+	if message_or_options is Dictionary:
+		final_opts = message_or_options as Dictionary
+		final_msg = final_opts.get("message", final_opts.get("text", ""))
+		final_title = final_opts.get("title", title)
+	else:
+		final_msg = str(message_or_options)
+	var box = _create_box(final_title, final_msg, final_opts, final_ctx)
 	box._setup_buttons(true, false)
 	return box
 
-## 输入提交框 (Prompt Dialog)
-static func prompt(message: String, title: String = "输入", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
-	var box = _create_box(title, message, options, context_node)
+## 输入提交框 (Prompt Dialog - 支持 String 或 Dictionary 配置对象)
+static func prompt(message_or_options: Variant, title: String = "输入", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
+	var final_msg = ""
+	var final_title = title
+	var final_opts = options
+	var final_ctx = context_node
+	if message_or_options is Dictionary:
+		final_opts = message_or_options as Dictionary
+		final_msg = final_opts.get("message", final_opts.get("text", ""))
+		final_title = final_opts.get("title", title)
+	else:
+		final_msg = str(message_or_options)
+	var box = _create_box(final_title, final_msg, final_opts, final_ctx)
 	box._setup_buttons(true, true)
 	return box
 

@@ -80,7 +80,23 @@ func _ready() -> void:
 # 静态命令式快捷调用 (Static Imperative API)
 # ==========================================
 
-## 文字提示（原 show，因与父类 show()->void 冲突已重命名为 text）
+## 静态命令式服务方法（支持 String 与 Dictionary 选项对象，对标 service 规范避免与 Godot 冲突）
+static func service(options_or_message: Variant, duration: float = 2.0, position: Position = Position.MIDDLE) -> GToast:
+	if options_or_message is Dictionary:
+		return _display_toast(options_or_message as Dictionary)
+	return _display_toast({
+		"message": str(options_or_message),
+		"type": ToastType.TEXT,
+		"duration": duration,
+		"position": position,
+		"forbid_click": false
+	})
+
+## 便捷启动别名
+static func open(options_or_message: Variant, duration: float = 2.0, position: Position = Position.MIDDLE) -> GToast:
+	return service(options_or_message, duration, position)
+
+## 文字提示 (Text Toast)
 static func text(message: String, duration: float = 2.0, position: Position = Position.MIDDLE) -> GToast:
 	return _display_toast({
 		"message": message,

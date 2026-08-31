@@ -58,3 +58,30 @@ func _draw() -> void:
 		var str_sz = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
 		var pos = Vector2(center.x - str_sz.x / 2.0, center.y + str_sz.y * 0.35)
 		draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color.WHITE)
+
+## 静态多态构建工厂 (支持 1. 文本/路径单值 create("U"), 2. 字典对象 create({ ... }), 3. 多参数 create(text, size, shape))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GAvatar:
+	var av = GAvatar.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text"): av.text = str(opts["text"])
+		if opts.has("size"): av.avatar_size = float(opts["size"])
+		if opts.has("shape"):
+			if opts["shape"] is int: av.shape = opts["shape"]
+			elif str(opts["shape"]).to_lower() == "square": av.shape = Shape.SQUARE
+		if opts.has("texture") and opts["texture"] is Texture2D: av.avatar_texture = opts["texture"]
+		elif opts.has("src") and opts["src"] is String and ResourceLoader.exists(opts["src"]): av.avatar_texture = load(opts["src"])
+		if opts.has("bg_color") or opts.has("background"): av.background_color = Color(opts.get("bg_color", opts.get("background", Color.TRANSPARENT)))
+	elif arg1 != null:
+		if arg1 is Texture2D:
+			av.avatar_texture = arg1
+		elif str(arg1).begins_with("res://") and ResourceLoader.exists(str(arg1)):
+			av.avatar_texture = load(str(arg1))
+		else:
+			av.text = str(arg1)
+		if arg2 != null:
+			av.avatar_size = float(arg2)
+		if arg3 != null:
+			if arg3 is int: av.shape = arg3
+			elif str(arg3).to_lower() == "square": av.shape = Shape.SQUARE
+	return av

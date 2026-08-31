@@ -422,3 +422,35 @@ func _update_styles() -> void:
 	
 	if _arrow_icon:
 		_arrow_icon.add_theme_color_override("font_color", GotodTheme.get_color("text_secondary", Color("#909399")))
+
+## 静态多态构建工厂 (支持 1. 数组选项 create(options_list), 2. 字典对象 create({ ... }), 3. 多参数 create(options, selected_val, placeholder))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GSelect:
+	var sel = GSelect.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("options") and opts["options"] is Array:
+			var arr: Array[Dictionary] = []
+			for item in opts["options"]:
+				if item is Dictionary: arr.append(item)
+				else: arr.append({ "label": str(item), "value": item })
+			sel.options = arr
+		if opts.has("placeholder"): sel.placeholder_text = str(opts["placeholder"])
+		if opts.has("clearable"): sel.clearable = bool(opts["clearable"])
+		if opts.has("multiple"): sel.multiple = bool(opts["multiple"])
+		if opts.has("filterable"): sel.filterable = bool(opts["filterable"])
+		if opts.has("disabled"): sel.disabled = bool(opts["disabled"])
+		if opts.has("selected") or opts.has("value"):
+			sel.set_value(opts.get("selected", opts.get("value", null)))
+		if opts.has("on_change") and opts["on_change"] is Callable:
+			sel.item_selected.connect(func(_idx, val, _lbl): opts["on_change"].call(val))
+	elif arg1 is Array:
+		var arr: Array[Dictionary] = []
+		for item in (arg1 as Array):
+			if item is Dictionary: arr.append(item)
+			else: arr.append({ "label": str(item), "value": item })
+		sel.options = arr
+		if arg2 != null:
+			sel.set_value(arg2)
+		if arg3 != null:
+			sel.placeholder_text = str(arg3)
+	return sel

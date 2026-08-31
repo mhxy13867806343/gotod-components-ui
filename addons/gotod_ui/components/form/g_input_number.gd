@@ -95,3 +95,23 @@ func _update_styles() -> void:
 		_line_edit.add_theme_color_override("font_color", GotodTheme.get_color("text_primary"))
 	if _dec_btn: _dec_btn.disabled = disabled
 	if _inc_btn: _inc_btn.disabled = disabled
+
+## 静态多态构建工厂 (支持 1. 数值单值 create(10), 2. 字典对象 create({ ... }), 3. 多参数 create(value, min_val, max_val))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GInputNumber:
+	var num = GInputNumber.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("min"): num.min_value = float(opts["min"])
+		if opts.has("max"): num.max_value = float(opts["max"])
+		if opts.has("step"): num.step = float(opts["step"])
+		if opts.has("precision"): num.precision = int(opts["precision"])
+		if opts.has("value"): num.value = float(opts["value"])
+		if opts.has("disabled"): num.disabled = bool(opts["disabled"])
+		if opts.has("on_change") and opts["on_change"] is Callable: num.value_changed.connect(opts["on_change"])
+	elif arg1 != null:
+		num.value = float(arg1)
+		if arg2 != null:
+			num.min_value = float(arg2)
+		if arg3 != null:
+			num.max_value = float(arg3)
+	return num

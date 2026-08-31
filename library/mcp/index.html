@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="gotod-components-ui 的 MCP 大库：聚合索引、官方参考、Godot 引擎与 3000+ 精选 Server">
+  <title>MCP 大库 · gotod-components-ui</title>
+  <link rel="stylesheet" href="../../assets/css/theme.css?v=20260831_77">
+  <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_77">
+  <link rel="stylesheet" href="../css/index.css?v=20260831_77">
+  <link rel="stylesheet" href="../css/vue-components.css?v=20260831_77">
+  <link rel="stylesheet" href="../css/mcp-skills.css?v=20260831_77">
+</head>
+<body>
+  <div class="source-app is-mcp is-catalog">
+    <header class="source-topbar">
+      <a class="source-brand" href="../../" aria-label="返回 gotod-components-ui 主站">
+        <span class="source-brand-mark">G</span>
+        <span>gotod-components-ui</span>
+        <span class="source-brand-label">MCP</span>
+      </a>
+      <nav class="source-nav" aria-label="页面导航">
+        <a href="../main.html">入口</a>
+        <a href="../index.html">Library</a>
+        <a href="../vue-components.html">Vue 来源</a>
+        <a class="is-current" href="./">MCP</a>
+        <a href="../skills/">Skills</a>
+        <a class="source-github" href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </nav>
+    </header>
+
+    <main class="catalog-shell">
+      <section class="catalog-hero">
+        <p class="source-eyebrow">GOTOD UI / MCP DIRECTORY</p>
+        <h1>先走聚合大站，<br><em>再按分类翻卡片。</em></h1>
+        <p>本页把 MCPServers.org、Smithery、Glama、官方 Registry 和 GitHub awesome 清单接到一起。卡片主体来自 punkpeye/awesome-mcp-servers，Godot 相关条目置顶在「游戏引擎」。百万级在线目录仍从上方聚合站进入。</p>
+      </section>
+
+      <section class="source-overview catalog-overview" aria-label="目录规模">
+        <div><strong id="catalogTotal">—</strong><span>精选 Server</span></div>
+        <div><strong id="catalogGroupCount">—</strong><span>功能分类</span></div>
+        <div><strong>10</strong><span>聚合 / GitHub 入口</span></div>
+        <div><strong>Godot</strong><span>引擎条目已置顶</span></div>
+      </section>
+
+      <section>
+        <div class="source-section-heading catalog-heading">
+          <div><p class="source-eyebrow">INDEX HUBS</p><h2>聚合索引大站</h2></div>
+          <p>要一次看上千或上万条，直接进这些站。本页是离线可检索的精选镜像，方便对照和复制链接。</p>
+        </div>
+        <div id="catalogHubs" class="catalog-hubs" aria-label="MCP 聚合站"></div>
+      </section>
+
+      <section class="library-toolbar catalog-toolbar">
+        <div class="library-search-wrap"><input id="catalogSearch" class="library-search" type="search" placeholder="搜索 Server、仓库、Godot、数据库、浏览器..." aria-label="搜索 MCP"></div>
+        <div id="catalogTabs" class="library-tabs" role="tablist" aria-label="MCP 分类"></div>
+      </section>
+      <div class="library-meta"><span id="catalogCount">加载中...</span><span>悬停查看 · 外链直达 · 一键复制</span></div>
+      <section id="catalogGrid" class="library-grid catalog-grid" aria-label="MCP 卡片"></section>
+      <p class="library-source">数据主要解析自 <a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" rel="noreferrer">punkpeye/awesome-mcp-servers</a>。在线全量请走 MCPServers.org、Smithery、Glama 与 <a href="https://registry.modelcontextprotocol.io" target="_blank" rel="noreferrer">官方 Registry</a>。第三方许可证与维护状态以仓库为准。</p>
+    </main>
+  </div>
+  <script src="../js/mcp-data.js?v=20260831_77"></script>
+  <script src="../js/catalog-app.js?v=20260831_77"></script>
+  <script src="../js/mcp.js?v=20260831_77"></script>
+</body>
+</html>

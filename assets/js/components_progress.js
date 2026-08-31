@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['progress'] = {
   "desc": "用于展示操作进度，告知用户当前状态和预期。支持线性条状与圆形环状。",
   "demos": [
     {
-      "title": "1. 基础直线进度条 (Basic Line Progress)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(val) / xx(opts) / xx(a,b,c))",
       "render": "<div style=\"display:flex; flex-direction:column; gap:12px; max-width:400px;\"><div style=\"background:var(--bg-surface); height:8px; border-radius:4px; overflow:hidden;\"><div style=\"background:var(--primary); width:70%; height:100%;\"></div></div><div style=\"display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary);\"><span>主线任务下载中</span><span>70%</span></div></div>",
-      "code": "# GDScript: 基础进度条\nvar prog = GProgress.new()\nprog.percentage = 70.0\nadd_child(prog)"
+      "code": "# 方式 1: 单一进度数值快捷构建\nvar prog1 = GProgress.create(75.0)\n\n# 方式 2: 完整字典配置对象\nvar prog2 = GProgress.create({\n    \"percentage\": 85.0,\n    \"type\": \"circle\",\n    \"status\": \"success\",\n    \"stroke_width\": 8.0,\n    \"show_text\": true\n})\n\n# 方式 3: 多参数位置传参 (百分比, 形状类型, 状态色彩)\nvar prog3 = GProgress.create(60.0, GProgress.ProgressType.CIRCLE, \"warning\")"
     },
     {
       "title": "2. 百分比内显与粗细定制 (Text Inside & Stroke Width)",
@@ -69,6 +69,12 @@ window.COMPONENT_CATALOG['progress'] = {
   ],
   "events": [],
   "methods": [
+    {
+      "name": "create(percentage_or_options: Variant, type: Variant = null, status: Variant = null) -> GProgress",
+      "desc": "静态多态构建工厂方法。支持单进度数值、字典配置对象、多参数位置传递三种形态",
+      "params": "(percentage_or_options: Variant, type: Variant = null, status: Variant = null) -> GProgress",
+      "version": "v1.0.6"
+    },
     {
       "name": "set_percentage(val: float)",
       "desc": "平滑更新进度条数值",

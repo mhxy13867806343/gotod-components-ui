@@ -86,3 +86,24 @@ func _update_styles() -> void:
 		_label.add_theme_color_override("font_color", col)
 	if _box:
 		_box.queue_redraw()
+
+## 静态多态构建工厂 (支持 1. 文本单值 create("记住密码"), 2. 字典对象 create({ ... }), 3. 多参数 create(text, checked, on_toggle))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GCheckbox:
+	var cb = GCheckbox.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text") or opts.has("label"): cb.text = str(opts.get("text", opts.get("label", "")))
+		if opts.has("checked") or opts.has("value"): cb.checked = bool(opts.get("checked", opts.get("value", false)))
+		if opts.has("disabled"): cb.disabled = bool(opts["disabled"])
+		if opts.has("indeterminate"): cb.indeterminate = bool(opts["indeterminate"])
+		if opts.has("on_toggle") and opts["on_toggle"] is Callable: cb.toggled.connect(opts["on_toggle"])
+		elif opts.has("on_change") and opts["on_change"] is Callable: cb.toggled.connect(opts["on_change"])
+	elif arg1 != null:
+		cb.text = str(arg1)
+		if arg2 != null:
+			cb.checked = bool(arg2)
+		if arg3 is Callable:
+			cb.toggled.connect(arg3)
+		elif arg3 != null:
+			cb.disabled = bool(arg3)
+	return cb

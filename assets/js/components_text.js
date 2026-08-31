@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['text'] = {
   "desc": "统一的排版文本组件，支持 H1~H6 标题层级、状态色、次级灰度文字、代码块字体与超出省略。",
   "demos": [
     {
-      "title": "1. 语义色彩与排版层级 (Types & Hierarchy: H1 ~ Body / Small)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
       "render": "\n      <div style=\"display:flex; flex-direction:column; gap:8px;\">\n        <span style=\"font-size:20px; font-weight:700; color:var(--text-primary);\">H1 标题文本 (Primary)</span>\n        <span style=\"font-size:16px; font-weight:600; color:var(--primary);\">H2 主要语义色文本 (Info/Primary)</span>\n        <span style=\"font-size:14px; color:var(--success);\">正文成功语义色 (Success)</span>\n        <span style=\"font-size:13px; color:var(--warning);\">正文警告语义色 (Warning)</span>\n        <span style=\"font-size:13px; color:var(--danger);\">正文危险语义色 (Danger)</span>\n        <span style=\"font-size:12px; color:var(--text-secondary);\">辅助次要描述文本 (Secondary)</span>\n      </div>\n    ",
-      "code": "# GDScript: 基础文本排版\nvar text_h1 = GText.new(\"H1 标题\", GText.Type.H1)\nvar text_desc = GText.new(\"次要描述\", GText.Type.SECONDARY)\nadd_child(text_h1)"
+      "code": "# 方式 1: 单一文本参数快捷构建\nvar text1 = GText.create(\"H1 标题文本\")\n\n# 方式 2: 完整字典配置对象\nvar text2 = GText.create({\n    \"text\": \"正文成功语义色\",\n    \"type\": \"success\",\n    \"hierarchy\": \"h2\",\n    \"strong\": true\n})\n\n# 方式 3: 多参数位置传参 (文本, 语义类型, 标题层级)\nvar text3 = GText.create(\"警告描述\", \"warning\", \"caption\")"
     },
     {
       "title": "2. 文本省略与截断 (Truncated & Multi-line Ellipsis)",
@@ -69,6 +69,12 @@ window.COMPONENT_CATALOG['text'] = {
   ],
   "events": [],
   "methods": [
+    {
+      "name": "create(text_or_options: Variant, type: Variant = null, hierarchy: Variant = null) -> GText",
+      "desc": "静态多态构建工厂方法。支持单文本参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(text_or_options: Variant, type: Variant = null, hierarchy: Variant = null) -> GText",
+      "version": "v1.0.6"
+    },
     {
       "name": "set_text(new_text: String)",
       "desc": "更新文本内容",

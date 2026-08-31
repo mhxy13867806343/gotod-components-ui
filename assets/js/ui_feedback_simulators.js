@@ -251,10 +251,81 @@ window.openSimToast = function(opts) {
   }
 };
 
+let simToastCountdownInterval = null;
+window.runSimToastCountdown = function() {
+  let second = 3;
+  if (simToastCountdownInterval) clearInterval(simToastCountdownInterval);
+  window.openSimToast({
+    message: `倒计时 ${second} 秒`,
+    type: 'loading',
+    forbidClick: true,
+    duration: 0
+  });
+  simToastCountdownInterval = setInterval(() => {
+    second--;
+    if (second > 0) {
+      const msgEl = document.getElementById('simToastMsg');
+      if (msgEl) msgEl.innerText = `倒计时 ${second} 秒`;
+    } else {
+      clearInterval(simToastCountdownInterval);
+      window.openSimToast({
+        message: '执行完成！',
+        type: 'success',
+        duration: 1500
+      });
+    }
+  }, 1000);
+};
+
 window.closeSimToast = function() {
+  if (simToastCountdownInterval) clearInterval(simToastCountdownInterval);
   const mask = document.getElementById('simToastMask');
   if (mask) {
     mask.classList.remove('active');
+    mask.style.display = 'none';
+  }
+};
+
+// ==========================================
+// Fullscreen GLoading Simulator Helper
+// ==========================================
+let simLoadingTimer = null;
+window.openSimLoading = function(opts) {
+  if (typeof opts === 'string') opts = { text: opts };
+  opts = opts || {};
+  const text = opts.text || opts.message || '正在同步服务器数据...';
+  const duration = opts.duration !== undefined ? opts.duration : 2500;
+  
+  let mask = document.getElementById('simLoadingMask');
+  if (!mask) {
+    mask = document.createElement('div');
+    mask.id = 'simLoadingMask';
+    mask.className = 'g-loading-fullscreen-mask';
+    mask.onclick = window.closeSimLoading;
+    document.body.appendChild(mask);
+  }
+
+  mask.innerHTML = `
+    <div class="g-loading-fullscreen-card" onclick="event.stopPropagation()">
+      <div class="g-loading-ring"></div>
+      <div class="g-loading-fullscreen-text">${text}</div>
+      <div style="font-size:11px; color:var(--text-disabled); margin-top:4px;">点击背景可手动关闭</div>
+    </div>
+  `;
+  mask.style.display = 'flex';
+
+  if (simLoadingTimer) clearTimeout(simLoadingTimer);
+  if (duration > 0) {
+    simLoadingTimer = setTimeout(() => {
+      window.closeSimLoading();
+    }, duration);
+  }
+};
+
+window.closeSimLoading = function() {
+  if (simLoadingTimer) clearTimeout(simLoadingTimer);
+  const mask = document.getElementById('simLoadingMask');
+  if (mask) {
     mask.style.display = 'none';
   }
 };

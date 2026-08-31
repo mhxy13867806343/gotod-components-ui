@@ -102,3 +102,28 @@ func _process(delta: float) -> void:
 		_label.position.x = _scroll_offset
 		if _scroll_offset < -_label.size.x:
 			_scroll_offset = _clip_control.size.x
+
+## 静态多态构建工厂 (支持 1. 广播文本单值 create(text), 2. 字典对象 create({ ... }), 3. 多参数 create(text, type, scrollable))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GNoticeBar:
+	var bar = GNoticeBar.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text"): bar.text = str(opts["text"])
+		if opts.has("scrollable"): bar.scrollable = bool(opts["scrollable"])
+		if opts.has("speed"): bar.scroll_speed = float(opts["speed"])
+		if opts.has("type"):
+			if opts["type"] is int: bar.notice_type = opts["type"]
+			elif str(opts["type"]).to_lower() == "info": bar.notice_type = NoticeType.INFO
+			elif str(opts["type"]).to_lower() == "success": bar.notice_type = NoticeType.SUCCESS
+			elif str(opts["type"]).to_lower() == "danger": bar.notice_type = NoticeType.DANGER
+		if opts.has("mode"):
+			if opts["mode"] is int: bar.mode = opts["mode"]
+			elif str(opts["mode"]).to_lower() == "closeable": bar.mode = NoticeMode.CLOSEABLE
+			elif str(opts["mode"]).to_lower() == "link": bar.mode = NoticeMode.LINK
+	elif arg1 != null:
+		bar.text = str(arg1)
+		if arg2 != null:
+			if arg2 is int: bar.notice_type = arg2
+		if arg3 != null:
+			bar.scrollable = bool(arg3)
+	return bar

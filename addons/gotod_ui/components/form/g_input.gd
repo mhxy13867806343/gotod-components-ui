@@ -219,3 +219,27 @@ func _update_styles() -> void:
 		_line_edit.add_theme_font_size_override("font_size", int(dim["font_size"]))
 		_line_edit.add_theme_color_override("font_color", GotodTheme.get_color("text_primary"))
 		_line_edit.add_theme_color_override("font_placeholder_color", GotodTheme.get_color("text_disabled"))
+
+## 静态多态构建工厂 (支持 1. 单值简写 create(placeholder), 2. 字典对象 create({ ... }), 3. 多参数 create(text, placeholder, clearable))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GInput:
+	var inp = GInput.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text"): inp.text = str(opts["text"])
+		if opts.has("placeholder"): inp.placeholder_text = str(opts["placeholder"])
+		elif opts.has("placeholder_text"): inp.placeholder_text = str(opts["placeholder_text"])
+		if opts.has("clearable"): inp.clearable = bool(opts["clearable"])
+		if opts.has("secret") or opts.has("show_password"): inp.secret = bool(opts.get("secret", opts.get("show_password", false)))
+		if opts.has("show_password_toggle"): inp.show_password_toggle = bool(opts["show_password_toggle"])
+		if opts.has("disabled"): inp.disabled = bool(opts["disabled"])
+		if opts.has("prefix"): inp.prefix_text = str(opts["prefix"])
+		if opts.has("suffix"): inp.suffix_text = str(opts["suffix"])
+		if opts.has("on_change") and opts["on_change"] is Callable: inp.text_changed.connect(opts["on_change"])
+		if opts.has("on_submit") and opts["on_submit"] is Callable: inp.text_submitted.connect(opts["on_submit"])
+	elif arg1 != null:
+		inp.text = str(arg1)
+		if arg2 != null:
+			inp.placeholder_text = str(arg2)
+		if arg3 != null:
+			inp.clearable = bool(arg3)
+	return inp

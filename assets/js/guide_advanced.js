@@ -385,7 +385,7 @@ GMessage.error("金币不足，无法升级", self)
 GMessage.close_all()
 
 # 3. 字典配置高级调用
-GMessage.show({
+GMessage.display({
     "message": "自定义停留 5 秒的消息",
     "type": "success",
     "duration": 5.0

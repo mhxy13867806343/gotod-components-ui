@@ -140,3 +140,26 @@ func collapse() -> void:
 	_tween.tween_property(_trigger_btn, "rotation_degrees", 0.0, expand_duration)
 	_tween.chain().tween_callback(func(): _menu_container.visible = false)
 	expanded_changed.emit(false)
+
+## 静态多态构建工厂 (支持 1. 数组单值 create(items_list), 2. 字典对象 create({ ... }), 3. 多参数 create(items, direction, position))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GFab:
+	var fab = GFab.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("items") and opts["items"] is Array: fab.items = opts["items"]
+		if opts.has("direction"):
+			if opts["direction"] is int: fab.direction = opts["direction"]
+			elif str(opts["direction"]).to_lower() == "vertical": fab.direction = Direction.VERTICAL
+		if opts.has("position"):
+			if opts["position"] is int: fab.fab_position = opts["position"]
+		if opts.has("auto_collapse"): fab.auto_collapse_on_click = bool(opts["auto_collapse"])
+		if opts.has("on_click") and opts["on_click"] is Callable:
+			fab.item_clicked.connect(opts["on_click"])
+	elif arg1 is Array:
+		fab.items = arg1 as Array
+		if arg2 != null:
+			if arg2 is int: fab.direction = arg2
+			elif str(arg2).to_lower() == "vertical": fab.direction = Direction.VERTICAL
+		if arg3 != null and arg3 is int:
+			fab.fab_position = arg3
+	return fab

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="gotod-components-ui 的设计来源与 Vue 风格组件库对照">
+  <title>Vue 风格组件来源 · gotod-components-ui</title>
+  <link rel="stylesheet" href="../assets/css/theme.css?v=20260831_77">
+  <link rel="stylesheet" href="../assets/css/style.css?v=20260831_77">
+  <link rel="stylesheet" href="css/vue-components.css?v=20260831_77">
+</head>
+<body>
+  <div id="vueComponentsApp" class="source-app">
+    <header class="source-topbar">
+      <a class="source-brand" href="../" aria-label="返回 gotod-components-ui 主站">
+        <span class="source-brand-mark">G</span>
+        <span>gotod-components-ui</span>
+        <span class="source-brand-label">UI DNA</span>
+      </a>
+      <nav class="source-nav" aria-label="页面导航">
+        <a href="main.html">入口</a>
+        <a href="index.html">Library</a>
+        <a class="is-current" href="vue-components.html">Vue 来源</a>
+        <a href="mcp/">MCP</a>
+        <a href="skills/">Skills</a>
+        <a class="source-github" href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </nav>
+    </header>
+
+    <main class="source-shell">
+      <section class="source-hero">
+        <div class="source-hero-copy">
+          <p class="source-eyebrow">GOTOD UI / COMPONENT ORIGINS</p>
+          <h1>不是照搬，<br><em>是把熟悉的体验带进 Godot。</em></h1>
+          <p class="source-intro">gotod-components-ui 借鉴成熟 Vue 生态的交互语言，再将它重写为 Godot 4.x 可用的 GDScript UI 组件。这里记录每个设计灵感的来源，也方便你沿着官方文档继续深入。</p>
+          <div class="source-hero-actions">
+            <a class="source-button source-button-primary" href="../">浏览组件 Demo <span>→</span></a>
+            <a class="source-button source-button-quiet" href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" rel="noreferrer">查看项目源码 ↗</a>
+          </div>
+        </div>
+        <div class="source-orbit" aria-hidden="true">
+          <div class="orbit-ring orbit-ring-one"></div>
+          <div class="orbit-ring orbit-ring-two"></div>
+          <div class="orbit-core"><strong>G</strong><span>Vue × Godot</span></div>
+          <span class="orbit-label orbit-label-naive">N</span>
+          <span class="orbit-label orbit-label-element">E</span>
+          <span class="orbit-label orbit-label-ant">A</span>
+          <span class="orbit-label orbit-label-vant">V</span>
+        </div>
+      </section>
+
+      <section class="source-overview" aria-label="项目概览">
+        <div><strong>04</strong><span>灵感来源</span></div>
+        <div><strong>35+</strong><span>Godot 组件</span></div>
+        <div><strong>4.x</strong><span>目标引擎版本</span></div>
+        <div><strong>100%</strong><span>开源可追溯</span></div>
+      </section>
+
+      <section class="source-library">
+        <div class="source-section-heading">
+          <div><p class="source-eyebrow">THE REFERENCE MAP</p><h2>组件库的灵感坐标</h2></div>
+          <p>按关键词筛选，查看它们分别影响了哪些组件与交互细节。</p>
+        </div>
+        <div class="source-toolbar">
+          <label class="source-search"><span>⌕</span><input v-model="query" type="search" placeholder="搜索组件库、组件或关键词..." aria-label="搜索组件库"></label>
+          <div class="source-filters" role="tablist" aria-label="筛选组件库">
+            <button v-for="filter in filters" :key="filter" :class="{ active: selectedFilter === filter }" @click="selectedFilter = filter" type="button">{{ filter }}</button>
+          </div>
+        </div>
+        <div class="source-grid">
+          <article v-for="(library, index) in filteredLibraries" :key="library.name" class="source-card" :style="{ '--card-accent': library.color, '--delay': `${index * 70}ms` }">
+            <div class="source-card-top">
+              <div class="source-logo" :class="`logo-${library.key}`">{{ library.mark }}</div>
+              <span class="source-index">0{{ index + 1 }}</span>
+            </div>
+            <div class="source-card-title"><div><h3>{{ library.name }}</h3><p>{{ library.subtitle }}</p></div><span class="source-kind">{{ library.kind }}</span></div>
+            <p class="source-card-desc">{{ library.description }}</p>
+            <div class="source-chip-row"><span v-for="tag in library.tags" :key="tag">{{ tag }}</span></div>
+            <div class="source-card-links"><a :href="library.website" target="_blank" rel="noreferrer">官网 <span>↗</span></a><a :href="library.github" target="_blank" rel="noreferrer">GitHub <span>↗</span></a></div>
+          </article>
+        </div>
+        <div v-if="!filteredLibraries.length" class="source-empty">没有找到匹配的组件库或组件名称。</div>
+      </section>
+
+      <section class="source-note"><span class="source-note-mark">↳</span><div><strong>如何理解这些来源？</strong><p>布局与组件命名参考 Naive UI、Element Plus、Ant Design Vue 和 Vant 的公开设计；状态管理、节点生命周期与渲染则由 Godot 原生能力实现。项目不是这些库的官方移植。</p></div></section>
+    </main>
+    <footer class="source-footer"><span>gotod-components-ui / design references</span><span>Built for Godot 4.x · Open source</span></footer>
+  </div>
+  <script src="../public/js/vue.global.min.js"></script>
+  <script src="js/vue-components.js?v=20260831_77"></script>
+</body>
+</html>

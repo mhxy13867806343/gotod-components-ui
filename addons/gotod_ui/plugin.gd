@@ -9,7 +9,8 @@ const CUSTOM_TYPES = [
 	{"name": "GText", "base": "Label", "script": "res://addons/gotod_ui/components/general/g_text.gd"},
 	{"name": "GDivider", "base": "Control", "script": "res://addons/gotod_ui/components/general/g_divider.gd"},
 	{"name": "GIcon", "base": "TextureRect", "script": "res://addons/gotod_ui/components/general/g_icon.gd"},
-	
+	{"name": "GMenu", "base": "BoxContainer", "script": "res://addons/gotod_ui/components/navigation/g_menu.gd"},
+
 	# Form
 	{"name": "GInput", "base": "PanelContainer", "script": "res://addons/gotod_ui/components/form/g_input.gd"},
 	{"name": "GTextarea", "base": "PanelContainer", "script": "res://addons/gotod_ui/components/form/g_textarea.gd"},

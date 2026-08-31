@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['button'] = {
   "desc": "常用的操作按钮，融合 Element Plus、Naive UI、Ant Design 与 Vant 规范。包含基础类型、朴素/边框按钮、圆角/圆形胶囊、禁用/加载、不同尺寸以及通栏全宽等全部场景。",
   "demos": [
     {
-      "title": "1. 基础类型 (Basic Types: Primary / Success / Warning / Danger / Info)",
-      "render": "\n          <div style=\"display:flex; gap:12px; flex-wrap:wrap; align-items:center;\">\n            <button class=\"g-btn g-btn-default\" onclick=\"showToast('Default button')\">Default 默认</button>\n            <button class=\"g-btn g-btn-primary\" onclick=\"showToast('Primary button', 'success')\">Primary 主要</button>\n            <button class=\"g-btn g-btn-success\" onclick=\"showToast('Success button', 'success')\">Success 成功</button>\n            <button class=\"g-btn g-btn-warning\" onclick=\"showToast('Warning button', 'warning')\">Warning 警告</button>\n            <button class=\"g-btn g-btn-danger\" onclick=\"showToast('Danger button', 'danger')\">Danger 危险</button>\n            <button class=\"g-btn g-btn-info\" onclick=\"showToast('Info button', 'info')\">Info 信息</button>\n          </div>\n        ",
-      "code": "# GDScript: Basic Types\nvar btn_primary = GButton.new()\nbtn_primary.text = \"Primary\"\nbtn_primary.button_type = GButton.ButtonType.PRIMARY\nbtn_primary.pressed.connect(func(): GMessage.success(\"Primary clicked\"))\nadd_child(btn_primary)"
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
+      "render": "\n          <div style=\"display:flex; gap:12px; flex-wrap:wrap; align-items:center;\">\n            <button class=\"g-btn g-btn-primary\" onclick=\"showToast('GButton.create(\"确认支付\")', 'success')\">1. 文本简写</button>\n            <button class=\"g-btn g-btn-success\" onclick=\"showToast('GButton.create({ text, type: \"success\" })', 'success')\">2. 字典对象配置</button>\n            <button class=\"g-btn g-btn-warning\" onclick=\"showToast('GButton.create(\"确认\", \"warning\", onClick)', 'warning')\">3. 多参数位置传递</button>\n          </div>\n        ",
+      "code": "# 方式 1: 单一文本参数快捷构建\nvar btn1 = GButton.create(\"确认支付\")\n\n# 方式 2: 完整字典配置对象\nvar btn2 = GButton.create({\n    \"text\": \"确认购买\",\n    \"type\": \"primary\",\n    \"icon\": \"cart-shopping\",\n    \"on_click\": func(): GMessage.success(\"购买成功！\")\n})\n\n# 方式 3: 多参数位置传参 (文案, 类型, 点击回调)\nvar btn3 = GButton.create(\"删除\", \"danger\", func(): GMessage.info(\"已删除\"))"
     },
     {
       "title": "2. 朴素与变体形态 (Variants: Solid / Outline / Dashed / Text / Link)",
@@ -104,6 +104,12 @@ window.COMPONENT_CATALOG['button'] = {
     }
   ],
   "methods": [
+    {
+      "name": "create(text_or_options: Variant, type: Variant = null, on_click: Variant = null) -> GButton",
+      "desc": "静态多态构建工厂方法。支持单文本参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(text_or_options: Variant, type: Variant = null, on_click: Variant = null) -> GButton",
+      "version": "v1.0.6"
+    },
     {
       "name": "set_loading(is_loading: bool)",
       "desc": "动态开启或关闭按钮加载动画",

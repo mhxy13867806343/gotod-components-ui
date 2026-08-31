@@ -11,24 +11,30 @@ window.currentDocKey = 'button';
 // Top Navigation Switcher
 // ==========================================
 window.switchTopSection = function(section, targetDocKey) {
-  window.currentSection = section;
-  window.StorageUtil.setSection(section);
+  const sectionAliases = { play: 'playground', godot4: 'godot-globals' };
+  const nextSection = sectionAliases[section] || section;
+  window.currentSection = nextSection;
+  window.currentTopSection = nextSection;
+  window.StorageUtil.setSection(nextSection);
 
   // Sync Top Select value
   const topSelect = document.getElementById('topSectionSelect');
-  if (topSelect && topSelect.value !== section) {
-    topSelect.value = section;
+  if (topSelect && topSelect.value !== nextSection) {
+    topSelect.value = nextSection;
+  }
+  if (typeof window.syncNavDropdownUI === 'function') {
+    window.syncNavDropdownUI(nextSection);
   }
 
   // Sync Flyout item active states
   document.querySelectorAll('.jd-flyout-item').forEach(item => {
-    const isThis = item.getAttribute('onclick') && item.getAttribute('onclick').includes(`'${section}'`);
+    const isThis = item.getAttribute('onclick') && item.getAttribute('onclick').includes(`'${nextSection}'`);
     item.classList.toggle('active', !!isThis);
   });
 
   // Render Sidebar and dispatch doc view
   if (typeof window.renderSidebarNav === 'function') {
-    window.renderSidebarNav(section, targetDocKey);
+    window.renderSidebarNav(nextSection, targetDocKey);
   }
 };
 
@@ -58,6 +64,34 @@ window.findSectionByDocKey = function(docKey) {
   const sections = window.SECTION_KEYS || [];
   if (sections.includes(docKey)) return docKey;
   return 'components';
+};
+
+window.getDocPagerHtml = function(key) {
+  const config = window.SIDEBAR_CONFIG || {};
+  const currentSection = window.currentSection || window.findSectionByDocKey(key);
+  const section = config[currentSection] && config[currentSection].groups.some(group => group.items.some(item => item.key === key))
+    ? currentSection
+    : window.findSectionByDocKey(key);
+  const cfg = config[section];
+  if (!cfg || !cfg.groups) return '';
+
+  const items = cfg.groups.flatMap(group => group.items || []);
+  const index = items.findIndex(item => item.key === key);
+  if (index < 0) return '';
+
+  const cleanTitle = (item) => item ? item.title.replace(/\s*\(v\d+\.\d+\)/g, '').replace(/^[\d\.\s]+/, '') : '';
+  const prev = items[index - 1] || null;
+  const next = items[index + 1] || null;
+
+  const prevHtml = prev
+    ? `<button class="doc-page-nav-btn" onclick="window.showDoc('${prev.key}')" title="${cleanTitle(prev)}"><i class="fa-solid fa-arrow-left"></i><span><small>上一页</small>${cleanTitle(prev)}</span></button>`
+    : `<button class="doc-page-nav-btn disabled" disabled><i class="fa-solid fa-arrow-left"></i><span><small>上一页</small>已经是本板块第一页</span></button>`;
+
+  const nextHtml = next
+    ? `<button class="doc-page-nav-btn doc-page-nav-btn-next" onclick="window.showDoc('${next.key}')" title="${cleanTitle(next)}"><span><small>下一页</small>${cleanTitle(next)}</span><i class="fa-solid fa-arrow-right"></i></button>`
+    : `<button class="doc-page-nav-btn doc-page-nav-btn-next disabled" disabled><span><small>下一页</small>已经是本板块最后一页</span><i class="fa-solid fa-arrow-right"></i></button>`;
+
+  return `<nav class="doc-page-nav" aria-label="文档上一页下一页导航">${prevHtml}${nextHtml}</nav>`;
 };
 
 // ==========================================
@@ -417,17 +451,20 @@ window.showDoc = function(key) {
   }
 
   const docBadge = (doc.version || doc.since) ? `<span class="g-tag g-tag-primary" style="font-size:11px; padding:2px 8px; margin-left:10px; border-radius:10px; font-weight:600; vertical-align:middle;">${doc.version || doc.since}</span>` : `<span class="g-tag g-tag-primary" style="font-size:11px; padding:2px 8px; margin-left:10px; border-radius:10px; font-weight:600; vertical-align:middle;">v1.0.5</span>`;
+  const docDesc = window.escapeHtml ? window.escapeHtml(doc.desc || '') : (doc.desc || '');
+  const docPagerHtml = typeof window.getDocPagerHtml === 'function' ? window.getDocPagerHtml(key) : '';
 
   const mainContentEl = document.getElementById('mainContent');
   if (mainContentEl) {
     mainContentEl.innerHTML = `
       <div class="doc-header">
         <h1 class="doc-title">${doc.title} ${docBadge}</h1>
-        <p class="doc-desc">${doc.desc}</p>
+        <p class="doc-desc">${docDesc}</p>
       </div>
       ${platformMatrixHtml}
       ${demosHtml}
       ${propsHtml}
+      ${docPagerHtml}
     `;
     mainContentEl.scrollTop = 0;
   }
@@ -435,8 +472,10 @@ window.showDoc = function(key) {
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
 
-  // Render Right Anchor Nav Outline (Naive UI / Element Plus style)
-  window.renderAnchorNav(doc, key);
+  // Render Right Anchor Nav Outline when the current page provides that module.
+  if (typeof window.renderAnchorNav === 'function') {
+    window.renderAnchorNav(doc, key);
+  }
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;

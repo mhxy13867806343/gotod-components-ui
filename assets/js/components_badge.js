@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['badge'] = {
   "desc": "按钮和图标上的数字或状态标记。支持 99+ 溢出保护与小红圆点模式。",
   "demos": [
     {
-      "title": "1. 基础数值徽标 (Basic Count Badge)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(val) / xx(opts) / xx(a,b,c))",
       "render": "<div style=\"display:flex; gap:28px; align-items:center; flex-wrap:wrap;\"><div style=\"position:relative; display:inline-block;\"><button class=\"g-btn g-btn-default\">未读私信</button><span class=\"g-badge\" style=\"position:absolute; top:-6px; right:-8px; background:var(--danger); color:#fff; font-size:11px; padding:1px 6px; border-radius:10px; font-weight:600;\">5</span></div><div style=\"position:relative; display:inline-block;\"><button class=\"g-btn g-btn-primary\">公会申请</button><span class=\"g-badge\" style=\"position:absolute; top:-6px; right:-8px; background:var(--warning); color:#fff; font-size:11px; padding:1px 6px; border-radius:10px; font-weight:600;\">12</span></div></div>",
-      "code": "# GDScript: 基础徽标\nvar badge = GBadge.new(5)\nbtn.add_child(badge)"
+      "code": "# 方式 1: 单一数值快捷构建\nvar badge1 = GBadge.create(5)\n\n# 方式 2: 完整字典配置对象\nvar badge2 = GBadge.create({\n    \"value\": 150,\n    \"max\": 99,\n    \"is_dot\": false,\n    \"color\": Color(\"#ef4444\")\n})\n\n# 方式 3: 多参数位置传参 (数值, 最大值, 是否为红点)\nvar badge3 = GBadge.create(99, 99, false)"
     },
     {
       "title": "2. 最大值封顶截断 (Max Value: 99+ / 999+)",
@@ -68,7 +68,14 @@ window.COMPONENT_CATALOG['badge'] = {
     }
   ],
   "events": [],
-  "methods": [],
+  "methods": [
+    {
+      "name": "create(value_or_options: Variant, max_val: Variant = null, is_dot: Variant = null) -> GBadge",
+      "desc": "静态多态构建工厂方法。支持单数值参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(value_or_options: Variant, max_val: Variant = null, is_dot: Variant = null) -> GBadge",
+      "version": "v1.0.6"
+    }
+  ],
   "slots": [
     {
       "name": "default",

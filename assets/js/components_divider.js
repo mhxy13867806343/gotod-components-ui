@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['divider'] = {
   "desc": "区隔内容的分割线组件，支持水平与垂直方向、带有文案的分割线、文案位置（Left/Center/Right）、虚线模式与游戏华丽边框风格。",
   "demos": [
     {
-      "title": "1. 基础水平分割线 (Basic Horizontal Divider)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
       "render": "\n          <div style=\"max-width:400px; font-size:13px; color:var(--text-secondary);\">\n            <span>上方战斗统计数据</span>\n            <div style=\"border-top:1px solid var(--border-base); margin:12px 0;\"></div>\n            <span>下方掉落物品明细</span>\n          </div>\n        ",
-      "code": "# GDScript: 基础分割线\nvar div = GDivider.new()\nadd_child(div)"
+      "code": "# 方式 1: 单一标题文本快捷构建\nvar div1 = GDivider.create(\"更多精彩活动\")\n\n# 方式 2: 完整字典配置对象\nvar div2 = GDivider.create({\n    \"title\": \"分割线中心文本\",\n    \"orientation\": \"horizontal\",\n    \"dashed\": true,\n    \"title_placement\": \"center\"\n})\n\n# 方式 3: 多参数位置传参 (标题, 方向, 虚线)\nvar div3 = GDivider.create(\"左侧标题\", \"horizontal\", true)"
     },
     {
       "title": "2. 带有文案的分割线 (Divider with Text / Title)",
@@ -56,7 +56,14 @@ window.COMPONENT_CATALOG['divider'] = {
     }
   ],
   "events": [],
-  "methods": [],
+  "methods": [
+    {
+      "name": "create(title_or_options: Variant, orientation: Variant = null, dashed: Variant = null) -> GDivider",
+      "desc": "静态多态构建工厂方法。支持单标题参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(title_or_options: Variant, orientation: Variant = null, dashed: Variant = null) -> GDivider",
+      "version": "v1.0.6"
+    }
+  ],
   "slots": [
     {
       "name": "default",

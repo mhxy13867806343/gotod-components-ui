@@ -13,6 +13,7 @@ static func analyze_project_used_components() -> Dictionary:
 		"GText": "res://addons/gotod_ui/components/general/g_text.gd",
 		"GDivider": "res://addons/gotod_ui/components/general/g_divider.gd",
 		"GIcon": "res://addons/gotod_ui/components/general/g_icon.gd",
+		"GMenu": "res://addons/gotod_ui/components/navigation/g_menu.gd",
 		"GInput": "res://addons/gotod_ui/components/form/g_input.gd",
 		"GTextarea": "res://addons/gotod_ui/components/form/g_textarea.gd",
 		"GInputNumber": "res://addons/gotod_ui/components/form/g_input_number.gd",

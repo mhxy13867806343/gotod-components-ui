@@ -237,3 +237,37 @@ func _update_styles() -> void:
 	add_theme_stylebox_override("pressed", pressed_sb)
 	add_theme_stylebox_override("disabled", disabled_sb)
 	add_theme_stylebox_override("focus", hover_sb)
+
+## 静态多态构建工厂 (支持 1. 单值简写 create(text), 2. 字典对象 create({ ... }), 3. 多参数 create(text, type, on_click))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GButton:
+	var btn = GButton.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text"): btn.text = str(opts["text"])
+		if opts.has("type"):
+			if opts["type"] is int: btn.button_type = opts["type"]
+			elif opts["type"] is String: btn.button_type = _parse_type_str(opts["type"])
+		if opts.has("variant"): btn.variant = opts["variant"]
+		if opts.has("shape"): btn.shape = opts["shape"]
+		if opts.has("size"): btn.button_size = opts["size"]
+		if opts.has("disabled"): btn.disabled = bool(opts["disabled"])
+		if opts.has("loading"): btn.loading = bool(opts["loading"])
+		if opts.has("block"): btn.block = bool(opts["block"])
+		if opts.has("on_click") and opts["on_click"] is Callable: btn.pressed.connect(opts["on_click"])
+	elif arg1 != null:
+		btn.text = str(arg1)
+		if arg2 != null:
+			if arg2 is int: btn.button_type = arg2
+			elif arg2 is String: btn.button_type = _parse_type_str(arg2)
+		if arg3 is Callable:
+			btn.pressed.connect(arg3)
+	return btn
+
+static func _parse_type_str(type_name: String) -> int:
+	match type_name.to_lower():
+		"primary": return ButtonType.PRIMARY
+		"success": return ButtonType.SUCCESS
+		"warning": return ButtonType.WARNING
+		"danger", "error": return ButtonType.DANGER
+		"info": return ButtonType.INFO
+		_: return ButtonType.DEFAULT

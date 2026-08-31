@@ -80,3 +80,35 @@ func _draw() -> void:
 			var font_size = int(radius * 0.5)
 			var str_sz = font.get_string_size(pct_str, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
 			draw_string(font, Vector2(center.x - str_sz.x / 2.0, center.y + str_sz.y * 0.35), pct_str, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, GotodTheme.get_color("text_primary"))
+
+## 静态多态构建工厂 (支持 1. 进度单值 create(75), 2. 字典对象 create({ ... }), 3. 多参数 create(percentage, type, status))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GProgress:
+	var prog = GProgress.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("percentage") or opts.has("value"): prog.percentage = float(opts.get("percentage", opts.get("value", 0.0)))
+		if opts.has("type"):
+			if opts["type"] is int: prog.type = opts["type"]
+			elif str(opts["type"]).to_lower() == "circle": prog.type = ProgressType.CIRCLE
+		if opts.has("status"):
+			if opts["status"] is int: prog.status = opts["status"]
+			elif opts["status"] is String: prog.status = _parse_status_str(opts["status"])
+		if opts.has("stroke_width") or opts.has("stroke"): prog.stroke_width = float(opts.get("stroke_width", opts.get("stroke", 6.0)))
+		if opts.has("show_text"): prog.show_text = bool(opts["show_text"])
+	elif arg1 != null:
+		prog.percentage = float(arg1)
+		if arg2 != null:
+			if arg2 is int: prog.type = arg2
+			elif str(arg2).to_lower() == "circle": prog.type = ProgressType.CIRCLE
+		if arg3 != null:
+			if arg3 is int: prog.status = arg3
+			elif arg3 is String: prog.status = _parse_status_str(arg3)
+	return prog
+
+static func _parse_status_str(name: String) -> GThemeTokens.Status:
+	match name.to_lower():
+		"success": return GThemeTokens.Status.SUCCESS
+		"warning": return GThemeTokens.Status.WARNING
+		"danger", "error": return GThemeTokens.Status.DANGER
+		"info": return GThemeTokens.Status.INFO
+		_: return GThemeTokens.Status.PRIMARY

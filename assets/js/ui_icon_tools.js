@@ -7,6 +7,21 @@
 window.currentCopyFormat = 'gdscript'; // 'gdscript' | 'annotation' | 'bbcode' | 'svg' | 'datauri'
 window.iconFavorites = JSON.parse(localStorage.getItem('gotod_icon_favorites') || '[]');
 
+window.ensureIconGalleryState = function() {
+  const parsedSize = parseInt(window.currentIconSize, 10);
+  window.currentIconSize = Number.isFinite(parsedSize) && parsedSize >= 8 ? parsedSize : 16;
+  window.currentIconColor = window.currentIconColor || '#409eff';
+  window.currentIconSearch = typeof window.currentIconSearch === 'string' ? window.currentIconSearch : '';
+  window.currentIconLib = window.currentIconLib || 'all';
+  window.currentIconCategory = window.currentIconCategory || 'all';
+
+  const parsedPageSize = parseInt(window.iconPageSize, 10);
+  window.iconPageSize = Number.isFinite(parsedPageSize) && parsedPageSize > 0 ? parsedPageSize : 400;
+
+  const parsedPage = parseInt(window.iconCurrentPage, 10);
+  window.iconCurrentPage = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+};
+
 window.setCopyFormat = function(fmt, btnEl) {
   window.currentCopyFormat = fmt;
   if (btnEl && btnEl.parentElement) {
@@ -101,6 +116,7 @@ add_child(icon)`;
 window.initIconGallery = function() {
   const container = document.getElementById('iconGalleryContainer');
   if (!container) return;
+  window.ensureIconGalleryState();
 
   const totalCount = window.AT_ICONS_LIST ? window.AT_ICONS_LIST.length : 0;
   const countBadge = document.getElementById('iconCountBadge');
@@ -112,6 +128,7 @@ window.initIconGallery = function() {
 window.renderIconGalleryGrid = function() {
   const grid = document.getElementById('iconGridList');
   if (!grid) return;
+  window.ensureIconGalleryState();
 
   const list = window.AT_ICONS_LIST || [];
   const q = (window.currentIconSearch || '').toLowerCase().trim();
@@ -187,6 +204,7 @@ window.renderIconGalleryGrid = function() {
 window.renderPaginationBar = function(totalCount, totalPages) {
   const container = document.getElementById('iconPaginationBar');
   if (!container) return;
+  window.ensureIconGalleryState();
 
   if (totalCount === 0 || totalPages <= 1) {
     if (totalCount > 0) {
@@ -254,13 +272,15 @@ window.renderPaginationBar = function(totalCount, totalPages) {
 };
 
 window.changeIconPage = function(page) {
+  window.ensureIconGalleryState();
   const list = window.AT_ICONS_LIST || [];
-  const q = window.currentIconSearch.toLowerCase().trim();
-  const lib = window.currentIconLib;
-  const cat = window.currentIconCategory;
+  const q = (window.currentIconSearch || '').toLowerCase().trim();
+  const lib = window.currentIconLib || 'all';
+  const cat = window.currentIconCategory || 'all';
+  const favs = window.iconFavorites || [];
 
   const filtered = list.filter(item => {
-    const matchLib = (lib === 'all' || item.lib === lib);
+    const matchLib = lib === 'favorites' ? favs.includes(item.name) : (lib === 'all' || item.lib === lib);
     const matchCat = (cat === 'all' || item.category === cat);
     const matchQ = (!q || item.name.toLowerCase().includes(q) || (item.description && item.description.toLowerCase().includes(q)));
     return matchLib && matchCat && matchQ;
@@ -429,4 +449,3 @@ ${annotation}`;
     window.showToast(`已选图标: ${iconName}`, 'success');
   }
 };
-

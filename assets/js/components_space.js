@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['space'] = {
   "desc": "设置组件之间的间距。避免组件紧贴在一起，提升页面结构的规整度。支持水平/垂直方向与自动换行 (Wrap)。",
   "demos": [
     {
-      "title": "1. 基础水平间距 (Basic Horizontal Space)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
       "render": "<div style=\"display:flex; gap:12px; align-items:center; flex-wrap:wrap;\"><button class=\"g-btn g-btn-primary\">按钮 1</button><button class=\"g-btn g-btn-success\">按钮 2</button><button class=\"g-btn g-btn-warning\">按钮 3</button></div>",
-      "code": "# GDScript: 基础水平间距\nvar space = GSpace.new()\nspace.add_child(btn1)\nspace.add_child(btn2)"
+      "code": "# 方式 1: 单一间距数值快捷构建\nvar space1 = GSpace.create(16.0)\n\n# 方式 2: 完整字典配置对象\nvar space2 = GSpace.create({\n    \"gap\": 12.0,\n    \"direction\": \"horizontal\",\n    \"wrap\": true,\n    \"children\": [btn1, btn2, btn3]\n})\n\n# 方式 3: 多参数位置传参 (间距, 排列方向, 是否自动换行)\nvar space3 = GSpace.create(16.0, \"vertical\", false)"
     },
     {
       "title": "2. 垂直排列间距 (Vertical Space)",
@@ -61,7 +61,14 @@ window.COMPONENT_CATALOG['space'] = {
     }
   ],
   "events": [],
-  "methods": [],
+  "methods": [
+    {
+      "name": "create(gap_or_options: Variant, direction: Variant = null, wrap: Variant = null) -> GSpace",
+      "desc": "静态多态构建工厂方法。支持单间距数值、字典配置对象、多参数位置传递三种形态",
+      "params": "(gap_or_options: Variant, direction: Variant = null, wrap: Variant = null) -> GSpace",
+      "version": "v1.0.6"
+    }
+  ],
   "slots": [
     {
       "name": "default",

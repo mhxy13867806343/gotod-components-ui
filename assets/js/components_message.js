@@ -8,56 +8,77 @@ window.COMPONENT_CATALOG['message'] = {
   "demos": [
     {
       "title": "1. 基础主要提示 (Basic Info Message)",
-      "render": "<button class=\"g-btn g-btn-primary\" onclick=\"showToast('这是一条基础顶部消息提示', 'info')\">弹出顶部提示 (Info)</button>",
-      "code": "# GDScript: 全局提示\nGMessage.info(\"这是一条普通消息提示\")"
+      "render": "<button class=\"g-btn g-btn-primary\" onclick=\"showToast({ message: '这是一条基础顶部消息提示', type: 'info' })\"><i class=\"fa-solid fa-circle-info\"></i> 弹出顶部提示 (Info)</button>",
+      "code": "# GDScript: 字符串简写或配置对象调用\nGMessage.info(\"这是一条普通消息提示\")\n# 亦可使用配置字典：\nGMessage.show({ \"message\": \"这是一条普通消息提示\", \"type\": \"info\" })"
     },
     {
       "title": "2. 四大主题语义色 (4 Semantic Types)",
-      "render": "<div style=\"display:flex; gap:10px; flex-wrap:wrap;\"><button class=\"g-btn g-btn-success\" style=\"font-size:12px;\" onclick=\"showToast('操作成功！数据已持久化', 'success')\">成功 (Success)</button><button class=\"g-btn g-btn-warning\" style=\"font-size:12px;\" onclick=\"showToast('网络波动，可能存在延迟', 'warning')\">警告 (Warning)</button><button class=\"g-btn g-btn-danger\" style=\"font-size:12px;\" onclick=\"showToast('连接超时，请检查网络', 'error')\">错误 (Error)</button></div>",
-      "code": "# GDScript: 语义化消息\nGMessage.success(\"恭喜强化成功！\")\nGMessage.warning(\"背包空间不足\")\nGMessage.error(\"金币不足，无法购买\")"
+      "render": "<div style=\"display:flex; gap:10px; flex-wrap:wrap;\"><button class=\"g-btn g-btn-success\" style=\"font-size:12px;\" onclick=\"showToast({ message: '操作成功！数据已持久化', type: 'success' })\"><i class=\"fa-solid fa-circle-check\"></i> 成功 (Success)</button><button class=\"g-btn g-btn-warning\" style=\"font-size:12px;\" onclick=\"showToast({ message: '网络波动，可能存在延迟', type: 'warning' })\"><i class=\"fa-solid fa-triangle-exclamation\"></i> 警告 (Warning)</button><button class=\"g-btn g-btn-danger\" style=\"font-size:12px;\" onclick=\"showToast({ message: '连接超时，请检查网络', type: 'error' })\"><i class=\"fa-solid fa-circle-xmark\"></i> 错误 (Error)</button></div>",
+      "code": "# GDScript: 语义化消息 (支持快捷方法与字典配置)\nGMessage.success(\"恭喜强化成功！\")\nGMessage.warning(\"背包空间不足\")\nGMessage.error(\"金币不足，无法购买\")\n\n# 字典形式：\nGMessage.show({ \"message\": \"恭喜强化成功！\", \"type\": \"success\", \"duration\": 3.0 })"
     },
     {
-      "title": "3. 可手动关闭消息 (Closable Message)",
-      "render": "<div style=\"background:rgba(64,158,255,0.1); border:1px solid rgba(64,158,255,0.3); border-radius:6px; padding:8px 14px; display:inline-flex; align-items:center; gap:10px; font-size:13px; color:var(--primary);\"><span>这是一条需要玩家手动关闭的重要提示</span><i class=\"fa-solid fa-xmark\" style=\"cursor:pointer;\" onclick=\"this.parentElement.remove()\"></i></div>",
-      "code": "# GDScript: 可关闭消息\nGMessage.show({ \"text\": \"重要系统消息\", \"closable\": true, \"duration\": 0 })"
+      "title": "3. 可手动关闭消息 (Closable Message - Object Config)",
+      "render": "<button class=\"g-btn g-btn-primary\" onclick=\"showToast({ message: '这是一条需要玩家手动关闭的重要提示', type: 'info', closable: true, duration: 0 })\"><i class=\"fa-solid fa-circle-info\"></i> 弹出可关闭消息 (对象配置)</button>",
+      "code": "# GDScript: 对象配置可关闭消息 (closable = true, duration = 0 不自动关闭)\nGMessage.show({\n    \"message\": \"重要系统升级维护通知，请手动点击关闭\",\n    \"type\": \"info\",\n    \"closable\": true,\n    \"duration\": 0.0 # 0 表示永久展示直至用户点击关闭\n})"
     },
     {
-      "title": "4. 自定义图标与停留时长 (Custom Icon & Duration)",
-      "render": "<button class=\"g-btn g-btn-default\" onclick=\"showToast('⭐ 获得成就【初出茅庐】！', 'success')\">🏆 弹出自定义成就消息</button>",
-      "code": "# GDScript: 自定义成就消息\nGMessage.show({ \"text\": \"获得成就【初出茅庐】！\", \"icon\": \"trophy\", \"duration\": 5.0 })"
+      "title": "4. 自定义图标与停留时长 (Custom Icon & Duration Object)",
+      "render": "<div style=\"display:flex; gap:10px; flex-wrap:wrap;\"><button class=\"g-btn g-btn-default\" onclick=\"showToast({ message: '获得成就【初出茅庐】！', type: 'success', duration: 5, icon: '🏆' })\"><i class=\"fa-solid fa-trophy\"></i> 🏆 自定义成就消息</button><button class=\"g-btn g-btn-warning\" onclick=\"showToast({ message: '⚡ 暴击率临时提升 50% (持续 8 秒)', type: 'warning', duration: 4, icon: '⚡' })\">⚡ 属性增益消息</button></div>",
+      "code": "# GDScript: 自定义图标与停留时长 (通过字典对象传入参数)\nGMessage.show({\n    \"message\": \"获得成就【初出茅庐】！\",\n    \"type\": \"success\",\n    \"duration\": 5.0,\n    \"closable\": true\n})"
     },
     {
-      "title": "5. 游戏战斗连击与金币拾取消息 (Game Combo & Coin Popup)",
-      "render": "<div style=\"display:flex; gap:12px;\"><button class=\"g-btn g-btn-warning\" style=\"font-weight:700;\" onclick=\"showToast('🪙 拾取金币 +500！', 'success')\">🪙 拾取金币</button><button class=\"g-btn g-btn-danger\" style=\"font-weight:700;\" onclick=\"showToast('🔥 100 连击 (COMBO x100)!', 'error')\">💥 100 连击</button></div>",
-      "code": "# GDScript: 战斗金币消息\nGMessage.new_game_loot(\"🪙 获得金币 +500\")"
+      "title": "5. 一键清除所有消息 (Close All Active Messages)",
+      "render": "<div style=\"display:flex; gap:10px;\"><button class=\"g-btn g-btn-primary\" onclick=\"showToast('消息 1'); setTimeout(()=>showToast('消息 2'), 200); setTimeout(()=>showToast('消息 3'), 400);\">批量弹出 3 条消息</button><button class=\"g-btn g-btn-danger\" onclick=\"GMessage.closeAll(); showToast('已清空全部消息', 'info');\">一键清空 (close_all)</button></div>",
+      "code": "# GDScript: 一键关闭所有正在展示的消息\nGMessage.close_all()"
     }
   ],
-  "props": [],
+  "props": [
+    {
+      "name": "closable",
+      "type": "boolean",
+      "default": "false",
+      "desc": "是否显示右侧 clear/close 图标；开启后点击图标立即关闭当前消息",
+      "version": "v1.0.6"
+    },
+    {
+      "name": "duration",
+      "type": "float",
+      "default": "3.0",
+      "desc": "消息自动关闭时间；设为 0 时不自动关闭，通常配合 closable 手动关闭",
+      "version": "v1.0.6"
+    }
+  ],
   "events": [],
   "methods": [
     {
-      "name": "success(content: String, duration: float = 3.0)",
+      "name": "success(content: String, context_node: Node = null, duration: float = 3.0, closable: bool = false)",
       "desc": "弹出成功提示",
-      "params": "(content: String, duration: float) -> void",
-      "version": "v1.0"
+      "params": "(content: String, context_node: Node, duration: float, closable: bool) -> void",
+      "version": "v1.0.6"
     },
     {
-      "name": "warning(content: String, duration: float = 3.0)",
+      "name": "warning(content: String, context_node: Node = null, duration: float = 3.0, closable: bool = false)",
       "desc": "弹出警告提示",
-      "params": "(content: String, duration: float) -> void",
-      "version": "v1.0"
+      "params": "(content: String, context_node: Node, duration: float, closable: bool) -> void",
+      "version": "v1.0.6"
     },
     {
-      "name": "error(content: String, duration: float = 3.0)",
+      "name": "error(content: String, context_node: Node = null, duration: float = 3.0, closable: bool = false)",
       "desc": "弹出错误提示",
-      "params": "(content: String, duration: float) -> void",
-      "version": "v1.0"
+      "params": "(content: String, context_node: Node, duration: float, closable: bool) -> void",
+      "version": "v1.0.6"
     },
     {
-      "name": "info(content: String, duration: float = 3.0)",
+      "name": "info(content: String, context_node: Node = null, duration: float = 3.0, closable: bool = false)",
       "desc": "弹出普通信息提示",
-      "params": "(content: String, duration: float) -> void",
-      "version": "v1.0"
+      "params": "(content: String, context_node: Node, duration: float, closable: bool) -> void",
+      "version": "v1.0.6"
+    },
+    {
+      "name": "display(options: Dictionary, context_node: Node = null)",
+      "desc": "通过字典配置弹出消息，支持 message/text、type、duration、closable",
+      "params": "(options: Dictionary, context_node: Node) -> void",
+      "version": "v1.0.6"
     }
   ],
   "slots": [

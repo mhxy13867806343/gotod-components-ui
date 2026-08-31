@@ -92,6 +92,23 @@ func _draw() -> void:
 	var min_thumb_x = radius
 	var max_thumb_x = w - radius
 	var thumb_center_x = lerpf(min_thumb_x, max_thumb_x, _thumb_pos)
-	var thumb_center_y = h / 2.0
-	
 	draw_circle(Vector2(thumb_center_x, thumb_center_y), thumb_radius, Color.WHITE)
+
+## 静态多态构建工厂 (支持 1. 布尔单值 create(true), 2. 字典对象 create({ ... }), 3. 多参数 create(checked, on_toggle, disabled))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GSwitch:
+	var sw = GSwitch.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("checked") or opts.has("value"): sw.checked = bool(opts.get("checked", opts.get("value", false)))
+		if opts.has("size"): sw.switch_size = opts["size"]
+		if opts.has("disabled"): sw.disabled = bool(opts["disabled"])
+		if opts.has("checked_color"): sw.checked_color = Color(opts["checked_color"])
+		if opts.has("on_toggle") and opts["on_toggle"] is Callable: sw.toggled.connect(opts["on_toggle"])
+		elif opts.has("on_change") and opts["on_change"] is Callable: sw.toggled.connect(opts["on_change"])
+	elif arg1 != null:
+		sw.checked = bool(arg1)
+		if arg2 is Callable:
+			sw.toggled.connect(arg2)
+		if arg3 != null:
+			sw.disabled = bool(arg3)
+	return sw

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="gotod-components-ui 的 Agent Skills 大库：官方模板、中文精选与聚合市场">
+  <title>Skills 大库 · gotod-components-ui</title>
+  <link rel="stylesheet" href="../../assets/css/theme.css?v=20260831_77">
+  <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_77">
+  <link rel="stylesheet" href="../css/index.css?v=20260831_77">
+  <link rel="stylesheet" href="../css/vue-components.css?v=20260831_77">
+  <link rel="stylesheet" href="../css/mcp-skills.css?v=20260831_77">
+</head>
+<body>
+  <div class="source-app is-skills is-catalog">
+    <header class="source-topbar">
+      <a class="source-brand" href="../../" aria-label="返回 gotod-components-ui 主站">
+        <span class="source-brand-mark">G</span>
+        <span>gotod-components-ui</span>
+        <span class="source-brand-label">SKILL</span>
+      </a>
+      <nav class="source-nav" aria-label="页面导航">
+        <a href="../main.html">入口</a>
+        <a href="../index.html">Library</a>
+        <a href="../vue-components.html">Vue 来源</a>
+        <a href="../mcp/">MCP</a>
+        <a class="is-current" href="./">Skills</a>
+        <a class="source-github" href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" rel="noreferrer">GitHub ↗</a>
+      </nav>
+    </header>
+
+    <main class="catalog-shell">
+      <section class="catalog-hero">
+        <p class="source-eyebrow">GOTOD UI / AGENT SKILLS</p>
+        <h1>说明书一层，<br><em>工具一层。</em></h1>
+        <p>Skill 告诉代理何时、按什么顺序去调 MCP。百万级市场走 SkillsMP；本页收录本仓库 mcp-ui-verify、Anthropic 官方模板，以及中文社区 400+ 精选，Godot-Claude-Skills 也在「本仓库与官方」。</p>
+      </section>
+
+      <section class="source-overview catalog-overview" aria-label="目录规模">
+        <div><strong id="catalogTotal">—</strong><span>精选 Skills</span></div>
+        <div><strong id="catalogGroupCount">—</strong><span>场景分类</span></div>
+        <div><strong>07</strong><span>市场 / GitHub 入口</span></div>
+        <div><strong>SKILL.md</strong><span>统一格式</span></div>
+      </section>
+
+      <section>
+        <div class="source-section-heading catalog-heading">
+          <div><p class="source-eyebrow">INDEX HUBS</p><h2>技能市场与汇总仓</h2></div>
+          <p>要一次看几千或上百万条，进 SkillsMP 与 awesome 仓库。本页是可复制链接的精选镜像。</p>
+        </div>
+        <div id="catalogHubs" class="catalog-hubs" aria-label="Skills 聚合站"></div>
+      </section>
+
+      <section class="library-toolbar catalog-toolbar">
+        <div class="library-search-wrap"><input id="catalogSearch" class="library-search" type="search" placeholder="搜索 Skill、Godot、审查、中文、官方..." aria-label="搜索 Skills"></div>
+        <div id="catalogTabs" class="library-tabs" role="tablist" aria-label="Skills 分类"></div>
+      </section>
+      <div class="library-meta"><span id="catalogCount">加载中...</span><span>悬停查看 · 外链直达 · 一键复制</span></div>
+      <section id="catalogGrid" class="library-grid catalog-grid" aria-label="Skills 卡片"></section>
+      <p class="library-source">精选卡片主要解析自 <a href="https://github.com/laolaoshiren/claude-code-skills-zh" target="_blank" rel="noreferrer">claude-code-skills-zh</a>。官方模板见 <a href="https://github.com/anthropics/skills" target="_blank" rel="noreferrer">anthropics/skills</a>。全量市场请走 SkillsMP。第三方许可证以仓库为准。</p>
+    </main>
+  </div>
+  <script src="../js/skills-data.js?v=20260831_77"></script>
+  <script src="../js/catalog-app.js?v=20260831_77"></script>
+  <script src="../js/skills.js?v=20260831_77"></script>
+</body>
+</html>

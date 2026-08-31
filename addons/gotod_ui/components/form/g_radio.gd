@@ -77,3 +77,21 @@ func _update_styles() -> void:
 		_label.add_theme_color_override("font_color", col)
 	if _circle:
 		_circle.queue_redraw()
+
+## 静态多态构建工厂 (支持 1. 文本单值 create("选项A"), 2. 字典对象 create({ ... }), 3. 多参数 create(text, value, checked))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GRadio:
+	var r = GRadio.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text") or opts.has("label"): r.text = str(opts.get("text", opts.get("label", "")))
+		if opts.has("value"): r.value = str(opts["value"])
+		if opts.has("checked"): r.checked = bool(opts["checked"])
+		if opts.has("disabled"): r.disabled = bool(opts["disabled"])
+		if opts.has("on_select") and opts["on_select"] is Callable: r.selected.connect(opts["on_select"])
+	elif arg1 != null:
+		r.text = str(arg1)
+		if arg2 != null:
+			r.value = str(arg2)
+		if arg3 != null:
+			r.checked = bool(arg3)
+	return r

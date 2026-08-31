@@ -2,13 +2,23 @@
 class_name GLoading
 extends Control
 
-# ==========================================
-# 静态命令式遮罩服务 (Imperative Loading Service)
-# ==========================================
-static func service(options: Dictionary = {}, context_node: Node = null) -> GLoading:
+static var _active_instances: Array[GLoading] = []
+
+## 静态命令式遮罩服务 (对标 Element Plus ElLoading.service，支持 String 或 Dictionary 选项对象)
+static func service(options_or_text: Variant = {}, context_node: Node = null) -> GLoading:
+	var opts: Dictionary = {}
+	if options_or_text is Dictionary:
+		opts = options_or_text as Dictionary
+	elif options_or_text is String:
+		opts = { "text": str(options_or_text) }
+		
 	var loading = GLoading.new()
-	loading.text = options.get("text", "加载中...")
-	loading.spinner_size = options.get("spinner_size", 36.0)
+	loading.text = opts.get("text", opts.get("message", "加载中..."))
+	loading.spinner_size = opts.get("spinner_size", 36.0)
+	if opts.has("icon_text"):
+		loading._custom_icon_text = str(opts["icon_text"])
+	elif opts.has("icon"):
+		loading._custom_icon_text = str(opts["icon"])
 	
 	var tree: SceneTree = null
 	if context_node and is_instance_valid(context_node) and context_node.get_tree():
@@ -16,8 +26,8 @@ static func service(options: Dictionary = {}, context_node: Node = null) -> GLoa
 	elif Engine.get_main_loop() is SceneTree:
 		tree = Engine.get_main_loop() as SceneTree
 
-	if options.get("target"):
-		var target: Node = options["target"]
+	if opts.get("target"):
+		var target: Node = opts["target"]
 		target.add_child(loading)
 	elif tree and tree.root:
 		var canvas = CanvasLayer.new()
@@ -26,15 +36,52 @@ static func service(options: Dictionary = {}, context_node: Node = null) -> GLoa
 		tree.root.add_child(canvas)
 		loading.set_meta("_canvas_parent", canvas)
 		
+	_active_instances.append(loading)
 	return loading
+
+## 启动加载遮罩 (service 的便捷别名)
+static func open(options_or_text: Variant = {}, context_node: Node = null) -> GLoading:
+	return service(options_or_text, context_node)
+
+## 启动加载遮罩 (service 的便捷别名)
+static func start(options_or_text: Variant = {}, context_node: Node = null) -> GLoading:
+	return service(options_or_text, context_node)
+
+## 全屏整页加载快捷方法 (支持 String 或 Dictionary 配置对象)
+static func fullscreen(options_or_text: Variant = "正在同步服务器数据...", context_node: Node = null) -> GLoading:
+	if options_or_text is Dictionary:
+		var opts = (options_or_text as Dictionary).duplicate()
+		opts["fullscreen"] = true
+		return service(opts, context_node)
+	return service({ "text": str(options_or_text), "fullscreen": true }, context_node)
+
+## 局部容器内加载快捷方法 (支持 target + text 多参数或 Dictionary 配置对象)
+static func in_container(target_or_options: Variant, text: String = "正在加载资源...") -> GLoading:
+	if target_or_options is Dictionary:
+		return service(target_or_options as Dictionary)
+	return service({ "target": target_or_options as Node, "text": text })
+
+## 关闭全局所有活跃的 Loading 遮罩
+static func close_all() -> void:
+	for inst in _active_instances.duplicate():
+		if is_instance_valid(inst):
+			inst.close()
+	_active_instances.clear()
 
 ## 关闭当前 Loading 遮罩
 func close() -> void:
+	_active_instances.erase(self)
 	var canvas = get_meta("_canvas_parent", null)
 	if canvas and is_instance_valid(canvas):
 		canvas.queue_free()
 	else:
 		queue_free()
+
+## 停止当前 Loading (close 的别名)
+func stop() -> void:
+	close()
+
+var _custom_icon_text: String = ""
 
 @export var text: String = "Loading...":
 	set(val):

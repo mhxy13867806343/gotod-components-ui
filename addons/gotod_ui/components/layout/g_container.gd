@@ -44,3 +44,31 @@ func _update_direction() -> void:
 func css(rules_or_func: Variant) -> GContainer:
 	GStyle.apply_css_to_instance(self, rules_or_func)
 	return self
+
+## 静态多态构建工厂 (支持 1. 数组简写 create([c1, c2]), 2. 字典对象 create({ ... }), 3. 多参数 create(direction, separation, children))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GContainer:
+	var container = GContainer.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("direction"):
+			if opts["direction"] is int: container.direction = opts["direction"]
+			elif str(opts["direction"]).to_lower() == "vertical": container.direction = Direction.VERTICAL
+			elif str(opts["direction"]).to_lower() == "horizontal": container.direction = Direction.HORIZONTAL
+		if opts.has("separation") or opts.has("gap"):
+			container.add_theme_constant_override("separation", int(opts.get("separation", opts.get("gap", 0))))
+		if opts.has("children") and opts["children"] is Array:
+			for c in opts["children"]:
+				if c is Node: container.add_child(c)
+	elif arg1 is Array:
+		for c in (arg1 as Array):
+			if c is Node: container.add_child(c)
+	elif arg1 != null:
+		if arg1 is int: container.direction = arg1
+		elif str(arg1).to_lower() == "vertical": container.direction = Direction.VERTICAL
+		elif str(arg1).to_lower() == "horizontal": container.direction = Direction.HORIZONTAL
+		if arg2 != null:
+			container.add_theme_constant_override("separation", int(arg2))
+		if arg3 is Array:
+			for c in (arg3 as Array):
+				if c is Node: container.add_child(c)
+	return container

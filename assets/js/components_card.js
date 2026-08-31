@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['card'] = {
   "desc": "将信息聚合在卡片容器中展示。支持标题栏、右上角 Extra 扩展操作区与边框阴影。",
   "demos": [
     {
-      "title": "1. 基础卡片 (Basic Card: Header & Body & Footer)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
       "render": "<div class=\"g-card\" style=\"max-width:380px;\"><div class=\"g-card-header\" style=\"display:flex; justify-content:space-between; align-items:center;\"><span style=\"font-weight:600; font-size:14px;\">🏰 领主城堡管理</span><button class=\"g-btn g-btn-primary\" style=\"padding:4px 10px; font-size:12px;\" onclick=\"showToast('进入城堡大厅', 'info')\">进入大厅</button></div><div class=\"g-card-body\" style=\"font-size:13px; color:var(--text-secondary); line-height:1.6;\">城堡等级：Lv.18<br>当前税收产出：1,250 金币/小时<br>驻防守卫：48 / 60 骑士团</div><div class=\"g-card-footer\" style=\"display:flex; justify-content:flex-end; gap:8px; font-size:12px; border-top:1px solid var(--border-base); padding:8px 16px; color:var(--text-secondary);\"><span>维护状态：极佳</span></div></div>",
-      "code": "# GDScript: 基础卡片\nvar card = GCard.new()\ncard.header.text = \"🏰 领主城堡管理\"\ncard.body.text = \"城堡等级：Lv.18\"\nadd_child(card)"
+      "code": "# 方式 1: 单一标题文本快捷构建\nvar card1 = GCard.create(\"🏰 领主城堡管理\")\n\n# 方式 2: 完整字典配置对象\nvar card2 = GCard.create({\n    \"title\": \"装备词条特写\",\n    \"extra\": \"详情 >\",\n    \"bordered\": true,\n    \"body\": equip_specs_vbox\n})\n\n# 方式 3: 多参数位置传参 (标题, 右侧扩展文本, 主体节点)\nvar card3 = GCard.create(\"公会任务\", \"更多\", quest_list_node)"
     },
     {
       "title": "2. 阴影触发时机 (Shadow Trigger: Always / Hover / Never)",
@@ -75,7 +75,14 @@ window.COMPONENT_CATALOG['card'] = {
       "version": "v1.0"
     }
   ],
-  "methods": [],
+  "methods": [
+    {
+      "name": "create(title_or_options: Variant, extra: Variant = null, body_node: Variant = null) -> GCard",
+      "desc": "静态多态构建工厂方法。支持单标题参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(title_or_options: Variant, extra: Variant = null, body_node: Variant = null) -> GCard",
+      "version": "v1.0.6"
+    }
+  ],
   "slots": [
     {
       "name": "default",

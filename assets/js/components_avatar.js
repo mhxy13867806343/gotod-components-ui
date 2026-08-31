@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['avatar'] = {
   "desc": "用来代表用户或事物，支持图片、图标或字符展示。",
   "demos": [
     {
-      "title": "1. 基础尺寸与形状 (Sizes: Small / Default / Large & Circle / Square)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(text/src) / xx(opts) / xx(a,b,c))",
       "render": "<div style=\"display:flex; gap:20px; align-items:center; flex-wrap:wrap;\"><div style=\"width:32px; height:32px; border-radius:50%; background:var(--primary); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:600;\">S</div><div style=\"width:40px; height:40px; border-radius:50%; background:var(--success); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:600;\">M</div><div style=\"width:54px; height:54px; border-radius:50%; background:var(--warning); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:18px; font-weight:600;\">L</div><div style=\"width:40px; height:40px; border-radius:8px; background:#8da5f5; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:600;\">方</div></div>",
-      "code": "# GDScript: 基础头像\nvar avatar = GAvatar.new()\navatar.size = GAvatar.Size.MEDIUM"
+      "code": "# 方式 1: 单一文本或路径快捷构建\nvar av1 = GAvatar.create(\"亚瑟\")\n\n# 方式 2: 完整字典配置对象\nvar av2 = GAvatar.create({\n    \"text\": \"VIP\",\n    \"size\": 48.0,\n    \"shape\": \"circle\",\n    \"bg_color\": Color(\"#ffd700\")\n})\n\n# 方式 3: 多参数位置传参 (文本/图片, 尺寸, 形状)\nvar av3 = GAvatar.create(\"队长\", 40.0, GAvatar.Shape.CIRCLE)"
     },
     {
       "title": "2. 图标与文字头像 (Icon & Text Avatars)",
@@ -68,7 +68,14 @@ window.COMPONENT_CATALOG['avatar'] = {
     }
   ],
   "events": [],
-  "methods": [],
+  "methods": [
+    {
+      "name": "create(text_or_options: Variant, size: Variant = null, shape: Variant = null) -> GAvatar",
+      "desc": "静态多态构建工厂方法。支持单文本/路径参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(text_or_options: Variant, size: Variant = null, shape: Variant = null) -> GAvatar",
+      "version": "v1.0.6"
+    }
+  ],
   "slots": [
     {
       "name": "default",

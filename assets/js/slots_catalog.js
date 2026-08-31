@@ -17,7 +17,9 @@ window.SLOTS_CATALOG = {
           <div style="background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; gap:14px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-weight:700; font-size:14px; color:var(--primary);"><i class="fa-solid fa-code"></i> 插槽语法模型演示</span>
-              <span class="g-tag g-tag-success">Godot 4.x �              <!-- Default Slot Box -->
+              <span class="g-tag g-tag-success">Godot 4.x</span>
+            </div>
+              <!-- Default Slot Box -->
               <div style="border:2px dashed var(--success); border-radius:8px; padding:12px; background:rgba(24,160,88,0.06);">
                 <div style="font-size:11px; font-weight:700; color:var(--success); margin-bottom:4px;">1. 默认插槽 (Default Slot - 可直接省略 slotName = "")</div>
                 <div style="font-size:10px; color:var(--text-secondary); margin-bottom:6px;">💡 组件实例化后默认即指向 default 插槽，无需显式赋值 slotName = ""</div>
@@ -57,7 +59,6 @@ window.SLOTS_CATALOG = {
                 </div>
               </div>
             </div>
-          </div>
         `,
         code: `# =========================================================================
 # 🎰 Godot 4 插槽标准点语法使用规范 (Dot Slot Property Syntax)
@@ -535,3 +536,8 @@ btn.icon.mount([icon_node, badge_node]) # 多个子节点同时插入插槽`
     ]
   }
 };
+
+// Keep the original sidebar routes working after the default/named slot docs
+// were consolidated into one document.
+window.SLOTS_CATALOG['slot-default'] = window.SLOTS_CATALOG['slot-default-named'];
+window.SLOTS_CATALOG['slot-named'] = window.SLOTS_CATALOG['slot-default-named'];

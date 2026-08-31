@@ -108,7 +108,7 @@ GMessage.error("连接服务器超时，请检查网络设置", self)
 GMessage.close_all()
 
 # 5. 高级字典配置调用
-GMessage.show({
+GMessage.display({
     "message": "自定义停留 5 秒的高优先级提示",
     "type": "success",
     "duration": 5.0

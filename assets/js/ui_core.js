@@ -107,12 +107,26 @@ window.renderApiTable = function(title, headers, rows, subtitle = '', sectionId 
 };
 
 // ==========================================
-// 5. Toast Floating Message System
+// 5. Toast / GMessage Floating Message System (Supports String & Options Object)
 // ==========================================
-window.showToast = function(msg, type = 'info') {
+window.showToast = function(opts, type = 'info', closable = false) {
   const container = document.getElementById('toastContainer');
   if (!container) return;
   
+  let msg = '';
+  let duration = 3000;
+  let customIcon = '';
+
+  if (typeof opts === 'object' && opts !== null) {
+    msg = opts.message || opts.text || opts.content || '';
+    type = opts.type || type || 'info';
+    closable = opts.closable !== undefined ? opts.closable : closable;
+    duration = opts.duration !== undefined ? (opts.duration >= 10 ? opts.duration : opts.duration * 1000) : duration;
+    customIcon = opts.icon || '';
+  } else {
+    msg = String(opts || '');
+  }
+
   const toast = document.createElement('div');
   toast.className = 'toast-item';
   
@@ -123,15 +137,44 @@ window.showToast = function(msg, type = 'info') {
   else if (type === 'danger' || type === 'error') { icon = 'fa-circle-xmark'; col = 'var(--danger)'; }
   else if (type === 'info') { icon = 'fa-circle-info'; col = 'var(--primary)'; }
 
-  toast.innerHTML = `<i class="fa-solid ${icon}" style="color: ${col}; font-size:16px;"></i> <span>${msg}</span>`;
+  let iconNode = customIcon ? `<span style="color:${col}; font-size:16px;">${customIcon}</span>` : `<i class="fa-solid ${icon}" style="color: ${col}; font-size:16px;"></i>`;
+
+  toast.innerHTML = `
+    ${iconNode}
+    <span>${msg}</span>
+    ${closable ? '<button class="toast-close-btn" title="关闭消息" type="button" aria-label="关闭"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>' : ''}
+  `;
+  if (closable) {
+    const closeBtn = toast.querySelector('.toast-close-btn');
+    if (closeBtn) closeBtn.addEventListener('click', () => toast.remove());
+  }
   container.appendChild(toast);
 
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateY(-10px)';
-    toast.style.transition = 'all 0.3s';
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  if (duration > 0) {
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(-10px)';
+      toast.style.transition = 'all 0.3s';
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  }
+};
+
+window.GMessage = {
+  info: (opts) => window.showToast(typeof opts === 'string' ? { message: opts, type: 'info' } : { type: 'info', ...opts }),
+  success: (opts) => window.showToast(typeof opts === 'string' ? { message: opts, type: 'success' } : { type: 'success', ...opts }),
+  warning: (opts) => window.showToast(typeof opts === 'string' ? { message: opts, type: 'warning' } : { type: 'warning', ...opts }),
+  error: (opts) => window.showToast(typeof opts === 'string' ? { message: opts, type: 'error' } : { type: 'error', ...opts }),
+  show: (opts) => window.showToast(opts),
+  display: (opts) => window.showToast(opts),
+  closeAll: () => {
+    const container = document.getElementById('toastContainer');
+    if (container) container.innerHTML = '';
+  },
+  close_all: () => {
+    const container = document.getElementById('toastContainer');
+    if (container) container.innerHTML = '';
+  }
 };
 
 // ==========================================

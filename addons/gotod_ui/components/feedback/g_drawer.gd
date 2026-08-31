@@ -139,3 +139,25 @@ func _update_panel_anchors_initial() -> void:
 func _on_mask_input(event: InputEvent) -> void:
 	if mask_closable and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		close()
+
+## 静态多态构建工厂 (支持 1. 标题单值 create("抽屉标题"), 2. 字典对象 create({ ... }), 3. 多参数 create(title, placement, content_node))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GDrawer:
+	var drawer = GDrawer.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("title"): drawer.title = str(opts["title"])
+		if opts.has("placement"):
+			if opts["placement"] is int: drawer.placement = opts["placement"]
+			elif str(opts["placement"]).to_lower() == "left": drawer.placement = Placement.LEFT
+			elif str(opts["placement"]).to_lower() == "top": drawer.placement = Placement.TOP
+			elif str(opts["placement"]).to_lower() == "bottom": drawer.placement = Placement.BOTTOM
+		if opts.has("size"): drawer.drawer_size = float(opts["size"])
+		if opts.has("mask_closable"): drawer.mask_closable = bool(opts["mask_closable"])
+		if opts.has("body") and opts["body"] is Node: drawer.get_content_box().add_child(opts["body"])
+	elif arg1 != null:
+		drawer.title = str(arg1)
+		if arg2 != null:
+			if arg2 is int: drawer.placement = arg2
+		if arg3 != null and arg3 is Node:
+			drawer.get_content_box().add_child(arg3)
+	return drawer

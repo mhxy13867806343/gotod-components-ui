@@ -43,11 +43,12 @@ func _init_sidebar() -> void:
 		child.queue_free()
 		
 	var categories = [
-		{"name": "General", "items": [
-			{"id": "button", "label": "Button 按钮"},
-			{"id": "text", "label": "Text / Typography 文本"},
-			{"id": "divider", "label": "Divider 分割线"},
-		]},
+			{"name": "General", "items": [
+				{"id": "button", "label": "Button 按钮"},
+				{"id": "text", "label": "Text / Typography 文本"},
+				{"id": "divider", "label": "Divider 分割线"},
+				{"id": "menu", "label": "Menu 菜单导航"},
+			]},
 		{"name": "Form Controls", "items": [
 			{"id": "input", "label": "Input 输入框"},
 			{"id": "textarea", "label": "Textarea 文本域"},
@@ -97,11 +98,12 @@ func _show_page(page_id: String) -> void:
 	current_page = page_id
 	for child in content_container.get_children():
 		child.queue_free()
-		
-	match page_id:
-		"button": _render_button_demo()
-		"input": _render_input_demo()
-		"dialog": _render_dialog_demo()
+
+		match page_id:
+			"button": _render_button_demo()
+			"menu": _render_menu_demo()
+			"input": _render_input_demo()
+			"dialog": _render_dialog_demo()
 		"message": _render_message_demo()
 		"switch": _render_switch_demo()
 		"checkbox": _render_checkbox_demo()
@@ -157,6 +159,47 @@ func _render_button_demo() -> void:
 		space2.add_child(btn)
 	card2.get_node("VBoxContainer").add_child(space2)
 	content_container.add_child(card2)
+
+func _render_menu_demo() -> void:
+	content_title.text = "Menu 菜单导航"
+	var card = GCard.new()
+	card.title = "Vertical Menu"
+	var menu = GMenu.new()
+	menu.items = [
+		{"index": "dashboard", "label": "仪表盘", "icon": "⌂"},
+		{"index": "workbench", "label": "工作台", "icon": "▣", "children": [
+			{"index": "workbench-assets", "label": "资源库", "icon": "▦"},
+			{"index": "workbench-scenes", "label": "场景管理", "icon": "▶"}
+		]},
+		{"index": "settings", "label": "设置", "icon": "⚙"}
+	]
+	menu.default_openeds = ["workbench"]
+	menu.active_index = "dashboard"
+	menu.item_selected.connect(func(index, _path, item):
+		GMessage.success("Selected: " + str(item.get("label", index)), self)
+	)
+	card.get_node("VBoxContainer").add_child(menu)
+	content_container.add_child(card)
+
+	var card_h = GCard.new()
+	card_h.title = "Horizontal Menu (Popup Submenu)"
+	var menu_h = GMenu.new()
+	menu_h.mode = GMenu.MenuMode.HORIZONTAL
+	menu_h.popper_placement = GMenu.PopperPlacement.AUTO
+	menu_h.items = [
+		{"index": "overview", "label": "总览", "icon": "⌂"},
+		{"index": "workspace", "label": "工作区", "icon": "▣", "children": [
+			{"index": "assets", "label": "资源库", "icon": "▦"},
+			{"index": "scenes", "label": "场景管理", "icon": "▶"}
+		]},
+		{"index": "orders", "label": "订单", "icon": "≡"}
+	]
+	menu_h.active_index = "overview"
+	menu_h.item_selected.connect(func(index, _path, item):
+		GMessage.info("Selected: " + str(item.get("label", index)), self)
+	)
+	card_h.get_node("VBoxContainer").add_child(menu_h)
+	content_container.add_child(card_h)
 
 func _render_input_demo() -> void:
 	content_title.text = "Input 输入框"
@@ -234,7 +277,17 @@ func _render_message_demo() -> void:
 	b_err.button_type = GButton.ButtonType.DANGER
 	b_err.pressed.connect(func(): GMessage.error("Failed to load resource!"))
 	space.add_child(b_err)
-	
+
+	var b_close = GButton.new()
+	b_close.text = "Closable Message"
+	b_close.button_type = GButton.ButtonType.PRIMARY
+	b_close.pressed.connect(func(): GMessage.display({
+		"message": "Click the x icon to close this message.",
+		"closable": true,
+		"duration": 0.0
+	}))
+	space.add_child(b_close)
+
 	card.get_node("VBoxContainer").add_child(space)
 	content_container.add_child(card)
 

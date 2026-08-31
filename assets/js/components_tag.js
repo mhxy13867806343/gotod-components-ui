@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['tag'] = {
   "desc": "用于标记和选择。支持 Light, Outline, Solid 三种质感及动态添加/关闭操作。",
   "demos": [
     {
-      "title": "1. 基础主题色 (Basic Types: Primary / Success / Warning / Danger / Info)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
       "render": "<div style=\"display:flex; gap:10px; flex-wrap:wrap; align-items:center;\"><span class=\"g-tag g-tag-primary\">Primary 主要</span><span class=\"g-tag g-tag-success\">Success 成功</span><span class=\"g-tag g-tag-warning\">Warning 警告</span><span class=\"g-tag g-tag-danger\">Danger 危险</span><span class=\"g-tag g-tag-info\">Info 消息</span></div>",
-      "code": "# GDScript: 基础标签\nvar tag_p = GTag.new(\"Primary\", GotodTheme.Type.PRIMARY)\nadd_child(tag_p)"
+      "code": "# 方式 1: 单一文本参数快捷构建\nvar tag1 = GTag.create(\"热销新品\")\n\n# 方式 2: 完整字典配置对象\nvar tag2 = GTag.create({\n    \"text\": \"SSR 传说\",\n    \"type\": \"warning\",\n    \"variant\": GTag.Variant.SOLID,\n    \"closable\": true\n})\n\n# 方式 3: 多参数位置传参 (文本, 类型, 是否可关闭)\nvar tag3 = GTag.create(\"火系魔法\", \"danger\", true)"
     },
     {
       "title": "2. 可关闭标签 (Closable Tags)",
@@ -88,7 +88,14 @@ window.COMPONENT_CATALOG['tag'] = {
       "version": "v1.0"
     }
   ],
-  "methods": [],
+  "methods": [
+    {
+      "name": "create(text_or_options: Variant, type: Variant = null, closable: Variant = null) -> GTag",
+      "desc": "静态多态构建工厂方法。支持单文本参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(text_or_options: Variant, type: Variant = null, closable: Variant = null) -> GTag",
+      "version": "v1.0.6"
+    }
+  ],
   "slots": [
     {
       "name": "default",

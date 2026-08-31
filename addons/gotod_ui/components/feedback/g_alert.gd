@@ -109,3 +109,33 @@ func _update_styles() -> void:
 		_title_lbl.add_theme_color_override("font_color", GotodTheme.get_color("text_primary"))
 	if _desc_lbl:
 		_desc_lbl.add_theme_color_override("font_color", GotodTheme.get_color("text_secondary"))
+
+## 静态多态构建工厂 (支持 1. 标题单值 create("警告标题"), 2. 字典对象 create({ ... }), 3. 多参数 create(title, type, description))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GAlert:
+	var alert = GAlert.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("title"): alert.title = str(opts["title"])
+		if opts.has("description"): alert.description = str(opts["description"])
+		if opts.has("type"):
+			if opts["type"] is int: alert.type = opts["type"]
+			elif opts["type"] is String: alert.type = _parse_type_str(opts["type"])
+		if opts.has("closable"): alert.closable = bool(opts["closable"])
+		if opts.has("show_icon"): alert.show_icon = bool(opts["show_icon"])
+		if opts.has("on_close") and opts["on_close"] is Callable: alert.closed.connect(opts["on_close"])
+	elif arg1 != null:
+		alert.title = str(arg1)
+		if arg2 != null:
+			if arg2 is int: alert.type = arg2
+			elif arg2 is String: alert.type = _parse_type_str(arg2)
+		if arg3 != null:
+			alert.description = str(arg3)
+	return alert
+
+static func _parse_type_str(name: String) -> GThemeTokens.Status:
+	match name.to_lower():
+		"success": return GThemeTokens.Status.SUCCESS
+		"warning": return GThemeTokens.Status.WARNING
+		"danger", "error": return GThemeTokens.Status.DANGER
+		"info": return GThemeTokens.Status.INFO
+		_: return GThemeTokens.Status.DEFAULT

@@ -237,3 +237,24 @@ func _on_cancel() -> void:
 func _on_mask_input(event: InputEvent) -> void:
 	if mask_closable and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		close()
+
+## 静态多态构建工厂 (支持 1. 标题单值 create("对话框标题"), 2. 字典对象 create({ ... }), 3. 多参数 create(title, content, on_confirm))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GDialog:
+	var dlg = GDialog.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("title"): dlg.title = str(opts["title"])
+		if opts.has("content") or opts.has("message"): dlg.content_text = str(opts.get("content", opts.get("message", "")))
+		if opts.has("confirm_text"): dlg.confirm_button_text = str(opts["confirm_text"])
+		if opts.has("cancel_text"): dlg.cancel_button_text = str(opts["cancel_text"])
+		if opts.has("show_cancel"): dlg.show_cancel_button = bool(opts["show_cancel"])
+		if opts.has("width"): dlg.dialog_width = float(opts["width"])
+		if opts.has("on_confirm") and opts["on_confirm"] is Callable: dlg.confirmed.connect(opts["on_confirm"])
+		if opts.has("on_cancel") and opts["on_cancel"] is Callable: dlg.cancelled.connect(opts["on_cancel"])
+	elif arg1 != null:
+		dlg.title = str(arg1)
+		if arg2 != null:
+			dlg.content_text = str(arg2)
+		if arg3 is Callable:
+			dlg.confirmed.connect(arg3)
+	return dlg

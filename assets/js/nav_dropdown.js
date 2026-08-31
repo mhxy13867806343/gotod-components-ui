@@ -23,7 +23,7 @@ window.TOP_SECTIONS = [
   { key: 'changelog', label: '17. 版本更新日志与步骤时间线 (Changelog - GSteps)', icon: 'fa-clock-rotate-left', desc: '基于 GSteps 步骤条展示的发布历程与路线图' }
 ];
 
-// Initialize Top Nav GSelect Dropdown
+// Initialize Top Nav GMenu Dropdown
 window.initTopNavDropdown = function() {
   const container = document.getElementById('topNavSelectContainer');
   if (!container) return;
@@ -32,16 +32,16 @@ window.initTopNavDropdown = function() {
   const currentItem = window.TOP_SECTIONS.find(s => s.key === currentKey) || window.TOP_SECTIONS[1];
 
   container.innerHTML = `
-    <div class="g-nav-select" id="gNavSelectDropdown">
-      <div class="g-nav-select-trigger" onclick="toggleNavDropdown(event)">
+    <div class="g-nav-select g-menu-select" id="gNavSelectDropdown">
+      <button class="g-nav-select-trigger" type="button" onclick="toggleNavDropdown(event)" aria-haspopup="menu" aria-expanded="false">
         <i class="fa-solid ${currentItem.icon}" style="color:var(--primary);"></i>
-        <span class="g-nav-select-label" id="gNavSelectLabel">${currentItem.label.split(' ')[1] || currentItem.label}</span>
+        <span class="g-nav-select-label" id="gNavSelectLabel">${currentItem.label}</span>
         <i class="fa-solid fa-chevron-down g-nav-select-arrow" id="gNavSelectArrow"></i>
-      </div>
+      </button>
 
-      <div class="g-nav-select-menu" id="gNavSelectMenu">
+      <div class="g-menu g-nav-select-menu" id="gNavSelectMenu" role="menu">
         ${window.TOP_SECTIONS.map(sec => `
-          <div class="g-nav-select-option ${sec.key === currentKey ? 'selected' : ''}" data-key="${sec.key}" onclick="selectNavSection('${sec.key}')">
+          <button class="g-menu-item g-nav-select-option ${sec.key === currentKey ? 'selected' : ''}" data-key="${sec.key}" type="button" role="menuitem" onclick="selectNavSection('${sec.key}')">
             <div style="display:flex; align-items:center; gap:8px;">
               <i class="fa-solid ${sec.icon}" style="width:16px; text-align:center; color:${sec.key === currentKey ? 'var(--primary)' : 'var(--text-secondary)'};"></i>
               <div>
@@ -50,7 +50,7 @@ window.initTopNavDropdown = function() {
               </div>
             </div>
             ${sec.key === currentKey ? '<i class="fa-solid fa-check" style="color:var(--primary); font-size:11px;"></i>' : ''}
-          </div>
+          </button>
         `).join('')}
       </div>
     </div>
@@ -61,11 +61,49 @@ window.initTopNavDropdown = function() {
     const dropdown = document.getElementById('gNavSelectDropdown');
     const menu = document.getElementById('gNavSelectMenu');
     const arrow = document.getElementById('gNavSelectArrow');
+    const trigger = dropdown ? dropdown.querySelector('.g-nav-select-trigger') : null;
     if (dropdown && !dropdown.contains(e.target) && menu) {
-      menu.classList.remove('open');
+      menu.classList.remove('open', 'is-placement-top', 'is-placement-bottom');
       if (arrow) arrow.style.transform = 'rotate(0deg)';
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
     }
   });
+};
+
+window.positionAnchoredMenu = function(anchor, menu, options = {}) {
+  if (!anchor || !menu) return 'bottom';
+  const padding = options.padding ?? 12;
+  const gap = options.gap ?? 8;
+  const minWidth = options.minWidth ?? 0;
+  const maxHeightCap = options.maxHeight ?? Math.round(window.innerHeight - padding * 2);
+  const preferMinBelow = options.preferMinBelow ?? 280;
+  const rect = anchor.getBoundingClientRect();
+  const width = Math.min(Math.max(rect.width, minWidth), window.innerWidth - padding * 2);
+  const left = Math.max(padding, Math.min(rect.left, window.innerWidth - width - padding));
+
+  menu.style.position = 'fixed';
+  menu.style.width = width + 'px';
+  menu.style.left = left + 'px';
+  menu.style.right = 'auto';
+  menu.style.bottom = 'auto';
+  menu.style.maxHeight = 'none';
+  menu.style.top = '-9999px';
+  menu.classList.add('open');
+
+  const naturalHeight = menu.scrollHeight || preferMinBelow;
+  const spaceBelow = window.innerHeight - rect.bottom - padding;
+  const spaceAbove = rect.top - padding;
+  const placeAbove = spaceBelow < Math.min(naturalHeight, preferMinBelow) && spaceAbove > spaceBelow;
+  const availableHeight = Math.max(160, (placeAbove ? spaceAbove : spaceBelow) - gap);
+  const height = Math.min(naturalHeight, availableHeight, maxHeightCap);
+
+  menu.classList.toggle('is-placement-top', placeAbove);
+  menu.classList.toggle('is-placement-bottom', !placeAbove);
+  menu.style.maxHeight = height + 'px';
+  menu.style.top = (placeAbove
+    ? Math.max(padding, rect.top - gap - height)
+    : Math.min(rect.bottom + gap, window.innerHeight - padding - Math.min(height, 160))) + 'px';
+  return placeAbove ? 'top' : 'bottom';
 };
 
 // Toggle Dropdown Open/Close
@@ -73,24 +111,73 @@ window.toggleNavDropdown = function(event) {
   if (event) event.stopPropagation();
   const menu = document.getElementById('gNavSelectMenu');
   const arrow = document.getElementById('gNavSelectArrow');
-  if (!menu) return;
+  const trigger = event?.currentTarget || document.querySelector('.g-nav-select-trigger');
+  if (!menu || !trigger) return;
 
   const isOpen = menu.classList.contains('open');
   if (isOpen) {
-    menu.classList.remove('open');
+    menu.classList.remove('open', 'is-placement-top', 'is-placement-bottom');
     if (arrow) arrow.style.transform = 'rotate(0deg)';
-  } else {
-    menu.classList.add('open');
-    if (arrow) arrow.style.transform = 'rotate(180deg)';
+    trigger.setAttribute('aria-expanded', 'false');
+    return;
   }
+
+  window.positionAnchoredMenu(trigger, menu, { minWidth: Math.max(trigger.getBoundingClientRect().width, 360) });
+  const selected = menu.querySelector('.g-nav-select-option.selected');
+  if (selected && typeof selected.scrollIntoView === 'function') {
+    selected.scrollIntoView({ block: 'nearest' });
+  }
+  if (arrow) arrow.style.transform = 'rotate(180deg)';
+  trigger.setAttribute('aria-expanded', 'true');
+};
+
+window.toggleGMenuSub = function(event) {
+  if (event) event.stopPropagation();
+  const title = event.currentTarget || event.target;
+  const sub = title.closest('.g-sub-menu');
+  if (!sub) return;
+
+  const willOpen = !sub.classList.contains('is-open');
+  const root = sub.closest('.g-menu') || document;
+  root.querySelectorAll('.g-sub-menu.is-open').forEach(item => {
+    if (item !== sub) item.classList.remove('is-open', 'is-placement-top', 'is-placement-bottom');
+  });
+  sub.classList.toggle('is-open', willOpen);
+  if (!willOpen) {
+    sub.classList.remove('is-placement-top', 'is-placement-bottom');
+    return;
+  }
+
+  if (!sub.classList.contains('g-sub-menu-popup')) return;
+  const rect = title.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - rect.bottom;
+  const spaceAbove = rect.top;
+  const placeAbove = spaceBelow < 180 && spaceAbove > spaceBelow;
+  sub.classList.toggle('is-placement-top', placeAbove);
+  sub.classList.toggle('is-placement-bottom', !placeAbove);
+};
+
+window.activateGMenuItem = function(btn) {
+  const root = btn.closest('.g-menu');
+  if (!root) return;
+  root.querySelectorAll('.g-menu-item.is-active').forEach(item => item.classList.remove('is-active'));
+  btn.classList.add('is-active');
+  const label = (btn.innerText || '').trim();
+  if (typeof window.showToast === 'function') {
+    window.showToast('切换到 ' + label, 'success');
+  }
+  const sub = btn.closest('.g-sub-menu-popup');
+  if (sub) sub.classList.remove('is-open', 'is-placement-top', 'is-placement-bottom');
 };
 
 // Select Section from Dropdown
 window.selectNavSection = function(sectionKey) {
   const menu = document.getElementById('gNavSelectMenu');
   const arrow = document.getElementById('gNavSelectArrow');
-  if (menu) menu.classList.remove('open');
+  const trigger = document.querySelector('.g-nav-select-trigger');
+  if (menu) menu.classList.remove('open', 'is-placement-top', 'is-placement-bottom');
   if (arrow) arrow.style.transform = 'rotate(0deg)';
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
 
   // Switch top section
   if (typeof window.switchTopSection === 'function') {
@@ -110,7 +197,7 @@ window.syncNavDropdownUI = function(sectionKey) {
   const triggerElem = document.querySelector('.g-nav-select-trigger');
   
   if (labelElem) {
-    labelElem.innerText = item.label.split(' ')[1] || item.label;
+    labelElem.innerText = item.label;
   }
   if (triggerElem) {
     const icon = triggerElem.querySelector('.fa-solid:first-child');
@@ -137,6 +224,44 @@ window.syncNavDropdownUI = function(sectionKey) {
     }
   });
 };
+
+window.toggleDockMenu = function(event) {
+  if (event) event.stopPropagation();
+  const trigger = event.currentTarget;
+  const wrapper = trigger.closest('.jd-dock-menu');
+  if (!wrapper) return;
+  document.querySelectorAll('.jd-dock-menu.is-open').forEach(menu => {
+    if (menu !== wrapper) {
+      menu.classList.remove('is-open', 'is-placement-top');
+      const otherTrigger = menu.querySelector('.jd-dock-item');
+      if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+  const isOpen = wrapper.classList.toggle('is-open');
+  trigger.setAttribute('aria-expanded', String(isOpen));
+  if (!isOpen) {
+    wrapper.classList.remove('is-placement-top');
+    return;
+  }
+  const rect = trigger.getBoundingClientRect();
+  const placeAbove = (window.innerHeight - rect.bottom) < 160 && rect.top > (window.innerHeight - rect.bottom);
+  wrapper.classList.toggle('is-placement-top', placeAbove);
+};
+
+document.addEventListener('click', (event) => {
+  document.querySelectorAll('.jd-dock-menu.is-open').forEach(menu => {
+    if (!menu.contains(event.target)) {
+      menu.classList.remove('is-open', 'is-placement-top');
+      const trigger = menu.querySelector('.jd-dock-item');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.querySelectorAll('.g-sub-menu.is-open').forEach(sub => {
+    if (!sub.contains(event.target)) {
+      sub.classList.remove('is-open', 'is-placement-top', 'is-placement-bottom');
+    }
+  });
+});
 
 // Hook into DOM ready
 document.addEventListener('DOMContentLoaded', () => {

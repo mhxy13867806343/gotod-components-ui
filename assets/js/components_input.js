@@ -7,9 +7,9 @@ window.COMPONENT_CATALOG['input'] = {
   "desc": "通过鼠标或键盘输入字符的基础表单控件。包含基础用法、一键清空、密码切换、带前缀/后缀、校验状态描边、禁用与尺寸控制等完整场景。",
   "demos": [
     {
-      "title": "1. 基础输入与禁用状态 (Basic Input & Disabled)",
+      "title": "1. 快速构建与三大调用形态 (Quick Build: xx(str) / xx(opts) / xx(a,b,c))",
       "render": "\n      <div style=\"display:flex; gap:12px; max-width:440px; flex-wrap:wrap;\">\n        <input type=\"text\" class=\"g-input\" placeholder=\"请输入玩家昵称...\" style=\"width:200px;\">\n        <input type=\"text\" class=\"g-input\" placeholder=\"已禁用输入\" disabled style=\"width:200px; opacity:0.5;\">\n      </div>\n    ",
-      "code": "# GDScript: 基础输入框\nvar input = GInput.new()\ninput.placeholder = \"请输入玩家昵称...\"\nadd_child(input)"
+      "code": "# 方式 1: 单一占位提示文本快捷构建\nvar input1 = GInput.create(\"请输入玩家昵称...\")\n\n# 方式 2: 完整字典配置对象\nvar input2 = GInput.create({\n    \"placeholder\": \"请输入登录密码...\",\n    \"secret\": true,\n    \"show_password_toggle\": true,\n    \"clearable\": true\n})\n\n# 方式 3: 多参数位置传参 (默认文本, 占位符, 是否可清空)\nvar input3 = GInput.create(\"Arthur\", \"请输入角色名...\", true)"
     },
     {
       "title": "2. 状态验证与反馈边框 (Validation Status: Success / Warning / Error)",
@@ -180,6 +180,12 @@ window.COMPONENT_CATALOG['input'] = {
     }
   ],
   "methods": [
+    {
+      "name": "create(text_or_options: Variant, placeholder: Variant = null, clearable: Variant = null) -> GInput",
+      "desc": "静态多态构建工厂方法。支持单文本/占位符参数、字典配置对象、多参数位置传递三种形态",
+      "params": "(text_or_options: Variant, placeholder: Variant = null, clearable: Variant = null) -> GInput",
+      "version": "v1.0.6"
+    },
     {
       "name": "clear()",
       "desc": "清空当前输入框内容并发出 cleared 信号",

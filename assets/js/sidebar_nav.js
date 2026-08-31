@@ -213,6 +213,7 @@ window.SIDEBAR_CONFIG = {
           { key: 'text', title: 'GText / GTitle 文本', version: 'v1.0' },
           { key: 'divider', title: 'GDivider 分割线', version: 'v1.0' },
           { key: 'icon', title: 'GIcon 矢量图标', version: 'v1.1' },
+          { key: 'menu', title: 'GMenu 菜单导航', version: 'v1.0' },
           { key: 'fab', title: 'GFab 悬浮按钮 (2D拖拽/磁吸)', version: 'v1.2' }
         ]
       },
@@ -306,14 +307,19 @@ window.SIDEBAR_CONFIG = {
       {
         title: '游戏网络与物理系统 (Networking & Physics)',
         items: [
-          { key: 'net-sync', title: '⚡ MultiplayerSynchronizer 多人网络同步' },
-          { key: 'net-rpc', title: '📡 RPC 远程过程调用架构' },
-          { key: 'physics-2d-rigidbody', title: '🎯 RigidBody2D 刚体物理与碰撞反馈' },
-          { key: 'physics-raycast', title: '📐 RayCast2D 射线检测与视线遮挡' }
+          { key: 'net-multiplayer', title: '⚡ 高级多人联机与 RPC 架构' },
+          { key: 'net-http', title: '📡 GHttp 请求与 RESTful API 客户端' },
+          { key: 'net-axios', title: '🚀 GAxios 拦截器与并发请求' },
+          { key: 'net-websocket', title: '🌐 WebSocket 实时通信' },
+          { key: 'net-webrtc', title: '📺 WebRTC 低延迟连接' },
+          { key: 'phys-programmatic', title: '🎯 程序化物理与射线查询' },
+          { key: 'phys-character-rigidbody', title: '🏃 CharacterBody 与 RigidBody 力学' },
+          { key: 'phys-area-collision', title: '📦 Area2D/3D 区域与碰撞形状' },
+          { key: 'phys-coord-transforms', title: '📐 坐标转换与空间映射' }
         ]
       }
     ],
-    defaultKey: 'net-sync'
+    defaultKey: 'net-multiplayer'
   },
   'slots': {
     placeholder: 'Search slots & proxy...',
@@ -355,7 +361,14 @@ window.renderSidebarNav = function(section, targetDocKey) {
   const cfg = window.SIDEBAR_CONFIG[section] || window.SIDEBAR_CONFIG['components'];
   const activeKey = targetDocKey || cfg.defaultKey;
 
-  let html = `<input type="text" class="nav-search" placeholder="${cfg.placeholder}" oninput="filterNav(this.value)">`;
+  let html = `
+    <div class="nav-search-wrapper">
+      <input type="text" id="sidebarSearchInput" class="nav-search" placeholder="${cfg.placeholder}" oninput="filterNav(this.value)">
+      <button type="button" id="sidebarSearchClearBtn" class="nav-search-clear-btn" onclick="clearNavSearch()" title="清空搜索">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+  `;
 
   cfg.groups.forEach(group => {
     html += `<div class="nav-group"><div class="nav-group-title">${group.title}</div>`;
@@ -401,8 +414,22 @@ window.renderSidebarNav = function(section, targetDocKey) {
 // Sidebar Navigation Search Filtering
 window.filterNav = function(q) {
   const val = (q || '').toLowerCase().trim();
+  const clearBtn = document.getElementById('sidebarSearchClearBtn');
+  if (clearBtn) {
+    clearBtn.style.display = val ? 'inline-flex' : 'none';
+  }
   document.querySelectorAll('.nav-item').forEach(item => {
     const text = item.innerText.toLowerCase();
     item.style.display = text.includes(val) ? 'flex' : 'none';
   });
+};
+
+// Clear Search Input and Reset Filter
+window.clearNavSearch = function() {
+  const input = document.getElementById('sidebarSearchInput');
+  if (input) {
+    input.value = '';
+    input.focus();
+    window.filterNav('');
+  }
 };

@@ -88,3 +88,50 @@ func _update_styles() -> void:
 		_:                  col = GotodTheme.get_color("text_primary")
 
 	add_theme_color_override("font_color", col)
+
+## 静态多态构建工厂 (支持 1. 单值简写 create(text), 2. 字典对象 create({ ... }), 3. 多参数 create(text, type, hierarchy))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GText:
+	var label = GText.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text"): label.text = str(opts["text"])
+		if opts.has("type"):
+			if opts["type"] is int: label.text_type = opts["type"]
+			elif opts["type"] is String: label.text_type = _parse_text_type(opts["type"])
+		if opts.has("hierarchy"):
+			if opts["hierarchy"] is int: label.hierarchy = opts["hierarchy"]
+			elif opts["hierarchy"] is String: label.hierarchy = _parse_hierarchy(opts["hierarchy"])
+		if opts.has("strong"): label.strong = bool(opts["strong"])
+		if opts.has("italic"): label.italic = bool(opts["italic"])
+		if opts.has("code_style"): label.code_style = bool(opts["code_style"])
+	elif arg1 != null:
+		label.text = str(arg1)
+		if arg2 != null:
+			if arg2 is int: label.text_type = arg2
+			elif arg2 is String: label.text_type = _parse_text_type(arg2)
+		if arg3 != null:
+			if arg3 is int: label.hierarchy = arg3
+			elif arg3 is String: label.hierarchy = _parse_hierarchy(arg3)
+	return label
+
+static func _parse_text_type(name: String) -> int:
+	match name.to_lower():
+		"primary": return TextType.PRIMARY
+		"success": return TextType.SUCCESS
+		"warning": return TextType.WARNING
+		"danger", "error": return TextType.DANGER
+		"info": return TextType.INFO
+		"secondary": return TextType.SECONDARY
+		_: return TextType.DEFAULT
+
+static func _parse_hierarchy(name: String) -> int:
+	match name.to_lower():
+		"h1": return Hierarchy.H1
+		"h2": return Hierarchy.H2
+		"h3": return Hierarchy.H3
+		"h4": return Hierarchy.H4
+		"h5": return Hierarchy.H5
+		"h6": return Hierarchy.H6
+		"caption": return Hierarchy.CAPTION
+		"code": return Hierarchy.CODE
+		_: return Hierarchy.BODY

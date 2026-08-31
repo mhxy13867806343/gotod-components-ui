@@ -22,9 +22,21 @@ func _ready() -> void:
 # 命令式通知静态方法 (Imperative Notification Methods)
 # ==========================================
 
+## 统一通知服务方法 (支持 String 与 Dictionary 配置对象，对标 service 规范避免与 Godot 冲突)
+static func service(options_or_title: Variant, message: String = "", context_node: Node = null) -> void:
+	if options_or_title is Dictionary:
+		notify(options_or_title as Dictionary, context_node)
+	else:
+		_show_notification(str(options_or_title), message, GThemeTokens.Status.INFO, 4.5, context_node)
+
+## 启动别名方法
+static func open(options_or_title: Variant, message: String = "", context_node: Node = null) -> void:
+	service(options_or_title, message, context_node)
+
+## 字典配置对象调用
 static func notify(options: Dictionary, context_node: Node = null) -> void:
 	var title = options.get("title", "通知")
-	var msg = options.get("message", "")
+	var msg = options.get("message", options.get("text", options.get("description", "")))
 	var type_str = options.get("type", "info")
 	var duration = options.get("duration", 4.5)
 	var status = GThemeTokens.Status.INFO

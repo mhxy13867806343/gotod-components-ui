@@ -104,3 +104,23 @@ func _update_styles() -> void:
 		
 	var sb = GotodTheme.create_stylebox_flat(bg_col, border_col, 1, 6.0, 10.0, 8.0)
 	add_theme_stylebox_override("panel", sb)
+
+## 静态多态构建工厂 (支持 1. 文本单值 create(text), 2. 字典对象 create({ ... }), 3. 多参数 create(text, placeholder, rows))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GTextarea:
+	var ta = GTextarea.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text"): ta.text = str(opts["text"])
+		if opts.has("placeholder"): ta.placeholder_text = str(opts["placeholder"])
+		elif opts.has("placeholder_text"): ta.placeholder_text = str(opts["placeholder_text"])
+		if opts.has("rows"): ta.rows = int(opts["rows"])
+		if opts.has("max_length"): ta.max_length = int(opts["max_length"])
+		if opts.has("show_word_limit"): ta.show_word_limit = bool(opts["show_word_limit"])
+		if opts.has("on_change") and opts["on_change"] is Callable: ta.text_changed.connect(opts["on_change"])
+	elif arg1 != null:
+		ta.text = str(arg1)
+		if arg2 != null:
+			ta.placeholder_text = str(arg2)
+		if arg3 != null:
+			ta.rows = int(arg3)
+	return ta

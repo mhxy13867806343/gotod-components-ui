@@ -69,6 +69,12 @@ window.COMPONENT_CATALOG['container'] = {
   "events": [],
   "methods": [
     {
+      "name": "create(children_or_options: Variant, separation: Variant = null, children: Variant = null) -> GContainer",
+      "desc": "静态多态构建工厂方法。支持子节点数组单值、字典配置对象、多参数位置传递三种形态",
+      "params": "(children_or_options: Variant, separation: Variant = null, children: Variant = null) -> GContainer",
+      "version": "v1.0.6"
+    },
+    {
       "name": "css(rules_or_func: Variant)",
       "desc": "链式设定当前容器的样式规则",
       "params": "(rules_or_func: Variant) -> GContainer",

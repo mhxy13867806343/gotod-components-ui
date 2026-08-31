@@ -98,3 +98,35 @@ func _update_styles() -> void:
 	
 	if _label:
 		_label.add_theme_color_override("font_color", text_col)
+
+## 静态多态构建工厂 (支持 1. 文本单值 create("热销"), 2. 字典对象 create({ ... }), 3. 多参数 create(text, type, closable))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GTag:
+	var tag = GTag.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("text"): tag.text = str(opts["text"])
+		if opts.has("type"):
+			if opts["type"] is int: tag.type = opts["type"]
+			elif opts["type"] is String: tag.type = _parse_type_str(opts["type"])
+		if opts.has("variant"):
+			if opts["variant"] is int: tag.variant = opts["variant"]
+		if opts.has("round"): tag.round_shape = bool(opts["round"])
+		if opts.has("closable"): tag.closable = bool(opts["closable"])
+		if opts.has("on_close") and opts["on_close"] is Callable: tag.closed.connect(opts["on_close"])
+	elif arg1 != null:
+		tag.text = str(arg1)
+		if arg2 != null:
+			if arg2 is int: tag.type = arg2
+			elif arg2 is String: tag.type = _parse_type_str(arg2)
+		if arg3 != null:
+			tag.closable = bool(arg3)
+	return tag
+
+static func _parse_type_str(name: String) -> GThemeTokens.Status:
+	match name.to_lower():
+		"primary": return GThemeTokens.Status.PRIMARY
+		"success": return GThemeTokens.Status.SUCCESS
+		"warning": return GThemeTokens.Status.WARNING
+		"danger", "error": return GThemeTokens.Status.DANGER
+		"info": return GThemeTokens.Status.INFO
+		_: return GThemeTokens.Status.DEFAULT
