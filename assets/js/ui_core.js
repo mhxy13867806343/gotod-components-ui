@@ -814,3 +814,17 @@ window.showVersionUpdateModal = function(onRefresh, onCancel) {
     if (onRefresh) onRefresh();
   };
 };
+
+window.testVersionPollingUpdate = function() {
+  if (typeof window.showVersionUpdateModal === 'function') {
+    window.showVersionUpdateModal(() => {
+      if (window.showToast) window.showToast('✅ 正在执行页面更新重载...', 'success');
+      setTimeout(() => {
+        if (typeof window.forceHardReload === 'function') window.forceHardReload();
+        else window.location.reload();
+      }, 500);
+    }, () => {
+      if (window.showToast) window.showToast('已暂缓版本更新', 'info');
+    });
+  }
+};

@@ -86,10 +86,10 @@
       <span>JQ版</span>
     </a>
 
-    <!-- 4. 强制刷新 / 清除缓存 -->
-    <button class="jd-dock-item" onclick="window.forceHardReload()" title="清除浏览器本地静态缓存并强制刷新最新代码">
-      <i class="fa-solid fa-rotate" style="color:#38bdf8;"></i>
-      <span>刷新</span>
+    <!-- 4. 版本更新检测 / 触发更新弹窗 -->
+    <button class="jd-dock-item" onclick="if (typeof window.testVersionPollingUpdate === 'function') window.testVersionPollingUpdate(); else if (typeof window.showVersionUpdateModal === 'function') window.showVersionUpdateModal(window.forceHardReload); else window.forceHardReload();" title="检测并触发版本更新弹窗 (Version Polling)">
+      <i class="fa-solid fa-rotate" style="color:var(--primary);"></i>
+      <span>更新</span>
     </button>
 
     <!-- 5. 源码仓库 (GitHub) -->
