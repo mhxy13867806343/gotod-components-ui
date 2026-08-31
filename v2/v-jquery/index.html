@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../../assets/css/theme.css?v=20260831_55">
   <link rel="stylesheet" href="../../assets/css/style.css?v=20260831_55">
+  <link rel="stylesheet" href="../3d-lab.css?v=20260831_1">
   <!-- jQuery 3.7.1 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <style>
@@ -62,6 +63,7 @@
       </div>
 
       <div class="header-actions" style="display:flex; align-items:center; gap:12px;">
+        <a href="../v-csharp/" class="g-btn g-btn-default" style="font-size:12px; padding:6px 12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; border-radius:var(--radius); font-weight:700; color:#fbbf24;"><i class="fa-solid fa-code"></i><span>C# 3D 版</span></a>
         <a href="../../" class="g-btn g-btn-primary" style="font-size:12px; padding:6px 14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; border-radius:var(--radius); font-weight:700;">
           <i class="fa-solid fa-house"></i>
           <span>返回 V1 经典版</span>
@@ -73,30 +75,47 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="v2-dev-container">
-      <div class="v2-dev-card">
-        <div class="v2-dev-icon">
-          <i class="fa-brands fa-js" style="color:#f7df1e;"></i>
-        </div>
+    <main class="lab-shell">
+      <div class="lab-hero">
+        <div class="lab-kicker">GOTOD UI V2 / JQUERY 3.7.1 / GODOT 4.4</div>
         <h1 style="font-size:28px; font-weight:800; color:var(--text-main); margin-bottom:12px;">
-          Gotod UI v2 (jQuery Edition) 正在火热开发中...
+          3D 场景组件与 Shader 实验室
         </h1>
         <p style="font-size:15px; color:var(--text-secondary); line-height:1.7; margin-bottom:28px;">
-          基于 jQuery 现代化 DOM 封装与轻量级 Godot 4 游戏 UI 交互方案重构中。<br>
-          您可以随时点击下方或左上角按钮，返回功能完备的 V1 经典版。
+          面向 Godot 4.4 的 3D UI 组件：Node3D、Camera3D、MeshInstance3D、Environment、GPUParticles3D 与 ShaderMaterial。每个预览都对应可复制的 GDScript 实现。
         </p>
 
-        <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+        <div class="lab-links">
           <a href="../../" class="g-btn g-btn-primary" style="font-size:14px; padding:10px 24px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:var(--radius); font-weight:700; box-shadow:0 4px 16px rgba(34,197,94,0.35);">
             <i class="fa-solid fa-house"></i>
-            <span>立即返回 V1 经典版文档</span>
+            <span>返回 V1 经典版</span>
           </a>
           <a href="../v-vue/" class="g-btn g-btn-default" style="font-size:14px; padding:10px 20px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:var(--radius); font-weight:600;">
-            <i class="fa-brands fa-vuejs" style="color:#42b883;"></i>
-            <span>查看 Vue 3.5.9 版专区</span>
+            <i class="fa-brands fa-vuejs" style="color:#42b883;"></i><span>Vue 3.5.9 版专区</span>
           </a>
-        </div>
+        </div></div><div class="lab-hero-card"><div class="lab-kicker">JQUERY DOM API</div><pre>const scene = $('#scene3d')
+const material = $('#shaderMaterial')
+material.on('uniformchange', renderPreview)</pre><span id="labStatus" style="font:11px var(--font-mono);color:#67e8f9;">Ready · Web preview</span></div>
       </div>
+      <section class="lab-grid">
+        <article class="lab-card"><div class="lab-card-head"><div><h2>GScene3D · 场景与相机</h2><p>Node3D 根节点、Camera3D 轨道和 viewport 管理。</p></div><span class="g-tag g-tag-primary">基础</span></div><div class="lab-card-body"><div id="labScene" class="lab-preview"><div class="lab-scene"><div id="labCube" class="lab-cube"></div><div class="lab-orb"></div></div><button class="g-btn g-btn-primary" onclick="Gotod3DLab.rotate()">旋转 Mesh</button></div><div class="lab-code"><pre>var scene := GScene3D.new()
+scene.camera.position = Vector3(0, 2, 6)
+scene.camera.look_at(Vector3.ZERO)
+scene.add_mesh(BoxMesh.new())</pre></div></div></article>
+        <article class="lab-card"><div class="lab-card-head"><div><h2>GShaderMaterial3D · 空间 Shader</h2><p>封装 spatial shader 的 uniform 与材质实例隔离。</p></div><span class="g-tag g-tag-warning">Shader</span></div><div class="lab-card-body"><div class="lab-preview"><div class="lab-scene"><div id="labOrb" class="lab-orb"></div></div><label class="lab-control">Rim 色相 <input type="range" min="0" max="360" value="0" oninput="Gotod3DLab.shader(this.value)"><b id="shaderValue">0°</b></label></div><div class="lab-code"><pre>shader_type spatial;
+uniform float rim_power : hint_range(0.1, 8.0) = 2.5;
+void fragment() { EMISSION = COLOR.rgb * pow(1.0 - dot(NORMAL, VIEW), rim_power); }</pre></div></div></article>
+        <article class="lab-card"><div class="lab-card-head"><div><h2>GEnvironment3D · 光照、雾与辉光</h2><p>集中管理 WorldEnvironment、Sky、Fog、Glow。</p></div><span class="g-tag g-tag-success">渲染</span></div><div class="lab-card-body"><div class="lab-preview"><div class="lab-scene"><div class="lab-cube"></div></div><button class="g-btn g-btn-success" onclick="Gotod3DLab.environment(true)">启用 Glow / Fog</button> <button class="g-btn g-btn-default" onclick="Gotod3DLab.environment(false)">低功耗模式</button></div><div class="lab-code"><pre>var env := Environment.new()
+env.background_mode = Environment.BG_SKY
+env.glow_enabled = true
+env.fog_enabled = true
+$WorldEnvironment.environment = env</pre></div></div></article>
+        <article class="lab-card"><div class="lab-card-head"><div><h2>GParticles3D · 粒子与性能</h2><p>GPUParticles3D 发射参数与 MultiMeshInstance3D 批量实例。</p></div><span class="g-tag g-tag-danger">高级</span></div><div class="lab-card-body"><div class="lab-preview"><div class="lab-scene"><div style="font-size:48px;animation:labFloat 1.2s infinite;">✦ · ˚ ✧</div></div><button class="g-btn g-btn-primary" onclick="showToast('GPUParticles3D emission restarted', 'success')">重新发射粒子</button></div><div class="lab-code"><pre>var particles := GPUParticles3D.new()
+particles.amount = 512
+particles.lifetime = 2.0
+particles.process_material = particle_material</pre></div></div></article>
+      </section>
+      <div class="lab-note">实现依据 Godot 4.4 官方 3D 与 Shader 文档：空间材质使用 <code>shader_type spatial</code>，2D 后处理使用 <code>canvas_item</code>，计算着色器使用 RenderingDevice。<br><a href="https://docs.godotengine.org/zh-cn/4.4/tutorials/3d/index.html" target="_blank">3D 教程</a> · <a href="https://docs.godotengine.org/zh-cn/4.4/tutorials/shaders/index.html" target="_blank">Shader 教程</a></div>
     </main>
 
     <!-- JD.com Style Right-Side Fixed Toolbar Dock -->
@@ -109,6 +128,7 @@
         <i class="fa-brands fa-vuejs" style="color:#42b883;"></i>
         <span>Vue版</span>
       </a>
+      <a href="../v-csharp/" class="jd-dock-item" title="切换到 Godot C# 3D 版本"><i class="fa-solid fa-code" style="color:#fbbf24;"></i><span>C#版</span></a>
       <a href="https://github.com/mhxy13867806343/gotod-components-ui" target="_blank" class="jd-dock-item" title="访问 GitHub 开源仓库">
         <i class="fa-brands fa-github"></i>
         <span>源码</span>
@@ -119,5 +139,6 @@
       </button>
     </div>
   </div>
+  <script src="../3d-lab.js?v=20260831_3"></script>
 </body>
 </html>

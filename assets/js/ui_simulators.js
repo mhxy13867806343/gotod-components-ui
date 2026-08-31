@@ -536,20 +536,51 @@ window.runLiveTreeShaker = function() {
     }
   });
 
-  const total = 28;
+  const total = checkboxes.length || 52;
   const unused = total - used;
-  const rate = ((unused / total) * 100).toFixed(1);
+  const rate = total > 0 ? ((unused / total) * 100).toFixed(1) : '0.0';
 
+  const totalCntElem = document.getElementById('shakerTotalCount');
   const usedCntElem = document.getElementById('shakerUsedCount');
   const unusedCntElem = document.getElementById('shakerUnusedCount');
   const tagElem = document.getElementById('shakerOptimizeTag');
   const logElem = document.getElementById('shakerLogText');
 
+  if (totalCntElem) totalCntElem.innerText = `${total} 个`;
   if (usedCntElem) usedCntElem.innerText = `${used} 个`;
   if (unusedCntElem) unusedCntElem.innerText = `${unused} 个`;
   if (tagElem) tagElem.innerText = `包体优化率: ${rate}%`;
   if (logElem) {
-    logElem.innerHTML = `[GotodUI Tree-Shaker] 扫描完成: 实际打包 ${used} 个组件 (${usedNames.join(', ')})，自动 skip() 剔除 ${unused} 个未引用组件 (${unusedNames.slice(0, 5).join(', ')}...)。`;
+    const unusedSample = unusedNames.slice(0, 6).join(', ');
+    const moreTxt = unusedNames.length > 6 ? ` 等 ${unusedNames.length} 个` : '';
+    logElem.innerHTML = `[GotodUI Tree-Shaker] 扫描完成: 实际打包 ${used} 个组件 (${usedNames.slice(0, 8).join(', ')}${usedNames.length > 8 ? '...' : ''})，自动 skip() 剔除 ${unused} 个未引用组件 (${unusedSample}${moreTxt})。`;
+  }
+};
+
+window.setTreeShakerPreset = function(preset) {
+  const grid = document.getElementById('shakerCheckGrid');
+  if (!grid) return;
+  const checkboxes = grid.querySelectorAll('input[type="checkbox"]');
+  
+  const coreSet = new Set(['GButton', 'GInput', 'GTabs', 'GDialog', 'GProgress', 'GCard']);
+  const rpgSet = new Set([
+    'GButton', 'GText', 'GIcon', 'GFab', 'GInput', 'GSlider', 'GDialog', 'GDialogue',
+    'GChat', 'GCard', 'GTag', 'GBadge', 'GAvatar', 'GProgress', 'GTabs', 'GHaptic',
+    'GAIDialogueTree', 'GI18n'
+  ]);
+
+  checkboxes.forEach(cb => {
+    const name = cb.parentElement.innerText.trim().split(' ')[0];
+    if (preset === 'all') cb.checked = true;
+    else if (preset === 'none') cb.checked = false;
+    else if (preset === 'core') cb.checked = coreSet.has(name);
+    else if (preset === 'rpg') cb.checked = rpgSet.has(name);
+  });
+
+  window.runLiveTreeShaker();
+  if (window.showToast) {
+    const msgMap = { all: '已全选 52 个组件', none: '已清空所有组件', core: '已应用【核心精简】预设 (6个)', rpg: '已应用【中重度 RPG】预设 (18个)' };
+    window.showToast(msgMap[preset] || '预设已应用', 'info');
   }
 };
 

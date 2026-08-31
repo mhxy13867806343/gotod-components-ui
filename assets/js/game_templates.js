@@ -763,32 +763,95 @@ GMessage.error("网络连接断开")`
 
   'guide-treeshaking': {
     title: '📦 生产环境按需打包与摇树优化 (Tree-Shaking & Export Plugin)',
-    desc: '开发环境支持随意调用全部 28+ 个组件；在项目生产环境发布导出 (Project -> Export) 时，EditorExportPlugin 会自动静态分析项目中所有 .tscn 和 .gd，未被使用的组件会自动被 skip() 排除出最终安装包，大幅减小游戏包体体积！',
+    desc: '开发环境支持随意调用全部 52+ 个高保真游戏 UI 组件；在项目生产环境发布导出 (Project -> Export) 时，EditorExportPlugin 会自动静态分析项目中所有 .tscn 和 .gd，未被使用的组件会自动被 skip() 排除出最终安装包，大幅减小游戏包体体积！',
     demos: [
       {
         title: '生产环境摇树依赖分析与自动剔除模拟器 (Tree-Shaking Live Analyzer)',
         render: `
           <div style="display:flex; flex-direction:column; gap:16px; width:100%;">
             <div class="sim-card" style="width:100%;">
-              <div class="sim-card-header">
-                <span style="font-weight:700; font-size:14px; color:var(--primary);">🎯 项目场景组件引用模拟扫描器 (Dependency Scanner)</span>
-                <span class="g-tag g-tag-success" id="shakerOptimizeTag">包体优化率: 82.1%</span>
+              <div class="sim-card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <span style="font-weight:700; font-size:14px; color:var(--primary);">🎯 项目场景组件引用模拟扫描器 (52 全量组件 Dependency Scanner)</span>
+                <span class="g-tag g-tag-success" id="shakerOptimizeTag">包体优化率: 88.5%</span>
               </div>
-              <div style="padding:14px; background:var(--bg-surface); border-radius:var(--radius); margin-top:12px;">
+              
+              <!-- Quick Preset Actions Toolbar -->
+              <div style="display:flex; align-items:center; gap:8px; margin-top:12px; flex-wrap:wrap;">
+                <span style="font-size:12px; color:var(--text-secondary); font-weight:600;">快速预设:</span>
+                <button type="button" class="g-btn g-btn-primary" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px; font-weight:700;" onclick="setTreeShakerPreset('core')">
+                  <i class="fa-solid fa-bolt"></i> 核心精简 (6个)
+                </button>
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px; font-weight:600;" onclick="setTreeShakerPreset('rpg')">
+                  <i class="fa-solid fa-gamepad"></i> RPG 实战 (18个)
+                </button>
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('all')">
+                  <i class="fa-solid fa-check-double"></i> 全选 (52个)
+                </button>
+                <button type="button" class="g-btn g-btn-default" style="padding:3px 10px; font-size:11px; height:26px; border-radius:4px;" onclick="setTreeShakerPreset('none')">
+                  <i class="fa-solid fa-xmark"></i> 清空
+                </button>
+              </div>
+
+              <div style="padding:14px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); margin-top:12px;">
                 <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">勾选您在游戏中实际用到的组件，模拟导出时的按需过滤：</p>
-                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; font-size:12px;" id="shakerCheckGrid">
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(170px, 1fr)); gap:8px 12px; font-size:12px; max-height:280px; overflow-y:auto; padding-right:6px;" id="shakerCheckGrid">
+                  <!-- General & Layout (7) -->
                   <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GButton (按钮)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GText (文本)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GIcon (图标)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GFab (悬浮动作按钮)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GDivider (分割线)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSpace (间距)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GContainer (容器布局)</label>
+                  <!-- Form (11) -->
                   <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GInput (输入框)</label>
-                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GTabs (选项卡)</label>
-                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GDialog (弹窗)</label>
-                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GProgress (进度条)</label>
-                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GCard (卡片)</label>
-                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSelect (下拉框)</label>
-                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSlider (滑块)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GTextarea (多行文本)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GInputNumber (数字输入)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GStepper (步进器)</label>
                   <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSwitch (开关)</label>
-                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GDrawer (抽屉)</label>
-                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSteps (步骤条)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GCheckbox (复选框)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GRadio (单选框)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSelect (下拉框)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GPicker (选择器)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSlider (滑块)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GForm (表单校验)</label>
+                  <!-- Feedback (16) -->
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GDialog (弹窗对话框)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GDialogue (剧情对话)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GChat (聊天气泡)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GPopup (弹出层)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GOverlay (遮罩层)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GActionSheet (动作面板)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GPopover (气泡卡片)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GNoticeBar (通告栏)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GMessage (全局消息)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GToast (轻提示)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GAlert (警告提示)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GDrawer (抽屉面板)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GTooltip (悬浮提示)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GLoading (加载动画)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSkeleton (骨架屏)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GTour (漫游引导)</label>
+                  <!-- Data Display (10) -->
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GCard (卡片)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GTag (标签)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GBadge (徽标)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GAvatar (头像)</label>
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GProgress (进度条)</label>
+                  <label><input type="checkbox" checked onchange="runLiveTreeShaker()"> GTabs (选项卡)</label>
                   <label><input type="checkbox" onchange="runLiveTreeShaker()"> GCollapse (折叠面板)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSteps (步骤条)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GTable (高性能表格)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GVirtualList (虚拟列表)</label>
+                  <!-- Engine Studios & Ecosystem (8) -->
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GHud3D (3D投影HUD)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GHaptic (触觉马达)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GAIDialogueTree (AI对话树)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GI18n (国际化引擎)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GParticleStudio (粒子工坊)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GSkeletonParticleBinder (骨骼挂点)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GShaderStudio (GPU着色器)</label>
+                  <label><input type="checkbox" onchange="runLiveTreeShaker()"> GRouter (路由转场)</label>
                 </div>
               </div>
 
@@ -796,15 +859,15 @@ GMessage.error("网络连接断开")`
               <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:14px;">
                 <div style="padding:12px; background:var(--bg-surface); border:1px solid var(--border-base); border-radius:var(--radius); text-align:center;">
                   <div style="font-size:11px; color:var(--text-secondary);">开发环境全量组件</div>
-                  <div style="font-size:1.4rem; font-weight:700; color:var(--text-primary); margin-top:2px;">28 个</div>
+                  <div id="shakerTotalCount" style="font-size:1.4rem; font-weight:700; color:var(--text-primary); margin-top:2px;">52 个</div>
                 </div>
                 <div style="padding:12px; background:var(--bg-surface); border:1px solid var(--primary); border-radius:var(--radius); text-align:center;">
                   <div style="font-size:11px; color:var(--primary);">生产实际打包组件</div>
-                  <div id="shakerUsedCount" style="font-size:1.4rem; font-weight:700; color:var(--primary); margin-top:2px;">5 个</div>
+                  <div id="shakerUsedCount" style="font-size:1.4rem; font-weight:700; color:var(--primary); margin-top:2px;">6 个</div>
                 </div>
                 <div style="padding:12px; background:var(--bg-surface); border:1px solid var(--danger); border-radius:var(--radius); text-align:center;">
                   <div style="font-size:11px; color:var(--danger);">自动 skip() 剔除组件</div>
-                  <div id="shakerUnusedCount" style="font-size:1.4rem; font-weight:700; color:var(--danger); margin-top:2px;">23 个</div>
+                  <div id="shakerUnusedCount" style="font-size:1.4rem; font-weight:700; color:var(--danger); margin-top:2px;">46 个</div>
                 </div>
               </div>
 
@@ -812,7 +875,7 @@ GMessage.error("网络连接断开")`
               <div style="margin-top:14px; padding:10px 14px; background:#0d0d11; border:1px solid var(--border-base); border-radius:var(--radius); font-family:var(--font-mono); font-size:11px; color:#cfd0d8;">
                 <div style="color:var(--primary); font-weight:700; margin-bottom:4px;">[Godot 4 EditorExportPlugin 导出日志]:</div>
                 <div id="shakerLogText" style="line-height:1.6; color:#a0a5ad;">
-                  [GotodUI Tree-Shaker] 扫描完成: 实际打包 5 个组件，自动剔除 23 个未引用组件 (GCard, GSelect, GSlider, GSwitch, GDrawer, GSteps, GCollapse...)。
+                  [GotodUI Tree-Shaker] 扫描完成: 实际打包 6 个组件 (GButton, GInput, GDialog, GCard, GProgress, GTabs)，自动 skip() 剔除 46 个未引用组件 (GText, GIcon, GFab, GDivider, GSpace, GContainer 等 46 个)。
                 </div>
               </div>
             </div>
