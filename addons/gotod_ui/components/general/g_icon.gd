@@ -58,17 +58,7 @@ func _process(delta: float) -> void:
 
 const _ICON_SEARCH_PREFIXES: Array[String] = [
 	"res://addons/gotod_ui/assets/icons/",
-	"res://assets/icons/",
-	"res://addons/gotod_ui/assets/icons/node/",
-	"res://addons/gotod_ui/assets/icons/gameicons/",
-	"res://addons/gotod_ui/assets/icons/tabler/",
-	"res://addons/gotod_ui/assets/icons/lucide/",
-	"res://addons/gotod_ui/assets/icons/fontawesome/",
-	"res://addons/gotod_ui/assets/icons/iconpark/",
-	"res://addons/gotod_ui/assets/icons/pixel/",
-	"res://addons/gotod_ui/assets/icons/brands/",
-	"res://addons/gotod_ui/assets/icons/remix/",
-	"res://addons/gotod_ui/assets/icons/game/"
+	"res://assets/icons/"
 ]
 
 func _find_icon_path(p_name: String) -> String:

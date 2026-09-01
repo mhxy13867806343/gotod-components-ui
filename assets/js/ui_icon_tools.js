@@ -77,20 +77,21 @@ window.copyIconSnippet = function(iconName, resPath, cardEl) {
   const color = window.currentIconColor || '#409eff';
   const safeResPath = resPath || `res://addons/gotod_ui/assets/icons/node/${iconName}.svg`;
 
+  const builtInIcons = ["arrow-down", "arrow-left", "arrow-right", "arrow-up", "bell", "check", "chevron-down", "chevron-left", "chevron-right", "chevron-up", "close", "copy", "edit", "error", "eye-off", "eye", "gamepad", "heart", "home", "info", "lock", "minus", "plus", "question", "refresh", "search", "settings", "shield", "spinner", "star", "success", "sword", "trash", "unlock", "user", "warning", "x"];
+  const isBuiltIn = builtInIcons.includes(iconName) || builtInIcons.includes(iconName.replace(/_/g, '-'));
+
   if (fmt === 'gdscript') {
-    textToCopy = `# 方式 1: 图标名称快捷构建 (全量 25,000+ 矢量图库智能自动检索)
+    if (isBuiltIn) {
+      textToCopy = `# 内置核心图标 (直接构建)
 var icon = GIcon.create("${iconName}", ${size}, Color("${color}"))
-add_child(icon)
-
-# 方式 2: 原生 SVG 字符串直接构建 (零文件依赖，动态渲染)
+add_child(icon)`;
+    } else {
+      textToCopy = `# 原生 SVG 字符串直接动态构建 (零本地文件依赖，即拷即用)
 var svg_str = """${svg}"""
-var icon_svg = GIcon.from_svg(svg_str, ${size})
-add_child(icon_svg)
-
-# 方式 3: 在自定义 Node 顶部使用 @icon 注解 (Godot 4 原生支持)
-@icon("${safeResPath}")
-class_name MyCustomNode extends Node2D`;
-    toastMsg = `已复制 GDScript 多形态代码: ${iconName}`;
+var icon = GIcon.from_svg(svg_str, ${size})
+add_child(icon)`;
+    }
+    toastMsg = `已复制 GDScript 代码: ${iconName}`;
   } else if (fmt === 'annotation') {
     textToCopy = `@icon("${safeResPath}")`;
     toastMsg = `已复制 @icon 注解: @icon("${safeResPath}")`;
