@@ -25,11 +25,36 @@ window.CHANGELOG_DATA = [
     ]
   },
   {
+    version: "v1.6.3",
+    date: "2026-09-02",
+    status: "process",
+    icon: "fa-icons",
+    title: "v1.6.3 25,988+ 矢量图标全量集成与 GIcon 智能检索版 (现行最新版)",
+    summary: "全量导出并极限压缩 25,988+ 矢量图标库（Godot @icons、Tabler、Lucide、GameIcons、FontAwesome 等），统一纯白色调适配 Godot 染色；重构 GIcon 智能检索与多目录/中下划线模糊匹配。",
+    highlights: [
+      {
+        tag: "25,988+ 矢量图标全量压缩集成",
+        type: "success",
+        desc: "全量导出包含 10 大分类库的 25,988 个 SVG 矢量图标至插件目录，去除冗余 XML 与空格，规范为 <code>#ffffff</code> 纯白色调，完美支持 Godot <code>modulate</code> 染色。"
+      },
+      {
+        tag: "GIcon 智能多目录与模糊自愈检索",
+        type: "primary",
+        desc: "无需手动输入 <code>node/</code> 等分类子目录，直接填写如 <code>arrow_turn_up_right</code> 即可自动命中；自动互转 <code>_</code> 与 <code>-</code> 命名风格，未命中提供清晰 Warning。"
+      },
+      {
+        tag: "图标自动化脚本工具链",
+        type: "info",
+        desc: "新增 <code>library/scripts/export_all_icons.js</code> (全量秒级导出) 与 <code>library/scripts/extract_icon.js</code> (按需提取)。"
+      }
+    ]
+  },
+  {
     version: "v1.6.2",
     date: "2026-09-01",
-    status: "process",
+    status: "finish",
     icon: "fa-shield-halved",
-    title: "v1.6.2 全量生命周期实战修复 & gcd 稳定基石认证 (现行最新版)",
+    title: "v1.6.2 全量生命周期实战修复 & gcd 稳定基石认证",
     summary: "正式确立【gcd (Godot Component Done) 稳定冻结规范】，全量修复 GMessageBox、GPopup、GDialog、GSteps、GFab 等组件生命周期时序缺陷，历史核心组件全部赋予 [gcd] 稳定认证并冻结，后续坚持向下兼容与增量拓展！",
     highlights: [
       {
