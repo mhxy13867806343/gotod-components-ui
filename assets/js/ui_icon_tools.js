@@ -73,21 +73,30 @@ window.copyIconSnippet = function(iconName, resPath, cardEl) {
   let textToCopy = '';
   let toastMsg = '';
 
-  const snippet = `var icon = GIcon.new("${iconName}", ${window.currentIconSize}.0, Color("${window.currentIconColor}"))`;
-  const annotation = `@icon("${resPath || 'res://addons/gotod_ui/assets/icons/node/' + iconName + '.svg'}")`;
-  const bbcode = `[img=${window.currentIconSize}]${resPath}[/img]`;
+  const size = (window.currentIconSize || 16) + '.0';
+  const color = window.currentIconColor || '#409eff';
+  const safeResPath = resPath || `res://addons/gotod_ui/assets/icons/node/${iconName}.svg`;
 
   if (fmt === 'gdscript') {
-    textToCopy = `# GDScript 实例化:
-${snippet}
-add_child(icon)`;
-    toastMsg = `已复制 GDScript: ${snippet}`;
+    textToCopy = `# 方式 1: 图标名称快捷构建 (全量 25,000+ 矢量图库智能自动检索)
+var icon = GIcon.create("${iconName}", ${size}, Color("${color}"))
+add_child(icon)
+
+# 方式 2: 原生 SVG 字符串直接构建 (零文件依赖，动态渲染)
+var svg_str = """${svg}"""
+var icon_svg = GIcon.from_svg(svg_str, ${size})
+add_child(icon_svg)
+
+# 方式 3: 在自定义 Node 顶部使用 @icon 注解 (Godot 4 原生支持)
+@icon("${safeResPath}")
+class_name MyCustomNode extends Node2D`;
+    toastMsg = `已复制 GDScript 多形态代码: ${iconName}`;
   } else if (fmt === 'annotation') {
-    textToCopy = annotation;
-    toastMsg = `已复制 @icon 注解: ${annotation}`;
+    textToCopy = `@icon("${safeResPath}")`;
+    toastMsg = `已复制 @icon 注解: @icon("${safeResPath}")`;
   } else if (fmt === 'bbcode') {
-    textToCopy = bbcode;
-    toastMsg = `已复制富文本 BBCode: ${bbcode}`;
+    textToCopy = `[img=${parseInt(size, 10)}]${safeResPath}[/img]`;
+    toastMsg = `已复制富文本 BBCode: [img]${safeResPath}[/img]`;
   } else if (fmt === 'svg') {
     textToCopy = svg;
     toastMsg = `已复制 SVG 源码 (${iconName}.svg)`;
@@ -95,6 +104,16 @@ add_child(icon)`;
     const b64 = btoa(unescape(encodeURIComponent(svg)));
     textToCopy = `data:image/svg+xml;base64,${b64}`;
     toastMsg = `已复制 Base64 DataURI`;
+  } else if (fmt === 'csharp') {
+    textToCopy = `// C# (Godot .NET) 实例化
+var icon = GIcon.create("${iconName}", ${size}f, new Color("${color}"));
+AddChild(icon);
+
+// 或直接使用 SVG 字符串构建:
+var svgStr = @"${svg}";
+var iconSvg = GIcon.from_svg(svgStr, ${size}f);
+AddChild(iconSvg);`;
+    toastMsg = `已复制 C# 调用代码: ${iconName}`;
   }
 
   if (cardEl) {
@@ -423,29 +442,3 @@ window.changeIconColor = function(colorCss, swatchEl) {
   }
 };
 
-window.copyIconSnippet = function(iconName, resPath, cardEl) {
-  const snippet = `var icon = GIcon.new("${iconName}", ${window.currentIconSize}.0, Color("${window.currentIconColor}"))`;
-  const annotation = `@icon("${resPath || 'res://addons/gotod_ui/assets/icons/node/' + iconName + '.svg'}")`;
-  
-  if (cardEl) {
-    cardEl.classList.add('copied-pulse');
-    setTimeout(() => cardEl.classList.remove('copied-pulse'), 400);
-  }
-
-  const fullText = `# GDScript:
-${snippet}
-add_child(icon)
-
-# Node 树类注解:
-${annotation}`;
-
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(fullText).then(() => {
-      window.showToast(`已复制: ${iconName}\n${snippet}`, 'success');
-    }).catch(() => {
-      window.showToast(`已选图标: ${iconName}`, 'success');
-    });
-  } else {
-    window.showToast(`已选图标: ${iconName}`, 'success');
-  }
-};
