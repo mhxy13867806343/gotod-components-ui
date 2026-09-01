@@ -25,27 +25,27 @@ window.CHANGELOG_DATA = [
     ]
   },
   {
-    version: "v1.6.3",
+    version: "v1.6.4",
     date: "2026-09-02",
     status: "process",
     icon: "fa-icons",
-    title: "v1.6.3 25,988+ 矢量图标全量集成与 GIcon 智能检索版 (现行最新版)",
-    summary: "全量导出并极限压缩 25,988+ 矢量图标库（Godot @icons、Tabler、Lucide、GameIcons、FontAwesome 等），统一纯白色调适配 Godot 染色；重构 GIcon 智能检索与多目录/中下划线模糊匹配。",
+    title: "v1.6.4 原生 SVG 零依赖动态渲染与轻量化图标中心版 (现行最新版)",
+    summary: "新增 GIcon 原生 SVG XML 字符串直接解析与渲染功能（零本地文件依赖）；在线图标中心升级为一键生成原生 SVG 字符串与 C# 代码；插件包恢复 ~162 KB 极致纯净轻量。",
     highlights: [
       {
-        tag: "25,988+ 矢量图标全量压缩集成",
+        tag: "原生 SVG 零依赖动态解析与渲染",
         type: "success",
-        desc: "全量导出包含 10 大分类库的 25,988 个 SVG 矢量图标至插件目录，去除冗余 XML 与空格，规范为 <code>#ffffff</code> 纯白色调，完美支持 Godot <code>modulate</code> 染色。"
+        desc: "内置 <code>Image.load_svg_from_string</code> 转换管道，直接传入原生 <code>&lt;svg&gt;...&lt;/svg&gt;</code> 文本即可自动生成矢量纹理，无需下载或在工程中存放 25,000+ 离散文件。"
       },
       {
-        tag: "GIcon 智能多目录与模糊自愈检索",
+        tag: "GIcon 多态工厂与属性扩展",
         type: "primary",
-        desc: "无需手动输入 <code>node/</code> 等分类子目录，直接填写如 <code>arrow_turn_up_right</code> 即可自动命中；自动互转 <code>_</code> 与 <code>-</code> 命名风格，未命中提供清晰 Warning。"
+        desc: "新增 <code>GIcon.from_svg()</code>、<code>set_svg()</code> 与 <code>svg_data</code> 属性，<code>GIcon.create()</code> 支持自动嗅探并解析 SVG 字符串。"
       },
       {
-        tag: "图标自动化脚本工具链",
+        tag: "Web 图标中心一键原生代码复制",
         type: "info",
-        desc: "新增 <code>library/scripts/export_all_icons.js</code> (全量秒级导出) 与 <code>library/scripts/extract_icon.js</code> (按需提取)。"
+        desc: "检索中心点击任意 26,000+ 矢量图标卡片，一键复制零文件依赖的 <code>var svg_str = \"\"\"...\"\"\"</code> GDScript 与 C# 调用代码。"
       }
     ]
   },

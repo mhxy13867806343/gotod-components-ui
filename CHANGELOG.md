@@ -19,18 +19,16 @@
 
 ## 🌟 版本历程与功能汇总 (Done List)
 
-### 📌 当前版本: v1.6.3 (最新发布 · 全量矢量图标集成与 GIcon 智能检索版)
-* **🎨 25,988+ 矢量图标全量集成与极致压缩**:
-  * ⚡ **全量压缩导出**: 将包含 Godot 核心节点图标、GameIcons、Tabler、Lucide、FontAwesome、Remix、IconPark、Pixel、Brands 等全量 25,988 个矢量图标全量压缩导出至 `res://addons/gotod_ui/assets/icons/` 对应分类目录。
-  * 🎯 **Godot 渲染调和**: 统一单色 SVG 格式为 `#ffffff`（纯白），彻底解决 `currentColor` 或深色 fill 导致 Godot `modulate` (`icon_color`) 着色发黑/变暗的问题。
-* **🔍 `GIcon` 智能检索自愈与模糊匹配升级**:
-  * 📂 **多分类子目录自动递归检索**: 支持 `node/`, `tabler/`, `lucide/`, `gameicons/`, `fontawesome/` 等子目录图标无需输入前缀，直接输入 `arrow_turn_up_right` 即可秒级命中。
-  * 🔀 **下划线与中划线自动互转**: 自动兼容 `arrow_turn_up_right` 与 `arrow-turn-up-right` 等不同命名风格。
-  * ⚠️ **明确缺失告警**: 缺失文件打印清晰的 `push_warning` 提示，避免静默失败回退。
-* **🛠️ 开发者工具链增强**:
-  * 📝 新增 `library/scripts/export_all_icons.js` (全量秒级压缩导出脚本) 与 `library/scripts/extract_icon.js` (按需提取脚本)。
+### 📌 当前版本: v1.6.4 (最新发布 · 原生 SVG 零依赖动态渲染与轻量化图标中心版)
+* **⚡ `GIcon` 原生 SVG 字符串直接动态解析与渲染 (零本地文件依赖)**:
+  * 🚀 **动态解析**: 内置 `Image.load_svg_from_string` 与 `ImageTexture.create_from_image` 转换管道，直接传入原生 `<svg>...</svg>` XML 文本即可秒级生成矢量纹理并自适应缩放。
+  * 🛠️ **多态工厂增强**: 新增 `GIcon.from_svg(svg_str, size, color)`、`set_svg(svg_str)` 方法与 `@export_multiline var svg_data` 属性，`GIcon.create(svg_str)` 可自动识别 SVG 文本。
+  * 📦 **插件包极致纯净轻量 (~162 KB)**: 彻底摆脱在工程中存放 25,000+ 个零散文件的沉重负担，本地仅保留 37 个核心基础图标，海量扩展图标全走原生 SVG 动态字符串方式，即拷即用。
+* **📋 Web 图标中心全能代码生成升级**:
+  * ✨ 点击任意 26,000+ 图标卡片，一键生成免下载的原生 `var svg_str = """..."""` GDScript 代码与 C# (.NET) 代码。
 
 ### 📌 历史版本概览
+* **v1.6.2**: 全量实战深度修复 + `gcd` 稳定基石认证规范。
 * **v1.6.2**: 全量实战深度修复 + `gcd` 稳定基石认证规范。
 * **v1.6.1**: 插件包体积极致瘦身（21MB ➔ 159KB / 解压 136MB ➔ 1MB），离线图标按需解耦与网页端 26,000+ 图标中心。
 * **v1.6.0**: 新增 `GShaderStudio` (GPU 实时着色器工坊)、`GSkeletonParticleBinder` (骨骼粒子挂点绑定器) 与 `GFab` (多态悬浮按钮)。
@@ -173,7 +171,7 @@
 
 ## 📦 发布与构建记录 (Release History)
 
-* **v1.6.3** (2026-09-02): [gotod-components-ui-v1.6.3.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.3) (25,988+ 矢量图标全量集成与 GIcon 智能检索升级)
+* **v1.6.4** (2026-09-02): [gotod-components-ui-v1.6.4.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.4) (原生 SVG 零依赖动态渲染与轻量化图标中心，162 KB)
 * **v1.6.2** (2026-09-01): [gotod-components-ui-v1.6.2.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.2) (全量实战深度修复 + gcd 稳定基石认证，161 KB)
 * **v1.6.1** (2026-09-01): [gotod-components-ui-v1.6.1.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.1) (插件包极致瘦身，159 KB)
 * **v1.6.0** (2026-08-31): [gotod-components-ui-v1.6.0.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.0)

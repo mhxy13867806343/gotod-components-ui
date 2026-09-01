@@ -19,18 +19,16 @@
 
 ## 🌟 Version History & Features (Done List)
 
-### 📌 Current Release: v1.6.3 (Latest · 25,988+ Vector Icons Integration & Smart GIcon Lookup)
-* **🎨 25,988+ Vector Icons Full Integration & Extreme Compression**:
-  * ⚡ **Full Export & Minification**: Minified and exported all 25,988+ vector icons across Godot @icons, GameIcons, Tabler, Lucide, FontAwesome, Remix, IconPark, Pixel, and Brands into `res://addons/gotod_ui/assets/icons/`.
-  * 🎯 **Godot Rendering Normalization**: Normalized monochrome SVG fills/strokes to pure white `#ffffff`, ensuring Godot's `modulate` (`icon_color`) tinting functions vibrantly and accurately.
-* **🔍 `GIcon` Smart Multi-Directory & Fuzzy Lookup**:
-  * 📂 **Automatic Subdirectory Resolution**: Search across `node/`, `tabler/`, `lucide/`, `gameicons/`, `fontawesome/`, etc., allowing direct icon name usage like `arrow_turn_up_right`.
-  * 🔀 **Hyphen/Underscore Interchangeability**: Seamlessly matches both `arrow_turn_up_right` and `arrow-turn-up-right`.
-  * ⚠️ **Explicit Missing Icon Warnings**: Emits clear `push_warning` messages when an icon is not found.
-* **🛠️ Developer Tooling**:
-  * 📝 Added `library/scripts/export_all_icons.js` and `library/scripts/extract_icon.js` for on-demand icon management.
+### 📌 Current Release: v1.6.4 (Latest · Native SVG Direct String Rendering & Lean Icon Architecture)
+* **⚡ `GIcon` Native Inline SVG String Direct Parsing & Rendering (Zero File Dependency)**:
+  * 🚀 **Dynamic Parsing**: Integrated `Image.load_svg_from_string` and `ImageTexture.create_from_image` rendering pipeline, allowing direct `<svg>...</svg>` XML string input for instant vector rendering with aspect-ratio adaptive scaling.
+  * 🛠️ **Polymorphic Factory Enhancements**: Added `GIcon.from_svg(svg_str, size, color)`, `set_svg(svg_str)`, and `@export_multiline var svg_data`; `GIcon.create(svg_str)` auto-detects SVG XML strings.
+  * 📦 **Ultra-Lean Package Size (~162 KB)**: Replaced 25,000+ loose files with native SVG string generation, keeping only 37 core built-in icons in the repository.
+* **📋 Web Icon Center Code Generation Overhaul**:
+  * ✨ One-click generation of zero-file-dependency `var svg_str = """..."""` GDScript and C# (.NET) code for all 26,000+ icons in the web gallery.
 
 ### 📌 Previous Versions Overview
+* **v1.6.2**: Comprehensive real-world bugfixes & `gcd` stable foundation standard.
 * **v1.6.2**: Comprehensive real-world bugfixes & `gcd` stable foundation standard.
 * **v1.6.1**: Ultra-lean package size (21MB ➔ 159KB / Uncompressed 136MB ➔ 1MB), on-demand icon decoupling.
 * **v1.6.0**: Added `GShaderStudio` (GPU Realtime Shader Studio), `GSkeletonParticleBinder` (Skeleton Joint Particle Attacher), and `GFab` (Polymorphic Floating Action Button).
@@ -171,7 +169,7 @@ During real-world game development and component architectural hardening, the fo
 ---
 
 ## 📦 Release History & Downloads
-* **v1.6.3** (2026-09-02): [gotod-components-ui-v1.6.3.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.3) (25,988+ vector icons integration & GIcon smart lookup)
+* **v1.6.4** (2026-09-02): [gotod-components-ui-v1.6.4.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.4) (Native SVG zero-dependency string rendering & lean icon center, 162 KB)
 * **v1.6.2** (2026-09-01): [gotod-components-ui-v1.6.2.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.2) (Real-world bugfixes & gcd verification, 161 KB)
 * **v1.6.1** (2026-09-01): [gotod-components-ui-v1.6.1.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.1) (Ultra-Lean Package Size, 159 KB)
 * **v1.6.0** (2026-08-31): [gotod-components-ui-v1.6.0.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.0)
