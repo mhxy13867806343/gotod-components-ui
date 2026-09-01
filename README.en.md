@@ -122,7 +122,7 @@ your-project/
 
 ### Method 1: Download Release Archive (.zip) (Recommended)
 - 👉 **[GitHub Releases Page](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[Direct Download v1.6.2 Archive (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.2.zip)**
+- 📦 **[Direct Download v1.6.3 Archive (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.3.zip)**
 
 Extract the archive and copy the `addons/gotod_ui` folder directly into your Godot 4 project root at `res://addons/`.
 

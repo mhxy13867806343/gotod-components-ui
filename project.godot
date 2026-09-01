@@ -8,7 +8,7 @@ config_version=5
 
 config/name="gotod-components-ui"
 config/description="Vue-style (Naive UI, Element Plus, AntD, Vant) UI Component Library for Godot 4.x"
-config/version="1.6.2"
+config/version="1.6.3"
 config/tags=PackedStringArray("ui", "components", "vue", "godot4", "addon")
 
 run/main_scene="res://demo/demo_main.tscn"

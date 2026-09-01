@@ -19,22 +19,19 @@
 
 ## 🌟 版本历程与功能汇总 (Done List)
 
-### 📌 当前版本: v1.6.2 (最新发布 · gcd 稳定基石验证版)
-* **`gcd` (Godot Component Done / 校验已过·稳定冻结) 核心工程规范发布**:
-  * 🏷️ **`[gcd]` 稳定基石认证**: 凡标有 `[gcd]` 的组件与模块，代表已通过游戏实机全生命周期（`_init` ➔ `set_props` ➔ `add_child` ➔ `_ready` ➔ `call_methods` ➔ `queue_free`）与极端边界值测试，已完全正确并进入**稳定冻结保护状态**。
-  * 🛡️ **向后兼容不动旧代码守则**: 确立后续组件库研发核心原则——**“旧的稳定已验证 `[gcd]` 组件严禁随意重构或破坏，新增功能只做增量扩展，新增组件经测试后赋予 `[gcd]` 标记”**，彻底杜绝发版后破坏性 Regression 问题。
-* **实战核心 Bug 彻底修复与自愈增强**:
-  * 🚨 **`GMessageBox` (重要)**: 修复 `confirm()` 与 `prompt()` 因生命周期时序导致的取消按钮与输入框丢失严重 Bug，提前注入构造参数确保 100% 渲染。
-  * 🪟 **`GPopup`**: 修复在 `_ready()` 前调用 `set_content()` 内容丢失为空白的缺陷，支持动态热替换与 `GPopup.create()` 工厂。
-  * 💬 **`GDialog`**: 增强插槽容器自愈机制，彻底杜绝在 `_ready()` 前设置 Header/Body/Footer 插槽时容器为 null 或误销毁已有节点的问题。
-  * 🪜 **`GSteps`**: 修复 `current_step` 变更时未触发重新渲染导致高亮不刷新的问题，同时支持弱类型数组赋值与 `GSteps.create()`。
-  * 🔘 **`GFab`**: 为 `items` 添加响应式 setter，修复初始化时菜单项未自动生成的缺陷。
-  * 📢 **`GNoticeBar`**: 为 `notice_type` 与 `mode` 增加响应式监听，动态变更时实时重绘背景与关闭按钮。
-  * 📋 **`GSelect` & `GCheckboxGroup`**: 增强泛型数组清洗转换，无缝兼容字符串列表与字典列表。
-  * ⏳ **`UseCooldown`**: 修复 `reset()` 误触发 `cooldown_finished` 信号的问题，增加 `_cancelled` 取消守卫与自动场景树获取。
-  * 🅰️ **`GBadge` / `GAvatar` / `GProgress`**: 增加 `ThemeDB.fallback_font` 空安全兜底断言，防止底层字体获取异常。
+### 📌 当前版本: v1.6.3 (最新发布 · 全量矢量图标集成与 GIcon 智能检索版)
+* **🎨 25,988+ 矢量图标全量集成与极致压缩**:
+  * ⚡ **全量压缩导出**: 将包含 Godot 核心节点图标、GameIcons、Tabler、Lucide、FontAwesome、Remix、IconPark、Pixel、Brands 等全量 25,988 个矢量图标全量压缩导出至 `res://addons/gotod_ui/assets/icons/` 对应分类目录。
+  * 🎯 **Godot 渲染调和**: 统一单色 SVG 格式为 `#ffffff`（纯白），彻底解决 `currentColor` 或深色 fill 导致 Godot `modulate` (`icon_color`) 着色发黑/变暗的问题。
+* **🔍 `GIcon` 智能检索自愈与模糊匹配升级**:
+  * 📂 **多分类子目录自动递归检索**: 支持 `node/`, `tabler/`, `lucide/`, `gameicons/`, `fontawesome/` 等子目录图标无需输入前缀，直接输入 `arrow_turn_up_right` 即可秒级命中。
+  * 🔀 **下划线与中划线自动互转**: 自动兼容 `arrow_turn_up_right` 与 `arrow-turn-up-right` 等不同命名风格。
+  * ⚠️ **明确缺失告警**: 缺失文件打印清晰的 `push_warning` 提示，避免静默失败回退。
+* **🛠️ 开发者工具链增强**:
+  * 📝 新增 `library/scripts/export_all_icons.js` (全量秒级压缩导出脚本) 与 `library/scripts/extract_icon.js` (按需提取脚本)。
 
 ### 📌 历史版本概览
+* **v1.6.2**: 全量实战深度修复 + `gcd` 稳定基石认证规范。
 * **v1.6.1**: 插件包体积极致瘦身（21MB ➔ 159KB / 解压 136MB ➔ 1MB），离线图标按需解耦与网页端 26,000+ 图标中心。
 * **v1.6.0**: 新增 `GShaderStudio` (GPU 实时着色器工坊)、`GSkeletonParticleBinder` (骨骼粒子挂点绑定器) 与 `GFab` (多态悬浮按钮)。
 * **v1.5.0**: 新增 `GParticleStudio` UI 粒子特效工坊与 `GAIDialogueTree` 大模型/本地行为树智能多分支剧本推理引擎。
@@ -176,6 +173,7 @@
 
 ## 📦 发布与构建记录 (Release History)
 
+* **v1.6.3** (2026-09-02): [gotod-components-ui-v1.6.3.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.3) (25,988+ 矢量图标全量集成与 GIcon 智能检索升级)
 * **v1.6.2** (2026-09-01): [gotod-components-ui-v1.6.2.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.2) (全量实战深度修复 + gcd 稳定基石认证，161 KB)
 * **v1.6.1** (2026-09-01): [gotod-components-ui-v1.6.1.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.1) (插件包极致瘦身，159 KB)
 * **v1.6.0** (2026-08-31): [gotod-components-ui-v1.6.0.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.0)

@@ -72,7 +72,7 @@
 
 ### 方式 1: 下载发布包 (.zip) (推荐)
 - 👉 **[GitHub Releases 发行页](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[直接下载最新 v1.6.2 发布包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.2.zip)**
+- 📦 **[直接下载最新 v1.6.2 发布包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.3.zip)**
 
 解压并将 `addons/gotod_ui` 文件夹直接复制到您的 Godot 4 项目根目录下的 `res://addons/` 即可。
 

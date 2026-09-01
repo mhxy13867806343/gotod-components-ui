@@ -16,7 +16,7 @@ Object.assign(window.GUIDE_CATALOG, {
             <div style="background:linear-gradient(135deg, rgba(64,158,255,0.1), rgba(103,194,58,0.1)); border:1px solid var(--primary); padding:14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
               <div>
                 <div style="font-weight:800; font-size:13px; color:var(--primary); display:flex; align-items:center; gap:6px;">
-                  <i class="fa-solid fa-box-archive"></i> gotod-components-ui v1.6.2 独立安装包 (.zip)
+                  <i class="fa-solid fa-box-archive"></i> gotod-components-ui v1.6.3 独立安装包 (.zip)
                   <span class="brand-badge" style="background: rgba(24, 160, 88, 0.18); color: #18a058; border: 1px solid rgba(24, 160, 88, 0.4); font-size: 10px; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-circle-check"></i> gcd: verified</span>
                 </div>
                 <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
@@ -24,8 +24,8 @@ Object.assign(window.GUIDE_CATALOG, {
                 </div>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.6.2/gotod-components-ui-v1.6.2.zip" class="g-btn g-btn-primary" style="height:32px; font-size:12px; font-weight:700;">
-                  <i class="fa-solid fa-download"></i> 立即下载 gotod-components-ui-v1.6.2.zip
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.6.3/gotod-components-ui-v1.6.3.zip" class="g-btn g-btn-primary" style="height:32px; font-size:12px; font-weight:700;">
+                  <i class="fa-solid fa-download"></i> 立即下载 gotod-components-ui-v1.6.3.zip
                 </a>
                 <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases" target="_blank" class="g-btn g-btn-success" style="height:32px; font-size:11px;">
                   <i class="fa-brands fa-github"></i> GitHub Releases
@@ -57,7 +57,7 @@ Object.assign(window.GUIDE_CATALOG, {
           </div>
         `,
         code: `# 方式 1: 直接下载官方 Release 独立安装包 (推荐，免 Git)
-# 下载直链: https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.6.2/gotod-components-ui-v1.6.2.zip
+# 下载直链: https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.6.3/gotod-components-ui-v1.6.3.zip
 
 # 方式 2: Git 仓库克隆方式
 git clone https://github.com/mhxy13867806343/gotod-components-ui.git`

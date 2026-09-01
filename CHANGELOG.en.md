@@ -19,22 +19,19 @@
 
 ## 🌟 Version History & Features (Done List)
 
-### 📌 Current Release: v1.6.2 (Latest · gcd Certified Stable Foundation)
-* **`gcd` (Godot Component Done / Verified & Frozen) Standard Launch**:
-  * 🏷️ **`[gcd]` Stable Foundation Certification**: Components marked with `[gcd]` have undergone full runtime lifecycle tests (`_init` ➔ `set_props` ➔ `add_child` ➔ `_ready` ➔ `call_methods` ➔ `queue_free`) and extreme edge-case validations, entering **frozen stable protection**.
-  * 🛡️ **Backward-Compatibility Rule**: Establishing the core engineering guideline: **"Existing verified `[gcd]` components must remain untouched without destructive rewrites; new features must be modular additions with new `[gcd]` verification."**
-* **Core Bugfixes & Self-Healing Enhancements**:
-  * 🚨 **`GMessageBox` (Critical)**: Fixed missing Cancel button & Input field in `confirm()`/`prompt()` caused by lifecycle race condition, ensuring 100% reliable rendering.
-  * 🪟 **`GPopup`**: Fixed early `set_content()` invocation before `_ready()` resulting in empty popup; added dynamic slot replacement and `GPopup.create()`.
-  * 💬 **`GDialog`**: Enhanced slot self-healing containers for Header/Body/Footer slots before `_ready()`, preventing null reference and child destruction.
-  * 🪜 **`GSteps`**: Fixed `current_step` setter not refreshing step highlight colors and numbers; relaxed steps array typing and added `GSteps.create()`.
-  * 🔘 **`GFab`**: Added reactive setter to `items`, fixing unrendered menu items upon instantiation.
-  * 📢 **`GNoticeBar`**: Added reactive setters for `notice_type` & `mode` to immediately re-render style backgrounds and close buttons.
-  * 📋 **`GSelect` & `GCheckboxGroup`**: Enhanced array type normalization for strings & dictionaries.
-  * ⏳ **`UseCooldown`**: Fixed unexpected `cooldown_finished` emission upon manual `reset()`; added `_cancelled` guard and SceneTree auto-detection.
-  * 🅰️ **`GBadge` / `GAvatar` / `GProgress`**: Added `ThemeDB.fallback_font` null-safety assertions.
+### 📌 Current Release: v1.6.3 (Latest · 25,988+ Vector Icons Integration & Smart GIcon Lookup)
+* **🎨 25,988+ Vector Icons Full Integration & Extreme Compression**:
+  * ⚡ **Full Export & Minification**: Minified and exported all 25,988+ vector icons across Godot @icons, GameIcons, Tabler, Lucide, FontAwesome, Remix, IconPark, Pixel, and Brands into `res://addons/gotod_ui/assets/icons/`.
+  * 🎯 **Godot Rendering Normalization**: Normalized monochrome SVG fills/strokes to pure white `#ffffff`, ensuring Godot's `modulate` (`icon_color`) tinting functions vibrantly and accurately.
+* **🔍 `GIcon` Smart Multi-Directory & Fuzzy Lookup**:
+  * 📂 **Automatic Subdirectory Resolution**: Search across `node/`, `tabler/`, `lucide/`, `gameicons/`, `fontawesome/`, etc., allowing direct icon name usage like `arrow_turn_up_right`.
+  * 🔀 **Hyphen/Underscore Interchangeability**: Seamlessly matches both `arrow_turn_up_right` and `arrow-turn-up-right`.
+  * ⚠️ **Explicit Missing Icon Warnings**: Emits clear `push_warning` messages when an icon is not found.
+* **🛠️ Developer Tooling**:
+  * 📝 Added `library/scripts/export_all_icons.js` and `library/scripts/extract_icon.js` for on-demand icon management.
 
 ### 📌 Previous Versions Overview
+* **v1.6.2**: Comprehensive real-world bugfixes & `gcd` stable foundation standard.
 * **v1.6.1**: Ultra-lean package size (21MB ➔ 159KB / Uncompressed 136MB ➔ 1MB), on-demand icon decoupling.
 * **v1.6.0**: Added `GShaderStudio` (GPU Realtime Shader Studio), `GSkeletonParticleBinder` (Skeleton Joint Particle Attacher), and `GFab` (Polymorphic Floating Action Button).
 * **v1.5.0**: Added `GParticleStudio` UI Particle Studio and `GAIDialogueTree` LLM/Behavior Tree AI dynamic branching dialogue engine.
@@ -174,8 +171,8 @@ During real-world game development and component architectural hardening, the fo
 ---
 
 ## 📦 Release History & Downloads
-
-* **v1.6.2** (2026-09-01): [gotod-components-ui-v1.6.2.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.2) (Deep Battle-Tested Fixes + gcd Frozen Stability Certification, 161 KB)
+* **v1.6.3** (2026-09-02): [gotod-components-ui-v1.6.3.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.3) (25,988+ vector icons integration & GIcon smart lookup)
+* **v1.6.2** (2026-09-01): [gotod-components-ui-v1.6.2.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.2) (Real-world bugfixes & gcd verification, 161 KB)
 * **v1.6.1** (2026-09-01): [gotod-components-ui-v1.6.1.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.1) (Ultra-Lean Package Size, 159 KB)
 * **v1.6.0** (2026-08-31): [gotod-components-ui-v1.6.0.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.0)
 * **v1.5.0** (2026-08-31): [Release v1.5.0](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.5.0)
