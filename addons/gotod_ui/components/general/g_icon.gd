@@ -53,10 +53,23 @@ func _process(delta: float) -> void:
 
 func _update_icon_texture() -> void:
 	pivot_offset = Vector2(icon_size / 2.0, icon_size / 2.0)
-	# If a local svg resource exists under addons/gotod_ui/assets/icons/
-	var icon_path = "res://addons/gotod_ui/assets/icons/" + icon_name + ".svg"
-	if ResourceLoader.exists(icon_path):
-		texture = load(icon_path)
+	if icon_name.is_empty():
+		return
+	# 1. Direct resource path (res:// or user://)
+	if icon_name.begins_with("res://") or icon_name.begins_with("user://"):
+		if ResourceLoader.exists(icon_name):
+			texture = load(icon_name)
+			return
+	# 2. Built-in curated core icons (res://addons/gotod_ui/assets/icons/<name>.svg)
+	var builtin_path = "res://addons/gotod_ui/assets/icons/" + icon_name + ".svg"
+	if ResourceLoader.exists(builtin_path):
+		texture = load(builtin_path)
+		return
+	# 3. Project custom icons path (res://assets/icons/<name>.svg)
+	var project_path = "res://assets/icons/" + icon_name + ".svg"
+	if ResourceLoader.exists(project_path):
+		texture = load(project_path)
+		return
 
 ## 静态多态构建工厂 (支持 1. 单值简写 create("heart"), 2. 字典对象 create({ ... }), 3. 多参数 create(name, size, color))
 static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GIcon:

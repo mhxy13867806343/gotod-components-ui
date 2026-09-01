@@ -19,13 +19,14 @@
 
 ## 🌟 版本历程与功能汇总 (Done List)
 
-### 📌 当前版本: v1.6.0 (最新发布)
-* **核心更新**:
-  * 🎨 **GShaderStudio (GPU 实时着色器工坊)**: 可视化调节消融溶解 (Dissolve)、彩虹全息流光 (Hologram)、全息扫描线 (Scanlines)、毛玻璃背景模糊 (Frosted Glass)，支持一键导出 Godot 4 `shader_type canvas_item;` 材质与源码。
-  * 🦴 **GSkeletonParticleBinder (骨骼粒子挂点绑定器)**: 动态锚定 `GParticleStudio` 粒子发射器至 2D/3D 骨骼关节（Spine, DragonBones, Godot Skeleton2D），实时追踪武器挥砍刀光、足底扬尘与法杖聚气。
-  * 🕹️ **GFab (多态悬浮按钮)**: 完美实现三大调用形态 (`GFab.create(items)` / `GFab.create(opts)` / `GFab.create(a,b,c)`)、批量 `add_actions`、2D 自由拖拽与磁性贴边。
+### 📌 当前版本: v1.6.1 (最新发布)
+* **核心更新与轻量化瘦身**:
+  * ⚡ **插件包体积极致瘦身 (21MB ➔ 159KB / 解压 136MB ➔ 1MB)**: 将全量 34,000+ 离线图标库剥离为按需模式，插件默认仅保留 30+ 款高频核心常用 UI 矢量图标（`gamepad`, `search`, `settings`, `check`, `close`, `plus`, `minus`, `spinner`, `arrow`, `chevron`, `info`, `warning`, `user`, `star` 等），彻底解决 Godot 导入时卡顿扫描 3.4 万个文件的问题。
+  * 🌐 **网页端按需获取与即时复制中心**: 完善 Web 文档中的 26,000+ 图标超级检索中心，支持一键点击复制 GDScript 实例化代码、原生 SVG 源码或直接下载 SVG 资产放入项目使用。
+  * 🧩 **`GIcon` 路径自适应增强**: 智能兼容内置精简图标、`res://assets/icons/` 项目自定义图标与 `res://` 绝对路径资源加载。
 
 ### 📌 历史版本概览
+* **v1.6.0**: 新增 `GShaderStudio` (GPU 实时着色器工坊)、`GSkeletonParticleBinder` (骨骼粒子挂点绑定器) 与 `GFab` (多态悬浮按钮)。
 * **v1.5.0**: 新增 `GParticleStudio` UI 粒子特效工坊与 `GAIDialogueTree` 大模型/本地行为树智能多分支剧本推理引擎。
 * **v1.4.0**: 新增 `GTable` & `TableV2`（十万行虚拟化表格）、`GHud3D`（3D 空间透视看板）与 `GHaptic`（跨平台触感马达震动）。
 * **v1.3.0**: 新增 `GVirtualList`（百万级数据虚拟列表）、`GI18n`（全场景国际化多语言动态热切换引擎）与 `GCollapse` 触控手势滑动。

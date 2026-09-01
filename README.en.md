@@ -40,11 +40,13 @@ In the live web preview, you can:
 
 ## 🌟 Core Modules & Features
 
-### 1. 🧩 35+ Ready-to-Use UI Components & Game Controls
-- **Basic**: Button, Text typography, Divider, Icon, Fab floating action button.
-- **Form**: Input, InputNumber, Select, Switch, Checkbox, Radio, Slider, Stepper, Picker, Form responsive container.
-- **Feedback**: Dialog modal, Message toast, NoticeBar ticker, Toast, Dialogue (JRPG/AVG system), Chat (WeChat/Lifeline stream), InteractPrompt (floating key), Alert, Drawer, Tooltip, Popconfirm, Skeleton, Loading overlay, Tour guide.
-- **Data**: Card, Tag, Badge, Avatar, Progress, Tabs, Collapse, Steps, Space container.
+### 1. 🧩 52+ Ready-to-Use UI Components & Game Controls
+- **Basic**: Button, Text typography, Divider, Icon (built-in with 30+ core UI vector icons, 26,000+ full icon library searchable via the [Online Documentation](https://mhxy13867806343.github.io/gotod-components-ui/)), Fab floating action button, Space container.
+- **Form**: Input, Textarea, InputNumber, Select, Switch, Checkbox, Radio, Slider, Stepper, Picker, Form responsive container.
+- **Feedback**: Dialog modal, Message toast, NoticeBar ticker, Toast, Dialogue (JRPG/AVG system), Chat (WeChat/Lifeline stream), Alert, Drawer, Tooltip, Popover, Skeleton, Loading overlay, Tour guide.
+- **Data**: Card, Tag, Badge, Avatar, Progress, Tabs, Collapse, Steps, Table, VirtualList.
+
+> 💡 **Pure & Lightweight Architecture**: The release package is ultra-lean at only **~150 KB** (unpacked ~1 MB), pre-bundled with 30+ essential UI icons for instant Godot 4 import. Additional icons can be searched and copied directly from the online icon catalog as needed.
 
 ### 2. 🎰 Vue-Style Dot Slot Property Syntax (`GSlotProxy`)
 - **Default Slot**: Component defaults to default slot, assign properties directly via `btn.slotName.color = "red"` or `btn.slotName.text = "Confirm"`.
@@ -113,7 +115,7 @@ your-project/
 
 ### Method 1: Download Release Archive (.zip) (Recommended)
 - 👉 **[GitHub Releases Page](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[Direct Download v1.6.0 Archive (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.0.zip)**
+- 📦 **[Direct Download v1.6.1 Archive (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.1.zip)**
 
 Extract the archive and copy the `addons/gotod_ui` folder directly into your Godot 4 project root at `res://addons/`.
 

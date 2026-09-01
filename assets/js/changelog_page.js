@@ -25,11 +25,31 @@ window.CHANGELOG_DATA = [
     ]
   },
   {
+    version: "v1.6.1",
+    date: "2026-09-01",
+    status: "process",
+    icon: "fa-bolt-lightning",
+    title: "v1.6.1 插件包极致瘦身与按需图标中心 (现行最新版)",
+    summary: "将全量 34,000+ 离线图标库解耦为按需获取模式，插件包体积从 21MB 缩减至 159KB（解压仅 1MB），彻底告别 Godot 扫描 3.4 万个文件的卡顿！",
+    highlights: [
+      {
+        tag: "插件包极致瘦身 (21MB ➔ 159KB)",
+        type: "success",
+        desc: "默认内置 30+ 款高频核心通用 UI 矢量图标（search, settings, check, close, spinner, arrow, user, star 等），体积直接降至 159 KB，Godot 4 导入秒级响应。"
+      },
+      {
+        tag: "网页端按需获取",
+        type: "primary",
+        desc: "完整保留在线 26,000+ 矢量图库超级检索中心，用户可在文档中随时搜索，一键复制 GDScript 实例化代码或下载原生 SVG 源码按需放入项目。"
+      }
+    ]
+  },
+  {
     version: "v1.6.0",
     date: "2026-08-31",
-    status: "process",
+    status: "finish",
     icon: "fa-cubes-stacked",
-    title: "v1.6.0 骨骼粒子绑定与 GPU Shader 工坊重磅发布 (今日最新版)",
+    title: "v1.6.0 骨骼粒子绑定与 GPU Shader 工坊重磅发布",
     summary: "正式推出 GSkeletonParticleBinder 骨骼动画粒子挂点绑定器，以及 GShaderStudio GPU 实时着色器工坊与动态毛玻璃背景模糊滤镜。",
     highlights: [
       {

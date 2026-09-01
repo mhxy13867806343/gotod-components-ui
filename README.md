@@ -53,11 +53,13 @@
 ## 🌟 核心体系与特性
 
 ### 1. 🧩 52+ 开箱即用 UI 组件与游戏专用控件
-- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 图标、Fab 悬浮按钮、Space 间距容器。
+- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 矢量图标（内置 30+ 款高频通用 UI 图标，更多 26,000+ 矢量图标可在[在线文档中心](https://mhxy13867806343.github.io/gotod-components-ui/)即时检索并一键复制）、Fab 悬浮按钮、Space 间距容器。
 - **表单输入**：Input 输入框、Textarea 多行文本、InputNumber 数字步进、Select 选择器、Switch 开关、Checkbox 复选框、Radio 单选框、Slider 滑块、Stepper 步进器、Picker 拾取器、Form 响应式表单容器。
 - **反馈交互**：Dialog 模态弹窗、Dialogue JRPG剧情对话流、Chat 聊天气泡、Popup 弹出层、Overlay 遮罩层、ActionSheet 动作面板、Popover 气泡卡片、NoticeBar 滚动通告栏、Message 全局浮动吐司、Toast 轻提示、Alert 警告条、Drawer 抽屉、Tooltip 提示、Loading 加载、Skeleton 骨架屏、Tour 漫游引导。
 - **数据展示**：Card 卡片、Tag 标签、Badge 徽标、Avatar 头像、Progress 进度条、Tabs 选项卡、Collapse 折叠面板、Steps 步骤条、Table 表格、VirtualList 百万级虚拟列表。
 - **引擎工坊与生态**：GHud3D 3D空间透视HUD、GHaptic 跨平台触感马达、GAIDialogueTree AI对话树、GI18n 国际化引擎、GParticleStudio 粒子工坊、GSkeletonParticleBinder 骨骼挂点绑定、GShaderStudio GPU着色器工坊、GRouter 路由转场。
+
+> 💡 **纯净轻量化设计**：插件包采用按需精简架构，整体发布包仅 **~150 KB**（解压约 1 MB），默认预置 30+ 款常用核心图标，Godot 4 秒级导入无压力。如需使用其他特定图标，请直接访问[网页图标中心](https://mhxy13867806343.github.io/gotod-components-ui/)一键复制 SVG 源码或 GDScript 代码即可。
 
 ---
 
@@ -65,7 +67,7 @@
 
 ### 方式 1: 下载发布包 (.zip) (推荐)
 - 👉 **[GitHub Releases 发行页](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[直接下载最新 v1.6.0 发布包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.0.zip)**
+- 📦 **[直接下载最新 v1.6.0 发布包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.1.zip)**
 
 解压并将 `addons/gotod_ui` 文件夹直接复制到您的 Godot 4 项目根目录下的 `res://addons/` 即可。
 

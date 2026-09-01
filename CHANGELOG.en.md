@@ -19,13 +19,14 @@
 
 ## 🌟 Version History & Features (Done List)
 
-### 📌 Current Release: v1.6.0 (Latest)
-* **Key Highlights**:
-  * 🎨 **GShaderStudio (GPU Realtime Shader Studio)**: Visually tweak Dissolve, Hologram, Scanlines, and Frosted Glass shaders with one-click export for Godot 4 `shader_type canvas_item;` code.
-  * 🦴 **GSkeletonParticleBinder (Skeleton Joint Particle Attacher)**: Dynamically attach `GParticleStudio` particle emitters to 2D/3D skeleton joints (Spine, DragonBones, Godot Skeleton2D) for weapon slash trails, foot dust, and spell effects.
-  * 🕹️ **GFab (Polymorphic Floating Action Button)**: Full support for 3 creation styles (`GFab.create(items)` / `GFab.create(opts)` / `GFab.create(a,b,c)`), batch `add_actions`, 2D free dragging, and magnetic screen-edge docking.
+### 📌 Current Release: v1.6.1 (Latest)
+* **Key Highlights & Lightweight Optimization**:
+  * ⚡ **Ultra-Lean Package Size (21MB ➔ 159KB / Uncompressed 136MB ➔ 1MB)**: Decoupled 34,000+ heavy icon files into an on-demand workflow. The plugin now includes 30+ curated core UI icons (`gamepad`, `search`, `settings`, `check`, `close`, `plus`, `minus`, `spinner`, `arrow`, `chevron`, `info`, `warning`, `user`, `star`, etc.), completely resolving Godot editor lag when scanning 34k files.
+  * 🌐 **Online On-Demand Icon Center**: Enhanced Web Documentation with 26,000+ vector icon search, offering 1-click copying of GDScript instantiation snippets, raw SVG code, or direct SVG asset downloads.
+  * 🧩 **Enhanced `GIcon` Path Flexibility**: Seamlessly supports built-in core icons, project custom icons at `res://assets/icons/`, and absolute `res://` resource paths.
 
 ### 📌 Previous Versions Overview
+* **v1.6.0**: Added `GShaderStudio` (GPU Realtime Shader Studio), `GSkeletonParticleBinder` (Skeleton Joint Particle Attacher), and `GFab` (Polymorphic Floating Action Button).
 * **v1.5.0**: Added `GParticleStudio` UI Particle Studio and `GAIDialogueTree` LLM/Behavior Tree AI dynamic branching dialogue engine.
 * **v1.4.0**: Added `GTable` & `TableV2` (100k rows virtualized table), `GHud3D` (3D billboard perspective projection), and `GHaptic` (cross-platform haptic motor vibration).
 * **v1.3.0**: Added `GVirtualList` (1M rows virtual list), `GI18n` (multilingual dynamic hot-reloading engine), and `GCollapse` touch gestures.
