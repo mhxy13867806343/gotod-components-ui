@@ -49,11 +49,18 @@ signal popup_visibility_changed(is_visible: bool)
 		disabled = val
 		_update_styles()
 
-@export var options: Array[Dictionary] = []:
+@export var options: Array = []:
 	set(val):
-		options = val
+		var arr: Array[Dictionary] = []
+		for item in val:
+			if item is Dictionary:
+				arr.append(item)
+			else:
+				arr.append({"label": str(item), "value": str(item)})
+		options = arr
 		_filtered_options = options.duplicate(true)
 		_update_display()
+
 
 @export var selected_index: int = -1:
 	set(val):

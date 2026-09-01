@@ -19,13 +19,23 @@
 
 ## 🌟 Version History & Features (Done List)
 
-### 📌 Current Release: v1.6.1 (Latest)
-* **Key Highlights & Lightweight Optimization**:
-  * ⚡ **Ultra-Lean Package Size (21MB ➔ 159KB / Uncompressed 136MB ➔ 1MB)**: Decoupled 34,000+ heavy icon files into an on-demand workflow. The plugin now includes 30+ curated core UI icons (`gamepad`, `search`, `settings`, `check`, `close`, `plus`, `minus`, `spinner`, `arrow`, `chevron`, `info`, `warning`, `user`, `star`, etc.), completely resolving Godot editor lag when scanning 34k files.
-  * 🌐 **Online On-Demand Icon Center**: Enhanced Web Documentation with 26,000+ vector icon search, offering 1-click copying of GDScript instantiation snippets, raw SVG code, or direct SVG asset downloads.
-  * 🧩 **Enhanced `GIcon` Path Flexibility**: Seamlessly supports built-in core icons, project custom icons at `res://assets/icons/`, and absolute `res://` resource paths.
+### 📌 Current Release: v1.6.2 (Latest · gcd Certified Stable Foundation)
+* **`gcd` (Godot Component Done / Verified & Frozen) Standard Launch**:
+  * 🏷️ **`[gcd]` Stable Foundation Certification**: Components marked with `[gcd]` have undergone full runtime lifecycle tests (`_init` ➔ `set_props` ➔ `add_child` ➔ `_ready` ➔ `call_methods` ➔ `queue_free`) and extreme edge-case validations, entering **frozen stable protection**.
+  * 🛡️ **Backward-Compatibility Rule**: Establishing the core engineering guideline: **"Existing verified `[gcd]` components must remain untouched without destructive rewrites; new features must be modular additions with new `[gcd]` verification."**
+* **Core Bugfixes & Self-Healing Enhancements**:
+  * 🚨 **`GMessageBox` (Critical)**: Fixed missing Cancel button & Input field in `confirm()`/`prompt()` caused by lifecycle race condition, ensuring 100% reliable rendering.
+  * 🪟 **`GPopup`**: Fixed early `set_content()` invocation before `_ready()` resulting in empty popup; added dynamic slot replacement and `GPopup.create()`.
+  * 💬 **`GDialog`**: Enhanced slot self-healing containers for Header/Body/Footer slots before `_ready()`, preventing null reference and child destruction.
+  * 🪜 **`GSteps`**: Fixed `current_step` setter not refreshing step highlight colors and numbers; relaxed steps array typing and added `GSteps.create()`.
+  * 🔘 **`GFab`**: Added reactive setter to `items`, fixing unrendered menu items upon instantiation.
+  * 📢 **`GNoticeBar`**: Added reactive setters for `notice_type` & `mode` to immediately re-render style backgrounds and close buttons.
+  * 📋 **`GSelect` & `GCheckboxGroup`**: Enhanced array type normalization for strings & dictionaries.
+  * ⏳ **`UseCooldown`**: Fixed unexpected `cooldown_finished` emission upon manual `reset()`; added `_cancelled` guard and SceneTree auto-detection.
+  * 🅰️ **`GBadge` / `GAvatar` / `GProgress`**: Added `ThemeDB.fallback_font` null-safety assertions.
 
 ### 📌 Previous Versions Overview
+* **v1.6.1**: Ultra-lean package size (21MB ➔ 159KB / Uncompressed 136MB ➔ 1MB), on-demand icon decoupling.
 * **v1.6.0**: Added `GShaderStudio` (GPU Realtime Shader Studio), `GSkeletonParticleBinder` (Skeleton Joint Particle Attacher), and `GFab` (Polymorphic Floating Action Button).
 * **v1.5.0**: Added `GParticleStudio` UI Particle Studio and `GAIDialogueTree` LLM/Behavior Tree AI dynamic branching dialogue engine.
 * **v1.4.0**: Added `GTable` & `TableV2` (100k rows virtualized table), `GHud3D` (3D billboard perspective projection), and `GHaptic` (cross-platform haptic motor vibration).
@@ -41,16 +51,25 @@
 
 During real-world game development and component architectural hardening, the following key issues were resolved:
 
-| # | Component | Issue / Root Cause | Severity | Status |
-| :--- | :--- | :--- | :---: | :---: |
-| 1 | **GFab** | Web catalog script string escape and newline issue causing `SyntaxError: Invalid or unexpected token` | High | ✅ Fixed |
-| 2 | **GFab** | Calling `add_action()` before `_ready()` threw Null Pointer Exception on `_menu_container` | Medium | ✅ Fixed |
-| 3 | **GDivider** | Vertical divider drawing formula incorrectly used `size.y / 2.0` instead of `size.x / 2.0` | Medium | ✅ Fixed |
-| 4 | **@tool Scripts** | Custom Enum directly exported via `@export` caused type conversion exceptions in Godot 4 Inspector | Medium | ✅ Normalized |
-| 5 | **GRouter** | Skipping Tween inside static `push` caused `_is_transitioning` deadlock; rapid scene switching crashed on freed old scene | High | ✅ Fixed |
-| 6 | **GAxios** | Accessing dictionary key via dot syntax `final_config.params` caused GDScript error; HTTP enum required integer cast | Low | ✅ Fixed |
-| 7 | **GMenu** | Clicking child item in 5-level nested submenu bubbled up and caused unexpected parent menu closure | Medium | ✅ Fixed |
-| 8 | **GDialog / GLoading** | Overlay mask failed to stop event propagation, leading to background misclicks | High | ✅ Fixed |
+| # | Component | Issue / Root Cause | Severity | Status | gcd Certified |
+| :--- | :--- | :--- | :---: | :---: | :---: |
+| 1 | **GMessageBox** | `confirm`/`prompt` lifecycle race condition causing Cancel button and Input field loss | High | ✅ Fixed | `[gcd]` Verified |
+| 2 | **GPopup** | Calling `set_content()` before `_ready()` left container empty | High | ✅ Fixed | `[gcd]` Verified |
+| 3 | **GDialog** | Slot container was null or destroyed when configuring slots before `_ready()` | High | ✅ Fixed | `[gcd]` Verified |
+| 4 | **GSteps** | Changing `current_step` only queued redraw without updating child highlight colors | Medium | ✅ Fixed | `[gcd]` Verified |
+| 5 | **GFab** | Setting `items` or using `create()` did not auto-populate submenu nodes | Medium | ✅ Fixed | `[gcd]` Verified |
+| 6 | **GNoticeBar** | Changing `notice_type` or `mode` did not trigger style/close-button re-render | Medium | ✅ Fixed | `[gcd]` Verified |
+| 7 | **UseCooldown** | `reset()` loop exit accidentally fired `cooldown_finished` signal | Medium | ✅ Fixed | `[gcd]` Verified |
+| 8 | **GSelect / GCheckboxGroup** | Strict type deduction threw errors on array literals | Low | ✅ Fixed | `[gcd]` Verified |
+| 9 | **GBadge / GAvatar** | Default font lookup returned null in headless or un-themed rendering | Low | ✅ Fixed | `[gcd]` Verified |
+| 10 | **GRouter** | Skipping Tween inside static `push` caused `_is_transitioning` deadlock | High | ✅ Fixed | `[gcd]` Verified |
+| 11 | **GDivider** | Vertical divider drawing formula incorrectly used `size.y / 2.0` instead of `size.x / 2.0` | Medium | ✅ Fixed | `[gcd]` Verified |
+| 12 | **GFab (Web)** | Web catalog script string escape and newline issue causing syntax error | High | ✅ Fixed | `[gcd]` Verified |
+| 13 | **@tool Scripts** | Custom Enum directly exported via `@export` caused type conversion exceptions | Medium | ✅ Normalized | `[gcd]` Verified |
+| 14 | **GAxios** | Dot syntax access on Dictionary params caused GDScript error | Low | ✅ Fixed | `[gcd]` Verified |
+| 15 | **GMenu** | Clicking child item in 5-level nested submenu bubbled up to parent menu | Medium | ✅ Fixed | `[gcd]` Verified |
+| 16 | **GLoading** | Overlay mask failed to stop event propagation, leading to background misclicks | High | ✅ Fixed | `[gcd]` Verified |
+
 
 ---
 
@@ -156,6 +175,8 @@ During real-world game development and component architectural hardening, the fo
 
 ## 📦 Release History & Downloads
 
+* **v1.6.2** (2026-09-01): [gotod-components-ui-v1.6.2.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.2) (Deep Battle-Tested Fixes + gcd Frozen Stability Certification, 161 KB)
+* **v1.6.1** (2026-09-01): [gotod-components-ui-v1.6.1.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.1) (Ultra-Lean Package Size, 159 KB)
 * **v1.6.0** (2026-08-31): [gotod-components-ui-v1.6.0.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.0)
 * **v1.5.0** (2026-08-31): [Release v1.5.0](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.5.0)
 * **v1.4.0** (2026-08-31): [Release v1.4.0](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.4.0)
@@ -163,3 +184,4 @@ During real-world game development and component architectural hardening, the fo
 * **v1.2.0** (2026-08-31): [Release v1.2.0](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.2.0)
 * **v1.0.5** (2026-08-31): [Release v1.0.5](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.0.5)
 * **v1.0.4** (2026-08-30): [Release v1.0.4](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.0.4)
+

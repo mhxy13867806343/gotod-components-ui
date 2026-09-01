@@ -26,56 +26,50 @@ static func open(options_or_message: Variant, context_node: Node = null) -> GMes
 static func alert(message_or_options: Variant, title: String = "提示", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
 	var final_msg = ""
 	var final_title = title
-	var final_opts = options
+	var final_opts = options.duplicate()
 	var final_ctx = context_node
 	if message_or_options is Dictionary:
-		final_opts = message_or_options as Dictionary
+		final_opts = (message_or_options as Dictionary).duplicate()
 		final_msg = final_opts.get("message", final_opts.get("text", ""))
 		final_title = final_opts.get("title", title)
 	else:
 		final_msg = str(message_or_options)
-	var box = _create_box(final_title, final_msg, final_opts, final_ctx)
-	box._setup_buttons(false, false)
-	return box
+	return _create_box(final_title, final_msg, final_opts, final_ctx, false, false)
 
 ## 确认取消框 (Confirm Dialog - 支持 String 或 Dictionary 配置对象)
 static func confirm(message_or_options: Variant, title: String = "确认", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
 	var final_msg = ""
 	var final_title = title
-	var final_opts = options
+	var final_opts = options.duplicate()
 	var final_ctx = context_node
 	if message_or_options is Dictionary:
-		final_opts = message_or_options as Dictionary
+		final_opts = (message_or_options as Dictionary).duplicate()
 		final_msg = final_opts.get("message", final_opts.get("text", ""))
 		final_title = final_opts.get("title", title)
 	else:
 		final_msg = str(message_or_options)
-	var box = _create_box(final_title, final_msg, final_opts, final_ctx)
-	box._setup_buttons(true, false)
-	return box
+	return _create_box(final_title, final_msg, final_opts, final_ctx, true, false)
 
 ## 输入提交框 (Prompt Dialog - 支持 String 或 Dictionary 配置对象)
 static func prompt(message_or_options: Variant, title: String = "输入", options: Dictionary = {}, context_node: Node = null) -> GMessageBox:
 	var final_msg = ""
 	var final_title = title
-	var final_opts = options
+	var final_opts = options.duplicate()
 	var final_ctx = context_node
 	if message_or_options is Dictionary:
-		final_opts = message_or_options as Dictionary
+		final_opts = (message_or_options as Dictionary).duplicate()
 		final_msg = final_opts.get("message", final_opts.get("text", ""))
 		final_title = final_opts.get("title", title)
 	else:
 		final_msg = str(message_or_options)
-	var box = _create_box(final_title, final_msg, final_opts, final_ctx)
-	box._setup_buttons(true, true)
-	return box
+	return _create_box(final_title, final_msg, final_opts, final_ctx, true, true)
 
 ## 关闭当前弹窗
 static func close() -> void:
 	if _current_box and is_instance_valid(_current_box):
 		_current_box._close_direct()
 
-static func _create_box(title: String, message: String, options: Dictionary, context_node: Node = null) -> GMessageBox:
+static func _create_box(title: String, message: String, options: Dictionary, context_node: Node = null, show_cancel: bool = false, has_input: bool = false) -> GMessageBox:
 	if _current_box and is_instance_valid(_current_box):
 		_current_box._close_direct()
 		
@@ -83,6 +77,8 @@ static func _create_box(title: String, message: String, options: Dictionary, con
 	box._title_text = title
 	box._message_text = message
 	box._options = options
+	box._options["show_cancel"] = show_cancel if not options.has("show_cancel") else options["show_cancel"]
+	box._options["has_input"] = has_input if not options.has("has_input") else options["has_input"]
 	
 	var tree: SceneTree = null
 	if context_node and is_instance_valid(context_node) and context_node.get_tree():
@@ -99,6 +95,7 @@ static func _create_box(title: String, message: String, options: Dictionary, con
 		_current_box = box
 		
 	return box
+
 
 var _title_text: String = "提示"
 var _message_text: String = ""

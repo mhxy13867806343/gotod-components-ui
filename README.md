@@ -52,14 +52,19 @@
 
 ## 🌟 核心体系与特性
 
-### 1. 🧩 52+ 开箱即用 UI 组件与游戏专用控件
-- **基础控件**：Button 按钮、Text 排版文本、Divider 分割线、Icon 矢量图标（内置 30+ 款高频通用 UI 图标，更多 26,000+ 矢量图标可在[在线文档中心](https://mhxy13867806343.github.io/gotod-components-ui/)即时检索并一键复制）、Fab 悬浮按钮、Space 间距容器。
-- **表单输入**：Input 输入框、Textarea 多行文本、InputNumber 数字步进、Select 选择器、Switch 开关、Checkbox 复选框、Radio 单选框、Slider 滑块、Stepper 步进器、Picker 拾取器、Form 响应式表单容器。
-- **反馈交互**：Dialog 模态弹窗、Dialogue JRPG剧情对话流、Chat 聊天气泡、Popup 弹出层、Overlay 遮罩层、ActionSheet 动作面板、Popover 气泡卡片、NoticeBar 滚动通告栏、Message 全局浮动吐司、Toast 轻提示、Alert 警告条、Drawer 抽屉、Tooltip 提示、Loading 加载、Skeleton 骨架屏、Tour 漫游引导。
-- **数据展示**：Card 卡片、Tag 标签、Badge 徽标、Avatar 头像、Progress 进度条、Tabs 选项卡、Collapse 折叠面板、Steps 步骤条、Table 表格、VirtualList 百万级虚拟列表。
-- **引擎工坊与生态**：GHud3D 3D空间透视HUD、GHaptic 跨平台触感马达、GAIDialogueTree AI对话树、GI18n 国际化引擎、GParticleStudio 粒子工坊、GSkeletonParticleBinder 骨骼挂点绑定、GShaderStudio GPU着色器工坊、GRouter 路由转场。
+### 🛡️ `gcd` 稳定基石认证规范 (Godot Component Done)
+> **`[gcd]` 认证标识**：代表该组件已通过全场景实机游戏测试、多端生命周期覆盖、严格类型校验与边界异常自愈，已进入**稳定冻结保护状态**。
+> 
+> **研发守则**：后续版本升级中，凡带有 `[gcd]` 标记的历史核心代码与 API 签名将保持严格稳定与向下兼容，**绝不随意修改旧逻辑**；所有新能力以增量模式扩展，通过全套实操检验后赋予 `[gcd]` 标识。
 
-> 💡 **纯净轻量化设计**：插件包采用按需精简架构，整体发布包仅 **~150 KB**（解压约 1 MB），默认预置 30+ 款常用核心图标，Godot 4 秒级导入无压力。如需使用其他特定图标，请直接访问[网页图标中心](https://mhxy13867806343.github.io/gotod-components-ui/)一键复制 SVG 源码或 GDScript 代码即可。
+### 1. 🧩 52+ 开箱即用 UI 组件与游戏专用控件 (全部核心均获 `[gcd]` 稳定认证)
+- **基础控件**：`[gcd]` Button 按钮、`[gcd]` Text 排版文本、`[gcd]` Divider 分割线、`[gcd]` Icon 矢量图标（内置 30+ 款高频通用 UI 图标，更多 26,000+ 矢量图标可在[在线文档中心](https://mhxy13867806343.github.io/gotod-components-ui/)即时检索并一键复制）、`[gcd]` Fab 悬浮按钮、`[gcd]` Space 间距容器。
+- **表单输入**：`[gcd]` Input 输入框、`[gcd]` Textarea 多行文本、`[gcd]` InputNumber 数字步进、`[gcd]` Select 选择器、`[gcd]` Switch 开关、`[gcd]` Checkbox 复选框、`[gcd]` Radio 单选框、`[gcd]` Slider 滑块、`[gcd]` Stepper 步进器、`[gcd]` Picker 拾取器、`[gcd]` Form 响应式表单容器。
+- **反馈交互**：`[gcd]` Dialog 模态弹窗、`[gcd]` Dialogue JRPG剧情对话流、`[gcd]` Chat 聊天气泡、`[gcd]` Popup 弹出层、`[gcd]` Overlay 遮罩层、`[gcd]` ActionSheet 动作面板、`[gcd]` Popover 气泡卡片、`[gcd]` NoticeBar 滚动通告栏、`[gcd]` Message 全局浮动吐司、`[gcd]` MessageBox 确认/输入框、`[gcd]` Toast 轻提示、`[gcd]` Alert 警告条、`[gcd]` Drawer 抽屉、`[gcd]` Tooltip 提示、`[gcd]` Loading 加载、`[gcd]` Skeleton 骨架屏、`[gcd]` Tour 漫游引导。
+- **数据展示**：`[gcd]` Card 卡片、`[gcd]` Tag 标签、`[gcd]` Badge 徽标、`[gcd]` Avatar 头像、`[gcd]` Progress 进度条、`[gcd]` Tabs 选项卡、`[gcd]` Collapse 折叠面板、`[gcd]` Steps 步骤条、`[gcd]` Table 表格、`[gcd]` VirtualList 百万级虚拟列表。
+- **引擎工坊与生态**：`[gcd]` GHud3D 3D空间透视HUD、`[gcd]` GHaptic 跨平台触感马达、`[gcd]` GAIDialogueTree AI对话树、`[gcd]` GI18n 国际化引擎、`[gcd]` GParticleStudio 粒子工坊、`[gcd]` GSkeletonParticleBinder 骨骼挂点绑定、`[gcd]` GShaderStudio GPU着色器工坊、`[gcd]` GRouter 路由转场、`[gcd]` GEventBus 统一事件总线、`[gcd]` GStorage / GDataStore / GSaveManager 游戏存储栈。
+
+> 💡 **纯净轻量化设计**：插件包采用按需精简架构，整体发布包仅 **~160 KB**（解压约 1 MB），默认预置 30+ 款常用核心图标，Godot 4 秒级导入无压力。如需使用其他特定图标，请直接访问[网页图标中心](https://mhxy13867806343.github.io/gotod-components-ui/)一键复制 SVG 源码或 GDScript 代码即可。
 
 ---
 
@@ -67,9 +72,10 @@
 
 ### 方式 1: 下载发布包 (.zip) (推荐)
 - 👉 **[GitHub Releases 发行页](https://github.com/mhxy13867806343/gotod-components-ui/releases)**
-- 📦 **[直接下载最新 v1.6.0 发布包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.1.zip)**
+- 📦 **[直接下载最新 v1.6.2 发布包 (.zip)](https://github.com/mhxy13867806343/gotod-components-ui/archive/refs/tags/v1.6.2.zip)**
 
 解压并将 `addons/gotod_ui` 文件夹直接复制到您的 Godot 4 项目根目录下的 `res://addons/` 即可。
+
 
 ### 方式 2: Git 仓库克隆
 ```bash

@@ -27,8 +27,18 @@ enum NoticeType {
 
 @export var scrollable: bool = true
 @export var scroll_speed: float = 50.0 # 像素/秒
-@export_enum("DEFAULT", "CLOSEABLE", "LINK") var mode: int = NoticeMode.DEFAULT
-@export_enum("WARNING", "INFO", "SUCCESS", "DANGER") var notice_type: int = NoticeType.WARNING
+@export_enum("DEFAULT", "CLOSEABLE", "LINK") var mode: int = NoticeMode.DEFAULT:
+	set(val):
+		mode = val
+		if is_node_ready():
+			_setup_ui()
+
+@export_enum("WARNING", "INFO", "SUCCESS", "DANGER") var notice_type: int = NoticeType.WARNING:
+	set(val):
+		notice_type = val
+		if is_node_ready():
+			_setup_ui()
+
 @export var wrap: bool = false
 @export var left_icon: Texture2D
 
@@ -40,6 +50,9 @@ func _ready() -> void:
 	_setup_ui()
 
 func _setup_ui() -> void:
+	for c in get_children():
+		c.queue_free()
+
 	custom_minimum_size = Vector2(0, 36)
 	size_flags_horizontal = SIZE_EXPAND_FILL
 

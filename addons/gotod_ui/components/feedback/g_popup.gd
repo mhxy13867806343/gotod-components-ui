@@ -60,7 +60,12 @@ func _setup_nodes() -> void:
 	_panel_container.mouse_filter = MOUSE_FILTER_STOP
 	add_child(_panel_container)
 
-	# 3. Close Button
+	# 3. Content Slot Mount
+	if _content_slot and is_instance_valid(_content_slot):
+		if _content_slot.get_parent() != _panel_container:
+			_panel_container.add_child(_content_slot)
+
+	# 4. Close Button
 	if closeable:
 		_close_button = Button.new()
 		_close_button.text = "✕"
@@ -69,9 +74,19 @@ func _setup_nodes() -> void:
 		_panel_container.add_child(_close_button)
 
 func set_content(node: Control) -> void:
+	if _content_slot and is_instance_valid(_content_slot) and _content_slot != node:
+		if _panel_container and is_instance_valid(_panel_container) and _content_slot.get_parent() == _panel_container:
+			_panel_container.remove_child(_content_slot)
 	_content_slot = node
-	if _panel_container:
-		_panel_container.add_child(node)
+	if _panel_container and is_instance_valid(_panel_container) and node:
+		if node.get_parent() != _panel_container:
+			_panel_container.add_child(node)
+
+## 获取内部面板容器
+func get_panel_container() -> PanelContainer:
+	if not _panel_container:
+		_setup_nodes()
+	return _panel_container
 
 func _on_overlay_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -183,3 +198,29 @@ func _animate_close_transform() -> void:
 			_tween.tween_property(_panel_container, "position:x", -_panel_container.size.x, duration)
 		PositionType.RIGHT:
 			_tween.tween_property(_panel_container, "position:x", vp_size.x, duration)
+
+## 静态多态构建工厂 (支持 1. 内容节点 create(content_node, pos), 2. 字典对象 create({ ... }))
+static func create(arg1: Variant = null, arg2: Variant = null) -> GPopup:
+	var popup = GPopup.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("position") or opts.has("placement"):
+			var p = opts.get("position", opts.get("placement", PositionType.CENTER))
+			if p is int: popup.position_type = p
+			elif str(p).to_lower() == "top": popup.position_type = PositionType.TOP
+			elif str(p).to_lower() == "bottom": popup.position_type = PositionType.BOTTOM
+			elif str(p).to_lower() == "left": popup.position_type = PositionType.LEFT
+			elif str(p).to_lower() == "right": popup.position_type = PositionType.RIGHT
+		if opts.has("closeable") or opts.has("closable"):
+			popup.closeable = bool(opts.get("closeable", opts.get("closable", false)))
+		if opts.has("round_corner"): popup.round_corner = bool(opts["round_corner"])
+		if opts.has("overlay"): popup.overlay = bool(opts["overlay"])
+		if opts.has("close_on_click_overlay"): popup.close_on_click_overlay = bool(opts["close_on_click_overlay"])
+		if opts.has("duration"): popup.duration = float(opts["duration"])
+		if opts.has("content") and opts["content"] is Control:
+			popup.set_content(opts["content"])
+	elif arg1 is Control:
+		popup.set_content(arg1)
+		if arg2 != null and arg2 is int:
+			popup.position_type = arg2
+	return popup

@@ -25,11 +25,41 @@ window.CHANGELOG_DATA = [
     ]
   },
   {
-    version: "v1.6.1",
+    version: "v1.6.2",
     date: "2026-09-01",
     status: "process",
+    icon: "fa-shield-halved",
+    title: "v1.6.2 全量生命周期实战修复 & gcd 稳定基石认证 (现行最新版)",
+    summary: "正式确立【gcd (Godot Component Done) 稳定冻结规范】，全量修复 GMessageBox、GPopup、GDialog、GSteps、GFab 等组件生命周期时序缺陷，历史核心组件全部赋予 [gcd] 稳定认证并冻结，后续坚持向下兼容与增量拓展！",
+    highlights: [
+      {
+        tag: "gcd 稳定基石认证规范",
+        type: "success",
+        desc: "建立 <code>[gcd]</code> 标识体系，凡标有 <code>[gcd]</code> 的 52+ 款核心组件均已通过全场景实机游戏测试与极端边界值自愈，进入稳定冻结状态，后续版本严禁随意破坏旧逻辑。"
+      },
+      {
+        tag: "GMessageBox 按钮与输入框修复",
+        type: "danger",
+        desc: "彻底解决 <code>confirm()</code> 和 <code>prompt()</code> 在生命周期时序上丢失取消按钮与输入框的严重 Bug，提前注入配置，确保 100% 可靠渲染。"
+      },
+      {
+        tag: "GPopup & GDialog 插槽自愈",
+        type: "warning",
+        desc: "解决在 <code>_ready()</code> 前调用 <code>set_content()</code> 或配置 Header/Body/Footer 插槽导致内容空白或子节点被销毁的问题，支持动态热替换与链式工厂。"
+      },
+      {
+        tag: "GSteps / GFab / GNoticeBar 响应式重绘",
+        type: "primary",
+        desc: "重构步数切关动态刷新、悬浮按钮子项自构建与广播栏背景模式实时重绘机制，全面兼容弱类型数组赋值。"
+      }
+    ]
+  },
+  {
+    version: "v1.6.1",
+    date: "2026-09-01",
+    status: "finish",
     icon: "fa-bolt-lightning",
-    title: "v1.6.1 插件包极致瘦身与按需图标中心 (现行最新版)",
+    title: "v1.6.1 插件包极致瘦身与按需图标中心",
     summary: "将全量 34,000+ 离线图标库解耦为按需获取模式，插件包体积从 21MB 缩减至 159KB（解压仅 1MB），彻底告别 Godot 扫描 3.4 万个文件的卡顿！",
     highlights: [
       {
@@ -46,6 +76,7 @@ window.CHANGELOG_DATA = [
   },
   {
     version: "v1.6.0",
+
     date: "2026-08-31",
     status: "finish",
     icon: "fa-cubes-stacked",

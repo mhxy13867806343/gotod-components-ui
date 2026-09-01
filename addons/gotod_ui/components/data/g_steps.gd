@@ -5,11 +5,17 @@ extends BoxContainer
 @export var current_step: int = 0:
 	set(val):
 		current_step = val
-		queue_redraw()
+		_rebuild_steps()
 
-@export var steps: Array[String] = ["Step 1", "Step 2", "Step 3"]:
+@export var steps: Array = ["Step 1", "Step 2", "Step 3"]:
 	set(val):
-		steps = val
+		var arr: Array[String] = []
+		for s in val:
+			if s is Dictionary:
+				arr.append(str(s.get("title", s.get("name", ""))))
+			else:
+				arr.append(str(s))
+		steps = arr
 		_rebuild_steps()
 
 func _ready() -> void:
@@ -67,3 +73,18 @@ func _rebuild_steps() -> void:
 			line.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 			line.draw.connect(func(): line.draw_line(Vector2(0, 1), Vector2(30, 1), GotodTheme.get_color("divider"), 1.5))
 			add_child(line)
+
+## 静态多态构建工厂 (支持 1. 数组单值 create(steps), 2. 字典对象 create({ ... }))
+static func create(arg1: Variant = null, arg2: Variant = null) -> GSteps:
+	var st = GSteps.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("steps") and opts["steps"] is Array: st.steps = opts["steps"]
+		if opts.has("current_step") or opts.has("current"):
+			st.current_step = int(opts.get("current_step", opts.get("current", 0)))
+	elif arg1 is Array:
+		st.steps = arg1
+		if arg2 != null:
+			st.current_step = int(arg2)
+	return st
+

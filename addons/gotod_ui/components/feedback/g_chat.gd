@@ -252,3 +252,16 @@ func clear() -> void:
 	if _messages_vbox:
 		for child in _messages_vbox.get_children():
 			child.queue_free()
+
+## 静态多态构建工厂 (支持 1. 字典对象 create({ ... }))
+static func create(arg1: Variant = null) -> GChat:
+	var chat = GChat.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("self_color"): chat.self_bubble_color = Color(opts["self_color"])
+		if opts.has("other_color"): chat.other_bubble_color = Color(opts["other_color"])
+		if opts.has("show_input"): chat.show_input_bar = bool(opts["show_input"])
+		if opts.has("auto_scroll"): chat.auto_scroll = bool(opts["auto_scroll"])
+		if opts.has("messages") and opts["messages"] is Array: chat.add_messages(opts["messages"])
+	return chat
+

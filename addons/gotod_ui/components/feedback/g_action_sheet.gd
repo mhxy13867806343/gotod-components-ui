@@ -11,9 +11,18 @@ signal closed()
 @export var title: String = ""
 @export var description: String = ""
 @export var cancel_text: String = "取消"
-@export var actions: Array[Dictionary] = [] # [{ name: "选项", subname: "描述", color: Color(), disabled: false, loading: false }]
+@export var actions: Array = []: # [{ name: "选项", subname: "描述", color: Color(), disabled: false, loading: false }]
+	set(val):
+		var arr: Array[Dictionary] = []
+		for act in val:
+			if act is Dictionary:
+				arr.append(act)
+			elif act is String:
+				arr.append({"name": act})
+		actions = arr
 @export var close_on_click_action: bool = true
 @export var round_corner: bool = true
+
 
 var _mask: ColorRect
 var _panel: PanelContainer
@@ -119,3 +128,31 @@ func _build_ui() -> void:
 		cancel.emit()
 	)
 	_vbox.add_child(cancel_btn)
+
+## 静态多态构建工厂 (支持 1. 动作列表 create(actions), 2. 字典对象 create({ ... }), 3. 多参数 create(title, actions, on_select))
+static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GActionSheet:
+	var sheet = GActionSheet.new()
+	if arg1 is Dictionary:
+		var opts = arg1 as Dictionary
+		if opts.has("title"): sheet.title = str(opts["title"])
+		if opts.has("description"): sheet.description = str(opts["description"])
+		if opts.has("cancel_text"): sheet.cancel_text = str(opts["cancel_text"])
+		if opts.has("actions") and opts["actions"] is Array: sheet.actions = opts["actions"]
+		if opts.has("close_on_click"): sheet.close_on_click_action = bool(opts["close_on_click"])
+		if opts.has("round_corner"): sheet.round_corner = bool(opts["round_corner"])
+		if opts.has("on_select") and opts["on_select"] is Callable: sheet.select.connect(opts["on_select"])
+		if opts.has("on_cancel") and opts["on_cancel"] is Callable: sheet.cancel.connect(opts["on_cancel"])
+	elif arg1 is Array:
+		sheet.actions = arg1
+		if arg2 != null and arg2 is String:
+			sheet.title = arg2
+		if arg3 != null and arg3 is Callable:
+			sheet.select.connect(arg3)
+	elif arg1 is String:
+		sheet.title = str(arg1)
+		if arg2 is Array:
+			sheet.actions = arg2
+		if arg3 is Callable:
+			sheet.select.connect(arg3)
+	return sheet
+

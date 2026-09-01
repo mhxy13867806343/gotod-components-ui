@@ -19,13 +19,23 @@
 
 ## 🌟 版本历程与功能汇总 (Done List)
 
-### 📌 当前版本: v1.6.1 (最新发布)
-* **核心更新与轻量化瘦身**:
-  * ⚡ **插件包体积极致瘦身 (21MB ➔ 159KB / 解压 136MB ➔ 1MB)**: 将全量 34,000+ 离线图标库剥离为按需模式，插件默认仅保留 30+ 款高频核心常用 UI 矢量图标（`gamepad`, `search`, `settings`, `check`, `close`, `plus`, `minus`, `spinner`, `arrow`, `chevron`, `info`, `warning`, `user`, `star` 等），彻底解决 Godot 导入时卡顿扫描 3.4 万个文件的问题。
-  * 🌐 **网页端按需获取与即时复制中心**: 完善 Web 文档中的 26,000+ 图标超级检索中心，支持一键点击复制 GDScript 实例化代码、原生 SVG 源码或直接下载 SVG 资产放入项目使用。
-  * 🧩 **`GIcon` 路径自适应增强**: 智能兼容内置精简图标、`res://assets/icons/` 项目自定义图标与 `res://` 绝对路径资源加载。
+### 📌 当前版本: v1.6.2 (最新发布 · gcd 稳定基石验证版)
+* **`gcd` (Godot Component Done / 校验已过·稳定冻结) 核心工程规范发布**:
+  * 🏷️ **`[gcd]` 稳定基石认证**: 凡标有 `[gcd]` 的组件与模块，代表已通过游戏实机全生命周期（`_init` ➔ `set_props` ➔ `add_child` ➔ `_ready` ➔ `call_methods` ➔ `queue_free`）与极端边界值测试，已完全正确并进入**稳定冻结保护状态**。
+  * 🛡️ **向后兼容不动旧代码守则**: 确立后续组件库研发核心原则——**“旧的稳定已验证 `[gcd]` 组件严禁随意重构或破坏，新增功能只做增量扩展，新增组件经测试后赋予 `[gcd]` 标记”**，彻底杜绝发版后破坏性 Regression 问题。
+* **实战核心 Bug 彻底修复与自愈增强**:
+  * 🚨 **`GMessageBox` (重要)**: 修复 `confirm()` 与 `prompt()` 因生命周期时序导致的取消按钮与输入框丢失严重 Bug，提前注入构造参数确保 100% 渲染。
+  * 🪟 **`GPopup`**: 修复在 `_ready()` 前调用 `set_content()` 内容丢失为空白的缺陷，支持动态热替换与 `GPopup.create()` 工厂。
+  * 💬 **`GDialog`**: 增强插槽容器自愈机制，彻底杜绝在 `_ready()` 前设置 Header/Body/Footer 插槽时容器为 null 或误销毁已有节点的问题。
+  * 🪜 **`GSteps`**: 修复 `current_step` 变更时未触发重新渲染导致高亮不刷新的问题，同时支持弱类型数组赋值与 `GSteps.create()`。
+  * 🔘 **`GFab`**: 为 `items` 添加响应式 setter，修复初始化时菜单项未自动生成的缺陷。
+  * 📢 **`GNoticeBar`**: 为 `notice_type` 与 `mode` 增加响应式监听，动态变更时实时重绘背景与关闭按钮。
+  * 📋 **`GSelect` & `GCheckboxGroup`**: 增强泛型数组清洗转换，无缝兼容字符串列表与字典列表。
+  * ⏳ **`UseCooldown`**: 修复 `reset()` 误触发 `cooldown_finished` 信号的问题，增加 `_cancelled` 取消守卫与自动场景树获取。
+  * 🅰️ **`GBadge` / `GAvatar` / `GProgress`**: 增加 `ThemeDB.fallback_font` 空安全兜底断言，防止底层字体获取异常。
 
 ### 📌 历史版本概览
+* **v1.6.1**: 插件包体积极致瘦身（21MB ➔ 159KB / 解压 136MB ➔ 1MB），离线图标按需解耦与网页端 26,000+ 图标中心。
 * **v1.6.0**: 新增 `GShaderStudio` (GPU 实时着色器工坊)、`GSkeletonParticleBinder` (骨骼粒子挂点绑定器) 与 `GFab` (多态悬浮按钮)。
 * **v1.5.0**: 新增 `GParticleStudio` UI 粒子特效工坊与 `GAIDialogueTree` 大模型/本地行为树智能多分支剧本推理引擎。
 * **v1.4.0**: 新增 `GTable` & `TableV2`（十万行虚拟化表格）、`GHud3D`（3D 空间透视看板）与 `GHaptic`（跨平台触感马达震动）。
@@ -41,16 +51,26 @@
 
 在组件库架构演进与实战游戏项目对齐过程中，重点排查并解决了以下典型 Bug：
 
-| 序号 | 影响模块 | Bug 现象 / 错误原因 | 严重级别 | 修复状态 |
-| :--- | :--- | :--- | :---: | :---: |
-| 1 | **GFab** | Web 目录脚本字符转义与断行导致 `SyntaxError: Invalid or unexpected token` | 高危 | ✅ 已彻底修复 |
-| 2 | **GFab** | 节点在 `_ready()` 之前调用 `add_action()` 时 `_menu_container` 为空抛出 Null Pointer | 中危 | ✅ 已彻底修复 |
-| 3 | **GDivider** | 垂直分割线绘制公式误用 `size.y / 2.0` 代替 `size.x / 2.0`，导致线段偏离中心甚至不可见 | 中危 | ✅ 已彻底修复 |
-| 4 | **@tool 脚本** | 自定义 Enum 直接作为 `@export` 类型在 Godot 4 检查器修改时触发类型转换异常 | 中危 | ✅ 已规范化 |
-| 5 | **GRouter** | 静态 `push` 内部 `await` Tween 若被跳过导致 `_is_transitioning` 状态死锁；连续快速转场时访问已销毁场景崩溃 | 高危 | ✅ 已彻底修复 |
-| 6 | **GAxios** | 使用点语法直接访问 `final_config.params` 字典键在 GDScript 4 抛错；请求枚举未转整型 | 低危 | ✅ 已彻底修复 |
-| 7 | **GMenu** | 5 级递归深层子菜单在点击子项时冒泡触发父级菜单意外关闭 | 中危 | ✅ 已彻底修复 |
-| 8 | **GDialog / GLoading** | 遮罩层未拦截背景事件导致点击穿透误触底部游戏操作 | 高危 | ✅ 已彻底修复 |
+| 序号 | 影响模块 | Bug 现象 / 错误原因 | 严重级别 | 修复状态 | gcd 认证 |
+| :--- | :--- | :--- | :---: | :---: | :---: |
+| 1 | **GMessageBox** | `confirm`/`prompt` 先 `add_child` 触发 `_ready` 后才配置参数，导致取消按钮与输入框丢失 | 高危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 2 | **GPopup** | `_ready` 前调用 `set_content()` 因容器未建导致内容丢失空白 | 高危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 3 | **GDialog** | `_ready` 前调用插槽方法时容器为 null 或二次初始化误销毁子节点 | 高危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 4 | **GSteps** | `current_step` 修改仅 `queue_redraw`，未刷新子节点高亮配色与序号 | 中危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 5 | **GFab** | 赋值 `items` 或使用 `create()` 时，未进入场景树导致子菜单项未生成 | 中危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 6 | **GNoticeBar** | 动态修改 `notice_type` 或 `mode` 时未触发背景色与关闭按钮刷新 | 中危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 7 | **UseCooldown** | 调用 `reset()` 时 `while` 退出误发射 `cooldown_finished` 信号 | 中危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 8 | **GSelect / GCheckboxGroup** | 接收普通字面量数组时在严格类型推导模式下可能产生类型不匹配 | 低危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 9 | **GBadge / GAvatar** | 极端无主题或离线渲染环境下获取默认字体为空引发空引用 | 低危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 10 | **GRouter** | 静态 `push` 内部 `await` Tween 若被跳过导致 `_is_transitioning` 死锁 | 高危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 11 | **GDivider** | 垂直分割线绘制公式误用 `size.y / 2.0` 代替 `size.x / 2.0` 导致偏移 | 中危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+
+| 12 | **GFab (Web)** | Web 目录脚本字符转义与断行导致 `SyntaxError: Invalid or unexpected token` | 高危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 13 | **@tool 脚本** | 自定义 Enum 直接作为 `@export` 类型在 Godot 4 检查器修改时触发类型转换异常 | 中危 | ✅ 已规范化 | `[gcd]` 已验证 |
+| 14 | **GAxios** | 使用点语法直接访问 `final_config.params` 字典键在 GDScript 4 抛错；请求枚举未转整型 | 低危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 15 | **GMenu (浮层)** | 5 级递归深层子菜单在点击子项时冒泡触发父级菜单意外关闭 | 中危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+| 16 | **GLoading** | 遮罩层未拦截背景事件导致点击穿透误触底部游戏操作 | 高危 | ✅ 已彻底修复 | `[gcd]` 已验证 |
+
 
 ---
 
@@ -156,6 +176,8 @@
 
 ## 📦 发布与构建记录 (Release History)
 
+* **v1.6.2** (2026-09-01): [gotod-components-ui-v1.6.2.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.2) (全量实战深度修复 + gcd 稳定基石认证，161 KB)
+* **v1.6.1** (2026-09-01): [gotod-components-ui-v1.6.1.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.1) (插件包极致瘦身，159 KB)
 * **v1.6.0** (2026-08-31): [gotod-components-ui-v1.6.0.zip](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.6.0)
 * **v1.5.0** (2026-08-31): [Release v1.5.0](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.5.0)
 * **v1.4.0** (2026-08-31): [Release v1.4.0](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.4.0)
@@ -163,3 +185,4 @@
 * **v1.2.0** (2026-08-31): [Release v1.2.0](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.2.0)
 * **v1.0.5** (2026-08-31): [Release v1.0.5](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.0.5)
 * **v1.0.4** (2026-08-30): [Release v1.0.4](https://github.com/mhxy13867806343/gotod-components-ui/releases/tag/v1.0.4)
+

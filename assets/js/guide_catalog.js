@@ -16,15 +16,16 @@ Object.assign(window.GUIDE_CATALOG, {
             <div style="background:linear-gradient(135deg, rgba(64,158,255,0.1), rgba(103,194,58,0.1)); border:1px solid var(--primary); padding:14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
               <div>
                 <div style="font-weight:800; font-size:13px; color:var(--primary); display:flex; align-items:center; gap:6px;">
-                  <i class="fa-solid fa-box-archive"></i> gotod-components-ui v1.0.0 独立安装包 (.zip)
+                  <i class="fa-solid fa-box-archive"></i> gotod-components-ui v1.6.2 独立安装包 (.zip)
+                  <span class="brand-badge" style="background: rgba(24, 160, 88, 0.18); color: #18a058; border: 1px solid rgba(24, 160, 88, 0.4); font-size: 10px; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-circle-check"></i> gcd: verified</span>
                 </div>
                 <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
-                  免装 Git 工具，直接下载压缩包解压即用 (包含完整 28+ 组件与全部工具库)
+                  免装 Git 工具，直接下载压缩包解压即用 (包含完整 52+ 组件与全部工具库 · 全场景实战稳定认证)
                 </div>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod-components-ui-v1.0.0.zip" class="g-btn g-btn-primary" style="height:32px; font-size:12px; font-weight:700;">
-                  <i class="fa-solid fa-download"></i> 立即下载 gotod-components-ui-v1.0.0.zip
+                <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.6.2/gotod-components-ui-v1.6.2.zip" class="g-btn g-btn-primary" style="height:32px; font-size:12px; font-weight:700;">
+                  <i class="fa-solid fa-download"></i> 立即下载 gotod-components-ui-v1.6.2.zip
                 </a>
                 <a href="https://github.com/mhxy13867806343/gotod-components-ui/releases" target="_blank" class="g-btn g-btn-success" style="height:32px; font-size:11px;">
                   <i class="fa-brands fa-github"></i> GitHub Releases
@@ -43,22 +44,24 @@ Object.assign(window.GUIDE_CATALOG, {
             <div class="code-box" style="margin:0;"><pre><code>your-project/
 ├── addons/
 │   └── gotod_ui/
-│       ├── components/    # 全部 28+ 个 UI 组件 (Button, Dialog, Tabs, Input, Select, etc.)
+│       ├── components/    # 全部 52+ 个 UI 组件 (Button, Dialog, Tabs, Input, Select, etc.)
 │       ├── theme/         # 主题 Token 与样式盒引擎 (Naive, Element, AntD, Vant)
-│       ├── events/        # 全局事件总线 (GEvent uni.$emit / uni.$on)
+│       ├── events/        # 全局与局部统一事件总线 (GEventBus)
 │       ├── router/        # 场景转场路由管理器 (GRouter 4向滑动+3大缩放)
 │       ├── utils/         # 网络(Axios/WS/联机)、2D坐标计算、物理公式、格式化、资产加载
-│       ├── lifecycle/     # 生命周期安全守卫 (GLifecycleGuard)
-│       ├── plugin.cfg     # 插件配置文件
+│       ├── storage/       # Key-Value 缓存持久化 (GStorage / GDataStore / GSaveManager)
+│       ├── hooks/         # 游戏专用生命周期 Hooks (UseCooldown / UseFPS / UseCountdown)
+│       ├── plugin.cfg     # 插件配置文件 (v1.6.2)
 │       └── plugin.gd      # 节点自动注册插件脚本
 └── project.godot</code></pre></div>
           </div>
         `,
         code: `# 方式 1: 直接下载官方 Release 独立安装包 (推荐，免 Git)
-# 下载直链: https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.0.0/gotod-components-ui-v1.0.0.zip
+# 下载直链: https://github.com/mhxy13867806343/gotod-components-ui/releases/download/v1.6.2/gotod-components-ui-v1.6.2.zip
 
 # 方式 2: Git 仓库克隆方式
 git clone https://github.com/mhxy13867806343/gotod-components-ui.git`
+
       },
       {
         title: 'Step 2: 在 Godot 项目设置中启用插件',

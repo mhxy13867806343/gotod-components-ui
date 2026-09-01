@@ -53,7 +53,9 @@ func _draw() -> void:
 	var bg_col = GotodTheme.get_color("border_base", Color("#383842"))
 	var ratio = percentage / 100.0
 	var font = get_theme_default_font()
+	if not font: font = ThemeDB.fallback_font
 	var pct_str = "%d%%" % int(round(percentage))
+
 
 	if type == ProgressType.LINE:
 		var text_w = 40.0 if show_text else 0.0

@@ -54,10 +54,13 @@ func _draw() -> void:
 		draw_texture_rect(avatar_texture, rect, false)
 	elif !text.is_empty():
 		var font = get_theme_default_font()
+		if not font: font = ThemeDB.fallback_font
 		var font_size = int(avatar_size * 0.45)
-		var str_sz = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+		var str_sz = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size) if font else Vector2(16, 16)
 		var pos = Vector2(center.x - str_sz.x / 2.0, center.y + str_sz.y * 0.35)
-		draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color.WHITE)
+		if font:
+			draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color.WHITE)
+
 
 ## 静态多态构建工厂 (支持 1. 文本/路径单值 create("U"), 2. 字典对象 create({ ... }), 3. 多参数 create(text, size, shape))
 static func create(arg1: Variant = null, arg2: Variant = null, arg3: Variant = null) -> GAvatar:

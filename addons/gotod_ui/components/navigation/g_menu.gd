@@ -26,9 +26,13 @@ enum PopperPlacement {
 		if is_node_ready():
 			_rebuild_menu()
 
-@export var items: Array[Dictionary] = []:
+@export var items: Array = []:
 	set(val):
-		items = val
+		var arr: Array[Dictionary] = []
+		for item in val:
+			if item is Dictionary:
+				arr.append(item)
+		items = arr
 		if is_node_ready():
 			_rebuild_menu()
 
@@ -38,12 +42,16 @@ enum PopperPlacement {
 		if is_node_ready():
 			_rebuild_menu()
 
-@export var default_openeds: Array[String] = []:
+@export var default_openeds: Array = []:
 	set(val):
-		default_openeds = val
+		var arr: Array[String] = []
+		for o in val:
+			arr.append(str(o))
+		default_openeds = arr
 		_opened_indices = default_openeds.duplicate()
 		if is_node_ready():
 			_rebuild_menu()
+
 
 @export var unique_opened: bool = false
 

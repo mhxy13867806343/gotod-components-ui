@@ -82,6 +82,8 @@ func set_slot_node(p_slot_name: String, node: Control) -> void:
 			set_footer(node)
 
 func set_header(node: Control) -> void:
+	if not _header_container:
+		_setup_ui()
 	if _header_container and is_instance_valid(_header_container):
 		for c in _header_container.get_children():
 			if c != _close_btn:
@@ -91,6 +93,8 @@ func set_header(node: Control) -> void:
 	get_slot("header").target_node = node
 
 func set_content(node: Control) -> void:
+	if not _vbox:
+		_setup_ui()
 	if _vbox and is_instance_valid(_vbox):
 		if _body_label and is_instance_valid(_body_label):
 			_body_label.visible = false
@@ -99,6 +103,8 @@ func set_content(node: Control) -> void:
 	get_slot("default").target_node = node
 
 func set_footer(node: Control) -> void:
+	if not _footer_container:
+		_setup_ui()
 	if _footer_container and is_instance_valid(_footer_container):
 		for c in _footer_container.get_children():
 			c.queue_free()
@@ -124,8 +130,9 @@ func _ready() -> void:
 	visible = false
 
 func _setup_ui() -> void:
-	for child in get_children():
-		child.queue_free()
+	if _panel:
+		return
+
 		
 	# Backdrop Mask
 	_mask = ColorRect.new()

@@ -25,7 +25,17 @@ enum Position {
 @export var expand_duration: float = 0.25
 
 var is_expanded: bool = false
-var items: Array[Dictionary] = []
+var items: Array = []:
+	set(val):
+		var arr: Array[Dictionary] = []
+		for it in val:
+			if it is Dictionary:
+				arr.append(it)
+			elif it is String:
+				arr.append({"name": it, "label": it})
+		items = arr
+		if _menu_container:
+			_rebuild_menu()
 
 var _trigger_btn: Button
 var _menu_container: BoxContainer
@@ -34,6 +44,8 @@ var _tween: Tween
 func _ready() -> void:
 	_setup_layout()
 	_apply_fab_position()
+	if items.size() > 0:
+		_rebuild_menu()
 
 func _setup_layout() -> void:
 	if _menu_container:

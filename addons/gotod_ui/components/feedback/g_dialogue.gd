@@ -227,13 +227,16 @@ static func converse(dialogue_script: Array[Dictionary], position: Position = Po
 	return inst
 
 ## 3. 播放带分支选择支的对话
-static func ask(question: String, options: Array[String], speaker: String = "", avatar: Texture2D = null) -> GDialogue:
+static func ask(question: String, options: Array, speaker: String = "", avatar: Texture2D = null) -> GDialogue:
 	var inst = _get_or_create()
+	var opts_arr: Array[String] = []
+	for o in options:
+		opts_arr.append(str(o))
 	inst.start_dialogue([{
 		"text": question,
 		"speaker": speaker,
 		"avatar": avatar,
-		"options": options,
+		"options": opts_arr,
 		"side": "left"
 	}], Position.BOTTOM)
 	return inst

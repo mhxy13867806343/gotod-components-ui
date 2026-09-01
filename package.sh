@@ -36,13 +36,17 @@ echo "🚀 Packaging Gotod Components UI version: v${TARGET_VER}..."
 sed -i '' -E "s/version=\"[^\"]*\"/version=\"${TARGET_VER}\"/" addons/gotod_ui/plugin.cfg
 sed -i '' -E "s/config\/version=\"[^\"]*\"/config\/version=\"${TARGET_VER}\"/" project.godot
 
-# 3. Update download links in README.md and README.en.md
-sed -i '' -E "s/gotod-components-ui-v[0-9]+\.[0-9]+\.[0-9]+\.zip/gotod-components-ui-v${TARGET_VER}.zip/g" README.md README.en.md 2>/dev/null || true
+# 3. Update download links in README.md, README.en.md, guide_catalog.js, and index.html
+sed -i '' -E "s/gotod-components-ui-v[0-9]+\.[0-9]+\.[0-9]+\.zip/gotod-components-ui-v${TARGET_VER}.zip/g" README.md README.en.md assets/js/guide_catalog.js 2>/dev/null || true
 sed -i '' -E "s/tags\/v[0-9]+\.[0-9]+\.[0-9]+\.zip/tags\/v${TARGET_VER}.zip/g" README.md README.en.md 2>/dev/null || true
+sed -i '' -E "s/releases\/download\/v[0-9]+\.[0-9]+\.[0-9]+/releases\/download\/v${TARGET_VER}/g" assets/js/guide_catalog.js 2>/dev/null || true
+sed -i '' -E "s/gotod-components-ui v[0-9]+\.[0-9]+\.[0-9]+/gotod-components-ui v${TARGET_VER}/g" assets/js/guide_catalog.js 2>/dev/null || true
+sed -i '' -E "s/plugin.cfg \(v[0-9]+\.[0-9]+\.[0-9]+\)/plugin.cfg (v${TARGET_VER})/g" assets/js/guide_catalog.js 2>/dev/null || true
 sed -i '' -E "s/下载 v[0-9]+\.[0-9]+\.[0-9]+ 压缩包/下载 v${TARGET_VER} 压缩包/g" README.md 2>/dev/null || true
 sed -i '' -E "s/Download v[0-9]+\.[0-9]+\.[0-9]+ Archive/Download v${TARGET_VER} Archive/g" README.en.md 2>/dev/null || true
 
 # 4. Remove previous zip releases from root
+
 rm -f gotod-components-ui-v*.zip
 
 # 5. Build clean zip package

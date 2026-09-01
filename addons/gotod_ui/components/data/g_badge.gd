@@ -44,8 +44,10 @@ func _draw() -> void:
 	else:
 		var txt = str(value) if value <= max_value else "%d+" % max_value
 		var font = get_theme_default_font()
+		if not font: font = ThemeDB.fallback_font
 		var font_size = 11
-		var str_sz = font.get_string_size(txt, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+		var str_sz = font.get_string_size(txt, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size) if font else Vector2(16, 11)
+
 		var h = 16.0
 		var w = max(h, str_sz.x + 8.0)
 		var rect = Rect2(badge_pos.x - w / 2.0, badge_pos.y - h / 2.0, w, h)
